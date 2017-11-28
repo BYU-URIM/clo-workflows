@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="c080d088-b7dc-4308-b6ce-3bed4aa32242" 
+        solutionId="c080d088-b7dc-4308-b6ce-3bed4aa32242" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="clo_workflows"
+        sharePointProductVersion="15.0">
+  <features>
+        <featureReference itemId="1440f70a-2502-4471-8e7d-48aa53a3e4c3" />
+  </features>
+</package>

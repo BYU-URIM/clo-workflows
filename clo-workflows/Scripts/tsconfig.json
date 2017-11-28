@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "declaration": false,
+      "noImplicitAny": false,
+      "removeComments": true,
+      "experimentalDecorators": true,
+      "noLib": false,
+      "jsx": "react",
+      "outDir": "dist",
+      "lib": ["es2015", "dom", "es2015.promise"],
+      "types": ["reflect-metadata"],
+      "moduleResolution": "node",
+      "emitDecoratorMetadata": true,
+      "sourceMap": true,
+      "strictNullChecks": true
+    },
+    "exclude": [
+      "node_modules",
+      "static"
+    ],
+    "include": [
+        "src/**/*",
+        "test/*"
+      ]
+  }

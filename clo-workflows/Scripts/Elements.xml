@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Module Name="Scripts">
+    <File Path="Scripts\dist\bundle.js" Url="Scripts/dist/bundle.js" ReplaceContent="TRUE" />
+    <File Path="Scripts\dist\bundle.js.map" Url="Scripts/dist/bundle.js.map" ReplaceContent="TRUE" />
+  </Module>
+</Elements>
