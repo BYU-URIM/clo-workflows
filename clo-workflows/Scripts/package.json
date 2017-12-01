@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "webpack-dev-server --inline --content-base dist",
     "build": "webpack",
     "build:watch": "webpack --watch",
     "test": "rimraf test_build && tsc --outDir test_build && ava test_build/test",
@@ -21,7 +22,8 @@
     "source-map-loader": "^0.2.1",
     "ts-loader": "^3.1.1",
     "typescript": "2.5.2",
-    "webpack": "^3.6.0"
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.5"
   },
   "dependencies": {
     "core-decorators": "^0.20.0",
