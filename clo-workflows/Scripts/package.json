@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "webpack-dev-server --inline --content-base dist",
-    "build": "webpack",
-    "build:watch": "webpack --watch",
+    "dev:local": "webpack-dev-server --env.NODE_ENV=local --inline --content-base dist",
+    "dev:sharepoint": "webpack --watch --env.NODE_ENV=sharepoint",
+    "build": "webpack --env.NODE_ENV=sharepoint",
     "test": "rimraf test_build && tsc --outDir test_build && ava test_build/test",
     "lint": "tslint -c tslint.json 'src/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'"
   },
