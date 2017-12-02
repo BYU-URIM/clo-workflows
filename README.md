@@ -13,7 +13,7 @@ block diagram of major components:
    The parent store adds no other functionality to the app.
    
    ### Async Service
-   A functional layer dedicated to a persisting data to the server and fetching data from the server.
+   A functional layer dedicated to persisting data to the server and fetching data from the server.
    This service does not directly perform REST calls, but passes calls through to the data access layer.
    As a high level persister abstraction, each function in this service may make several calls to various data access functions.
    
@@ -28,7 +28,7 @@ block diagram of major components:
    Smart components render dumb components and pass them any applicable app state.
    These components are full React stateful components:
    ```
-   class Component extends React.Component<any, any> { ... }
+   class Layout extends React.Component<any, any> { ... }
    ```
    
    ### Dumb Components
