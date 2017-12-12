@@ -1,3 +1,3 @@
-import * as ava from 'ava'
+import * as ava from "ava"
 
-ava.test('test test', t => t.pass())
+ava.test("test test", t => t.pass())
