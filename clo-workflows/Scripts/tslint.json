@@ -10,7 +10,8 @@
         "ordered-imports": false,
         "arrow-parens": false,
         "space-before-function-paren": false,
-        "whitespace": false
+        "whitespace": false,
+        "member-ordering": false
     },
     "rulesDirectory": []
 }
