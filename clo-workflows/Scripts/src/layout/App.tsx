@@ -5,9 +5,6 @@ import { UserStore } from "../store/UserStore"
 @inject("rootStore")
 @observer
 export class App extends React.Component<any, any> {
-    constructor(props) {
-        super(props)
-    }
 
     public componentWillMount() {
         this.userStore = this.props.rootStore.userStore
