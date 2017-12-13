@@ -14,7 +14,7 @@
       "moduleResolution": "node",
       "emitDecoratorMetadata": true,
       "sourceMap": true,
-      "strictNullChecks": true
+      "strictNullChecks": false
     },
     "exclude": [
       "node_modules",
