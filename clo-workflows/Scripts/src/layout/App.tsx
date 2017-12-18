@@ -1,6 +1,7 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { UserStore } from "../store/UserStore"
+import { Fabric } from "office-ui-fabric-react/lib/Fabric"
 
 @inject("rootStore")
 @observer
@@ -14,10 +15,10 @@ export class App extends React.Component<any, any> {
 
     public render() {
         return (
-            <div>
+            <Fabric>
                 <h2>CLO Workflows</h2>
                 <div>{`current user: ${this.userStore.currentUser.name}`}</div>
-            </div>
+            </Fabric>
         )
     }
 }
