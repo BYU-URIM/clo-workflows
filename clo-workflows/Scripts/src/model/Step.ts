@@ -8,5 +8,5 @@ type StepName = "Intake" | "Public Domain Research" | "Public Domain Approval" |
 
 export interface IStep {
     name: StepName
-    formControls: Array<IFormControl>
+    processFormControls: Array<IFormControl>
 }
