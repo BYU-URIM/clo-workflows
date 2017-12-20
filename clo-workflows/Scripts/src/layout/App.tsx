@@ -8,13 +8,13 @@ import Greeting from "../component/Greeting"
 @observer
 export class App extends React.Component<any, any> {
 
-    public componentWillMount() {
+    componentWillMount() {
         this.userStore = this.props.rootStore.userStore
     }
 
     private userStore: UserStore
 
-    public render() {
+    render() {
         return (
             <Fabric>
                 <h2>CLO Workflows</h2>

@@ -6,7 +6,7 @@ export class AsyncService {
     // data access object
     private dao: IDataAccess = DataAccessFactory.getDao()
 
-    public async fetchUser(): Promise<IUser> {
+    async fetchUser(): Promise<IUser> {
         const user: IUser = await this.dao.fetchUser()
         return user
     }

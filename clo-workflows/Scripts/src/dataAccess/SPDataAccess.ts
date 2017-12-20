@@ -2,7 +2,7 @@ import { IDataAccess } from "./IDataAccess"
 
 export class SPDataAccess implements IDataAccess {
 
-    public fetchUser() {
+    fetchUser() {
         return fetch("../_api/web/currentuser")
             .then(res => res.json())
             .then(data => ({

@@ -3,7 +3,7 @@ import { IUser } from "../model/User"
 
 export class MockDataAccess implements IDataAccess {
 
-    public fetchUser(): Promise<IUser> {
+    fetchUser(): Promise<IUser> {
         return Promise.resolve({
             name: "Connor Moody",
             username: "cmoody4",
