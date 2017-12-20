@@ -8,6 +8,7 @@ export class MockDataAccess implements IDataAccess {
             name: "Connor Moody",
             username: "cmoody4",
             email: "cmoody4@byu.edu",
+            role: null,
         })
     }
 
