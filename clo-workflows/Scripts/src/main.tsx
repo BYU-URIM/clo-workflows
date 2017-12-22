@@ -12,7 +12,7 @@ useStrict(true)
 const root = document.getElementById("root")
 
 const rootStore = new RootStore()
-rootStore.initData().then(() => {
+rootStore.init().then(() => {
     ReactDom.render(
         <Provider rootStore={rootStore}>
             <App />
