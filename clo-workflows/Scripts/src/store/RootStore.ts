@@ -11,19 +11,21 @@ export class RootStore {
     userProcessStore: UserProcessStore // created for anyone logged into the app - all users, including employees can submit projects
     employeeProcessStore: EmployeeProcessStore // created for employees logged into the app
 
-    @action async init(): Promise<void> {
-        // create instances of any dependencies the child stores may have here
-        const asyncService = new AsyncService()
+    constructor(
+        private asyncService: AsyncService,
+    ) {}
 
-        this.uiStore = new UiStore(this, asyncService)
-        this.userStore = new UserStore(this, asyncService)
-        this.userProcessStore = new UserProcessStore(this, asyncService)
+    @action async init(): Promise<void> {
+        this.uiStore = new UiStore(this)
+        this.userStore = new UserStore(this, this.asyncService)
+        this.userProcessStore = new UserProcessStore(this, this.asyncService)
 
         await this.userStore.init()
         await this.userProcessStore.init()
 
+        // create and initialize the employee store if the current user is an employee
         if(this.userStore.isEmployee) {
-            this.employeeProcessStore = new EmployeeProcessStore(this, asyncService)
+            this.employeeProcessStore = new EmployeeProcessStore(this, this.asyncService)
             this.employeeProcessStore.init()
         }
     }
