@@ -1,6 +1,5 @@
 node_modules/
-dist/bundle.js
-dist/bundle.js.map
+dist/
 test_build/
 .vscode/
 
