@@ -1,6 +1,7 @@
+import { IRole } from './../model/Role'
 import { IDataAccess } from "./IDataAccess"
 import { IUser } from "../model/User"
-
+ 
 export class MockDataAccess implements IDataAccess {
 
     fetchUser(): Promise<IUser> {

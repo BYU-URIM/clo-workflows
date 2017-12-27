@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react"
 import { UserStore } from "../store/UserStore"
 import { Fabric } from "office-ui-fabric-react/lib/Fabric"
 import Greeting from "../component/Greeting"
+import RoleChecker from "../component/RoleChecker";
 
 @inject("rootStore")
 @observer
@@ -18,7 +19,8 @@ export class App extends React.Component<any, any> {
         return (
             <Fabric>
                 <h2>CLO Workflows</h2>
-                <Greeting user={this.userStore.currentUser.name} />
+                <Greeting user = {this.userStore.currentUser.name} />
+                <RoleChecker role={"Junior License Processor"}/>
             </Fabric>
         )
     }
