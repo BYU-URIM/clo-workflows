@@ -20,7 +20,6 @@
     "@types/react-router": "^4.0.15",
     "@types/react-router-dom": "^4.0.8",
     "ava": "^0.24.0",
-    "mobx-react-devtools": "^4.2.15",
     "source-map-loader": "^0.2.1",
     "ts-loader": "^3.1.1",
     "typescript": "2.5.2",
