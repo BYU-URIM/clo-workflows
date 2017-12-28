@@ -22,5 +22,4 @@ export class SPDataAccess implements IDataAccess {
                 role: null,
             }))
     }
-
 }
