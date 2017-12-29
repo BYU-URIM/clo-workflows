@@ -12,14 +12,5 @@ export class SPDataAccess implements IDataAccess {
                 role: null,
             }))
     }
-    fetchUserRole() {
-        return fetch("../_api/web/currentuser")
-            .then(res => res.json())
-            .then(data => ({
-                name: data.d.Title,
-                email: data.d.Email,
-                username: data.d.LoginName,
-                role: null,
-            }))
-    }
+
 }
