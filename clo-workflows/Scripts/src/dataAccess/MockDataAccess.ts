@@ -1,21 +1,16 @@
-import { roleData } from './MockData'
-import { IRole } from './../model/Role'
+import { roleData } from "./MockData"
+import { IRole } from "./../model/Role"
 import { IDataAccess } from "./IDataAccess"
 import { IUser } from "../model/User"
- 
 
 export class MockDataAccess implements IDataAccess {
-    
+
     fetchUser(): Promise<IUser> {
-        return Promise.resolve(
-            {
+        return Promise.resolve({
                 name: "Connor Moody",
                 username: "cmoody4",
                 email: "cmoody4@byu.edu",
-                role: roleData[5]
-            }
-        )
+                role: roleData[0],
+            })
     }
-
 }
-                         

@@ -3,7 +3,9 @@ import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from "office-ui-fabric-react/lib/DetailsList"
 import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection"
 import { autobind } from "office-ui-fabric-react/lib/Utilities"
-
+/** 
+ * TODO: match this to views
+*/
 let _items: any[] = []
 
 let _columns: IColumn[] = [

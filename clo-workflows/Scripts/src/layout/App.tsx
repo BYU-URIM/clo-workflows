@@ -5,7 +5,7 @@ import { Fabric } from "office-ui-fabric-react/lib/Fabric"
 import { RoleRenderContainer } from "./RoleRenderContainer"
 import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
-import Header from "../component/Anonymous/Header";
+import Header from "../component/Header";
 
 // Register icons and pull the fonts from the default SharePoint cdn.
 initializeIcons()
