@@ -1,5 +1,5 @@
 import * as React from "react"
-import { IUser } from "../../model/User"
+import { IUser } from "../model/User"
 
 interface IAnonymousProps {
   currentUser: IUser

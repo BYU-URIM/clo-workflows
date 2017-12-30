@@ -6,9 +6,9 @@ import { autobind } from "office-ui-fabric-react/lib/Utilities"
 /**
  * TODO: match this to views
  */
-let _items: any[] = []
+const _items: any[] = []
 
-let _columns: IColumn[] = [
+const _columns: IColumn[] = [
   {
     key: "column1",
     name: "Project",
@@ -52,7 +52,7 @@ export class InProgressList extends React.Component<
   {},
   {
     items: {}[]
-    selectionDetails: {}
+    selectionDetails: {},
   }
 > {
   private _selection: Selection
