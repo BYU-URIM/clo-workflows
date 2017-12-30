@@ -1,6 +1,6 @@
 import { IStep } from "./Step"
 
-type RoleName = "Anonymous" | "Junior License Processor" | "Senior License Processor"
+export type RoleName = "Anonymous" | "Junior License Processor" | "Senior License Processor"
                     | "Supervisor" | "Admin Assistant" | "Administrator"
 
 export interface IRole {

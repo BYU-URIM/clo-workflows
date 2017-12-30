@@ -1,7 +1,7 @@
 import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
 import { UserStore } from "../../src/store/UserStore"
-import { AsyncService } from '../../src/service/AsyncService';
+import { AsyncService } from "../../src/service/AsyncService"
 import { RoleName } from "../../src/model/Role"
 import { RootStore } from "../../src/store/RootStore"
 

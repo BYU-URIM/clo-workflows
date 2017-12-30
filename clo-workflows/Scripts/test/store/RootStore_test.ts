@@ -3,7 +3,7 @@ import { RootStore } from "../../src/store/RootStore"
 import { AsyncService } from "../../src/service/AsyncService"
 import { DataAccessFactory } from "../../src/dataAccess/DataAccessFactory"
 import { useStrict } from "mobx"
-import { when, mock, verify } from "ts-mockito"
+import { when, mock, verify, instance } from "ts-mockito"
 import { RoleName } from "../../src/model/Role"
 import { IUser } from "../../src/model/User"
 
@@ -19,7 +19,7 @@ ava.test("root store creates all child stores when an employee logs in", async t
         },
     }))
 
-    const rootStore: RootStore = new RootStore(mockAsyncService)
+    const rootStore: RootStore = new RootStore(instance(mockAsyncService))
     await rootStore.init()
     t.truthy(rootStore.uiStore)
     t.truthy(rootStore.userStore)
@@ -34,12 +34,12 @@ ava.test("root store creates all stores except employeeProcess store when anonym
         username: "cmoody4",
         email: "cdmoody0604@gmail.com",
         role: {
-            name: "Administrator" as RoleName,
+            name: "Anonymous" as RoleName,
             permittedSteps: [],
         },
     }))
 
-    const rootStore: RootStore = new RootStore(mockAsyncService)
+    const rootStore: RootStore = new RootStore(instance(mockAsyncService))
     await rootStore.init()
     t.truthy(rootStore.uiStore)
     t.truthy(rootStore.userStore)
