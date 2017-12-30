@@ -18,6 +18,6 @@ export class UserStore {
     @computed get isEmployee(): boolean {
         return this.currentUser
             && this.currentUser.role
-            && this.currentUser.role.name !== "anonymous"
+            && this.currentUser.role.name !== "Anonymous"
     }
 }

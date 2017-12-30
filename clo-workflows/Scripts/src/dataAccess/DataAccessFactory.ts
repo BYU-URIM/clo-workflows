@@ -5,6 +5,7 @@ import { SPDataAccess } from "./SPDataAccess"
 
 // static utitlity class for creating data access objects
 // contains logic for creating a SPDataAccess or MockDataAccess depending on the environment
+
 export class DataAccessFactory {
 
     // creates and returns a data access object
