@@ -1,7 +1,7 @@
 import React = require("react")
 import { IUser } from "../model/User"
 import { Persona, PersonaInitialsColor } from "office-ui-fabric-react/lib/Persona"
-interface IHeaderProps {
+export interface IHeaderProps {
   currentUser: IUser
 }
 const styles = {
