@@ -1,6 +1,8 @@
 import { IRole } from "./../model/Role"
 /**
- * TODO: add correct data, put in a store/ask connor where we will access this from sharepoint
+ * TODO:
+ * - add correct data, put in a store
+ * - ask connor where we will access this from sharepoint
  */
 export const roleData: Array<IRole> = [{
   name: "Anonymous",
