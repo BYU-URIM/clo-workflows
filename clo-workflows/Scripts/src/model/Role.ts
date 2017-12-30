@@ -7,4 +7,3 @@ export interface IRole {
     name: RoleName
     permittedSteps: Array<IStep> // steps which are visible to members of each role
 }
-
