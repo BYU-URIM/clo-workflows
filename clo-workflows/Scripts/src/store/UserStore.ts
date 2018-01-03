@@ -16,27 +16,7 @@ export class UserStore {
 
 
     @action async init(): Promise<void> {
-<<<<<<< HEAD
-        this.currentUser = await this.asyncService.fetchUser()
-        this.currentUserProjects = [
-            {
-                ID:"project1",
-                Title:"Project 1 Title",
-                Type:"Synch"
-            },
-            {
-                ID:"project2",
-                Title:"Project 2 Title",
-                Type:"Arranging"
-            },{
-                ID:"project3",
-                Title:"Project 2 Title",
-                Type:"Masters"
-            }
-        ]
-=======
         this.currentUser = await this.dataService.fetchUser()
->>>>>>> 7719b561543e0ad180eb7caf17ce6285bee4dad7
     }
 
     @computed get isEmployee(): boolean {
