@@ -9,23 +9,4 @@ export class MockDataAccess implements IDataAccess {
     fetchUser(): Promise<IUserDto> {
         return Promise.resolve(MockUsersDtos[0])
     }
-    fetchUserProjects(): Array<IProject> {
-            return [
-                {
-                    ID:"project1",
-                    Title:"Project 1 Title",
-                    Type:"Synch"
-                },
-                {
-                    ID:"project2",
-                    Title:"Project 2 Title",
-                    Type:"Arranging"
-                },{
-                    ID:"project3",
-                    Title:"Project 2 Title",
-                    Type:"Masters"
-                }
-            ]    
-        
-    }
 }
