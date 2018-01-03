@@ -1,3 +1,5 @@
+import { MockDataAccess } from './../dataAccess/MockDataAccess'
+import { IProject } from './../model/Project'
 import { RootStore } from "./RootStore"
 import { DataService } from "../service/DataService"
 import { IUser } from "../model/User"
@@ -10,6 +12,8 @@ export class UserStore {
     ) {}
 
     @observable currentUser: IUser
+    @observable currentUserProjects?: Array<IProject>
+
 
     @action async init(): Promise<void> {
         this.currentUser = await this.dataService.fetchUser()

@@ -22,11 +22,10 @@ export class App extends React.Component<any, any> {
   render() {
     return (
       <Fabric>
-        <Header currentUser={this.userStore.currentUser} />
         {this.userStore.isEmployee ? (
           <Employee currentUser={this.userStore.currentUser} />
         ) : (
-          <Anonymous currentUser={this.userStore.currentUser} />
+          <Anonymous currentUser={this.userStore.currentUser} currentUserProjects = {this.userStore.currentUserProjects}/>
         )}
         <DevTools />
       </Fabric>
