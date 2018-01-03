@@ -6,7 +6,7 @@ import * as steps from "../../res/json/Steps.json"
 import * as processFormControls from "../../res/json/ProcessFormControls.json"
 import { IRole } from "../../src/model/Role"
 import { MockDataAccess } from "../../src/dataAccess/MockDataAccess"
-import { IFormControl } from '../../src/model/FormControl';
+import { IFormControl } from "../../src/model/FormControl"
 
 /*
     ensure that fetchUser creates a userObject with the correct shape
