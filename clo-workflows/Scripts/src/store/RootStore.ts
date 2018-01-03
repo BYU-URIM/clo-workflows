@@ -1,5 +1,5 @@
 import { UiStore } from "./UiStore"
-import { AsyncService } from "../service/AsyncService"
+import { DataService } from "../service/DataService"
 import { UserStore } from "./UserStore"
 import { action } from "mobx"
 import { UserProcessStore } from "./UserProcessStore"
@@ -12,20 +12,20 @@ export class RootStore {
     employeeProcessStore: EmployeeProcessStore // created for employees logged into the app
 
     constructor(
-        private asyncService: AsyncService,
+        private dataService: DataService,
     ) {}
 
     @action async init(): Promise<void> {
         this.uiStore = new UiStore(this)
-        this.userStore = new UserStore(this, this.asyncService)
-        this.userProcessStore = new UserProcessStore(this, this.asyncService)
+        this.userStore = new UserStore(this, this.dataService)
+        this.userProcessStore = new UserProcessStore(this, this.dataService)
 
         await this.userStore.init()
         await this.userProcessStore.init()
 
         // create and initialize the employee store if the current user is an employee
         if(this.userStore.isEmployee) {
-            this.employeeProcessStore = new EmployeeProcessStore(this, this.asyncService)
+            this.employeeProcessStore = new EmployeeProcessStore(this, this.dataService)
             this.employeeProcessStore.init()
         }
     }

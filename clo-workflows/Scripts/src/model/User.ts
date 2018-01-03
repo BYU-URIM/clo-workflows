@@ -6,3 +6,10 @@ export interface IUser {
     email: string
     role: IRole
 }
+
+export interface IUserDto {
+    name: string
+    username: string
+    email: string
+    roleName: string
+}

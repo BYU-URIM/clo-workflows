@@ -1,5 +1,5 @@
-import { IUser } from "../model/User"
+import { IUserDto } from "../model/User"
 
 export interface IDataAccess {
-    fetchUser(): Promise<IUser>
+    fetchUser(): Promise<IUserDto>
 }

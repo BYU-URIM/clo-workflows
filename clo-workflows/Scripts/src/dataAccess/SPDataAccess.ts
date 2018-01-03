@@ -9,7 +9,7 @@ export class SPDataAccess implements IDataAccess {
                 name: data.d.Title,
                 email: data.d.Email,
                 username: data.d.LoginName,
-                role: null,
+                roleName: data.d.Group,
             }))
     }
 

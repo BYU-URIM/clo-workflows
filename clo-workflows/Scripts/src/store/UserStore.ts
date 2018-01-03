@@ -1,18 +1,18 @@
 import { RootStore } from "./RootStore"
-import { AsyncService } from "../service/AsyncService"
+import { DataService } from "../service/DataService"
 import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 
 export class UserStore {
     constructor(
         private root: RootStore,
-        private asyncService: AsyncService,
+        private dataService: DataService,
     ) {}
 
     @observable currentUser: IUser
 
     @action async init(): Promise<void> {
-        this.currentUser = await this.asyncService.fetchUser()
+        this.currentUser = await this.dataService.fetchUser()
     }
 
     @computed get isEmployee(): boolean {
