@@ -8,13 +8,12 @@ interface IAnonymousProps {
   currentUser: IUser
   currentUserProjects: Array<IProject>
 }
-
 export class Anonymous extends React.Component<IAnonymousProps> {
   render() {
     const { currentUser, currentUserProjects } = this.props
     return (
       <div>
-        <NewProject />
+        <NewProject currentUser={currentUser} />
         <ExistingProjects currentUser={currentUser} currentUserProjects = {currentUserProjects} />
 
       </div>
