@@ -1,129 +1,129 @@
 export type WorkType = "Music" | "Book" | "Article" | "Book Chapter" | "Image" | "Video" | "Website" | "Other"
 
 export interface IWork {
-    Type: WorkType
-    ID: number
+    type: WorkType
+    id: number
 }
 
 export interface IMusicWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
-    SeriesTitle: string
-    Edition: string
-    FormatInformation: string
-    CallNumber: number
+    course: string
+    format: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
+    seriesTitle: string
+    edition: string
+    formatInformation: string
+    callNumber: number
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }
 
 export interface IBookWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
-    Edition: string
-    FormatInformation: string
-    CallNumber: number
+    course: string
+    format: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
+    edition: string
+    formatInformation: string
+    callNumber: number
     ISBN: number
-    TotalPages: number
-    TotalChapters: number
+    totalPages: number
+    totalChapters: number
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }
 
 export interface IArticleWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
-    JournalTitle: string
-    Edition: string
-    FormatInformation: string
-    CallNumber: string
+    course: string
+    format: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
+    journalTitle: string
+    edition: string
+    formatInformation: string
+    callNumber: string
     ISSN: number
-    Volume: number
-    Issue: string
-    PageRange: string
-    TotalPages: number
+    volume: number
+    issue: string
+    pageRange: string
+    totalPages: number
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }
 
 export interface IBookChapterWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
-    BookTitle: string
-    Edition: string
-    FormatInformation: string
-    CallNumber: number
+    course: string
+    format: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
+    bookTitle: string
+    edition: string
+    formatInformation: string
+    callNumber: number
     ISBN: number
-    PageRange: string
-    TotalPages: number
+    pageRange: string
+    totalPages: number
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }
 
 export interface IImageWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
-    AlbumTitle: string
-    Edition: string
-    FormatInformation: string
-    CallNumber: number
+    course: string
+    format: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
+    albumTitle: string
+    edition: string
+    formatInformation: string
+    callNumber: number
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }
 
 export interface IVideoWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
+    course: string
+    format: string
+    title: string
     URL: string
-    HoldType: string
-    HoldFrom: string
-    HoldUnitl: string
-    Year: string
-    Director: string
-    HardCopyOwner: string
+    holdType: string
+    holdFrom: string
+    holdUnitl: string
+    year: string
+    director: string
+    hardCopyOwner: string
 }
 
 export interface IWebsiteWork extends IWork {
-    Course: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
+    course: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }
 
 export interface IOtherWork extends IWork {
-    Course: string
-    Format: string
-    Title: string
-    Author: string
-    Publisher: string
-    YearPublished: string
-    SeriesTitle: string
-    Edition: string
-    FormatInformation: string
-    CallNumber: number
+    course: string
+    format: string
+    title: string
+    author: string
+    publisher: string
+    yearPublished: string
+    seriesTitle: string
+    edition: string
+    formatInformation: string
+    callNumber: number
     URL: string
-    HardCopyOwner: string
+    hardCopyOwner: string
 }

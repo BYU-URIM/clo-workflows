@@ -1,14 +1,14 @@
 import { MockDataAccess } from './../dataAccess/MockDataAccess'
 import { IProject } from './../model/Project'
 import { RootStore } from "./RootStore"
-import { AsyncService } from "../service/AsyncService"
+import { DataService } from "../service/DataService"
 import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 
 export class UserStore {
     constructor(
         private root: RootStore,
-        private asyncService: AsyncService,
+        private dataService: DataService,
     ) {}
 
     @observable currentUser: IUser
@@ -16,6 +16,7 @@ export class UserStore {
 
 
     @action async init(): Promise<void> {
+<<<<<<< HEAD
         this.currentUser = await this.asyncService.fetchUser()
         this.currentUserProjects = [
             {
@@ -33,6 +34,9 @@ export class UserStore {
                 Type:"Masters"
             }
         ]
+=======
+        this.currentUser = await this.dataService.fetchUser()
+>>>>>>> 7719b561543e0ad180eb7caf17ce6285bee4dad7
     }
 
     @computed get isEmployee(): boolean {

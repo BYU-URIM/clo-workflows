@@ -1,0 +1,53 @@
+{
+    "Anonymous": {
+        "name": "Anonymous",
+        "permittedSteps": [
+            "Intake"
+        ]
+    },
+    "Junior License Processor": {
+        "name": "Junior License Processor",
+        "permittedSteps": [
+            "Existing License",
+            "Ownership Research",
+            "Request Submitted",
+            "Response from Rights Holder Received",
+            "Receipt of License",
+            "Payment"
+        ]
+    },
+    "Senior License Processor": {
+        "name": "Senior License Processor",
+        "permittedSteps": [
+            "Public Domain Research",
+            "Exemption Analysis",
+            "Ownership Research",
+            "Request Submitted",
+            "Response from Rights Holder Received",
+            "Receipt of License",
+            "Payment"
+        ]
+    },
+    "Supervisor": {
+        "name": "Supervisor",
+        "permittedSteps": [
+            "Public Domain Approval",
+            "Existing License Approval",
+            "Exemption Approval",
+            "CLO Response to Rights Holder",
+            "Supervisor Signature"
+        ]
+    },
+    "Admin Assistant": {
+        "name": "Admin Assistant",
+        "permittedSteps": [
+            "Process Payment"
+        ]
+    },
+    "Administrator": {
+        "name": "Administrator",
+        "permittedSteps": [
+            "Public Domain Research"
+        ]
+    }
+}

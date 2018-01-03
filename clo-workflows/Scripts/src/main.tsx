@@ -5,7 +5,7 @@ import { BrowserRouter, Router } from "react-router-dom"
 import { App } from "./layout/App"
 import { Provider } from "mobx-react"
 import { RootStore } from "./store/RootStore"
-import { AsyncService } from "./service/AsyncService"
+import { DataService } from "./service/DataService"
 import { DataAccessFactory } from "./dataAccess/DataAccessFactory"
 
 // in strict mode, mobx requires that all observable data members only be modified through explicit @action mutators
@@ -13,7 +13,7 @@ useStrict(true)
 
 const root = document.getElementById("root")
 
-const rootStore = new RootStore(new AsyncService(DataAccessFactory.getDao()))
+const rootStore = new RootStore(new DataService(DataAccessFactory.getDao()))
 
 rootStore.init().then(() => {
     ReactDom.render(

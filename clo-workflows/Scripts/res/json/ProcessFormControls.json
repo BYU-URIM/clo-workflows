@@ -1,0 +1,161 @@
+{
+    "ID": {
+        "displayName": "ID",
+        "modelRef": "id",
+        "type": "number"
+    },
+    "Project ID": {
+        "displayName": "Project ID",
+        "modelRef": "projectId",
+        "type": "number"
+    },
+    "Work ID": {
+        "displayName": "Work ID",
+        "modelRef": "workId",
+        "type": "number"
+    },
+    "Public Domain Research": {
+        "displayName": "Public Domain Research",
+        "modelRef": "publicDomainResearch",
+        "type": "choice",
+        "choices": [
+            "Public Domain",
+            "Non Public Domain",
+            "Unclear"
+        ]
+    },
+    "Public Domain Approval": {
+        "displayName": "Public Domain Approval",
+        "modelRef": "publicDomainApproval",
+        "type": "checkbox"
+    },
+    "Existing License": {
+        "displayName": "Existing License",
+        "modelRef": "existingLicense",
+        "type": "choice",
+        "choices": [
+            "CC",
+            "Library Database",
+            "Terms of Use",
+            "Permission from Rights Holder"
+        ]
+    },
+    "Existing License Approval": {
+        "displayName": "Existing License Approval",
+        "modelRef": "existingLicenseApproval",
+        "type": "checkbox"
+    },
+    "Exemption Analysis": {
+        "displayName": "Exemption Analysis",
+        "modelRef": "exemptionAnalysis",
+        "type": "choice",
+        "choices": [
+            "Fair Use",
+            "No Exemption"
+        ]
+    },
+    "Exemption Approval": {
+        "displayName": "Exemption Approval",
+        "modelRef": "exemptionApproval",
+        "type": "checkbox"
+    },
+    "Licensing Exchange": {
+        "displayName": "Licensing Exchange",
+        "modelRef": "licensingExchange",
+        "type": "choice",
+        "choices": [
+            "Tresona",
+            "Wearethehits.com",
+            "Not found in licensing exchange"
+        ]
+    },
+    "Direct to Rights Holders": {
+        "displayName": "Direct to Rights Holders",
+        "modelRef": "directToRightsHolders",
+        "type": "textarea"
+    },
+    "Request Submitted": {
+        "displayName": "Request Submitted",
+        "modelRef": "requestSubmitted",
+        "type": "checkbox"
+    },
+    "Rights Holder Response": {
+        "displayName": "Rights Holder Response",
+        "modelRef": "rightsHolderResponse",
+        "type": "choice",
+        "choices": [
+            "Waiting for rights holder response",
+            "License request approved",
+            "License request denied"
+        ],
+        "defaultValue": "Waiting for rights holder response"
+    },
+    "CLO Response to Rights Holder": {
+        "displayName": "CLO Response to Rights Holder",
+        "modelRef": "cloResponseToRightsHolder",
+        "type": "choice",
+        "choices": [
+            "Rights holder offer accepted",
+            "Renegotiating",
+            "Public domian override",
+            "Exemption override",
+            "Low risk override",
+            "Cancel request"
+        ]
+    },
+    "Receipt of License": {
+        "displayName": "Receipt of License",
+        "modelRef": "receiptOfLicense",
+        "type": "choice",
+        "choices": [
+            "License not received",
+            "Signature required",
+            "Signature not required"
+        ],
+        "defaultValue": "License not received"
+    },
+    "Supervisor Signature": {
+        "displayName": "Supervisor Signature",
+        "modelRef": "supervisorSignature",
+        "type": "checkbox"
+    },
+    "Payment": {
+        "displayName": "Payment",
+        "modelRef": "payment",
+        "type": "choice",
+        "choices": [
+            "Fee required",
+            "Gratis"
+        ]
+    },
+    "Process Payment": {
+        "displayName": "Process Payment",
+        "modelRef": "processPayment",
+        "type": "checkbox"
+    },
+    "Fast Track Number": {
+        "displayName": "fastTrackNumber",
+        "modelRef": "processPayment",
+        "type": "number"
+    },
+    "Initial Request Completion": {
+        "displayName": "Initial Request Completion",
+        "modelRef": "initialRequestCompletion",
+        "type": "choice",
+        "choices": [
+            "Signed license to be sent",
+            "Signed license sent to rights holder"
+        ],
+        "defaultValue": "Signed license to be sent"
+    },
+    "Final Request Completion": {
+        "displayName": "Final Request Completion",
+        "modelRef": "finalRequestCompletion",
+        "type": "choice",
+        "choices": [
+            "Awaiting countersignature",
+            "Countersignature received"
+        ],
+        "defaultValue": "Awaiting countersignature"
+    }
+}
