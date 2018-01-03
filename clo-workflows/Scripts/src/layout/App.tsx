@@ -26,7 +26,7 @@ export class App extends React.Component<any, any> {
         {this.userStore.isEmployee ? (
           <Employee currentUser={this.userStore.currentUser} />
         ) : (
-          <Anonymous currentUser={this.userStore.currentUser} />
+          <Anonymous currentUser={this.userStore.currentUser} currentUserProjects = {this.userStore.currentUserProjects}/>
         )}
         <DevTools />
       </Fabric>

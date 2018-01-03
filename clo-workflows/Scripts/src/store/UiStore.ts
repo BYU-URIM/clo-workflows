@@ -5,5 +5,4 @@ export class UiStore {
     constructor(
         private root: RootStore,
     ) {}
-
 }
