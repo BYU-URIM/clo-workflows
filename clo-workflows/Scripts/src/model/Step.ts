@@ -7,6 +7,6 @@ type StepName = "Intake" | "Work Approval" | "Public Domain Research" | "Public 
                     | "Process Payment" | "Complete Request" | "Completing the License Request"
 
 export interface IStep {
-    name: StepName
+    name: string
     processFormControls: Array<IFormControl>
 }
