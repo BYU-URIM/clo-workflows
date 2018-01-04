@@ -4,6 +4,11 @@
         "modelRef": "type",
         "type": "text"
     },
+    "ID": {
+        "displayName": "ID",
+        "modelRef": "id",
+        "type": "text"
+    },
     "Title": {
         "displayName": "Title",
         "modelRef": "title",
@@ -79,8 +84,8 @@
         "modelRef": "territory",
         "type": "text"
     },
-    "Number Of Copies": {
-        "displayName": "Number Of Copies",
+    "Number of Copies": {
+        "displayName": "Number of Copies",
         "modelRef": "numberOfCopies",
         "type": "number"
     },
@@ -177,7 +182,7 @@
     "Copy of Score": {
         "displayName": "Copy of Score",
         "modelRef": "copyOfScore",
-        "type": "boolean"
+        "type": "checkbox"
     },
     "Link": {
         "displayName": "Link",
@@ -204,7 +209,7 @@
         "modelRef": "requestorContactInfo",
         "type": "text"
     },
-    "Date Request Sent to ClO": {
+    "Date Request Sent to CLO": {
         "displayName": "Date Request Sent to CLO",
         "modelRef": "dateRequestSentToClo",
         "type": "datetime"
@@ -227,7 +232,7 @@
     "Approved by BYUSA": {
         "displayName": "Approved By BYUSA",
         "modelRef": "approvedByBYUSA",
-        "type": "boolean"
+        "type": "checkbox"
     },
     "Digital Format": {
         "displayName": "Digital Format",
@@ -258,8 +263,8 @@
         "modelRef": "additionalEdits",
         "type": "text"
     },
-    "cloDetermination": {
-        "displayName": "Clo Determination",
+    "CLO Determination": {
+        "displayName": "CLO Determination",
         "modelRef": "cloDetermination",
         "type": "text"
     }
