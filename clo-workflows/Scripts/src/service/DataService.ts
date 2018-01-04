@@ -20,10 +20,10 @@ export class DataService {
         }
 
         // normalized roles contain strings for steps, map to actual step objects
-        role.permittedSteps = roles[userDto.roleName].permittedSteps.map(stepName => steps[stepName])
+        role.permittedSteps = roles[userDto.roleName].permittedSteps.map(stepName => Object.assign({}, steps[stepName]))
         role.permittedSteps.forEach(step => {
             // normalized steps contain strings for formControls, map to actual formControl objects
-            step.processFormControls = step.processFormControls.map(formControlName => processFormControls[formControlName])
+            step.processFormControls = step.processFormControls.map(formControlName => Object.assign({}, processFormControls[formControlName]))
         })
 
         // build user object from userDto and role
