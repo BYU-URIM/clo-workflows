@@ -84,7 +84,7 @@
         "modelRef": "ISBN",
         "type": "number"
     },
-    "Volumne": {
+    "Volume": {
         "displayName": "Volume",
         "modelRef": "volume",
         "type": "number"
