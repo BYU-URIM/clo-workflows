@@ -1,0 +1,147 @@
+{
+    "Type": {
+        "displayName": "Type",
+        "modelRef": "type",
+        "type": "text"
+    },
+    "ID": {
+        "displayName": "ID",
+        "modelRef": "id",
+        "type": "text"
+    },
+    "Course": {
+        "displayName": "Course",
+        "modelRef": "course",
+        "type": "text"
+    },
+    "Format": {
+        "displayName": "Format",
+        "modelRef": "format",
+        "type": "text"
+    },
+    "Title": {
+        "displayName": "Title",
+        "modelRef": "title",
+        "type": "text"
+    },
+    "Author": {
+        "displayName": "Author",
+        "modelRef": "author",
+        "type": "text"
+    },
+    "Publisher": {
+        "displayName": "Publisher",
+        "modelRef": "publisher",
+        "type": "text"
+    },
+    "Year Published": {
+        "displayName": "Year Published",
+        "modelRef": "yearPublished",
+        "type": "text"
+    },
+    "Series Title": {
+        "displayName": "Series Title",
+        "modelRef": "seriesTitle",
+        "type": "text"
+    },
+    "Album Title": {
+        "displayName": "Album Title",
+        "modelRef": "albumTitle",
+        "type": "text"
+    },
+    "Book Title": {
+        "displayName": "Book Title",
+        "modelRef": "bookTitle",
+        "type": "text"
+    },
+    "Journal Title": {
+        "displayName": "Journal Title",
+        "modelRef": "journalTitle",
+        "type": "text"
+    },
+    "Edition": {
+        "displayName": "Edition",
+        "modelRef": "edition",
+        "type": "text"
+    },
+    "Format Information": {
+        "displayName": "Format Information",
+        "modelRef": "formatInformation",
+        "type": "text"
+    },
+    "Call Number": {
+        "displayName": "Call Number",
+        "modelRef": "callNumber",
+        "type": "number"
+    },
+    "ISSN": {
+        "displayName": "ISSN",
+        "modelRef": "ISSN",
+        "type": "number"
+    },
+    "ISBN": {
+        "displayName": "ISBN",
+        "modelRef": "ISBN",
+        "type": "number"
+    },
+    "Volumne": {
+        "displayName": "Volume",
+        "modelRef": "volume",
+        "type": "number"
+    },
+    "Issue": {
+        "displayName": "Issue",
+        "modelRef": "issue",
+        "type": "text"
+    },
+    "Page Range": {
+        "displayName": "Page Range",
+        "modelRef": "pageRange",
+        "type": "text"
+    },
+    "Total Pages": {
+        "displayName": "Total Pages",
+        "modelRef": "totalPages",
+        "type": "number"
+    },
+    "Total Chapters": {
+        "displayName": "Total Chapters",
+        "modelRef": "totalChapters",
+        "type": "number"
+    },
+    "URL": {
+        "displayName": "URL",
+        "modelRef": "URL",
+        "type": "text"
+    },
+    "Hold Type": {
+        "displayName": "Hold Type",
+        "modelRef": "holdType",
+        "type": "text"
+    },
+    "Hold From": {
+        "displayName": "Hold Form",
+        "modelRef": "holdFrom",
+        "type": "text"
+    },
+    "Hold Until": {
+        "displayName": "Hold Until",
+        "modelRef": "holdUntil",
+        "type": "text"
+    },
+    "Year": {
+        "displayName": "Year",
+        "modelRef": "year",
+        "type": "text"
+    },
+    "Director": {
+        "displayName": "Director",
+        "modelRef": "director",
+        "type": "text"
+    },
+    "Hard Copy Owner": {
+        "displayName": "Hard Copy Owner",
+        "modelRef": "hardCopyOwner",
+        "type": "text"
+    }
+}

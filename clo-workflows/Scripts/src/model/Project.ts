@@ -30,7 +30,7 @@ export interface ISynchProject extends IProject {
     dateOfFollowUp3: string
     dateOfFollowUp4: string
     datePaymentInformationSent: string
-    dateOfContractReceived: string
+    dateContractReceived: string
     dateSentToClient: string
     materialsRequested: string
     creditsRead: string
@@ -114,7 +114,7 @@ export interface IGrandProject extends IProject {
     dateOfFollowUp2: string
     dateOfFollowUp3: string
     dateOfFollowUp4: string
-    dateOfPaymentInformation: string
+    datePaymentInformationSent: string
     dateOfContractReceived: string
     dateSentToClient: string
     materialsRequested: string

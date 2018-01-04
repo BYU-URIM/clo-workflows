@@ -1,0 +1,266 @@
+{
+    "Type": {
+        "displayName": "Type",
+        "modelRef": "type",
+        "type": "text"
+    },
+    "Title": {
+        "displayName": "Title",
+        "modelRef": "title",
+        "type": "text"
+    },
+    "Dance Title": {
+        "displayName": "Dance Title",
+        "modelRef": "danceTitle",
+        "type": "text"
+    },
+    "Description of Work": {
+        "displayName": "Description of Work",
+        "modelRef": "descriptionOfWork",
+        "type": "text"
+    },
+    "Group": {
+        "displayName": "Group",
+        "modelRef": "group",
+        "type": "text"
+    },
+    "Timing": {
+        "displayName": "Timing",
+        "modelRef": "timing",
+        "type": "text"
+    },
+    "Artist": {
+        "displayName": "Artist",
+        "modelRef": "artist",
+        "type": "text"
+    },
+    "Arranger": {
+        "displayName": "Arranger",
+        "modelRef": "arranger",
+        "type": "text"
+    },
+    "Copyright Owner": {
+        "displayName": "Copyright Owner",
+        "modelRef": "copyrightOwner",
+        "type": "text"
+    },
+    "Licensing Organization": {
+        "displayName": "Licensing Organization",
+        "modelRef": "licensingOrganization",
+        "type": "text"
+    },
+    "Instrumentation": {
+        "displayName": "Instrumentation",
+        "modelRef": "instrumentation",
+        "type": "text"
+    },
+    "Society": {
+        "displayName": "Society",
+        "modelRef": "society",
+        "type": "text"
+    },
+    "Fee": {
+        "displayName": "fee",
+        "modelRef": "fee",
+        "type": "number"
+    },
+    "Term": {
+        "displayName": "Term",
+        "modelRef": "tee",
+        "type": "text"
+    },
+    "MFN": {
+        "displayName": "MFN",
+        "modelRef": "mfn",
+        "type": "text"
+    },
+    "Territory": {
+        "displayName": "Territory",
+        "modelRef": "territory",
+        "type": "text"
+    },
+    "Number Of Copies": {
+        "displayName": "Number Of Copies",
+        "modelRef": "numberOfCopies",
+        "type": "number"
+    },
+    "Options Contract Notes": {
+        "displayName": "Options Contract Notes",
+        "modelRef": "optionsContractNotes",
+        "type": "text"
+    },
+    "Contact": {
+        "displayName": "Contact",
+        "modelRef": "contact",
+        "type": "text"
+    },
+    "Date Request Send": {
+        "displayName": "Date Request Send",
+        "modelRef": "dateRequestSend",
+        "type": "datetime"
+    },
+    "Date Quote Received": {
+        "displayName": "Date Quote Received",
+        "modelRef": "dateQuoteReceived",
+        "type": "datetime"
+    },
+    "Date Confirmed Use": {
+        "displayName": "Date Confirmed Use",
+        "modelRef": "dateConfirmedUse",
+        "type": "datetime"
+    },
+    "Date of Follow-up 1": {
+        "displayName": "Date of Follow-up 1",
+        "modelRef": "dateOfFollowUp1",
+        "type": "datetime"
+    },
+    "Date of Follow-up 2": {
+        "displayName": "Date of Follow-up 2",
+        "modelRef": "dateOfFollowUp2",
+        "type": "datetime"
+    },
+    "Date of Follow-up 3": {
+        "displayName": "Date of Follow-up 3",
+        "modelRef": "dateOfFollowUp3",
+        "type": "datetime"
+    },
+    "Date of Follow-up 4": {
+        "displayName": "Date of Follow-up 4",
+        "modelRef": "dateOfFollowUp4",
+        "type": "datetime"
+    },
+    "Date Payment Information Sent": {
+        "displayName": "Date Payment Information Sent",
+        "modelRef": "datePaymentInformationSent",
+        "type": "datetime"
+    },
+    "Date Contract Received": {
+        "displayName": "Date Contract Received",
+        "modelRef": "dateContractReceived",
+        "type": "datetime"
+    },
+    "Date Sent to Client": {
+        "displayName": "Date Sent to Client",
+        "modelRef": "dateSentToClient",
+        "type": "datetime"
+    },
+    "Materials Requested": {
+        "displayName": "Materials Requested",
+        "modelRef": "materialsRequested",
+        "type": "text"
+    },
+    "Credits Read": {
+        "displayName": "Credits Read",
+        "modelRef": "creditsRead",
+        "type": "text"
+    },
+    "Album": {
+        "displayName": "Album",
+        "modelRef": "album",
+        "type": "text"
+    },
+    "Track Number": {
+        "displayName": "Track Number",
+        "modelRef": "trackNumber",
+        "type": "number"
+    },
+    "Release Date": {
+        "displayName": "Release Date",
+        "modelRef": "releaseDate",
+        "type": "datetime"
+    },
+    "Source": {
+        "displayName": "Source",
+        "modelRef": "source",
+        "type": "text"
+    },
+    "Copy of Score": {
+        "displayName": "Copy of Score",
+        "modelRef": "copyOfScore",
+        "type": "boolean"
+    },
+    "Link": {
+        "displayName": "Link",
+        "modelRef": "link",
+        "type": "text"
+    },
+    "Projected Audience Size": {
+        "displayName": "Projected Audience Size",
+        "modelRef": "projectedAudienceSize",
+        "type": "number"
+    },
+    "Actual Audience Size": {
+        "displayName": "Actual Audience Size",
+        "modelRef": "actualAudienceSize",
+        "type": "number"
+    },
+    "Date of Showing": {
+        "displayName": "Date of Showing",
+        "modelRef": "dateOfShowing",
+        "type": "datetime"
+    },
+    "Requestor Contact Info": {
+        "displayName": "Requestor Contact Info",
+        "modelRef": "requestorContactInfo",
+        "type": "text"
+    },
+    "Date Request Sent to ClO": {
+        "displayName": "Date Request Sent to CLO",
+        "modelRef": "dateRequestSentToClo",
+        "type": "datetime"
+    },
+    "Admission Fee": {
+        "displayName": "Admission Fee",
+        "modelRef": "admissionFee",
+        "type": "number"
+    },
+    "Fee Structure": {
+        "displayName": "Fee Structure",
+        "modelRef": "feeStructure",
+        "type": "text"
+    },
+    "Number of Showings": {
+        "displayName": "Number of Showings",
+        "modelRef": "numberOfShowings",
+        "type": "number"
+    },
+    "Approved by BYUSA": {
+        "displayName": "Approved By BYUSA",
+        "modelRef": "approvedByBYUSA",
+        "type": "boolean"
+    },
+    "Digital Format": {
+        "displayName": "Digital Format",
+        "modelRef": "digitalFormat",
+        "type": "choice",
+        "choices": [
+            "DVD",
+            "BluRay"
+        ]
+    },
+    "FT Number": {
+        "displayName": "FT Number",
+        "modelRef": "ftNumber",
+        "type": "number"
+    },
+    "Account Code": {
+        "displayName": "Account Code",
+        "modelRef": "accountCode",
+        "type": "text"
+    },
+    "Censoring": {
+        "displayName": "Censoring",
+        "modelRef": "censoring",
+        "type": "text"
+    },
+    "Additional Edits": {
+        "displayName": "Additional Edits",
+        "modelRef": "additionalEdits",
+        "type": "text"
+    },
+    "cloDetermination": {
+        "displayName": "Clo Determination",
+        "modelRef": "cloDetermination",
+        "type": "text"
+    }
+}
