@@ -9,6 +9,7 @@ import * as workFormControls from "../../res/json/WorkFormControls.json"
 import * as projectTypes from "../../res/json/ProjectTypes.json"
 import * as projectFormControls from "../../res/json/ProjectFormControls.json"
 import { IFormControl } from "../model/FormControl"
+import { IRequestElement } from "../model/RequestElement"
 
 export class DataService {
     constructor(
@@ -40,6 +41,10 @@ export class DataService {
         }
 
         return user
+    }
+
+    async fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProjects()
     }
 
     getWorkFormControls(): Map<string, Array<IFormControl>> {

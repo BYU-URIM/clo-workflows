@@ -1,26 +1,40 @@
 import * as React from "react"
 import { IUser } from "../model/User"
-interface IEmployeeProps {
-  currentUser: IUser
-}
+import { inject, observer } from "mobx-react"
+import { EmployeeProcessStore } from "../store/EmployeeProcessStore"
+import { UiStore } from "../store/UiStore"
+import { UserStore } from "../store/UserStore"
+import FormControlGroup from "./FormControlGroup"
+import { observable } from "mobx"
+
 const styles = {
   border: "solid 2px black",
   margin: "25px",
   padding: "10px",
 }
-export const Employee = (props: IEmployeeProps) => {
-  return (
-    <div>
-      {props.currentUser.role.permittedSteps.map(step => (
-        <div key={`${step.name}-${step.processFormControls.length}`} style={styles}>
-          <h2>{step.name}</h2>
-          <ul>
-            {step.processFormControls.map(formControl => (
-              <li key={`${step.name}-${formControl.displayName}`}>{formControl.displayName}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  )
+
+@inject("rootStore")
+@observer
+export class Employee extends React.Component<any, any> {
+
+    public componentWillMount() {
+        this.userStore = this.props.rootStore.userStore
+        this.uiStore = this.props.rootStore.uiStore
+        this.employeeProcessStore = this.props.rootStore.employeeProcessStore
+    }
+
+    private userStore: UserStore
+    private uiStore: UiStore
+    private employeeProcessStore: EmployeeProcessStore
+
+    public render() {
+        return (
+            <div>
+                <h2>Test Work Form</h2>
+                <FormControlGroup data={this.employeeProcessStore.currentProject} formControls={this.uiStore.projectFormControls.get("Movies")}
+                    validation={{}} onChange={this.employeeProcessStore.updateCurrentProject} />
+            </div>
+        )
+    }
+
 }
