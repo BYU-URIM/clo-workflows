@@ -1,4 +1,5 @@
 import { IDataAccess } from "./IDataAccess"
+import { IRequestElement } from "../model/RequestElement"
 
 export class SPDataAccess implements IDataAccess {
 
@@ -11,6 +12,10 @@ export class SPDataAccess implements IDataAccess {
                 username: data.d.LoginName,
                 roleName: data.d.Group,
             }))
+    }
+
+    fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
+        return Promise.resolve(null)
     }
 
 }

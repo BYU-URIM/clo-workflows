@@ -16,7 +16,7 @@ export class RootStore {
     ) {}
 
     @action async init(): Promise<void> {
-        this.uiStore = new UiStore(this)
+        this.uiStore = new UiStore(this, this.dataService)
         this.userStore = new UserStore(this, this.dataService)
         this.userProcessStore = new UserProcessStore(this, this.dataService)
 
@@ -26,7 +26,7 @@ export class RootStore {
         // create and initialize the employee store if the current user is an employee
         if(this.userStore.isEmployee) {
             this.employeeProcessStore = new EmployeeProcessStore(this, this.dataService)
-            this.employeeProcessStore.init()
+            await this.employeeProcessStore.init()
         }
     }
 }

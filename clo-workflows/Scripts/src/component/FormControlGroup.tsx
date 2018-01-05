@@ -4,35 +4,47 @@ import { IFormControl } from "../model/FormControl"
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
+import { IRequestElement, FormEntryType } from "../model/RequestElement"
+import { ObservableMap } from "mobx"
 
-// "text" | "choice" | "checkbox" | "textarea" | "datetime" | "number"
 interface IFormControlGroupProps {
-    model: {}
+    data: ObservableMap<FormEntryType>
     formControls: Array<IFormControl>
     validation: {}
-    onChange: (fieldName: string, newVal: any) => void
+    onChange: (fieldName: string, newVal: FormEntryType) => void
+}
+
+const styles = {
+    width: "30%",
+    margin: "0 20",
+}
+
+const checkboxStyles = {
+    margin: "20 0",
 }
 
 // renders an array of form controls which pull their information from the model object in props
 function FormControlGroup(props: IFormControlGroupProps) {
     return (
-        <div>
+        <div style={styles}>
         {
-            props.formControls.map(formControl => {
+            props.formControls && props.formControls.map((formControl, index) => {
                 if(formControl.type === "text"  || formControl.type === "datetime" || formControl.type === "number") {
-                    return <TextField value={props.model[formControl.modelRef]} errorMessage={props.validation[formControl.modelRef]}
-                                onChanged={(newVal: string) => props.onChange(formControl.modelRef, newVal) } label={formControl.displayName} />
+                    return <TextField value={props.data.get(formControl.modelRef) as string} errorMessage={props.validation[formControl.modelRef]}
+                                onChanged={(newVal: string) => props.onChange(formControl.modelRef, newVal) } label={formControl.displayName} key={index} />
                 } else if(formControl.type === "choice") {
-                    return <Dropdown options={formControl.choices.map(choice => ({key: choice, text: choice}))} selectedKey={props.model[formControl.modelRef]}
-                                onChanged={(option: IDropdownOption) => props.onChange(formControl.modelRef, option.text)} label={formControl.displayName} />
+                    return <Dropdown options={formControl.choices.map(choice => ({key: choice, text: choice}))} selectedKey={props.data.get(formControl.modelRef) as string}
+                                onChanged={(option: IDropdownOption) => props.onChange(formControl.modelRef, option.text)} label={formControl.displayName} key={index} />
                 } else if(formControl.type === "textarea") {
-                    return <TextField multiline value={props.model[formControl.modelRef]} errorMessage={props.validation[formControl.modelRef]}
+                    return <TextField multiline value={props.data.get(formControl.modelRef) as string} errorMessage={props.validation[formControl.modelRef]} key={index}
                                 onChange={(e) => props.onChange(formControl.modelRef, e.currentTarget.value)} label={formControl.displayName} />
                 } else if(formControl.type === "checkbox") {
-                    return <Checkbox checked={props.model[formControl.modelRef]} label={formControl.displayName}
-                                onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) => props.onChange(formControl.modelRef, isChecked)} />
+                    return <div style={checkboxStyles} key={index}>
+                                <Checkbox checked={props.data.get(formControl.modelRef) as boolean} label={formControl.displayName}
+                                    onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) => props.onChange(formControl.modelRef, isChecked)} />
+                            </div>
                 } else {
-                    return <div>unrecognized form control type</div>
+                    return <div key={index} >unrecognized form control type</div>
                 }
             })
         }
