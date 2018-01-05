@@ -4,6 +4,11 @@ import { IRole } from "../model/Role"
 import * as roles from "../../res/json/Roles.json"
 import * as steps from "../../res/json/Steps.json"
 import * as processFormControls from "../../res/json/ProcessFormControls.json"
+import * as workTypes from "../../res/json/WorkTypes.json"
+import * as workFormControls from "../../res/json/WorkFormControls.json"
+import * as projectTypes from "../../res/json/ProjectTypes.json"
+import * as projectFormControls from "../../res/json/ProjectFormControls.json"
+import { IFormControl } from "../model/FormControl"
 
 export class DataService {
     constructor(
@@ -35,5 +40,23 @@ export class DataService {
         }
 
         return user
+    }
+
+    getWorkFormControls(): Map<string, Array<IFormControl>> {
+        const workFormControlMap: Map<string, Array<IFormControl>> = new Map()
+        Object.keys(workTypes).forEach(workType => {
+            const formControls = workTypes[workType].map(formControlName => workFormControls[formControlName]) as Array<IFormControl>
+            workFormControlMap.set(workType, formControls)
+        })
+        return workFormControlMap
+    }
+
+    getProjectFormControls(): Map<string, Array<IFormControl>> {
+        const projectFormControlMap: Map<string, Array<IFormControl>> = new Map()
+        Object.keys(projectTypes).forEach(projectType => {
+            const formControls = projectTypes[projectType].map(formControlName => projectFormControls[formControlName]) as Array<IFormControl>
+            projectFormControlMap.set(projectType, formControls)
+        })
+        return projectFormControlMap
     }
 }

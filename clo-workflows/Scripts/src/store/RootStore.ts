@@ -16,7 +16,7 @@ export class RootStore {
     ) {}
 
     @action async init(): Promise<void> {
-        this.uiStore = new UiStore(this)
+        this.uiStore = new UiStore(this, this.dataService)
         this.userStore = new UserStore(this, this.dataService)
         this.userProcessStore = new UserProcessStore(this, this.dataService)
 
