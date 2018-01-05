@@ -30,7 +30,7 @@ export class Employee extends React.Component<any, any> {
     public render() {
         return (
             <div>
-                <h2>Test Work Form</h2>
+                <h2>Test Project Form</h2>
                 <FormControlGroup data={this.employeeProcessStore.currentProject} formControls={this.uiStore.projectFormControls.get("Movies")}
                     validation={{}} onChange={this.employeeProcessStore.updateCurrentProject} />
             </div>
