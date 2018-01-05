@@ -59,7 +59,7 @@ ava.test("test processFormControls for correct shape", t => {
     for(const formControlName in processFormControls) {
         const formControl: IFormControl= processFormControls[formControlName]
         t.truthy(formControl.displayName)
-        t.truthy(formControl.modelRef)
+        t.truthy(formControl.dataRef)
         t.truthy(formControl.type)
         t.true(formControlTypes.indexOf(formControl.type) !== -1)
         if(formControl.type === "choice") {
@@ -83,7 +83,7 @@ ava.test("test workFormControls for correct shape", t => {
     for(const formControlName in workFormControls) {
         const formControl: IFormControl= workFormControls[formControlName]
         t.truthy(formControl.displayName)
-        t.truthy(formControl.modelRef)
+        t.truthy(formControl.dataRef)
         t.truthy(formControl.type)
         t.true(formControlTypes.indexOf(formControl.type) !== -1)
         if(formControl.type === "choice") {
@@ -107,7 +107,7 @@ ava.test("test projectFormControls for correct shape", t => {
     for(const formControlName in projectFormControls) {
         const formControl: IFormControl= projectFormControls[formControlName]
         t.truthy(formControl.displayName)
-        t.truthy(formControl.modelRef)
+        t.truthy(formControl.dataRef)
         t.truthy(formControl.type)
         t.true(formControlTypes.indexOf(formControl.type) !== -1)
         if(formControl.type === "choice") {

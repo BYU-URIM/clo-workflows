@@ -8,5 +8,5 @@ type StepName = "Intake" | "Work Approval" | "Public Domain Research" | "Public 
 
 export interface IStep {
     name: string
-    processFormControls: Array<IFormControl>
+    processFormControls: Array<string> // contains string names of form controls permitted at a given step
 }
