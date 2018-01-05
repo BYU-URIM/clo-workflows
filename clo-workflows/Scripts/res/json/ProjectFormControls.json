@@ -1,242 +1,242 @@
 {
     "Type": {
         "displayName": "Type",
-        "modelRef": "type",
+        "dataRef": "type",
         "type": "text"
     },
     "ID": {
         "displayName": "ID",
-        "modelRef": "id",
+        "dataRef": "id",
         "type": "text"
     },
     "Title": {
         "displayName": "Title",
-        "modelRef": "title",
+        "dataRef": "title",
         "type": "text"
     },
     "Dance Title": {
         "displayName": "Dance Title",
-        "modelRef": "danceTitle",
+        "dataRef": "danceTitle",
         "type": "text"
     },
     "Description of Work": {
         "displayName": "Description of Work",
-        "modelRef": "descriptionOfWork",
+        "dataRef": "descriptionOfWork",
         "type": "text"
     },
     "Group": {
         "displayName": "Group",
-        "modelRef": "group",
+        "dataRef": "group",
         "type": "text"
     },
     "Timing": {
         "displayName": "Timing",
-        "modelRef": "timing",
+        "dataRef": "timing",
         "type": "text"
     },
     "Artist": {
         "displayName": "Artist",
-        "modelRef": "artist",
+        "dataRef": "artist",
         "type": "text"
     },
     "Arranger": {
         "displayName": "Arranger",
-        "modelRef": "arranger",
+        "dataRef": "arranger",
         "type": "text"
     },
     "Copyright Owner": {
         "displayName": "Copyright Owner",
-        "modelRef": "copyrightOwner",
+        "dataRef": "copyrightOwner",
         "type": "text"
     },
     "Licensing Organization": {
         "displayName": "Licensing Organization",
-        "modelRef": "licensingOrganization",
+        "dataRef": "licensingOrganization",
         "type": "text"
     },
     "Instrumentation": {
         "displayName": "Instrumentation",
-        "modelRef": "instrumentation",
+        "dataRef": "instrumentation",
         "type": "text"
     },
     "Society": {
         "displayName": "Society",
-        "modelRef": "society",
+        "dataRef": "society",
         "type": "text"
     },
     "Fee": {
         "displayName": "fee",
-        "modelRef": "fee",
+        "dataRef": "fee",
         "type": "number"
     },
     "Term": {
         "displayName": "Term",
-        "modelRef": "tee",
+        "dataRef": "tee",
         "type": "text"
     },
     "MFN": {
         "displayName": "MFN",
-        "modelRef": "mfn",
+        "dataRef": "mfn",
         "type": "text"
     },
     "Territory": {
         "displayName": "Territory",
-        "modelRef": "territory",
+        "dataRef": "territory",
         "type": "text"
     },
     "Number of Copies": {
         "displayName": "Number of Copies",
-        "modelRef": "numberOfCopies",
+        "dataRef": "numberOfCopies",
         "type": "number"
     },
     "Options Contract Notes": {
         "displayName": "Options Contract Notes",
-        "modelRef": "optionsContractNotes",
+        "dataRef": "optionsContractNotes",
         "type": "text"
     },
     "Contact": {
         "displayName": "Contact",
-        "modelRef": "contact",
+        "dataRef": "contact",
         "type": "text"
     },
     "Date Request Send": {
         "displayName": "Date Request Send",
-        "modelRef": "dateRequestSend",
+        "dataRef": "dateRequestSend",
         "type": "datetime"
     },
     "Date Quote Received": {
         "displayName": "Date Quote Received",
-        "modelRef": "dateQuoteReceived",
+        "dataRef": "dateQuoteReceived",
         "type": "datetime"
     },
     "Date Confirmed Use": {
         "displayName": "Date Confirmed Use",
-        "modelRef": "dateConfirmedUse",
+        "dataRef": "dateConfirmedUse",
         "type": "datetime"
     },
     "Date of Follow-up 1": {
         "displayName": "Date of Follow-up 1",
-        "modelRef": "dateOfFollowUp1",
+        "dataRef": "dateOfFollowUp1",
         "type": "datetime"
     },
     "Date of Follow-up 2": {
         "displayName": "Date of Follow-up 2",
-        "modelRef": "dateOfFollowUp2",
+        "dataRef": "dateOfFollowUp2",
         "type": "datetime"
     },
     "Date of Follow-up 3": {
         "displayName": "Date of Follow-up 3",
-        "modelRef": "dateOfFollowUp3",
+        "dataRef": "dateOfFollowUp3",
         "type": "datetime"
     },
     "Date of Follow-up 4": {
         "displayName": "Date of Follow-up 4",
-        "modelRef": "dateOfFollowUp4",
+        "dataRef": "dateOfFollowUp4",
         "type": "datetime"
     },
     "Date Payment Information Sent": {
         "displayName": "Date Payment Information Sent",
-        "modelRef": "datePaymentInformationSent",
+        "dataRef": "datePaymentInformationSent",
         "type": "datetime"
     },
     "Date Contract Received": {
         "displayName": "Date Contract Received",
-        "modelRef": "dateContractReceived",
+        "dataRef": "dateContractReceived",
         "type": "datetime"
     },
     "Date Sent to Client": {
         "displayName": "Date Sent to Client",
-        "modelRef": "dateSentToClient",
+        "dataRef": "dateSentToClient",
         "type": "datetime"
     },
     "Materials Requested": {
         "displayName": "Materials Requested",
-        "modelRef": "materialsRequested",
+        "dataRef": "materialsRequested",
         "type": "text"
     },
     "Credits Read": {
         "displayName": "Credits Read",
-        "modelRef": "creditsRead",
+        "dataRef": "creditsRead",
         "type": "text"
     },
     "Album": {
         "displayName": "Album",
-        "modelRef": "album",
+        "dataRef": "album",
         "type": "text"
     },
     "Track Number": {
         "displayName": "Track Number",
-        "modelRef": "trackNumber",
+        "dataRef": "trackNumber",
         "type": "number"
     },
     "Release Date": {
         "displayName": "Release Date",
-        "modelRef": "releaseDate",
+        "dataRef": "releaseDate",
         "type": "datetime"
     },
     "Source": {
         "displayName": "Source",
-        "modelRef": "source",
+        "dataRef": "source",
         "type": "text"
     },
     "Copy of Score": {
         "displayName": "Copy of Score",
-        "modelRef": "copyOfScore",
+        "dataRef": "copyOfScore",
         "type": "checkbox"
     },
     "Link": {
         "displayName": "Link",
-        "modelRef": "link",
+        "dataRef": "link",
         "type": "text"
     },
     "Projected Audience Size": {
         "displayName": "Projected Audience Size",
-        "modelRef": "projectedAudienceSize",
+        "dataRef": "projectedAudienceSize",
         "type": "number"
     },
     "Actual Audience Size": {
         "displayName": "Actual Audience Size",
-        "modelRef": "actualAudienceSize",
+        "dataRef": "actualAudienceSize",
         "type": "number"
     },
     "Date of Showing": {
         "displayName": "Date of Showing",
-        "modelRef": "dateOfShowing",
+        "dataRef": "dateOfShowing",
         "type": "datetime"
     },
     "Requestor Contact Info": {
         "displayName": "Requestor Contact Info",
-        "modelRef": "requestorContactInfo",
+        "dataRef": "requestorContactInfo",
         "type": "text"
     },
     "Date Request Sent to CLO": {
         "displayName": "Date Request Sent to CLO",
-        "modelRef": "dateRequestSentToClo",
+        "dataRef": "dateRequestSentToClo",
         "type": "datetime"
     },
     "Admission Fee": {
         "displayName": "Admission Fee",
-        "modelRef": "admissionFee",
+        "dataRef": "admissionFee",
         "type": "number"
     },
     "Fee Structure": {
         "displayName": "Fee Structure",
-        "modelRef": "feeStructure",
+        "dataRef": "feeStructure",
         "type": "text"
     },
     "Number of Showings": {
         "displayName": "Number of Showings",
-        "modelRef": "numberOfShowings",
+        "dataRef": "numberOfShowings",
         "type": "number"
     },
     "Approved by BYUSA": {
         "displayName": "Approved By BYUSA",
-        "modelRef": "approvedByBYUSA",
+        "dataRef": "approvedByBYUSA",
         "type": "checkbox"
     },
     "Digital Format": {
         "displayName": "Digital Format",
-        "modelRef": "digitalFormat",
+        "dataRef": "digitalFormat",
         "type": "choice",
         "choices": [
             "DVD",
@@ -245,27 +245,27 @@
     },
     "FT Number": {
         "displayName": "FT Number",
-        "modelRef": "ftNumber",
+        "dataRef": "ftNumber",
         "type": "number"
     },
     "Account Code": {
         "displayName": "Account Code",
-        "modelRef": "accountCode",
+        "dataRef": "accountCode",
         "type": "text"
     },
     "Censoring": {
         "displayName": "Censoring",
-        "modelRef": "censoring",
+        "dataRef": "censoring",
         "type": "text"
     },
     "Additional Edits": {
         "displayName": "Additional Edits",
-        "modelRef": "additionalEdits",
+        "dataRef": "additionalEdits",
         "type": "text"
     },
     "CLO Determination": {
         "displayName": "CLO Determination",
-        "modelRef": "cloDetermination",
+        "dataRef": "cloDetermination",
         "type": "text"
     }
 }

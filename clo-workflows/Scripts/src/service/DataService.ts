@@ -27,10 +27,6 @@ export class DataService {
 
         // normalized roles contain strings for steps, map to actual step objects
         role.permittedSteps = roles[userDto.roleName].permittedSteps.map(stepName => Object.assign({}, steps[stepName]))
-        role.permittedSteps.forEach(step => {
-            // normalized steps contain strings for formControls, map to actual formControl objects
-            step.processFormControls = step.processFormControls.map(formControlName => Object.assign({}, processFormControls[formControlName]))
-        })
 
         // build user object from userDto and role
         const user: IUser = {
@@ -47,21 +43,34 @@ export class DataService {
         return await this.dao.fetchEmployeeActiveProjects()
     }
 
+    // returns a map of work type name to form controls
     getWorkFormControls(): Map<string, Array<IFormControl>> {
         const workFormControlMap: Map<string, Array<IFormControl>> = new Map()
         Object.keys(workTypes).forEach(workType => {
-            const formControls = workTypes[workType].map(formControlName => workFormControls[formControlName]) as Array<IFormControl>
+            const formControls = workTypes[workType].map(formControlName => Object.assign({}, workFormControls[formControlName])) as Array<IFormControl>
             workFormControlMap.set(workType, formControls)
         })
         return workFormControlMap
     }
 
+    // returns a map of project type name to form controls
     getProjectFormControls(): Map<string, Array<IFormControl>> {
         const projectFormControlMap: Map<string, Array<IFormControl>> = new Map()
         Object.keys(projectTypes).forEach(projectType => {
-            const formControls = projectTypes[projectType].map(formControlName => projectFormControls[formControlName]) as Array<IFormControl>
+            const formControls = projectTypes[projectType].map(formControlName => Object.assign({}, projectFormControls[formControlName])) as Array<IFormControl>
             projectFormControlMap.set(projectType, formControls)
         })
         return projectFormControlMap
+    }
+
+    // returns a map of step name to form controls, returns only the steps permitted for the provided user
+    getPermittedProcessFormControls(user: IUser): Map<string, Array<IFormControl>> {
+        const processFormControlMap: Map<string, Array<IFormControl>> = new Map()
+        user.role.permittedSteps.forEach(step => {
+            const formControls = processFormControls[step.name]
+            processFormControlMap.set(step.name, formControls)
+        })
+
+        return processFormControlMap
     }
 }

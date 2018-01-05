@@ -20,8 +20,10 @@ export class RootStore {
         this.userStore = new UserStore(this, this.dataService)
         this.userProcessStore = new UserProcessStore(this, this.dataService)
 
+        // order of initializations matters - user store must be initialized first because other stores depend on user info
         await this.userStore.init()
         await this.userProcessStore.init()
+        this.uiStore.init()
 
         // create and initialize the employee store if the current user is an employee
         if(this.userStore.isEmployee) {

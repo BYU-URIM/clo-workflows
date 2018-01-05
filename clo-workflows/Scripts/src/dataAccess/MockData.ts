@@ -1,4 +1,4 @@
-import { IUserDto } from "../model/User"
+import { IUserDto, IUser } from "../model/User"
 import { IRequestElement } from "../model/RequestElement"
 
 export const MockUsersDtos: Array<IUserDto> = [
@@ -14,6 +14,15 @@ export const MockUsersDtos: Array<IUserDto> = [
         username: "cmoody",
         roleName: "Senior License Processor",
     },
+]
+
+export const MockUsers: Array<IUser> = [
+    {
+        name: "Connor Moody",
+        email: "email@gmail.com",
+        username: "cmoody",
+        role: null,
+    } ,
 ]
 
 export const MockProjects: Array<IRequestElement> = [

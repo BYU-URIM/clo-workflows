@@ -1,147 +1,147 @@
 {
     "Type": {
         "displayName": "Type",
-        "modelRef": "type",
+        "dataRef": "type",
         "type": "text"
     },
     "ID": {
         "displayName": "ID",
-        "modelRef": "id",
+        "dataRef": "id",
         "type": "text"
     },
     "Course": {
         "displayName": "Course",
-        "modelRef": "course",
+        "dataRef": "course",
         "type": "text"
     },
     "Format": {
         "displayName": "Format",
-        "modelRef": "format",
+        "dataRef": "format",
         "type": "text"
     },
     "Title": {
         "displayName": "Title",
-        "modelRef": "title",
+        "dataRef": "title",
         "type": "text"
     },
     "Author": {
         "displayName": "Author",
-        "modelRef": "author",
+        "dataRef": "author",
         "type": "text"
     },
     "Publisher": {
         "displayName": "Publisher",
-        "modelRef": "publisher",
+        "dataRef": "publisher",
         "type": "text"
     },
     "Year Published": {
         "displayName": "Year Published",
-        "modelRef": "yearPublished",
+        "dataRef": "yearPublished",
         "type": "text"
     },
     "Series Title": {
         "displayName": "Series Title",
-        "modelRef": "seriesTitle",
+        "dataRef": "seriesTitle",
         "type": "text"
     },
     "Album Title": {
         "displayName": "Album Title",
-        "modelRef": "albumTitle",
+        "dataRef": "albumTitle",
         "type": "text"
     },
     "Book Title": {
         "displayName": "Book Title",
-        "modelRef": "bookTitle",
+        "dataRef": "bookTitle",
         "type": "text"
     },
     "Journal Title": {
         "displayName": "Journal Title",
-        "modelRef": "journalTitle",
+        "dataRef": "journalTitle",
         "type": "text"
     },
     "Edition": {
         "displayName": "Edition",
-        "modelRef": "edition",
+        "dataRef": "edition",
         "type": "text"
     },
     "Format Information": {
         "displayName": "Format Information",
-        "modelRef": "formatInformation",
+        "dataRef": "formatInformation",
         "type": "text"
     },
     "Call Number": {
         "displayName": "Call Number",
-        "modelRef": "callNumber",
+        "dataRef": "callNumber",
         "type": "number"
     },
     "ISSN": {
         "displayName": "ISSN",
-        "modelRef": "ISSN",
+        "dataRef": "ISSN",
         "type": "number"
     },
     "ISBN": {
         "displayName": "ISBN",
-        "modelRef": "ISBN",
+        "dataRef": "ISBN",
         "type": "number"
     },
     "Volume": {
         "displayName": "Volume",
-        "modelRef": "volume",
+        "dataRef": "volume",
         "type": "number"
     },
     "Issue": {
         "displayName": "Issue",
-        "modelRef": "issue",
+        "dataRef": "issue",
         "type": "text"
     },
     "Page Range": {
         "displayName": "Page Range",
-        "modelRef": "pageRange",
+        "dataRef": "pageRange",
         "type": "text"
     },
     "Total Pages": {
         "displayName": "Total Pages",
-        "modelRef": "totalPages",
+        "dataRef": "totalPages",
         "type": "number"
     },
     "Total Chapters": {
         "displayName": "Total Chapters",
-        "modelRef": "totalChapters",
+        "dataRef": "totalChapters",
         "type": "number"
     },
     "URL": {
         "displayName": "URL",
-        "modelRef": "URL",
+        "dataRef": "URL",
         "type": "text"
     },
     "Hold Type": {
         "displayName": "Hold Type",
-        "modelRef": "holdType",
+        "dataRef": "holdType",
         "type": "text"
     },
     "Hold From": {
         "displayName": "Hold Form",
-        "modelRef": "holdFrom",
+        "dataRef": "holdFrom",
         "type": "text"
     },
     "Hold Until": {
         "displayName": "Hold Until",
-        "modelRef": "holdUntil",
+        "dataRef": "holdUntil",
         "type": "text"
     },
     "Year": {
         "displayName": "Year",
-        "modelRef": "year",
+        "dataRef": "year",
         "type": "text"
     },
     "Director": {
         "displayName": "Director",
-        "modelRef": "director",
+        "dataRef": "director",
         "type": "text"
     },
     "Hard Copy Owner": {
         "displayName": "Hard Copy Owner",
-        "modelRef": "hardCopyOwner",
+        "dataRef": "hardCopyOwner",
         "type": "text"
     }
 }

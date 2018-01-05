@@ -30,18 +30,18 @@ function FormControlGroup(props: IFormControlGroupProps) {
         {
             props.formControls && props.formControls.map((formControl, index) => {
                 if(formControl.type === "text"  || formControl.type === "datetime" || formControl.type === "number") {
-                    return <TextField value={props.data.get(formControl.modelRef) as string} errorMessage={props.validation[formControl.modelRef]}
-                                onChanged={(newVal: string) => props.onChange(formControl.modelRef, newVal) } label={formControl.displayName} key={index} />
+                    return <TextField value={props.data.get(formControl.dataRef) as string} errorMessage={props.validation[formControl.dataRef]}
+                                onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal) } label={formControl.displayName} key={index} />
                 } else if(formControl.type === "choice") {
-                    return <Dropdown options={formControl.choices.map(choice => ({key: choice, text: choice}))} selectedKey={props.data.get(formControl.modelRef) as string}
-                                onChanged={(option: IDropdownOption) => props.onChange(formControl.modelRef, option.text)} label={formControl.displayName} key={index} />
+                    return <Dropdown options={formControl.choices.map(choice => ({key: choice, text: choice}))} selectedKey={props.data.get(formControl.dataRef) as string}
+                                onChanged={(option: IDropdownOption) => props.onChange(formControl.dataRef, option.text)} label={formControl.displayName} key={index} />
                 } else if(formControl.type === "textarea") {
-                    return <TextField multiline value={props.data.get(formControl.modelRef) as string} errorMessage={props.validation[formControl.modelRef]} key={index}
-                                onChange={(e) => props.onChange(formControl.modelRef, e.currentTarget.value)} label={formControl.displayName} />
+                    return <TextField multiline value={props.data.get(formControl.dataRef) as string} errorMessage={props.validation[formControl.dataRef]} key={index}
+                                onChange={(e) => props.onChange(formControl.dataRef, e.currentTarget.value)} label={formControl.displayName} />
                 } else if(formControl.type === "checkbox") {
                     return <div style={checkboxStyles} key={index}>
-                                <Checkbox checked={props.data.get(formControl.modelRef) as boolean} label={formControl.displayName}
-                                    onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) => props.onChange(formControl.modelRef, isChecked)} />
+                                <Checkbox checked={props.data.get(formControl.dataRef) as boolean} label={formControl.displayName}
+                                    onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) => props.onChange(formControl.dataRef, isChecked)} />
                             </div>
                 } else {
                     return <div key={index} >unrecognized form control type</div>

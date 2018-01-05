@@ -27,11 +27,12 @@ ava.test("test that fetchUser correctly builds a user object", async t => {
     const role: IRole = user.role
     const jsonRole: {name: string, permittedSteps: string[]} = roles[userDto.roleName]
     t.deepEqual(role.permittedSteps.map(step => step.name), jsonRole.permittedSteps)
-
-    // check each step in the role object and the jsonRole definition to make sure that each step object is built out correctly
     role.permittedSteps.forEach(step => {
-        const jsonStep: {name: string, processFormControls: string[]} = steps[step.name]
-        const jsonFormControls: Array<IFormControl> = jsonStep.processFormControls.map((formControlName: string) => processFormControls[formControlName])
-        t.deepEqual(step.processFormControls, jsonFormControls)
+        t.truthy(step.name)
+        t.truthy(step.processFormControls)
     })
 })
+
+/*
+    ensure t
+*/
