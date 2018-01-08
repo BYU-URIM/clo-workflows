@@ -26,13 +26,17 @@ export class Employee extends React.Component<any, any> {
     private userStore: UserStore
     private uiStore: UiStore
     private employeeProcessStore: EmployeeProcessStore
-
+    
     public render() {
+        const {uiStore, userStore, employeeProcessStore} = this 
         return (
             <div>
                 <h2>Test Project Form</h2>
-                <FormControlGroup data={this.employeeProcessStore.currentProject} formControls={this.uiStore.projectFormControls.get("Movies")}
-                    validation={{}} onChange={this.employeeProcessStore.updateCurrentProject} />
+                <FormControlGroup 
+                    data={employeeProcessStore.currentProject} 
+                    formControls={uiStore.projectFormControls.get("Movies")}
+                    validation={{}} 
+                    onChange={employeeProcessStore.updateCurrentProject} />
             </div>
         )
     }

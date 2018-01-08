@@ -42,6 +42,9 @@ export class DataService {
     async fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
         return await this.dao.fetchEmployeeActiveProjects()
     }
+    async fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
+        return await this.dao.fetchClientActiveProjects()
+    }
 
     // returns a map of work type name to form controls
     getWorkFormControls(): Map<string, Array<IFormControl>> {

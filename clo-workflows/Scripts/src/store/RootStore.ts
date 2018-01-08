@@ -2,13 +2,13 @@ import { UiStore } from "./UiStore"
 import { DataService } from "../service/DataService"
 import { UserStore } from "./UserStore"
 import { action } from "mobx"
-import { UserProcessStore } from "./UserProcessStore"
+import { ClientProcessStore } from "./ClientProcessStore"
 import { EmployeeProcessStore } from "./EmployeeProcessStore"
 
 export class RootStore {
     uiStore: UiStore
     userStore: UserStore
-    userProcessStore: UserProcessStore // created for anyone logged into the app - all users, including employees can submit projects
+    clientProcessStore: ClientProcessStore // created for anyone logged into the app - all users, including employees can submit projects
     employeeProcessStore: EmployeeProcessStore // created for employees logged into the app
 
     constructor(
@@ -18,11 +18,11 @@ export class RootStore {
     @action async init(): Promise<void> {
         this.uiStore = new UiStore(this, this.dataService)
         this.userStore = new UserStore(this, this.dataService)
-        this.userProcessStore = new UserProcessStore(this, this.dataService)
+        this.clientProcessStore = new ClientProcessStore(this, this.dataService)
 
         // order of initializations matters - user store must be initialized first because other stores depend on user info
         await this.userStore.init()
-        await this.userProcessStore.init()
+        await this.clientProcessStore.init()
         this.uiStore.init()
 
         // create and initialize the employee store if the current user is an employee

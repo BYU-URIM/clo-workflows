@@ -7,7 +7,7 @@ import { when, mock, verify, instance, spy } from "ts-mockito"
 import { IUser } from "../../src/model/User"
 import { MockProjects, MockUsers } from "../../src/dataAccess/MockData"
 import { UserStore } from "../../src/store/UserStore"
-import { UserProcessStore } from "../../src/store/UserProcessStore"
+import { ClientProcessStore } from "../../src/store/ClientProcessStore"
 
 ava.test("root store creates all child stores when an employee logs in", async t => {
     const mockDataService = mock(DataService)
@@ -26,7 +26,7 @@ ava.test("root store creates all child stores when an employee logs in", async t
     await rootStore.init()
     t.truthy(rootStore.uiStore)
     t.truthy(rootStore.userStore)
-    t.truthy(rootStore.userProcessStore)
+    t.truthy(rootStore.clientProcessStore)
     t.truthy(rootStore.employeeProcessStore)
 })
 
@@ -47,6 +47,6 @@ ava.test("root store creates all stores except employeeProcess store when client
     await rootStore.init()
     t.truthy(rootStore.uiStore)
     t.truthy(rootStore.userStore)
-    t.truthy(rootStore.userProcessStore)
+    t.truthy(rootStore.clientProcessStore)
     t.falsy(rootStore.employeeProcessStore)
 })
