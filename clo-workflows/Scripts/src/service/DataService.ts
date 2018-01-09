@@ -1,5 +1,5 @@
-import { IFormControl } from './../model/FormControl'
-import { ObservableMap } from 'mobx'
+import { IFormControl } from "./../model/FormControl"
+import { ObservableMap } from "mobx"
 import { IDataAccess } from "../dataAccess/IDataAccess"
 import { IUserDto, IUser } from "../model/User"
 import { IRole } from "../model/Role"
@@ -11,6 +11,7 @@ import * as WORK_FORM_CONTROLS from "../../res/json/WORK_FORM_CONTROLS.json"
 import * as PROJECT_TYPES from "../../res/json/PROJECT_TYPES.json"
 import * as PROJECT_FORM_CONTROLS from "../../res/json/PROJECT_FORM_CONTROLS.json"
 import { IRequestElement } from "../model/RequestElement"
+import { deepCopy } from "../utils"
 
 export class DataService {
     constructor(
@@ -43,41 +44,27 @@ export class DataService {
     async fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
         return await this.dao.fetchEmployeeActiveProjects()
     }
+
     async fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
         return await this.dao.fetchClientActiveProjects()
     }
 
     // returns a map of work type name to form controls
-    getworkFormControls(): Map<string, Array<IFormControl>> {
-        const workFormControlMap: Map<string, Array<IFormControl>> = new Map()
-        Object.keys(WORK_TYPES).forEach(workType => {
-            const formControls = WORK_TYPES[workType].map(formControlName => Object.assign({}, WORK_FORM_CONTROLS[formControlName])) as Array<IFormControl>
-            workFormControlMap.set(workType, formControls)
-        })
-        return workFormControlMap
+    getWorkFormControlsForType(workType: string): Array<IFormControl> {
+        return deepCopy(WORK_TYPES[workType].map(formControlName => WORK_FORM_CONTROLS[formControlName]))
     }
 
     // returns a map of project type name to form controls
-    getProjectFormControls(): Map<string, Array<IFormControl>> {
-        const projectFormControls: Map<string, Array<IFormControl>> = new Map()
-        Object.keys(PROJECT_TYPES).forEach(projectType => {
-            const formControls = PROJECT_TYPES[projectType].map(formControlName => Object.assign({}, PROJECT_FORM_CONTROLS[formControlName])) as Array<IFormControl>
-            projectFormControls.set(projectType, formControls)
-        })
-        return projectFormControls
-}
-    // returns a map of step name to form controls, returns only the steps permitted for the provided user
-    getPermittedProcessFormControls(user: IUser): Map<string, Array<IFormControl>> {
-        const processFormControls: Map<string, Array<IFormControl>> = new Map()
-        user.role.permittedSteps.forEach(step => {
-            const formControls = PROCESS_FORM_CONTROLS[step.name]
-            processFormControls.set(step.name, formControls)
-        })
-
-        return processFormControls
+    getProjectFormControlsForType(projectType: string): Array<IFormControl> {
+        return deepCopy(PROJECT_TYPES[projectType].map(formControlName => PROJECT_FORM_CONTROLS[formControlName]))
     }
-    
-    getProjectTypes(){
-        return PROJECT_TYPES
+
+    // returns a map of step name to form controls, returns only the steps permitted for the provided user
+    getPermittedProcessFormControlsForStep(stepName: string): Array<IFormControl> {
+        return deepCopy(PROCESS_STEPS[stepName].permittedFormControls.map(formControlName => PROCESS_FORM_CONTROLS[formControlName]))
+    }
+
+    getProjectTypes(): Array<string> {
+        return Object.keys(PROJECT_TYPES)
     }
 }

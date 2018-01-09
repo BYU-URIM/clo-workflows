@@ -1,4 +1,4 @@
-// import * as ava from "ava"
+import * as ava from "ava"
 // import { DataService } from "../../src/service/DataService"
 // import { IUser, IUserDto } from "../../src/model/User"
 // import * as USER_ROLES from "../../res/json/USER_ROLES.json"
@@ -36,3 +36,5 @@
 // /*
 //     ensure t
 // */
+
+ava.test("test", t => t.pass())

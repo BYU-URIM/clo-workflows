@@ -1,4 +1,4 @@
-import { Employee } from './../component/Employee'
+import { Employee } from "./../component/Employee"
 import { DataService } from "../service/DataService"
 import { action } from "mobx"
 import { ClientStore } from "./ClientStore"
@@ -17,7 +17,7 @@ export class RootStore {
         this.sessionStore = new SessionStore(this, this.dataService)
         this.clientStore = new ClientStore(this, this.dataService)
 
-        // order of initializations matters - user store must be initialized first because other stores depend on user info
+        // order of initializations matters - session store must be initialized first because other stores depend on user info
         await this.sessionStore.init()
         await this.clientStore.init()
 

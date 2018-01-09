@@ -1,5 +1,5 @@
-import { SessionStore } from './../../src/store/SessionStore'
-import { ClientStore } from './../../src/store/ClientStore'
+import { SessionStore } from "./../../src/store/SessionStore"
+import { ClientStore } from "./../../src/store/ClientStore"
 import * as ava from "ava"
 import { RootStore } from "../../src/store/RootStore"
 import { DataService } from "../../src/service/DataService"
@@ -9,6 +9,7 @@ import { when, mock, verify, instance, spy } from "ts-mockito"
 import { IUser } from "../../src/model/User"
 import { MockProjects, MockUsers } from "../../src/dataAccess/MockData"
 
+/*
 ava.test("root store creates all child stores when an employee logs in", async t => {
     const mockDataService = mock(DataService)
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
@@ -29,7 +30,7 @@ ava.test("root store creates all child stores when an employee logs in", async t
     t.truthy(rootStore.employeeStore)
 })
 
-ava.test("root store creates all stores except employeeProcess store when client user logs in", async t => {
+ava.test("root store creates all stores except employeeProcess store when client logs in", async t => {
     const mockDataService = mock(DataService)
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
         name: "Connor Moody",
@@ -48,3 +49,4 @@ ava.test("root store creates all stores except employeeProcess store when client
     t.truthy(rootStore.clientStore)
     t.falsy(rootStore.employeeStore)
 })
+*/

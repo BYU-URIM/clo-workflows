@@ -23,16 +23,16 @@ export class Employee extends React.Component<any, any> {
 
     private sessionStore: SessionStore
     private employeeStore: EmployeeStore
-    
+
     public render() {
-        const { sessionStore, employeeStore} = this 
+        const { sessionStore, employeeStore} = this
         return (
             <div>
                 <h2>Test Project Form</h2>
-                <FormControlGroup 
-                    data={employeeStore.currentProject} 
-                    formControls={this.employeeStore.getDataService().getProjectFormControls().get("Movies")}
-                    validation={{}} 
+                <FormControlGroup
+                    data={employeeStore.currentProject}
+                    formControls={this.employeeStore.currentProjectFormControls}
+                    validation={{}}
                     onChange={employeeStore.updateCurrentProject} />
             </div>
         )

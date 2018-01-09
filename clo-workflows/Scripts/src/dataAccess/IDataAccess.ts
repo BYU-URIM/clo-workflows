@@ -1,4 +1,4 @@
-import { IRequestElement } from './../model/RequestElement'
+import { IRequestElement } from "./../model/RequestElement"
 import { IUserDto } from "../model/User"
 
 export interface IDataAccess {

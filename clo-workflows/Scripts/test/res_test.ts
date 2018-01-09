@@ -1,11 +1,11 @@
 import * as ava from "ava"
-import * as roles from "../res/json/Roles.json"
-import * as steps from "../res/json/Steps.json"
-import * as processFormControls from "../res/json/ProcessFormControls.json"
-import * as workFormControls from "../res/json/WorkFormControls.json"
-import * as projectFormControls from "../res/json/ProjectFormControls.json"
-import * as workTypes from "../res/json/WorkTypes.json"
-import * as projectTypes from "../res/json/ProjectTypes.json"
+import * as roles from "../res/json/USER_ROLES.json"
+import * as steps from "../res/json/PROCESS_STEPS.json"
+import * as PROCESS_FORM_CONTROLS from "../res/json/PROCESS_FORM_CONTROLS.json"
+import * as WORK_FORM_CONTROLS from "../res/json/WORK_FORM_CONTROLS.json"
+import * as PROJECT_FORM_CONTROLS from "../res/json/PROJECT_FORM_CONTROLS.json"
+import * as WORK_TYPES from "../res/json/WORK_TYPES.json"
+import * as PROJECT_TYPES from "../res/json/PROJECT_TYPES.json"
 import { IFormControl } from "../src/model/FormControl"
 
 /*
@@ -39,7 +39,7 @@ ava.test("test json steps for correct shape", t => {
         t.truthy(step.name)
         t.truthy(step.processFormControls)
         step.processFormControls.forEach(formControlName => {
-            t.truthy(processFormControls[formControlName]) // formControl string in permittedSteps array must refer to a formControl object
+            t.truthy(PROCESS_FORM_CONTROLS[formControlName]) // formControl string in permittedSteps array must refer to a formControl object
         })
     }
 })
@@ -56,8 +56,8 @@ ava.test("test json steps for correct shape", t => {
 ava.test("test processFormControls for correct shape", t => {
     const formControlTypes = ["text", "choice", "checkbox", "textarea", "datetime", "number"]
 
-    for(const formControlName in processFormControls) {
-        const formControl: IFormControl= processFormControls[formControlName]
+    for(const formControlName in PROCESS_FORM_CONTROLS) {
+        const formControl: IFormControl= PROCESS_FORM_CONTROLS[formControlName]
         t.truthy(formControl.displayName)
         t.truthy(formControl.dataRef)
         t.truthy(formControl.type)
@@ -80,8 +80,8 @@ ava.test("test processFormControls for correct shape", t => {
 ava.test("test workFormControls for correct shape", t => {
     const formControlTypes = ["text", "choice", "checkbox", "textarea", "datetime", "number"]
 
-    for(const formControlName in workFormControls) {
-        const formControl: IFormControl= workFormControls[formControlName]
+    for(const formControlName in WORK_FORM_CONTROLS) {
+        const formControl: IFormControl= WORK_FORM_CONTROLS[formControlName]
         t.truthy(formControl.displayName)
         t.truthy(formControl.dataRef)
         t.truthy(formControl.type)
@@ -104,8 +104,8 @@ ava.test("test workFormControls for correct shape", t => {
 ava.test("test projectFormControls for correct shape", t => {
     const formControlTypes = ["text", "choice", "checkbox", "textarea", "datetime", "number"]
 
-    for(const formControlName in projectFormControls) {
-        const formControl: IFormControl= projectFormControls[formControlName]
+    for(const formControlName in PROJECT_FORM_CONTROLS) {
+        const formControl: IFormControl= PROJECT_FORM_CONTROLS[formControlName]
         t.truthy(formControl.displayName)
         t.truthy(formControl.dataRef)
         t.truthy(formControl.type)
@@ -120,10 +120,10 @@ ava.test("test projectFormControls for correct shape", t => {
     ensure that all projectTypes contain references to exisiting form controls
 */
 ava.test("test that project types contain only valid projectFormControl names", t => {
-    for(const projectType in projectTypes) {
-        const formControlNames: string[] = projectTypes[projectType]
+    for(const projectType in PROJECT_TYPES) {
+        const formControlNames: string[] = PROJECT_TYPES[projectType]
         formControlNames.forEach(formControlName => {
-            t.truthy(projectFormControls[formControlName])
+            t.truthy(PROJECT_FORM_CONTROLS[formControlName])
         })
     }
 })
@@ -132,10 +132,10 @@ ava.test("test that project types contain only valid projectFormControl names", 
     ensure that all workTypes contain references to exisiting form controls
 */
 ava.test("test that work types contain only valid workFormControl names", t => {
-    for(const workType in workTypes) {
-        const formControlNames: string[] = workTypes[workType]
+    for(const workType in WORK_TYPES) {
+        const formControlNames: string[] = WORK_TYPES[workType]
         formControlNames.forEach(formControlName => {
-            t.truthy(workFormControls[formControlName])
+            t.truthy(WORK_FORM_CONTROLS[formControlName])
         })
     }
 })
