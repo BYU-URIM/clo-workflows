@@ -53,7 +53,7 @@ export class Anonymous extends  React.Component<any, any> {
           <FormControlGroup
             data={this.clientStore.newProject}
             formControls={this.clientStore.getDataService().getProjectFormControlsForType("Synch")}
-            validation={{}} 
+            validation={{}}
             onChange={this.clientStore.updateNewProject}
           />
       }
