@@ -34,34 +34,30 @@ export class Anonymous extends  React.Component<any, any> {
     const pt = this.clientStore.getDataService().getProjectTypes()
     // const projectTypes = this.clientStore.getDataService().getProjectFormControls().keys()
     const {newProject} = this.clientStore
-    
-  return (
+    return(
     <div style={styles}>
-    <Dropdown
-      className="WorkTypeDropdownClass"
-      label="Select the Work Type:"
-      selectedKey={this.clientStore.newProjectState.selectedType ? this.clientStore.newProjectState.selectedType : undefined}
-      options = {Array.from(pt).map(field=>({text:field, value: field, key: field}))}
-      placeHolder="Select an Option"
-      onChanged={(e)=>this.clientStore.updateNewProjectState(e.text)}
-    />
-          
-          <SearchBox 
-                    onFocus={ () => console.log('onFocus called') }
-                    onBlur={ () => console.log('onBlur called') }
+      <Dropdown
+        className="WorkTypeDropdownClass"
+        label="Select the Work Type:"
+        selectedKey={this.clientStore.newProjectState.selectedType ? this.clientStore.newProjectState.selectedType : undefined}
+        options = {Array.from(pt).map(field=>({text:field, value: field, key: field}))}
+        placeHolder="Select an Option"
+        onChanged={(e)=>this.clientStore.updateNewProjectState(e.text)}
+      />
+      <SearchBox
+        onFocus={ () => console.log("onFocus called") }
+        onBlur={ () => console.log("onBlur called") }
+      />
+      {
+        this.clientStore.newProjectState.selectedType &&
+          <FormControlGroup
+            data={this.clientStore.newProject}
+            formControls={this.clientStore.getDataService().getProjectFormControlsForType("Synch")}
+            validation={{}} 
+            onChange={this.clientStore.updateNewProject}
           />
-    
-{
-  this.clientStore.newProjectState.selectedType &&
-        <FormControlGroup
-          data={this.clientStore.newProject} 
-          formControls={this.clientStore.getDataService().getProjectFormControlsForType("Synch")}
-          validation={{}} 
-          onChange={this.clientStore.updateNewProject}
-        />
-     }     </div>
-      
-      
+      }
+    </div>
     )
   }
 }

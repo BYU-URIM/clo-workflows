@@ -15,7 +15,8 @@
         "max-line-length": [true, 200],
         "array-type": false,
         "member-access": false,
-        "forin": false
+        "forin": false,
+        "no-console":false
     },
     "rulesDirectory": []
 }
