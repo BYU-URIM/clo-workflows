@@ -67,4 +67,7 @@ export class DataService {
     getProjectTypes(): Array<string> {
         return Object.keys(PROJECT_TYPES)
     }
+    getWorkTypes(): Array<string> {
+        return Object.keys(WORK_TYPES)
+    }
 }
