@@ -15,22 +15,23 @@ export class ClientStore {
         this.projects = await this.dataService.fetchClientActiveProjects()
         runInAction(() => {
             this.newProject = observable.map(this.projects[0])
-            this.newProjectState = {selectedType: ""}
+            this.newProjectState = {projectType: "", workType:""}
         })
     }
 
     @observable projects: Array<IRequestElement>
     @observable newProject: ObservableMap<FormEntryType>
     @observable newProjectState: {
-        selectedType: string,
+        projectType: string,
+        workType: string,
     }
     @action updateNewProject(fieldName: string, newVal: FormEntryType): void {
         this.newProject.set(fieldName, newVal)
     }
-    @action updateNewProjectState(selected: string): void {
-        this.newProjectState.selectedType = selected
+    @action updateNewProjectState(fieldName: string, value: string): void {
+    this.newProjectState[fieldName] = value
     }
-    @action getDataService() {
+    @action DataService() {
         return this.dataService
     }
 }
