@@ -1,10 +1,10 @@
 import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
-import { UserStore } from "../../src/store/UserStore"
+import { SessionStore } from "../../src/store/SessionStore"
 import { DataService } from "../../src/service/DataService"
 import { RootStore } from "../../src/store/RootStore"
 
-ava.test("userStore recognizes employee", async t => {
+ava.test("sessionStore recognizes employee", async t => {
     const mockDataService = mock(DataService)
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
         name: "Connor Moody",
@@ -21,12 +21,12 @@ ava.test("userStore recognizes employee", async t => {
     const rootStore = instance(mockRootStore)
     const dataService = instance(mockDataService)
 
-    const userStore: UserStore = new UserStore(rootStore, dataService)
-    await userStore.init()
-    t.true(userStore.isEmployee)
+    const sessionStore: SessionStore = new SessionStore(rootStore, dataService)
+    await sessionStore.init()
+    t.true(sessionStore.isEmployee)
 })
 
-ava.test("userStore recognizes anonymous user", async t => {
+ava.test("sessionStore recognizes anonymous user", async t => {
     const mockDataService = mock(DataService)
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
         name: "Connor Moody",
@@ -43,7 +43,7 @@ ava.test("userStore recognizes anonymous user", async t => {
     const rootStore = instance(mockRootStore)
     const dataService = instance(mockDataService)
 
-    const userStore: UserStore = new UserStore(rootStore, dataService)
-    await userStore.init()
-    t.false(userStore.isEmployee)
+    const sessionStore: SessionStore = new SessionStore(rootStore, dataService)
+    await sessionStore.init()
+    t.false(sessionStore.isEmployee)
 })

@@ -4,15 +4,16 @@ import { action, ObservableMap, observable, runInAction } from "mobx"
 import { FormEntryType, IRequestElement } from "../model/RequestElement"
 import { autobind } from "core-decorators"
 
+// stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
-export class ClientProcessStore {
+export class EmployeeStore {
     constructor(
         private root: RootStore,
         private dataService: DataService,
     ) {}
 
     @action async init(): Promise<void> {
-        this.projects = await this.dataService.fetchClientActiveProjects()
+        this.projects = await this.dataService.fetchEmployeeActiveProjects()
         runInAction(() => this.currentProject = observable.map(this.projects[0]))
     }
 
@@ -21,5 +22,8 @@ export class ClientProcessStore {
 
     @action updateCurrentProject(fieldName: string, newVal: FormEntryType): void {
         this.currentProject.set(fieldName, newVal)
+    }
+    @action getDataService() {
+        return this.dataService
     }
 }

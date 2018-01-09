@@ -1,9 +1,8 @@
 import * as React from "react"
 import { IUser } from "../model/User"
 import { inject, observer } from "mobx-react"
-import { EmployeeProcessStore } from "../store/EmployeeProcessStore"
-import { UiStore } from "../store/UiStore"
-import { UserStore } from "../store/UserStore"
+import { EmployeeStore } from "../store/EmployeeStore"
+import { SessionStore } from "../store/SessionStore"
 import FormControlGroup from "./FormControlGroup"
 import { observable } from "mobx"
 
@@ -18,25 +17,23 @@ const styles = {
 export class Employee extends React.Component<any, any> {
 
     public componentWillMount() {
-        this.userStore = this.props.rootStore.userStore
-        this.uiStore = this.props.rootStore.uiStore
-        this.employeeProcessStore = this.props.rootStore.employeeProcessStore
+        this.sessionStore = this.props.rootStore.sessionStore
+        this.employeeStore = this.props.rootStore.employeeStore
     }
 
-    private userStore: UserStore
-    private uiStore: UiStore
-    private employeeProcessStore: EmployeeProcessStore
+    private sessionStore: SessionStore
+    private employeeStore: EmployeeStore
     
     public render() {
-        const {uiStore, userStore, employeeProcessStore} = this 
+        const { sessionStore, employeeStore} = this 
         return (
             <div>
                 <h2>Test Project Form</h2>
                 <FormControlGroup 
-                    data={employeeProcessStore.currentProject} 
-                    formControls={uiStore.projectFormControls.get("Movies")}
+                    data={employeeStore.currentProject} 
+                    formControls={this.employeeStore.getDataService().getProjectFormControls().get("Movies")}
                     validation={{}} 
-                    onChange={employeeProcessStore.updateCurrentProject} />
+                    onChange={employeeStore.updateCurrentProject} />
             </div>
         )
     }
