@@ -1,12 +1,13 @@
 import { RootStore } from "./RootStore"
 import { DataService } from "../service/DataService"
-import { action, ObservableMap, observable, runInAction } from "mobx"
+import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { FormEntryType, IRequestElement } from "../model/RequestElement"
 import { autobind } from "core-decorators"
+import { IFormControl } from "../model/FormControl"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
-export class EmployeeProcessStore {
+export class EmployeeStore {
     constructor(
         private root: RootStore,
         private dataService: DataService,
@@ -20,7 +21,14 @@ export class EmployeeProcessStore {
     @observable projects: Array<IRequestElement>
     @observable currentProject: ObservableMap<FormEntryType>
 
+    @computed get currentProjectFormControls(): Array<IFormControl> {
+        return this.dataService.getProjectFormControlsForType(this.currentProject.get("type") as string)
+    }
+
     @action updateCurrentProject(fieldName: string, newVal: FormEntryType): void {
         this.currentProject.set(fieldName, newVal)
+    }
+    @action getDataService() {
+        return this.dataService
     }
 }

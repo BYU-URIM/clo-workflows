@@ -13,4 +13,8 @@ export class MockDataAccess implements IDataAccess {
     fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
         return Promise.resolve(MockProjects)
     }
+
+    fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
+        return Promise.resolve(MockProjects)
+    }
 }

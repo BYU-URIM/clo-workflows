@@ -3,7 +3,7 @@ import { DataService } from "../service/DataService"
 import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 
-export class UserStore {
+export class SessionStore {
     constructor(
         private root: RootStore,
         private dataService: DataService,
