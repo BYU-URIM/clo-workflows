@@ -3,6 +3,7 @@ import { IRole } from "./../model/Role"
 import { IDataAccess } from "./IDataAccess"
 import { IUserDto } from "../model/User"
 import { IRequestElement } from "../model/RequestElement"
+import { deepCopy } from "../utils"
 
 export class MockDataAccess implements IDataAccess {
 
@@ -11,10 +12,10 @@ export class MockDataAccess implements IDataAccess {
     }
 
     fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
-        return Promise.resolve(MockProjects)
+        return Promise.resolve(deepCopy(MockProjects))
     }
 
     fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
-        return Promise.resolve(MockProjects)
+        return Promise.resolve(deepCopy(MockProjects))
     }
 }
