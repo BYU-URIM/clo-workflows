@@ -1,17 +1,15 @@
-import { IFormControl } from "./../model/FormControl"
-import { ObservableMap } from "mobx"
-import { IDataAccess } from "../dataAccess/IDataAccess"
-import { IUserDto, IUser } from "../model/User"
-import { IRole } from "../model/Role"
-import * as USER_ROLES from "../../res/json/USER_ROLES.json"
-import * as PROCESS_STEPS from "../../res/json/PROCESS_STEPS.json"
 import * as PROCESS_FORM_CONTROLS from "../../res/json/PROCESS_FORM_CONTROLS.json"
-import * as WORK_TYPES from "../../res/json/WORK_TYPES.json"
-import * as WORK_FORM_CONTROLS from "../../res/json/WORK_FORM_CONTROLS.json"
-import * as PROJECT_TYPES from "../../res/json/PROJECT_TYPES.json"
+import * as PROCESS_STEPS from "../../res/json/PROCESS_STEPS.json"
 import * as PROJECT_FORM_CONTROLS from "../../res/json/PROJECT_FORM_CONTROLS.json"
+import * as PROJECT_TYPES from "../../res/json/PROJECT_TYPES.json"
+import * as USER_ROLES from "../../res/json/USER_ROLES.json"
+import * as WORK_FORM_CONTROLS from "../../res/json/WORK_FORM_CONTROLS.json"
+import * as WORK_TYPES from "../../res/json/WORK_TYPES.json"
+import { IDataAccess } from "../dataAccess/IDataAccess"
 import { IRequestElement } from "../model/RequestElement"
+import { IUser, IUserDto } from "../model/User"
 import { deepCopy } from "../utils"
+import { IFormControl } from "./../model/FormControl"
 
 export class DataService {
     constructor(
@@ -65,9 +63,9 @@ export class DataService {
     }
 
     getProjectTypes(): Array<string> {
-        return Object.keys(PROJECT_TYPES)
+        return Array.from(Object.keys(PROJECT_TYPES))
     }
     getWorkTypes(): Array<string> {
-        return Object.keys(WORK_TYPES)
+        return Array.from(Object.keys(WORK_TYPES))
     }
 }
