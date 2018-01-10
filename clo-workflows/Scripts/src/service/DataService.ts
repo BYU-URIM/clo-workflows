@@ -46,9 +46,7 @@ export class DataService {
     }
 
     async fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
-        const x = await this.dao.fetchClientActiveProjects()
-        console.log("!!!~~~~!!!")
-        return x
+        return await this.dao.fetchClientActiveProjects()
     }
 
     // returns a map of work type name to form controls
