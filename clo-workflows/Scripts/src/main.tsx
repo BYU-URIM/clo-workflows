@@ -14,7 +14,7 @@ useStrict(true)
 const root = document.getElementById("root")
 
 const rootStore = new RootStore(new DataService(DataAccessFactory.getDao()))
-
+window["rootStore"] = rootStore
 rootStore.init().then(() => {
     ReactDom.render(
         <Provider rootStore={rootStore}>
