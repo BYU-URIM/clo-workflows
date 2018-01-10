@@ -27,7 +27,10 @@ export class EmployeeStore {
     @observable projects: Array<ICloRequestElement>
     @observable currentProject: ObservableMap<FormEntryType>
 
-    @observable selectedStep: IStep
+    @observable selectedStep: string
+    @action selectStep(step: string): void {
+        this.selectedStep = step
+    }
 
     @computed get currentProjectFormControls(): Array<IFormControl> {
         return this.dataService.getProjectFormControlsForType(this.currentProject.get("type") as string)
@@ -38,11 +41,15 @@ export class EmployeeStore {
     }
 
     // computes a plain JavaScript object mapping step names process counts
-    @computed get pendingProcessesByStep(): {[stepName: string]: number} {
+    @computed get processCountsByStep(): {[stepName: string]: number} {
         return this.processes.reduce((accumulator: any, process) => {
             const stepName: string = process.step as string
             accumulator[stepName] !== undefined ? accumulator[stepName]++ : accumulator[stepName] = 1
             return accumulator
         }, {})
+    }
+
+    @computed get processesForSelectedStep(): Array<ICloRequestElement> {
+        return this.processes.filter(process => process.step === this.selectedStep)
     }
 }
