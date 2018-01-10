@@ -1,5 +1,5 @@
 import { IDataAccess } from "./IDataAccess"
-import { IRequestElement } from "../model/RequestElement"
+import { ICloRequestElement } from "../model/CloRequestElement"
 
 export class SPDataAccess implements IDataAccess {
 
@@ -14,10 +14,19 @@ export class SPDataAccess implements IDataAccess {
             }))
     }
 
-    fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
+    fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }
-    fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
+
+    fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(null)
+    }
+
+    fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(null)
+    }
+
+    fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }
 

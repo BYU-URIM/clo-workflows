@@ -7,11 +7,10 @@ import FormControlGroup from "./FormControlGroup"
 import {SessionStore} from "../store/SessionStore"
 import {ClientStore} from "../store/ClientStore"
 import {Dropdown} from "office-ui-fabric-react/lib/Dropdown"
-import {WorkType} from "../model/Work"
 import { SearchBox } from "office-ui-fabric-react/lib/SearchBox"
 
 export interface IWorkTypeDropdownProps {
-  workTypes: Array<WorkType>
+  workTypes: Array<string>
   setNewProjectState: any
 }
 const styles = {

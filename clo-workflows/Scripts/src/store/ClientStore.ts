@@ -1,7 +1,7 @@
 import { RootStore } from "./RootStore"
 import { DataService } from "../service/DataService"
 import { action, ObservableMap, observable, runInAction } from "mobx"
-import { FormEntryType, IRequestElement } from "../model/RequestElement"
+import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 
 @autobind
@@ -19,7 +19,7 @@ export class ClientStore {
         })
     }
 
-    @observable projects: Array<IRequestElement>
+    @observable projects: Array<ICloRequestElement>
     @observable newProject: ObservableMap<FormEntryType>
     @observable newProjectState: {
         selectedType: string,
