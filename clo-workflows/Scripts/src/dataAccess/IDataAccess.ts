@@ -1,8 +1,10 @@
-import { IRequestElement } from "./../model/RequestElement"
+import { ICloRequestElement } from "./../model/CloRequestElement"
 import { IUserDto } from "../model/User"
 
 export interface IDataAccess {
     fetchUser(): Promise<IUserDto>
-    fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>>
-    fetchClientActiveProjects(): Promise<Array<IRequestElement>>
+    fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>>
+    fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>>
+    fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>>
+    fetchClientActiveProjects(): Promise<Array<ICloRequestElement>>
 }

@@ -4,7 +4,7 @@ import { IFormControl } from "../model/FormControl"
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
-import { IRequestElement, FormEntryType } from "../model/RequestElement"
+import { FormEntryType } from "../model/CloRequestElement"
 import { ObservableMap } from "mobx"
 
 interface IFormControlGroupProps {
@@ -15,7 +15,7 @@ interface IFormControlGroupProps {
 }
 
 const styles = {
-    width: "30%",
+    width: "450px",
     margin: "0 20",
 }
 

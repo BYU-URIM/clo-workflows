@@ -8,6 +8,7 @@ import * as WORK_TYPES from "../../res/json/WORK_TYPES.json"
 import { IDataAccess } from "../dataAccess/IDataAccess"
 import { IRequestElement } from "../model/RequestElement"
 import { IUser, IUserDto } from "../model/User"
+import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 import { IFormControl } from "./../model/FormControl"
 
@@ -39,11 +40,19 @@ export class DataService {
         return user
     }
 
-    async fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
+    async fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>> {
         return await this.dao.fetchEmployeeActiveProjects()
     }
 
-    async fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
+    async fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {
+        return this.dao.fetchEmployeeActiveProcesses()
+    }
+
+    async fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>> {
+        return this.dao.fetchEmployeeActiveWorks()
+    }
+
+    async fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
         return await this.dao.fetchClientActiveProjects()
     }
 

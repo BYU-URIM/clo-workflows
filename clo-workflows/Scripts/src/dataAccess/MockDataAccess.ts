@@ -1,21 +1,29 @@
-import { MockUsersDtos, MockProjects } from "./MockData"
+import { MockUsersDtos, MockProjects, MockProcesses, MockWorks } from "./MockData"
 import { IRole } from "./../model/Role"
 import { IDataAccess } from "./IDataAccess"
 import { IUserDto } from "../model/User"
-import { IRequestElement } from "../model/RequestElement"
+import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 
 export class MockDataAccess implements IDataAccess {
 
     fetchUser(): Promise<IUserDto> {
-        return Promise.resolve(MockUsersDtos[0])
+        return Promise.resolve(MockUsersDtos[1])
     }
 
-    fetchEmployeeActiveProjects(): Promise<Array<IRequestElement>> {
+    fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(deepCopy(MockProcesses))
+    }
+
+    fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
 
-    fetchClientActiveProjects(): Promise<Array<IRequestElement>> {
+    fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(deepCopy(MockWorks))
+    }
+
+    fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
 }
