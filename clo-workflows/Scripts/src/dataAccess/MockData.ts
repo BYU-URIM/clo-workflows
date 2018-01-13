@@ -33,6 +33,7 @@ export const MockProjects: Array<ICloRequestElement> = [
         descriptionOfWork: "description...",
         artist: "artist name",
         copyrightOwner: "owner name",
+        department: "Test department",
     },
 ]
 
@@ -42,24 +43,28 @@ export const MockProcesses: Array<ICloRequestElement> = [
         step: "Public Domain Research",
         projectId: 1,
         workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
         id: 2,
         step: "Public Domain Research",
         projectId: 1,
         workId: 2,
+        dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
         id: 3,
         step: "Ownership Research",
         projectId: 1,
         workId: 3,
+        dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
         id: 4,
         step: "Payment",
         projectId: 1,
         workId: 4,
+        dateSubmittedToCurrentStep: "1/1/2018",
     },
 ]
 

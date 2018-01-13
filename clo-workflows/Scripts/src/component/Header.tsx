@@ -8,7 +8,6 @@ const styles = {
   background: "lightgray",
   margin: "20px",
   padding: "15px",
-  borderRadius: "8px",
   display: "inline-block",
 }
 const Header = (props: IHeaderProps) => {
