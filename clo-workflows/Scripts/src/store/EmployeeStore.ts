@@ -21,27 +21,22 @@ export class EmployeeStore {
         this.works = await this.dataService.fetchEmployeeActiveWorks()
         this.processes = await this.dataService.fetchEmployeeActiveProcesses()
 
-        this.selectedProject = observable.map(this.projects[0])
+        this.selectedProject = observable.map()
+        this.selectedWork = observable.map()
+        this.selectedProcess = observable.map()
     }
 
-    @observable processes: Array<ICloRequestElement>
+
+    /*******************************************************************************************************/
+    // WORKS
     @observable works: Array<ICloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
+
+
+    /*******************************************************************************************************/
+    // PROJECTS
     @observable projects: Array<ICloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
-
-    @observable selectedProcess: ObservableMap<FormEntryType>
-    // TODO project lookup should be more efficient, store as map ?
-    @action selectProcess(itemBrief: IItemBrief): void {
-        const selectedProcess: ICloRequestElement = this.processes.find(process => process.id === itemBrief.id)
-        this.selectedProcess = observable.map(selectedProcess)
-        this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
-    }
-
-    @observable selectedStep: string
-    @action selectStep(step: string): void {
-        this.selectedStep = step
-    }
 
     @computed get selectedProjectFormControls(): Array<IFormControl> {
         return this.dataService.getProjectFormControlsForType(this.selectedProject.get("type") as string)
@@ -49,6 +44,27 @@ export class EmployeeStore {
 
     @action updateSelectedProject(fieldName: string, newVal: FormEntryType): void {
         this.selectedProject.set(fieldName, newVal)
+    }
+
+
+    /*******************************************************************************************************/
+    // STEPS
+    @observable selectedStep: string
+    @action selectStep(step: string): void {
+        this.selectedStep = step
+    }
+
+
+    /*******************************************************************************************************/
+    // PROCESSES
+    @observable processes: Array<ICloRequestElement>
+    @observable selectedProcess: ObservableMap<FormEntryType>
+
+    // TODO project lookup should be more efficient, store as map ?
+    @action selectProcess(itemBrief: IItemBrief): void {
+        const selectedProcess: ICloRequestElement = this.processes.find(process => process.id === itemBrief.id)
+        this.selectedProcess = observable.map(selectedProcess)
+        this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
     }
 
     // computes a plain JavaScript object mapping step names process counts
@@ -63,7 +79,6 @@ export class EmployeeStore {
     @computed private get processesForSelectedStep(): Array<ICloRequestElement> {
         return this.processes.filter(process => process.step === this.selectedStep)
     }
-
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
     @computed get processBriefsForSelectedStep(): Array<IItemBrief> {
         return this.processesForSelectedStep.map(process => {
@@ -78,6 +93,9 @@ export class EmployeeStore {
         })
     }
 
+
+    /*******************************************************************************************************/
+    // VIEWS
     // the view heirarchy refers to nested pages an employee has visited within the page heirarchy
     // the first view in the array is the "home" page, the last view in the array is the currently viewed page
     // The hierarchy is as follows:
