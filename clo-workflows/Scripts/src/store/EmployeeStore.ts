@@ -118,9 +118,9 @@ export class EmployeeStore {
         return this.viewHierarchy.map(viewKey => {
             let text: string
             if(viewKey === EmployeeViewKey.Dashboard) text = `${this.root.sessionStore.currentUser.role.name || ""} Dashboard`
-            else if(viewKey === EmployeeViewKey.ProcessDetail) text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("id") || ""}`
-            else if(viewKey === EmployeeViewKey.ProjectDetail) text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("id") || ""}`
-            else if(viewKey === EmployeeViewKey.WorkDetail) text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("id") || ""}`
+            else if(viewKey === EmployeeViewKey.ProcessDetail) text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("id") || ""} Detail`
+            else if(viewKey === EmployeeViewKey.ProjectDetail) text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("id") || ""} Detail`
+            else if(viewKey === EmployeeViewKey.WorkDetail) text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("id") || ""} Detail`
 
             return {
                 text,
