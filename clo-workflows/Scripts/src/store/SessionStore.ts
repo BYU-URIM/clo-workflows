@@ -3,6 +3,11 @@ import { DataService } from "../service/DataService"
 import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 
+export interface IFormState {
+    newProjectChecked?:boolean
+    newWorkChecked?:boolean
+}
+
 export class SessionStore {
     constructor(
         private root: RootStore,
@@ -13,6 +18,7 @@ export class SessionStore {
 
     @action async init(): Promise<void> {
         this.currentUser = await this.dataService.fetchUser()
+
     }
 
     @computed get isEmployee(): boolean {
@@ -20,4 +26,5 @@ export class SessionStore {
             && this.currentUser.role
             && this.currentUser.role.name !== "Anonymous"
     }
+        
 }

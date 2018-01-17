@@ -5,7 +5,7 @@ import { Fabric } from "office-ui-fabric-react/lib/Fabric"
 import { Anonymous } from "../component/Client"
 import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
-import Header from "../component/Header"
+import Header, { IHeaderProps } from "../component/Header"
 import { Employee } from "../component/Employee"
 
 // Register icons and pull the fonts from the default SharePoint cdn.
@@ -18,11 +18,11 @@ export class App extends React.Component<any, any> {
   }
 
   private sessionStore: SessionStore
-
   render() {
     return (
       <Fabric>
         <Header currentUser={this.sessionStore.currentUser} />
+
         {this.sessionStore.isEmployee ? (
           <Employee currentUser={this.sessionStore.currentUser} />
         ) : (

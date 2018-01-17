@@ -28,7 +28,6 @@ const styles = {
 export class Anonymous extends React.Component<any, any> {
     public componentWillMount() {
         this.sessionStore = this.props.rootStore.sessionStore
-
         this.clientStore = this.props.rootStore.clientStore
     }
     sessionStore: SessionStore
@@ -36,15 +35,16 @@ export class Anonymous extends React.Component<any, any> {
 
     render() {
         const options = [{ key: "Header", text: "Work Types", itemType: Header }]
-        const { newProject, newProjectState, DataService } = this.clientStore
+        const {sessionStore, clientStore} = this
+        const { newProject, newProjectState, DataService } = clientStore
         return (
             <div style={styles.main}>
                 <Dropdown
                     className="WorkTypeDropdownClass"
                     label="Select the Project Type:"
                     selectedKey={
-                        this.clientStore.newProjectState.projectType
-                            ? this.clientStore.newProjectState.projectType
+                        clientStore.newProjectState.projectType
+                            ? clientStore.newProjectState.projectType
                             : undefined
                     }
                     options={Array.from(DataService().getProjectTypes()).map((field) => ({
@@ -53,20 +53,49 @@ export class Anonymous extends React.Component<any, any> {
                         key: field,
                     }))}
                     placeHolder="Select an Option"
-                    onChanged={(e) => this.clientStore.updateNewProjectState("projectType", e.text)}
+                    onChanged={(e) => clientStore.updateNewProjectState(
+                        {
+                            projectType: e.text,
+                            newProjectChecked:false,
+                            workType:"", newWorkChecked:false,
+                            testField:"working"
+                        },
+                    )}
                     style={styles.item}
                 />
-                {this.clientStore.newProjectState.projectType && (
+                {
+                    clientStore.newProjectState.projectType && (
                     <div>
                         <SearchBox
                             onFocus={() => console.log("onFocus called")}
                             onBlur={() => console.log("onBlur called")}
                             style={styles.item}
                         />
-                        <Checkbox label="Create new project" style={styles.item} />
+                        <br/>
+                        <Checkbox 
+                            label="Create new project" 
+                            style={styles.item} 
+                            checked={clientStore.newProjectState.newProjectChecked} 
+                            onChange={()=> clientStore.updateForm({newProjectChecked: !clientStore.newProjectState.newProjectChecked})}
+                            />
                     </div>
-                )}
-                {newProjectState.projectType && (
+                    )
+                }
+                {
+                    (clientStore.currentnewProjectState.newProjectChecked) &&
+                        (
+                            <FormControlGroup 
+                            data={newProject}
+                            formControls={clientStore
+                                .DataService()
+                                .getProjectFormControlsForType(newProjectState.projectType)}
+                            validation={{}}
+                            onChange={clientStore.updateNewProject}
+                            />
+                        )
+                    
+                }
+                {newProjectState.newProjectChecked && (
                     <div>
                         <Dropdown
                             label="Select the Work Type:"
@@ -81,30 +110,38 @@ export class Anonymous extends React.Component<any, any> {
                                 key: field,
                             }))}
                             placeHolder="Select an Option"
-                            onChanged={(e) => this.clientStore.updateNewProjectState("workType", e.text)}
+                            onChanged={(e) => clientStore.updateNewProjectState({
+                                workType: e.text, 
+                                newWorkChecked: false})}
                             style={styles.item}
                         />
-                        label="Create new project" style={styles.item}
                     </div>
                 )}
-                {this.clientStore.newProjectState.workType && (
+                {clientStore.newProjectState.workType && (
                     <div>
-                        <Checkbox />
                         <SearchBox
                             onFocus={() => console.log("onFocus called")}
                             onBlur={() => console.log("onBlur called")}
                         />
-                    </div>
+                        <br/>
+                        <Checkbox 
+                            label="request new work" 
+                            style={styles.item} 
+                            checked={clientStore.newProjectState.newWorkChecked} 
+                            onChange={()=> clientStore.updateForm({
+                                newWorkChecked: !clientStore.newProjectState.newWorkChecked
+                            })}
+                            />                    </div>
                 )}
-                {this.clientStore.newProjectState.workType && (
+                {clientStore.newProjectState.newWorkChecked && (
                     <div style={styles.item}>
                         <FormControlGroup
                             data={newProject}
-                            formControls={this.clientStore
+                            formControls={clientStore
                                 .DataService()
                                 .getProjectFormControlsForType(newProjectState.projectType)}
                             validation={{}}
-                            onChange={this.clientStore.updateNewProject}
+                            onChange={clientStore.updateNewProject}
                         />
                     </div>
                 )}
