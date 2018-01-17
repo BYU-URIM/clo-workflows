@@ -1,3 +1,4 @@
+// ensures that values of a CloRequestElement are serializable primitive values (no functions or nested objects)
 export type FormEntryType = string | number | boolean
 
 // Request Element is a process, project, or work

@@ -14,6 +14,11 @@
         "dataRef": "title",
         "type": "text"
     },
+    "Department": {
+        "displayName": "Department",
+        "dataRef": "department",
+        "type": "text"
+    },
     "Dance Title": {
         "displayName": "Dance Title",
         "dataRef": "danceTitle",
