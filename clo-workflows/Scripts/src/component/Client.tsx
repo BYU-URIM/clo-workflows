@@ -4,16 +4,15 @@ import { inject, observer } from "mobx-react"
 import { IUser } from "../model/User"
 import Header from "./Header"
 import FormControlGroup from "./FormControlGroup"
-import { SessionStore } from "../store/SessionStore"
-import { ClientStore } from "../store/ClientStore"
-import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
-import { WorkType } from "../model/Work"
+import {SessionStore} from "../store/SessionStore"
+import {ClientStore} from "../store/ClientStore"
+import {Dropdown} from "office-ui-fabric-react/lib/Dropdown"
 import { SearchBox } from "office-ui-fabric-react/lib/SearchBox"
 import {
   Checkbox,
 } from "office-ui-fabric-react/lib/Checkbox"
 export interface IWorkTypeDropdownProps {
-  workTypes: Array<WorkType>
+  workTypes: Array<string>
   setNewProjectState: any
 }
 const styles = {

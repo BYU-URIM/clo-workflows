@@ -17,7 +17,9 @@
         "member-access": false,
         "forin": false,
         "no-console":false,
-        "object-literal-sort-keys":false
+        "object-literal-sort-keys": false,
+        "curly": false,
+        "no-consecutive-blank-lines": [true, 2]
     },
     "rulesDirectory": []
 }

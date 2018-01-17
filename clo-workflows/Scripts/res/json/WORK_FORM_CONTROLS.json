@@ -29,6 +29,11 @@
         "dataRef": "author",
         "type": "text"
     },
+    "Artist": {
+        "displayName": "Artist",
+        "dataRef": "artist",
+        "type": "text"
+    },
     "Publisher": {
         "displayName": "Publisher",
         "dataRef": "publisher",

@@ -1,18 +1,24 @@
 import * as React from "react"
 import { IUser } from "../model/User"
 import { inject, observer } from "mobx-react"
-import { EmployeeStore } from "../store/EmployeeStore"
+import { EmployeeStore, EmployeeViewKey } from "../store/EmployeeStore"
 import { SessionStore } from "../store/SessionStore"
 import FormControlGroup from "./FormControlGroup"
 import { observable } from "mobx"
+import { IStep } from "../model/Step"
+import { autobind } from "core-decorators"
+import { NonScrollableList } from "./NonScrollableList"
+import { RoleSteps } from "./RoleSteps"
+import { Breadcrumb } from "office-ui-fabric-react/lib/Breadcrumb"
+import { Button } from "office-ui-fabric-react/lib/Button"
+import { HeaderBreadcrumb } from "./HeaderBreadcrumb";
 
-const styles = {
-  border: "solid 2px black",
-  margin: "25px",
-  padding: "10px",
+const wrapperStyles = {
+    marginLeft: 25,
 }
 
 @inject("rootStore")
+@autobind
 @observer
 export class Employee extends React.Component<any, any> {
 
@@ -27,15 +33,28 @@ export class Employee extends React.Component<any, any> {
     public render() {
         const { sessionStore, employeeStore} = this
         return (
-            <div>
-                <h2>Test Project Form</h2>
-                <FormControlGroup
-                    data={employeeStore.currentProject}
-                    formControls={this.employeeStore.currentProjectFormControls}
-                    validation={{}}
-                    onChange={employeeStore.updateCurrentProject} />
+            <div style={wrapperStyles}>
+                <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
+                {
+                    /* Employee Dashboard */
+                    employeeStore.currentView === EmployeeViewKey.Dashboard &&
+                    <div>
+                        <RoleSteps />
+                        {
+                            employeeStore.selectedStep &&
+                            <NonScrollableList items={employeeStore.selectedStepProcessBriefs} title={employeeStore.selectedStep} onClickItem={employeeStore.selectProcess} />
+                        }
+                    </div>
+                }
+                {
+                    /* Process Detail */
+                    employeeStore.currentView === EmployeeViewKey.ProcessDetail &&
+                    <div style={{marginLeft: 30}}>
+                        <FormControlGroup data={employeeStore.selectedProcess} formControls={employeeStore.selectedProcessFormControls}
+                            validation={employeeStore.selectedProcessValidation} onChange={employeeStore.updateSelectedProcess} />
+                    </div>
+                }
             </div>
         )
     }
-
 }
