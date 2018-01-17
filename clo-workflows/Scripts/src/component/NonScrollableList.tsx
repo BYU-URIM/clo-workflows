@@ -25,7 +25,7 @@ const listItemStyles = {
     borderBottom: "1px inset #505050",
     padding: "13 0",
 }
-
+const wrapperStyles = { margin: "0 52" }
 const listStyles = { width: 400 }
 const titleStyles = { marginTop: 40 }
 const listItemBodyStyles = { font: "18px Segoe UI, sans-serif" }
@@ -52,7 +52,7 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
 
     public render() {
         return (
-            <div>
+            <div style={wrapperStyles}>
                 <h2 style={titleStyles} >{this.props.title}</h2>
                 <ul style={listStyles}>
                 {

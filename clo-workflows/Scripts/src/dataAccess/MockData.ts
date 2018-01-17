@@ -66,6 +66,41 @@ export const MockProcesses: Array<ICloRequestElement> = [
         workId: 4,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
+    {
+        id: 5,
+        step: "Public Domain Research",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 6,
+        step: "Public Domain Research",
+        projectId: 1,
+        workId: 2,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 7,
+        step: "Ownership Research",
+        projectId: 1,
+        workId: 3,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
 ]
 
 export const MockWorks: Array<ICloRequestElement> = [

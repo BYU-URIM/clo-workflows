@@ -7,6 +7,7 @@ import { IFormControl } from "../model/FormControl"
 import { IStep } from "../model/Step"
 import { IItemBrief } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
+import { validateFormControl } from "../utils"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -67,6 +68,22 @@ export class EmployeeStore {
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
     }
 
+    @action updateSelectedProcess(fieldName: string, newVal: FormEntryType): void {
+        this.selectedProcess.set(fieldName, newVal)
+    }
+
+    // TODO, this validation recomputes all fields each time, very inefficient
+    // returns plain javascript object mapping field names to error strings
+    @computed get selectedProcessValidation(): {} {
+        return this.selectedProcessFormControls.reduce((accumulator: {}, formControl: IFormControl) => {
+            const fieldName: string = formControl.dataRef
+            const inputVal = this.selectedProcess.get(fieldName)
+            const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
+            accumulator[fieldName] = error
+            return accumulator
+        }, {})
+    }
+
     // computes a plain JavaScript object mapping step names process counts
     @computed get processCountsByStep(): {[stepName: string]: number} {
         return this.processes.reduce((accumulator: any, process) => {
@@ -76,12 +93,17 @@ export class EmployeeStore {
         }, {})
     }
 
-    @computed private get processesForSelectedStep(): Array<ICloRequestElement> {
+    @computed private get selectedStepProcesses(): Array<ICloRequestElement> {
         return this.processes.filter(process => process.step === this.selectedStep)
     }
+
+    @computed get selectedProcessFormControls(): Array<IFormControl> {
+        return this.dataService.getProcessFormControlsForStep(this.selectedStep)
+    }
+
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
-    @computed get processBriefsForSelectedStep(): Array<IItemBrief> {
-        return this.processesForSelectedStep.map(process => {
+    @computed get selectedStepProcessBriefs(): Array<IItemBrief> {
+        return this.selectedStepProcesses.map(process => {
             const processWork = this.works.find(work => work.id === process.workId)
             const processProject = this.projects.find(project => project.id === process.projectId)
             return {

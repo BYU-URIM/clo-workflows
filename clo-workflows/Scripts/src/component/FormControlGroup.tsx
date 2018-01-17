@@ -37,7 +37,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 onChanged={(option: IDropdownOption) => props.onChange(formControl.dataRef, option.text)} label={formControl.displayName} key={index} />
                 } else if(formControl.type === "textarea") {
                     return <TextField multiline value={props.data.get(formControl.dataRef) as string} errorMessage={props.validation[formControl.dataRef]} key={index}
-                                onChange={(e) => props.onChange(formControl.dataRef, e.currentTarget.value)} label={formControl.displayName} />
+                                onChanged={ (newVal: string) => props.onChange(formControl.dataRef, newVal) } label={formControl.displayName} />
                 } else if(formControl.type === "checkbox") {
                     return <div style={checkboxStyles} key={index}>
                                 <Checkbox checked={props.data.get(formControl.dataRef) as boolean} label={formControl.displayName}

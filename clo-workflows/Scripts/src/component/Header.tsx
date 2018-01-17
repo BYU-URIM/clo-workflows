@@ -6,7 +6,7 @@ export interface IHeaderProps {
 }
 const styles = {
   background: "lightgray",
-  margin: "20px",
+  margin: "20 48",
   padding: "15px",
   display: "inline-block",
 }

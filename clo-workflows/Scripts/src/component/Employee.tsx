@@ -42,16 +42,16 @@ export class Employee extends React.Component<any, any> {
                         <RoleSteps />
                         {
                             employeeStore.selectedStep &&
-                            <NonScrollableList items={employeeStore.processBriefsForSelectedStep} title={employeeStore.selectedStep} onClickItem={employeeStore.selectProcess} />
+                            <NonScrollableList items={employeeStore.selectedStepProcessBriefs} title={employeeStore.selectedStep} onClickItem={employeeStore.selectProcess} />
                         }
                     </div>
                 }
                 {
                     /* Process Detail */
                     employeeStore.currentView === EmployeeViewKey.ProcessDetail &&
-                    <div>
-                        <FormControlGroup data={employeeStore.selectedProcess} formControls={employeeStore.selectedProjectFormControls}
-                            validation={{}} onChange={employeeStore.updateSelectedProject} />
+                    <div style={{marginLeft: 30}}>
+                        <FormControlGroup data={employeeStore.selectedProcess} formControls={employeeStore.selectedProcessFormControls}
+                            validation={employeeStore.selectedProcessValidation} onChange={employeeStore.updateSelectedProcess} />
                     </div>
                 }
             </div>
