@@ -1,28 +1,24 @@
 import * as React from "react"
 import { IUser } from "../model/User"
 import { inject, observer } from "mobx-react"
-import { EmployeeStore } from "../store/EmployeeStore"
+import { EmployeeStore, EmployeeViewKey } from "../store/EmployeeStore"
 import { SessionStore } from "../store/SessionStore"
 import FormControlGroup from "./FormControlGroup"
 import { observable } from "mobx"
 import { IStep } from "../model/Step"
-import { CompoundButton, IButtonProps } from "office-ui-fabric-react/lib/Button"
+import { autobind } from "core-decorators"
+import { NonScrollableList } from "./NonScrollableList"
+import { RoleSteps } from "./RoleSteps"
+import { Breadcrumb } from "office-ui-fabric-react/lib/Breadcrumb"
+import { Button } from "office-ui-fabric-react/lib/Button"
+import { HeaderBreadcrumb } from "./HeaderBreadcrumb";
 
 const wrapperStyles = {
     marginLeft: 25,
 }
 
-const stepButtonWrapperStyles = {
-    height: 40,
-    maxWidth: "95%",
-    margin: "auto",
-}
-
-const stepButtonStyles = {
-    margin: "10 10 0 0",
-}
-
 @inject("rootStore")
+@autobind
 @observer
 export class Employee extends React.Component<any, any> {
 
@@ -38,21 +34,27 @@ export class Employee extends React.Component<any, any> {
         const { sessionStore, employeeStore} = this
         return (
             <div style={wrapperStyles}>
-                <h1>{`${sessionStore.currentUser.role.name} Pending Items`}</h1>
-                <div style={stepButtonWrapperStyles}>
+                <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
                 {
-                    sessionStore.currentUser.role.permittedSteps.map((step: IStep, index: number) => {
-                        const pendingItemCount = employeeStore.pendingProcessesByStep[step.name] ? employeeStore.pendingProcessesByStep[step.name] : 0
-                        return (
-                            <CompoundButton key={index} style={stepButtonStyles} description={`${pendingItemCount} Pending Items`} primary={!!pendingItemCount}>
-                                {step.name}
-                            </CompoundButton>
-                        )
-                    })
+                    /* Employee Dashboard */
+                    employeeStore.currentView === EmployeeViewKey.Dashboard &&
+                    <div>
+                        <RoleSteps />
+                        {
+                            employeeStore.selectedStep &&
+                            <NonScrollableList items={employeeStore.selectedStepProcessBriefs} title={employeeStore.selectedStep} onClickItem={employeeStore.selectProcess} />
+                        }
+                    </div>
                 }
-                </div>
+                {
+                    /* Process Detail */
+                    employeeStore.currentView === EmployeeViewKey.ProcessDetail &&
+                    <div style={{marginLeft: 30}}>
+                        <FormControlGroup data={employeeStore.selectedProcess} formControls={employeeStore.selectedProcessFormControls}
+                            validation={employeeStore.selectedProcessValidation} onChange={employeeStore.updateSelectedProcess} />
+                    </div>
+                }
             </div>
         )
     }
-
 }

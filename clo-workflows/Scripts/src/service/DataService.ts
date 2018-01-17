@@ -68,8 +68,8 @@ export class DataService {
     }
 
     // returns a map of step name to form controls, returns only the steps permitted for the provided user
-    getPermittedProcessFormControlsForStep(stepName: string): Array<IFormControl> {
-        return deepCopy(PROCESS_STEPS[stepName].permittedFormControls.map(formControlName => PROCESS_FORM_CONTROLS[formControlName]))
+    getProcessFormControlsForStep(stepName: string): Array<IFormControl> {
+        return deepCopy(PROCESS_STEPS[stepName].processFormControls.map(formControlName => PROCESS_FORM_CONTROLS[formControlName]))
     }
 
     getProjectTypes(): Array<string> {

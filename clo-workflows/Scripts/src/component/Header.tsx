@@ -6,9 +6,8 @@ export interface IHeaderProps {
 }
 const styles = {
   background: "lightgray",
-  margin: "20px",
+  margin: "20 48",
   padding: "15px",
-  borderRadius: "8px",
   display: "inline-block",
 }
 const Header = (props: IHeaderProps) => {
