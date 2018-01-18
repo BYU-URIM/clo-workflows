@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev:local": "webpack-dev-server --env.NODE_ENV=local --inline --content-base dist",
+    "dev:local": "webpack-dev-server --env.NODE_ENV=local --inline --hot --content-base dist",
     "dev:sharepoint": "webpack --watch --env.NODE_ENV=sharepoint",
     "build": "webpack --env.NODE_ENV=sharepoint",
     "build:production": "webpack --env.Node_ENV=sharepoint --optimize-minimize",
