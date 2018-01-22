@@ -2,7 +2,7 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { SessionStore } from "../store/SessionStore"
 import { Fabric } from "office-ui-fabric-react/lib/Fabric"
-import { Anonymous } from "../component/Client"
+import { Client } from "../component/Client"
 import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
 import Header, { IHeaderProps } from "../component/Header"
@@ -23,11 +23,7 @@ export class App extends React.Component<any, any> {
       <Fabric>
         <Header currentUser={this.sessionStore.currentUser} />
 
-        {this.sessionStore.isEmployee ? (
-          <Employee currentUser={this.sessionStore.currentUser} />
-        ) : (
-          <Anonymous currentUser={this.sessionStore.currentUser} />
-        )}
+        {this.sessionStore.isEmployee ? <Employee currentUser={this.sessionStore.currentUser} /> : <Client currentUser={this.sessionStore.currentUser} />}
         <DevTools />
       </Fabric>
     )
