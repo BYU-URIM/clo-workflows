@@ -21,7 +21,7 @@ export const ClientProjectType = (props: IClientProjectTypeProps) => {
         className="WorkTypeDropdownClass"
         label="Select the Project Type:"
         selectedKey={clientStore.newProjectState.projectType ? clientStore.newProjectState.projectType : undefined}
-        options={Array.from(clientStore.DataService().getProjectTypes()).map((field) => ({
+        options={Array.from(clientStore.DataService.getProjectTypes()).map((field) => ({
           text: field,
           value: field,
           key: field,
@@ -48,15 +48,15 @@ export const ClientProjectType = (props: IClientProjectTypeProps) => {
             onChange={() => {
               clientStore.updateForm({ newProjectChecked: !clientStore.newProjectState.newProjectChecked 
               })
-              clientStore.toggleModal()
+              clientStore.toggleProjectModal()
             }}
           />
         </div>
       )}
 
       <Modal 
-        isOpen={clientStore.newProjectState.showModal} 
-        onDismiss={clientStore.toggleModal} 
+        isOpen={clientStore.newProjectState.showProjectModal} 
+        onDismiss={clientStore.toggleProjectModal} 
         isBlocking={false} 
         containerClassName="ms-modalExample-container"
         >
@@ -67,7 +67,7 @@ export const ClientProjectType = (props: IClientProjectTypeProps) => {
         {clientStore.currentnewProjectState.newProjectChecked && (
         <FormControlGroup
           data={clientStore.newProject}
-          formControls={clientStore.DataService().getProjectFormControlsForType(clientStore.newProjectState.projectType)}
+          formControls={clientStore.DataService.getProjectFormControlsForType(clientStore.newProjectState.projectType)}
           validation={{}}
           onChange={clientStore.updateProjectTypeForm}
         />

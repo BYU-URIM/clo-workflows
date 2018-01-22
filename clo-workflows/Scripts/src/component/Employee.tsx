@@ -11,50 +11,48 @@ import { NonScrollableList } from "./NonScrollableList"
 import { RoleSteps } from "./RoleSteps"
 import { Breadcrumb } from "office-ui-fabric-react/lib/Breadcrumb"
 import { Button } from "office-ui-fabric-react/lib/Button"
-import { HeaderBreadcrumb } from "./HeaderBreadcrumb";
+import { HeaderBreadcrumb } from "./HeaderBreadcrumb"
 
 const wrapperStyles = {
-    marginLeft: 25,
+  marginLeft: 25,
 }
 
 @inject("rootStore")
 @autobind
 @observer
 export class Employee extends React.Component<any, any> {
+  public componentWillMount() {
+    this.sessionStore = this.props.rootStore.sessionStore
+    this.employeeStore = this.props.rootStore.employeeStore
+  }
 
-    public componentWillMount() {
-        this.sessionStore = this.props.rootStore.sessionStore
-        this.employeeStore = this.props.rootStore.employeeStore
-    }
+  private sessionStore: SessionStore
+  private employeeStore: EmployeeStore
 
-    private sessionStore: SessionStore
-    private employeeStore: EmployeeStore
-
-    public render() {
-        const { sessionStore, employeeStore} = this
-        return (
-            <div style={wrapperStyles}>
-                <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
-                {
-                    /* Employee Dashboard */
-                    employeeStore.currentView === EmployeeViewKey.Dashboard &&
-                    <div>
-                        <RoleSteps />
-                        {
-                            employeeStore.selectedStep &&
-                            <NonScrollableList items={employeeStore.selectedStepProcessBriefs} title={employeeStore.selectedStep} onClickItem={employeeStore.selectProcess} />
-                        }
-                    </div>
-                }
-                {
-                    /* Process Detail */
-                    employeeStore.currentView === EmployeeViewKey.ProcessDetail &&
-                    <div style={{marginLeft: 30}}>
-                        <FormControlGroup data={employeeStore.selectedProcess} formControls={employeeStore.selectedProcessFormControls}
-                            validation={employeeStore.selectedProcessValidation} onChange={employeeStore.updateSelectedProcess} />
-                    </div>
-                }
-            </div>
-        )
-    }
+  public render() {
+    const { sessionStore, employeeStore } = this
+    return (
+      <div style={wrapperStyles}>
+        <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
+        {/* Employee Dashboard */
+        employeeStore.currentView === EmployeeViewKey.Dashboard && (
+          <div>
+            <RoleSteps />
+            {employeeStore.selectedStep && <NonScrollableList items={employeeStore.selectedStepProcessBriefs} title={employeeStore.selectedStep} onClickItem={employeeStore.selectProcess} />}
+          </div>
+        )}
+        {/* Process Detail */
+        employeeStore.currentView === EmployeeViewKey.ProcessDetail && (
+          <div style={{ marginLeft: 30 }}>
+            <FormControlGroup
+              data={employeeStore.selectedProcess}
+              formControls={employeeStore.selectedProcessFormControls}
+              validation={employeeStore.selectedProcessValidation}
+              onChange={employeeStore.updateSelectedProcess}
+            />
+          </div>
+        )}
+      </div>
+    )
+  }
 }

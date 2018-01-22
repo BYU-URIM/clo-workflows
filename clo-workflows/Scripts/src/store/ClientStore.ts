@@ -15,7 +15,7 @@ export class ClientStore {
         this.projects = await this.dataService.fetchClientActiveProjects()
         runInAction(() => {
             this.newProject = observable.map(this.projects[0])
-            this.newProjectState = {projectType: "", workType:"", newProjectChecked:false, newWorkChecked:false, projectTypeForm:[{}], showModal:false}
+            this.newProjectState = {projectType: "", workType:"", newProjectChecked:false, newWorkChecked:false, projectTypeForm:[{}], workTypeForm:[{}], showWorkModal:false, showProjectModal:false}
         })
     }
 
@@ -27,26 +27,33 @@ export class ClientStore {
         workType: string,
         newProjectChecked:boolean,
         newWorkChecked:boolean,
-        showModal:boolean
+        showProjectModal:boolean,
+        showWorkModal:boolean,
+        workTypeForm:{}
     }
     @action updateProjectTypeForm(fieldName: string, newVal: FormEntryType): void {
         this.updateNewProjectState({projectTypeForm:[{field: fieldName, value: newVal}]})
     }
+    @action updateWorkTypeForm(fieldName: string, newVal: FormEntryType): void {
+        this.updateNewProjectState({workTypeForm:[{field: fieldName, value: newVal}]})
+    }
     @action updateNewProjectState(form:{}): void {
         this.newProjectState = Object.assign({}, this.newProjectState, form)
     }
-    @action DataService() {
+    get DataService() {
         return this.dataService
     }
     @action updateForm(form:{}){
         this.newProjectState = Object.assign({}, this.newProjectState, form)
     }
+    @action toggleWorkModal(){
+        this.updateNewProjectState({ showWorkModal: !this.newProjectState.showWorkModal })
+    }
+    @action toggleProjectModal(){
+        this.updateNewProjectState({ showProjectModal: !this.newProjectState.showProjectModal })
+    }
     @computed get currentnewProjectState():any{
         return this.newProjectState
     }
-    @action toggleModal(){
-        this.updateNewProjectState({ showModal: !this.newProjectState.showModal })
-      }
-      
 
 }

@@ -28,7 +28,7 @@ const styles = {
 
 @inject("rootStore")
 @observer
-export class Anonymous extends React.Component<any, any> {
+export class Client extends React.Component<any, any> {
   public componentWillMount() {
     this.sessionStore = this.props.rootStore.sessionStore
     this.clientStore = this.props.rootStore.clientStore
@@ -42,20 +42,19 @@ export class Anonymous extends React.Component<any, any> {
     const { newProject, newProjectState, DataService } = clientStore
     return (
       <div style={styles.main}>
-        <Pivot linkSize={PivotLinkSize.large} linkFormat={ PivotLinkFormat.tabs }>
+        <Pivot linkSize={PivotLinkSize.large} linkFormat={PivotLinkFormat.tabs}>
           <PivotItem linkText="New Request">
-            <Label >Welcome {sessionStore.currentUser.name.split(" ")[0]}!</Label>            
+            <Label>Welcome {sessionStore.currentUser.name.split(" ")[0]}!</Label>
             <ClientProjectType clientStore={this.clientStore} styles={styles} />
             <ClientWorkType clientStore={this.clientStore} styles={styles} />
           </PivotItem>
           <PivotItem linkText="Pending Requests">
             <Label>Pivot #2</Label>
           </PivotItem>
-          <PivotItem  linkText="Completed Requests">
+          <PivotItem linkText="Completed Requests">
             <Label>Pivot #2</Label>
           </PivotItem>
         </Pivot>
-
       </div>
     )
   }

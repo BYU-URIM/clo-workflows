@@ -5,6 +5,7 @@ import { SearchBox } from "office-ui-fabric-react/lib/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
 import { observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
+import { Modal } from "office-ui-fabric-react/lib/components/Modal"
 export interface IClientWorkTypeProps {
   styles: {
     item: {}
@@ -12,7 +13,7 @@ export interface IClientWorkTypeProps {
   clientStore: ClientStore
 }
 
-export const ClientWorkType =  (props: IClientWorkTypeProps) => {
+export const ClientWorkType = (props: IClientWorkTypeProps) => {
   const { clientStore, styles } = props
   return (
     <div>
@@ -21,7 +22,7 @@ export const ClientWorkType =  (props: IClientWorkTypeProps) => {
           <Dropdown
             label="Select the Work Type:"
             selectedKey={clientStore.newProjectState.workType ? clientStore.newProjectState.workType : undefined}
-            options={Array.from(clientStore.DataService().getWorkTypes()).map((field) => ({
+            options={Array.from(clientStore.DataService.getWorkTypes()).map((field) => ({
               text: field,
               value: field,
               key: field,
@@ -46,23 +47,37 @@ export const ClientWorkType =  (props: IClientWorkTypeProps) => {
             style={styles.item}
             checked={clientStore.newProjectState.newWorkChecked}
             onChange={() =>
-              clientStore.updateForm({
+              {clientStore.updateForm({
                 newWorkChecked: !clientStore.newProjectState.newWorkChecked,
               })
+              clientStore.toggleWorkModal()
+            }
             }
           />{" "}
         </div>
       )}
-      {clientStore.newProjectState.newWorkChecked && (
-        <div style={styles.item}>
-          <FormControlGroup
-            data={clientStore.newProject}
-            formControls={clientStore.DataService().getProjectFormControlsForType(clientStore.newProjectState.projectType)}
-            validation={{}}
-            onChange={clientStore.updateProjectTypeForm}
-          />
+      <Modal 
+        isOpen={clientStore.newProjectState.showWorkModal} 
+        onDismiss={clientStore.toggleWorkModal} 
+        isBlocking={false} 
+        containerClassName="ms-modalExample-container"
+        >
+        <div className="ms-modalExample-header">
+          <span>Lorem Ipsum</span>
         </div>
-      )}
+        <div className="ms-modalExample-body">
+          {clientStore.newProjectState.newWorkChecked && (
+            <div style={styles.item}>
+              <FormControlGroup
+                data={clientStore.newProject}
+                formControls={clientStore.DataService.getWorkFormControlsForType(clientStore.newProjectState.workType)}
+                validation={{}}
+                onChange={clientStore.updateWorkTypeForm}
+              />
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   )
 }
