@@ -20,7 +20,8 @@
         "no-console":false,
         "object-literal-sort-keys": false,
         "curly": false,
-        "no-consecutive-blank-lines": [true, 2]
+        "no-consecutive-blank-lines": [true, 2],
+        "no-string-literal": false
     },
     "rulesDirectory": []
 }

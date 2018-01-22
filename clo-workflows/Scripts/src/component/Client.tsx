@@ -58,7 +58,7 @@ export class Anonymous extends React.Component<any, any> {
                             projectType: e.text,
                             newProjectChecked:false,
                             workType:"", newWorkChecked:false,
-                            testField:"working"
+                            testField:"working",
                         },
                     )}
                     style={styles.item}
@@ -72,10 +72,10 @@ export class Anonymous extends React.Component<any, any> {
                             style={styles.item}
                         />
                         <br/>
-                        <Checkbox 
-                            label="Create new project" 
-                            style={styles.item} 
-                            checked={clientStore.newProjectState.newProjectChecked} 
+                        <Checkbox
+                            label="Create new project"
+                            style={styles.item}
+                            checked={clientStore.newProjectState.newProjectChecked}
                             onChange={()=> clientStore.updateForm({newProjectChecked: !clientStore.newProjectState.newProjectChecked})}
                             />
                     </div>
@@ -84,7 +84,7 @@ export class Anonymous extends React.Component<any, any> {
                 {
                     (clientStore.currentnewProjectState.newProjectChecked) &&
                         (
-                            <FormControlGroup 
+                            <FormControlGroup
                             data={newProject}
                             formControls={clientStore
                                 .DataService()
@@ -93,7 +93,7 @@ export class Anonymous extends React.Component<any, any> {
                             onChange={clientStore.updateNewProject}
                             />
                         )
-                    
+
                 }
                 {newProjectState.newProjectChecked && (
                     <div>
@@ -111,7 +111,7 @@ export class Anonymous extends React.Component<any, any> {
                             }))}
                             placeHolder="Select an Option"
                             onChanged={(e) => clientStore.updateNewProjectState({
-                                workType: e.text, 
+                                workType: e.text,
                                 newWorkChecked: false})}
                             style={styles.item}
                         />
@@ -124,12 +124,12 @@ export class Anonymous extends React.Component<any, any> {
                             onBlur={() => console.log("onBlur called")}
                         />
                         <br/>
-                        <Checkbox 
-                            label="request new work" 
-                            style={styles.item} 
-                            checked={clientStore.newProjectState.newWorkChecked} 
+                        <Checkbox
+                            label="request new work"
+                            style={styles.item}
+                            checked={clientStore.newProjectState.newWorkChecked}
                             onChange={()=> clientStore.updateForm({
-                                newWorkChecked: !clientStore.newProjectState.newWorkChecked
+                                newWorkChecked: !clientStore.newProjectState.newWorkChecked,
                             })}
                             />                    </div>
                 )}

@@ -8,7 +8,7 @@
     "build": "webpack --env.NODE_ENV=sharepoint",
     "build:production": "webpack --env.Node_ENV=sharepoint --optimize-minimize",
     "test": "rimraf test_build/** && tsc --outDir test_build && Xcopy /E /I  \"./res\" \"./test_build/res\" && ava test_build/test --verbose",
-    "lint": "tslint -c tslint.json 'src/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'"
+    "lint": "tslint -c tslint.json 'src/**/*.ts*' && tslint -c tslint.json 'test/**/*.ts*'"
   },
   "author": "",
   "license": "MIT",
@@ -23,7 +23,6 @@
     "ts-loader": "^3.1.1",
     "ts-mockito": "^2.2.7",
     "tslint": "^5.9.0",
-    "tslint-config-prettier": "^1.6.0",
     "typescript": "2.6.2",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.5"
