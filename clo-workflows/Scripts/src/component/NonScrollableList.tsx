@@ -6,15 +6,17 @@ import Header from "./Header"
 
 export interface IItemBrief {
     header: string
-    subheader: string
+    subheader?: string
     body: string
     id: string | number
 }
 
 interface INonScrollableListProps {
     items: Array<IItemBrief>
-    title: string
-    onClickItem: (itemBrief: IItemBrief) => void
+    style?: {}
+    // NOTE selectable and onClick item will only if both are present
+    selectable?: boolean
+    onClickItem?: (itemBrief: IItemBrief) => void
 }
 
 interface IProcessListState {
@@ -25,9 +27,8 @@ const listItemStyles = {
     borderBottom: "1px inset #505050",
     padding: "13 0",
 }
-const wrapperStyles = { margin: "0 52" }
-const listStyles = { width: 400 }
-const titleStyles = { marginTop: 40 }
+
+const listStyles = { maxWidth: 400, padding: 0 }
 const listItemBodyStyles = { font: "18px Segoe UI, sans-serif" }
 
 const listItemHeaderStyles = {
@@ -51,23 +52,23 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
     }
 
     public render() {
+        const { props } = this
         return (
-            <div style={wrapperStyles}>
-                <h2 style={titleStyles} >{this.props.title}</h2>
+            <div style={this.props.style}>
                 <ul style={listStyles}>
                 {
-                    this.props.items.length
-                    ? this.props.items.map((item, index) => (
-                        <div key={index} style={this.getListItemStyle(index)} onMouseLeave={this.onMouseLeaveListItem}
-                            onMouseEnter={() => this.onMouseEnterListItem(index)} onClick={() => this.props.onClickItem(item)}>
+                    props.items.map((item, index) => (
+                        <div key={index}
+                            style={this.getListItemStyle(index)}
+                            onMouseLeave={props.selectable ? this.onMouseLeaveListItem : null}
+                            onMouseEnter={props.selectable ? () => this.onMouseEnterListItem(index) : null}
+                            onClick={props.selectable && props.onClickItem ? () => this.props.onClickItem(item) : null}
+                        >
                             <div style={listItemHeaderStyles}>{item.header}</div>
                             <div style={listItemSubheaderStyles}>{item.subheader}</div>
                             <div>{item.body}</div>
                         </div>
                     ))
-                    : (
-                        <div style={listItemHeaderStyles} >{"no active processes"}</div>
-                    )
                 }
                 </ul>
             </div>

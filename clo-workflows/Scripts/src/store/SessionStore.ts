@@ -4,8 +4,8 @@ import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 
 export interface IFormState {
-    newProjectChecked?:boolean
-    newWorkChecked?:boolean
+    newProjectChecked?: boolean
+    newWorkChecked?: boolean
 }
 
 export class SessionStore {
@@ -26,5 +26,5 @@ export class SessionStore {
             && this.currentUser.role
             && this.currentUser.role.name !== "Anonymous"
     }
-        
+
 }

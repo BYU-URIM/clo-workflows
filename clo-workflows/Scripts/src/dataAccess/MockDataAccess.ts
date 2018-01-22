@@ -8,7 +8,7 @@ import { deepCopy } from "../utils"
 export class MockDataAccess implements IDataAccess {
 
     fetchUser(): Promise<IUserDto> {
-        return Promise.resolve(MockUsersDtos[0])
+        return Promise.resolve(MockUsersDtos[1])
     }
 
     fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {

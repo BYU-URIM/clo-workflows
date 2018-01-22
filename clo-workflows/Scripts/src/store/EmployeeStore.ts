@@ -115,6 +115,12 @@ export class EmployeeStore {
         })
     }
 
+    @observable selectedProcessNotes: Array<IItemBrief> = [
+        {header: "1/1/2015", body: "Sed ut perspiciatis unde omnis iste natus error sit", id: 1},
+        {header: "1/1/2013", body: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis", id: 2},
+        {header: "1/1/2010", body: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", id: 2},
+    ]
+
 
     /*******************************************************************************************************/
     // VIEWS

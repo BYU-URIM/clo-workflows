@@ -24,22 +24,22 @@ export class ClientStore {
     @observable newProjectState: {
         projectType: string,
         workType: string,
-        newProjectChecked:boolean,
-        newWorkChecked:boolean,
+        newProjectChecked: boolean,
+        newWorkChecked: boolean,
     }
     @action updateNewProject(fieldName: string, newVal: FormEntryType): void {
         this.newProject.set(fieldName, newVal)
     }
-    @action updateNewProjectState(form:{}): void {
+    @action updateNewProjectState(form: {}): void {
         this.newProjectState = Object.assign({}, this.newProjectState, form)
     }
     @action DataService() {
         return this.dataService
     }
-    @action updateForm(form:{}){
+    @action updateForm(form: {}) {
         this.newProjectState = Object.assign({}, this.newProjectState, form)
     }
-    @computed get currentnewProjectState():any{
+    @computed get currentnewProjectState(): any {
         return this.newProjectState
     }
 }
