@@ -101,6 +101,62 @@ export const MockProcesses: Array<ICloRequestElement> = [
         workId: 1,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
+    {
+        id: 8,
+        step: "Payment",
+        projectId: 1,
+        workId: 1,
+        dateSubmittedToCurrentStep: "1/1/2018",
+    },
 ]
 
 export const MockWorks: Array<ICloRequestElement> = [

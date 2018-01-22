@@ -19,7 +19,7 @@ const breadcrumbItemStyles = {
     font: "20px Segoe UI, sans-serif",
     color: "#202020",
     fontWeight: "lighter",
-    fontSize: 24,
+    fontSize: 32,
 } as React.CSSProperties
 
 const wrapperStyles = {
