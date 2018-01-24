@@ -12,7 +12,11 @@ export class SessionStore {
     constructor(
         private root: RootStore,
         private dataService: DataService,
-    ) {}
+        testing?: boolean
+    ) {
+       this.testing = true
+    }
+    @observable testing: boolean
 
     @observable currentUser: IUser
 

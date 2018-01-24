@@ -7,7 +7,7 @@ import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
 import Header, { IHeaderProps } from "../component/Header"
 import { Employee } from "../component/Employee"
-
+import {Testing} from "../component/Testing"
 
 const backgroundStyles = {
 } as React.CSSProperties
@@ -36,11 +36,13 @@ export class App extends React.Component<any, any> {
                 <Header currentUser={this.sessionStore.currentUser} />
                 <div style={backgroundStyles}>
                     <div style={appContentStyles}>
-                        {this.sessionStore.isEmployee ? (
+                        {this.sessionStore.testing ? <Testing data = {this.sessionStore}/> 
+                        :this.sessionStore.isEmployee ? (
                         <Employee currentUser={this.sessionStore.currentUser} />
                         ) : (
                         <Client currentUser={this.sessionStore.currentUser} />
-                        )}
+                        )
+                    }
                     </div>
                 </div>
                 <DevTools />
