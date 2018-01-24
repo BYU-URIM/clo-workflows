@@ -321,3 +321,4 @@ OpenCover/
 !.vscode/extensions.json
 clo-workflows/Scripts/.prettierrc
 clo-workflows/Scripts/notes.md
+clo-workflows/Scripts/src/component/Testing.tsx
