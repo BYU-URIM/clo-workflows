@@ -16,7 +16,7 @@ module.exports = function(env) {
                     test: /\.tsx?$/,
                     loader: 'ts-loader',
                     exclude: /node_modules/,
-                }
+                }                
             ]
         },
         resolve: {
