@@ -7,4 +7,5 @@ export interface IDataAccess {
     fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>>
     fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>>
     fetchClientActiveProjects(): Promise<Array<ICloRequestElement>>
+    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>>
 }
