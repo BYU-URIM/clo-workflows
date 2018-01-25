@@ -36,8 +36,7 @@ export class App extends React.Component<any, any> {
                 <Header currentUser={this.sessionStore.currentUser} />
                 <div style={backgroundStyles}>
                     <div style={appContentStyles}>
-                        {this.sessionStore.testing ? <Testing data = {this.sessionStore}/> 
-                        :this.sessionStore.isEmployee ? (
+                        {this.sessionStore.isEmployee ? (
                         <Employee currentUser={this.sessionStore.currentUser} />
                         ) : (
                         <Client currentUser={this.sessionStore.currentUser} />
