@@ -30,7 +30,7 @@ export class RoleSteps extends React.Component<any, any> {
     private sessionStore: SessionStore
     private employeeStore: EmployeeStore
 
-    private onStepButtonClick(step: string): void {
+    private onStepButtonClick(step: IStep): void {
         this.employeeStore.selectStep(step)
     }
 
@@ -43,8 +43,8 @@ export class RoleSteps extends React.Component<any, any> {
                     sessionStore.currentUser.role.permittedSteps.map((step: IStep, index: number) => {
                         const pendingItemCount = employeeStore.processCountsByStep[step.name] ? employeeStore.processCountsByStep[step.name] : 0
                         return (
-                            <CompoundButton onClick={() => this.onStepButtonClick(step.name)} key={index} style={stepButtonStyles} description={`${pendingItemCount} Pending Items`}
-                                primary={!!pendingItemCount} text={step.name} checked={step.name === employeeStore.selectedStep} />
+                            <CompoundButton onClick={() => this.onStepButtonClick(step)} key={index} style={stepButtonStyles} description={`${pendingItemCount} Pending Items`}
+                                primary={!!pendingItemCount} text={step.name} checked={employeeStore.selectedStep && step.name === employeeStore.selectedStep.name} />
                         )
                     })
                 }

@@ -1,0 +1,92 @@
+{
+    "Intake": {
+        "name": "Intake",
+        "stepId": 0,
+        "view": null
+    },
+    "Public Domain Research": {
+        "name": "Public Domain Research",
+        "stepId": 1,
+        "view": "Public Domain Research"
+    },
+    "Public Domain Approval": {
+        "name": "Public Domain Approval",
+        "stepId": 1,
+        "view": "Public Domain Approval"
+    },
+    "Existing License": {
+        "name": "Existing License",
+        "stepId": 2,
+        "view": "Existing License"
+    },
+    "Existing License Approval": {
+        "name": "Existing License Approval",
+        "stepId": 3,
+        "view": "Existing License Approval"
+    },
+    "Exemption Analysis": {
+        "name": "Exemption Analysis",
+        "stepId": 4,
+        "view": "Exemption Analysis"
+    },
+    "Exemption Approval": {
+        "name": "Exemption Approval",
+        "stepId": 5,
+        "view": "Exemption Approval"
+    },
+    "Ownership Research": {
+        "name": "Ownership Research",
+        "stepId": 6,
+        "view": "Ownership Research"
+    },
+    "Request Submitted": {
+        "name": "Request Submitted",
+        "stepId": 7,
+        "view": "Request Submitted"
+    },
+    "Response from Rights Holder Received": {
+        "name": "Response from Rights Holder Received",
+        "stepId": 8,
+        "view": "Response from Rights Holder Received"
+    },
+    "CLO Response to Rights Holder": {
+        "name": "CLO Response to Rights Holder",
+        "stepId": 9,
+        "view": "CLO Response to Rights Holder"
+    },
+    "Receipt of License": {
+        "name": "Receipt of License",
+        "stepId": 10,
+        "view": "Receipt of License"
+    },
+    "Supervisor Signature": {
+        "name": "Supervisor Signature",
+        "stepId": 11,
+        "view": "Supervisor Signature"
+    },
+    "Payment": {
+        "name": "Payment",
+        "stepId": 12,
+        "view": "Payment"
+    },
+    "Process Payment": {
+        "name": "Process Payment",
+        "stepId": 13,
+        "view": "Process Payment"
+    },
+    "Initial Request Completion": {
+        "name": "Initial Request Completion",
+        "stepId": 14,
+        "view": "Initial Request Completion"
+    },
+    "Final Request Completion": {
+        "name": "Final Request Completion",
+        "stepId": 15,
+        "view": "Final Request Completion"
+    },
+    "Complete": {
+        "name": "Complete",
+        "stepId": 16,
+        "view": null
+    }
+}
