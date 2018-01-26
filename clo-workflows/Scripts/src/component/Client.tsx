@@ -1,6 +1,5 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-
 import { IUser } from "../model/User"
 import Header from "./Header"
 import FormControlGroup from "./FormControlGroup"
@@ -9,6 +8,7 @@ import {ClientStore} from "../store/ClientStore"
 import {Dropdown} from "office-ui-fabric-react/lib/Dropdown"
 import { SearchBox } from "office-ui-fabric-react/lib/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
+import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
 export interface IWorkTypeDropdownProps {
   workTypes: Array<string>
   setNewProjectState: any
@@ -47,7 +47,7 @@ export class Anonymous extends React.Component<any, any> {
                             ? clientStore.newProjectState.projectType
                             : undefined
                     }
-                    options={Array.from(DataService().getProjectTypes()).map((field) => ({
+                    options={Array.from(PROJECT_TYPES).map((field) => ({
                         text: field,
                         value: field,
                         key: field,
@@ -88,7 +88,7 @@ export class Anonymous extends React.Component<any, any> {
                             data={newProject}
                             formControls={clientStore
                                 .DataService()
-                                .getProjectFormControlsForType(newProjectState.projectType)}
+                                .getView(newProjectState.projectType)}
                             validation={{}}
                             onChange={clientStore.updateNewProject}
                             />
@@ -104,7 +104,7 @@ export class Anonymous extends React.Component<any, any> {
                                     ? this.clientStore.newProjectState.workType
                                     : undefined
                             }
-                            options={Array.from(DataService().getWorkTypes()).map((field) => ({
+                            options={Array.from(WORK_TYPES).map((field) => ({
                                 text: field,
                                 value: field,
                                 key: field,
@@ -139,7 +139,7 @@ export class Anonymous extends React.Component<any, any> {
                             data={newProject}
                             formControls={clientStore
                                 .DataService()
-                                .getProjectFormControlsForType(newProjectState.projectType)}
+                                .getView(newProjectState.projectType)}
                             validation={{}}
                             onChange={clientStore.updateNewProject}
                         />
