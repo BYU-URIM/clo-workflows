@@ -17,7 +17,7 @@ export function validateFormControl(formControl: IFormControl, value: FormEntryT
         return NUMBER_INPUT_ERROR
     }
 
-    if(formControl.type === "textarea" && !DATE_REGEX.test(value as string)) {
+    if(formControl.type === "datetime" && !DATE_REGEX.test(value as string)) {
         return DATE_INPUT_ERROR
     }
 }

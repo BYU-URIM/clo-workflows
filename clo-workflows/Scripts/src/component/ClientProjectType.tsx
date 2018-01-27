@@ -42,7 +42,7 @@ export const ClientProjectType = (props: IClientProjectTypeProps) => {
           <div style={{ display: "flex", flexAlign:"right"}}>
             <FormControlGroup
               data={clientStore.newProject}
-              formControls={clientStore.DataService.getProjectFormControlsForType(clientStore.getViewState.selectedProjectType)}
+              formControls={clientStore.projectTypeForm}
               validation={{}}
               onChange={()=>console.log("hi")}
               />

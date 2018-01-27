@@ -1,15 +1,13 @@
-import * as PROCESS_FORM_CONTROLS from "../../res/json/PROCESS_FORM_CONTROLS.json"
-import * as PROCESS_STEPS from "../../res/json/PROCESS_STEPS.json"
-import * as PROJECT_FORM_CONTROLS from "../../res/json/PROJECT_FORM_CONTROLS.json"
-import * as PROJECT_TYPES from "../../res/json/PROJECT_TYPES.json"
-import * as USER_ROLES from "../../res/json/USER_ROLES.json"
-import * as WORK_FORM_CONTROLS from "../../res/json/WORK_FORM_CONTROLS.json"
-import * as WORK_TYPES from "../../res/json/WORK_TYPES.json"
+import * as ROLES from "../../res/json/processing_config/USER_ROLES.json"
+import * as STEPS from "../../res/json/processing_config/PROCESS_STEPS.json"
+import * as VIEWS from "../../res/json/form_templates/VIEWS.json"
+import * as FORM_CONTROLS from "../../res/json/form_templates/FORM_CONTROLS.json"
 import { IDataAccess } from "../dataAccess/IDataAccess"
 import { IUser, IUserDto } from "../model/User"
 import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 import { IFormControl } from "./../model/FormControl"
+import { View } from "../model/View"
 
 export class DataService {
     constructor(
@@ -26,7 +24,7 @@ export class DataService {
         }
 
         // normalized roles contain strings for steps, map to actual step objects
-        role.permittedSteps = USER_ROLES[userDto.roleName].permittedSteps.map(stepName => Object.assign({}, PROCESS_STEPS[stepName]))
+        role.permittedSteps = ROLES[userDto.roleName].permittedSteps.map(stepName => deepCopy(STEPS[stepName]))
 
         // build user object from userDto and role
         const user: IUser = {
@@ -59,25 +57,7 @@ export class DataService {
         return await this.dao.fetchClientCompletedProjects()
     }
 
-    // returns a map of work type name to form controls
-    getWorkFormControlsForType(workType: string): Array<IFormControl> {
-        return deepCopy(WORK_TYPES[workType].map(formControlName => WORK_FORM_CONTROLS[formControlName]))
-    }
-
-    // returns a map of project type name to form controls
-    getProjectFormControlsForType(projectType: string): Array<IFormControl> {
-        return deepCopy(PROJECT_TYPES[projectType].map(formControlName => PROJECT_FORM_CONTROLS[formControlName]))
-    }
-
-    // returns a map of step name to form controls, returns only the steps permitted for the provided user
-    getProcessFormControlsForStep(stepName: string): Array<IFormControl> {
-        return deepCopy(PROCESS_STEPS[stepName].processFormControls.map(formControlName => PROCESS_FORM_CONTROLS[formControlName]))
-    }
-
-    getProjectTypes(): Array<string> {
-        return Array.from(Object.keys(PROJECT_TYPES))
-    }
-    getWorkTypes(): Array<string> {
-        return Array.from(Object.keys(WORK_TYPES))
+    getView(viewName: string): View {
+        return VIEWS[viewName].map(formControlName => deepCopy(FORM_CONTROLS[formControlName]))
     }
 }

@@ -8,5 +8,6 @@ type StepName = "Intake" | "Work Approval" | "Public Domain Research" | "Public 
 
 export interface IStep {
     name: string
-    processFormControls: Array<string> // contains string names of form controls permitted at a given step
+    stepId: number
+    view: string // contains the name of a view, which is a list of form controls displayed at this step
 }

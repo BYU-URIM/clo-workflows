@@ -16,7 +16,8 @@ import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/Choi
 import { Toggle } from "office-ui-fabric-react/lib/Toggle"
 import {SubForm} from "./SubForm"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
- export interface IWorkTypeDropdownProps {
+import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
+export interface IWorkTypeDropdownProps {
   workTypes: Array<string>
   setNewProjectState: any
 }

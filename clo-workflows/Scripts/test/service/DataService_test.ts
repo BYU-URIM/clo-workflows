@@ -1,8 +1,8 @@
 import * as ava from "ava"
 import { DataService } from "../../src/service/DataService"
 import { IUser, IUserDto } from "../../src/model/User"
-import * as USER_ROLES from "../../res/json/USER_ROLES.json"
-import * as PROCESS_STEPS from "../../res/json/PROCESS_STEPS.json"
+import * as USER_ROLES from "../../res/json/processing_config/USER_ROLES.json"
+import * as PROCESS_STEPS from "../../res/json/processing_config/PROCESS_STEPS.json"
 import * as PROCESS_FORM_CONTROLS from "../../res/json/PROCESS_FORM_CONTROLS.json"
 import { IRole } from "../../src/model/Role"
 import { MockDataAccess } from "../../src/dataAccess/MockDataAccess"
@@ -29,6 +29,7 @@ ava.test("test that fetchUser correctly builds a user object", async t => {
     t.deepEqual(role.permittedSteps.map(step => step.name), jsonRole.permittedSteps)
     role.permittedSteps.forEach(step => {
         t.truthy(step.name)
-        t.truthy(step.processFormControls)
+        t.regex(String(step.stepId), /[0-9]+/)
+        t.not(step.view, undefined)
     })
 })

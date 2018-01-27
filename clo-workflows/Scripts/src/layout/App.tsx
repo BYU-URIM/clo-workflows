@@ -9,7 +9,8 @@ import Header, { IHeaderProps } from "../component/Header"
 import { Employee } from "../component/Employee"
 import Testing from "../component/Testing"
 
-const backgroundStyles = {} as React.CSSProperties
+const backgroundStyles = {
+} as React.CSSProperties
 
 // app content refers to everything in the app below the header
 const appContentStyles = {
