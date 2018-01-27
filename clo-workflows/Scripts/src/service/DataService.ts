@@ -51,8 +51,8 @@ export class DataService {
         return this.dao.fetchEmployeeActiveWorks()
     }
 
-    async fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return await this.dao.fetchClientActiveProjects()
+    async fetchClientProjects(): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchClientProjects()
     }
     
     async fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {

@@ -22,7 +22,7 @@ ava.test("root store creates all child stores when an employee logs in", async t
     }))
 
     when(mockDataService.fetchEmployeeActiveProjects()).thenReturn(Promise.resolve(MockProjects))
-    when(mockDataService.fetchClientActiveProjects()).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchClientProjects()).thenReturn(Promise.resolve(MockProjects))
 
     const rootStore: RootStore = new RootStore(instance(mockDataService))
     await rootStore.init()
@@ -43,7 +43,7 @@ ava.test("root store creates all stores except employeeProcess store when client
         },
     }))
     when(mockDataService.fetchEmployeeActiveProjects()).thenReturn(Promise.resolve(MockProjects))
-    when(mockDataService.fetchClientActiveProjects()).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchClientProjects()).thenReturn(Promise.resolve(MockProjects))
 
     const rootStore: RootStore = new RootStore(instance(mockDataService))
     await rootStore.init()

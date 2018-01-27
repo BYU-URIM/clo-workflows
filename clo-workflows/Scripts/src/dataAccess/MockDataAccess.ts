@@ -23,7 +23,7 @@ export class MockDataAccess implements IDataAccess {
         return Promise.resolve(deepCopy(MockWorks))
     }
 
-    fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
+    fetchClientProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
     fetchClientCompletedProjects():Promise<Array<ICloRequestElement>> {

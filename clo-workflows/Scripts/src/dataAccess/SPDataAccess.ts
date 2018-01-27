@@ -26,7 +26,7 @@ export class SPDataAccess implements IDataAccess {
         return Promise.resolve(null)
     }
 
-    fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
+    fetchClientProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }
     fetchClientCompletedProjects():Promise<Array<ICloRequestElement>> {
