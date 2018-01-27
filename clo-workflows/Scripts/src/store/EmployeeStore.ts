@@ -40,7 +40,7 @@ export class EmployeeStore {
     @observable selectedProject: ObservableMap<FormEntryType>
 
     @computed get selectedProjectFormControls(): Array<IFormControl> {
-        return this.dataService.getProjectFormControlsForType(this.selectedProject.get("type") as string)
+        return this.dataService.getView(this.selectedProject.get("type") as string)
     }
 
     @action updateSelectedProject(fieldName: string, newVal: FormEntryType): void {
@@ -50,8 +50,8 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // STEPS
-    @observable selectedStep: string
-    @action selectStep(step: string): void {
+    @observable selectedStep: IStep
+    @action selectStep(step: IStep): void {
         this.selectedStep = step
     }
 
@@ -94,11 +94,11 @@ export class EmployeeStore {
     }
 
     @computed private get selectedStepProcesses(): Array<ICloRequestElement> {
-        return this.processes.filter(process => process.step === this.selectedStep)
+        return this.processes.filter(process => process.step === this.selectedStep.name)
     }
 
     @computed get selectedProcessFormControls(): Array<IFormControl> {
-        return this.dataService.getProcessFormControlsForStep(this.selectedStep)
+        return this.dataService.getView(this.selectedStep.view)
     }
 
     // TODO make more efficient - cache requestElements by ID for quicker lookup?

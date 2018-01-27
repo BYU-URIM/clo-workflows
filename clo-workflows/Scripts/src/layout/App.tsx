@@ -8,7 +8,6 @@ import { initializeIcons } from "@uifabric/icons"
 import Header, { IHeaderProps } from "../component/Header"
 import { Employee } from "../component/Employee"
 
-
 const backgroundStyles = {
 } as React.CSSProperties
 
