@@ -7,22 +7,23 @@ import FormControlGroup from "./FormControlGroup"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
 import { DefaultButton } from "office-ui-fabric-react/lib/Button"
 import { Label } from "office-ui-fabric-react/lib/Label"
+import { inject, observer } from "mobx-react"
 
 export interface IClientProjectTypeProps {
-  styles?: {
-    item: {}
-  }
+
   clientStore: ClientStore
 }
-
-export const ClientProjectType = (props: IClientProjectTypeProps) => {
-  const { clientStore, styles } = props
-  return (
-    <div>
+@inject("rootStore")
+@observer
+export class ClientProjectType extends React.Component<any, any>{
+  render(){
+    const {clientStore} = this.props.rootStore
+    return (
+      <div>
       <Dropdown
         label="Select the Project Type:"
         selectedKey={clientStore.getViewState.selectedProjectType ? clientStore.getViewState.selectedProjectType : undefined}
-        options={clientStore.fetchProjectTypesAsOptions.map((field, index) => ({
+        options={clientStore.ProjectTypesAsOptions.map((field, index) => ({
           text: field.text,
           value: field.text,
           key: field.text,
@@ -33,21 +34,21 @@ export const ClientProjectType = (props: IClientProjectTypeProps) => {
             "selectedProjectType", e.text,
           )
         }
-        }
-        style={styles.item} 
+      }
       />
 
       {
         clientStore.getViewState.selectedProjectType && (
-          <div style={{ display: "flex", flexAlign:"right"}}>
+          <div>
             <FormControlGroup
               data={clientStore.newProject}
-              formControls={clientStore.projectTypeForm}
-              validation={{}}
-              onChange={()=>console.log("hi")}
+              formControls={clientStore.getViewState.projectTypeForm()}
+              validation={clientStore.newProjectValidation}
+              onChange={clientStore.updateNewProject}
               />
           </div>
           )}
     </div>
   )
+}
 }

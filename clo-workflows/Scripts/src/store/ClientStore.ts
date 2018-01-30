@@ -4,7 +4,9 @@ import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
-import {PROJECT_TYPES} from "../model/CloRequestElement"
+import { validateFormControl } from "../utils"
+import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
+
 @autobind
 export class ClientStore {
   constructor(private root: RootStore, private dataService: DataService) {}
@@ -12,42 +14,44 @@ export class ClientStore {
   @action
   async init(): Promise<void> {
     this.projects = await this.dataService.fetchClientProjects()
-    runInAction(() => {
-      this.newProject = observable.map(this.projects[0])
-    })
+    this.newProject = observable.map(this.projects[0])
+    this.viewState = this.viewState
   }
 
   @observable newProject: ObservableMap<FormEntryType>
   @observable projects: Array<ICloRequestElement>
-  // @observable
-  // newProjectState: {
-  //   projectTypeForm?: ObservableMap<FormEntryType>
-  //   projectType: string
-  //   workType: string
-  //   newProjectChecked: boolean
-  //   newWorkChecked: boolean
-  //   showProjectModal: boolean
-  //   showWorkModal: boolean
-  //   workTypeForm: {}
 
-  // }
+  @computed
+  get newProjectFormControls(): Array<IFormControl> {
+    return this.dataService.getView(this.newProject["type"])
+  }
+
+  @action
+  updateNewProject(fieldName: string, newVal: FormEntryType): void {
+    this.newProject.set(fieldName, newVal)
+  }
+
   @observable
   viewState: {
     newRequestVisible: boolean
+    projectTypeForm
+
+    
   }
   @observable startNewRequest = false
   @observable newOrExisting: string
-  @observable selectedProjectType: string
-  @observable projectTypeForm: Array<IFormControl>
-
-  @computed getProjectTypeForm(){
-    this.dataService.getView(this.getViewState.selectedProjectType)
+  @observable selectedProjectType?: string = undefined
+  @observable selectedWorkType?: string = undefined
+  @computed get ProjectTypeForm():Array<IFormControl> {
+    return this.dataService.getView(this.newProject.get("type") as string)
+  }  
+  @computed get WorkTypeForm():Array<IFormControl> {
+    return this.dataService.getView(this.newProject.get("type") as string)
   }
   @action
   updateMember(m: string, v?: any) {
     !v ? (this[m] = !this[m]) : (this[m] = v)
   }
-  @observable selectedProcess: ObservableMap<FormEntryType>
 
   @computed
   get getViewState() {
@@ -55,11 +59,12 @@ export class ClientStore {
       newRequestVisible: this.startNewRequest,
       newOrExisting: this.newOrExisting,
       selectedProjectType: this.selectedProjectType,
-      projectTypeForm:this.getProjectTypeForm,
+      selectedWorkType: this.selectedWorkType,
+      projectTypeForm:():Array<IFormControl> => this.ProjectTypeForm,
     }
   }
 
-  get DataService() {
+  @computed get DataService() {
     return this.dataService
   }
   @action
@@ -67,39 +72,31 @@ export class ClientStore {
     this.startNewRequest = false
     this.newOrExisting = ""
   }
-  get fetchProjectTypesAsOptions(): any {
+  @computed get ProjectTypesAsOptions(){
     return PROJECT_TYPES.map(e => ({
       key: e,
       text: e,
     }))
   }
+  @computed get WorkTypesAsOptions(){
+    return WORK_TYPES.map(e => (
+    {
+      key: e,
+      text: e
+    }
+    ))
+  }
+  @computed
+  get newProjectValidation(): {} {
+    return this.ProjectTypeForm.reduce((accumulator: {}, formControl: IFormControl) => {
+      const fieldName: string = formControl.dataRef
+      const inputVal = this.newProject.get(fieldName)
+      const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
+      accumulator[fieldName] = error
+      return accumulator
+    }, {})
+  }
+  
+
 }
 
-// @action
-// updateForm(form: {}) {
-//   this.newProjectState = Object.assign({}, this.newProjectState, form)
-// }
-// @action
-// updateNewProjectState(form: {}): void {
-//   this.newProjectState = Object.assign({}, this.newProjectState, form)
-// }
-// @computed
-// get getNewProjectState(): any {
-//   return this.newProjectState
-// }
-// @action
-// updateProjectTypeForm(fieldName: string, newVal: FormEntryType): void {
-//   this.updateNewProjectState({ projectTypeForm: [{ field: fieldName, value: newVal }] })
-// }
-// @action
-// updateWorkTypeForm(fieldName: string, newVal: FormEntryType): void {
-//   this.updateNewProjectState({ workTypeForm: [{ field: fieldName, value: newVal }] })
-// }
-// @action
-// toggleWorkModal() {
-//   this.updateNewProjectState({ showWorkModal: !this.newProjectState.showWorkModal })
-// }
-// @action
-// toggleProjectModal() {
-//   this.updateNewProjectState({ showProjectModal: !this.newProjectState.showProjectModal })
-// }

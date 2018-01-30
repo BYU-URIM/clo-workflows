@@ -16,7 +16,7 @@ interface IFormControlGroupProps {
 
 const styles = {
     width: "450px",
-    margin: "0 20",
+    margin: "0 0",
 }
 
 const checkboxStyles = {

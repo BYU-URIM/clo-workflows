@@ -2,12 +2,12 @@ import { IUserDto, IUser } from "../model/User"
 import { ICloRequestElement } from "../model/CloRequestElement"
 
 export const MockUsersDtos: Array<IUserDto> = [
-    {
-        name: "Connor Moody",
-        email: "email@gmail.com",
-        username: "cmoody",
-        roleName: "Anonymous",
-    },
+    // {
+    //     name: "Connor Moody",
+    //     email: "email@gmail.com",
+    //     username: "cmoody",
+    //     roleName: "Junior License Processor",
+    // },
     {
         name: "Connor Moody",
         email: "email@gmail.com",
