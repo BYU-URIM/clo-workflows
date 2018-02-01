@@ -4,12 +4,11 @@ import * as pnp from "sp-pnp-js"
 import { IUserDto, IUser } from "../model/User"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
+import * as DB_CONFIG from "../../res/json/DB_CONFIG.json"
 
 export class SPDataAccess implements IDataAccess {
 
     async fetchUser(): Promise<IUserDto> {
-        window["appweb"] = this.getAppWeb()
-        
         const spUser = await this.getAppWeb().currentUser.get()
         const roleNames = await this.getAppWeb().siteUsers.getById(spUser.Id).groups.get()
 
@@ -73,7 +72,7 @@ export class SPDataAccess implements IDataAccess {
     private readonly WORKS_LIST_NAME: string = "works"
     private readonly NOTES_LIST_NAME: string = "notes"
     private readonly ACTIVE_FILTER_STRING: string = "Step neq 'complete'"
-    private readonly HOST_WEB_URL = ""
+    private readonly HOST_WEB_URL = DB_CONFIG["hostUrl"]
 
     private getAppWeb(): Web {
         return pnp.sp.configure({

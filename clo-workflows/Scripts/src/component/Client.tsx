@@ -88,7 +88,8 @@ export class Anonymous extends React.Component<any, any> {
                             data={newProject}
                             formControls={clientStore
                                 .DataService()
-                                .getView(newProjectState.projectType)}
+                                .getView(newProjectState.projectType)
+                                .formControls}
                             validation={{}}
                             onChange={clientStore.updateNewProject}
                             />
@@ -139,7 +140,8 @@ export class Anonymous extends React.Component<any, any> {
                             data={newProject}
                             formControls={clientStore
                                 .DataService()
-                                .getView(newProjectState.projectType)}
+                                .getView(newProjectState.projectType)
+                                .formControls}
                             validation={{}}
                             onChange={clientStore.updateNewProject}
                         />
