@@ -77,7 +77,7 @@ export class Client extends React.Component<any, any> {
               {clientStore.newOrExistingWork === "existing" && <div>existing</div>}
               {clientStore.getViewState.selectedProjectType && (
                 <ChoiceGroup
-                  selectedKey={clientStore.newOrExistingWork}
+                  selectedKey={clientStore.getViewState.newOrExistingWork}
                   options={clientStore.choices.work}
                   onChange={(event, selected) => clientStore.updateMember("newOrExistingWork", selected.key)}
                   label="Start project from:"

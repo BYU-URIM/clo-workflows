@@ -18,12 +18,10 @@ export class ClientWorkType extends React.Component<any, any> {
             label="Select the Work Type:"
             selectedKey={clientStore.getViewState.selectedWorkType ? clientStore.getViewState.selectedWorkType : undefined}
             options={clientStore.WorkTypesAsOptions.map(field => {
-              console.log(clientStore.WorkTypesAsOptions)
               return field
             })}
             placeHolder="Select an Option"
             onChanged={e => {
-              console.log(e)
               return clientStore.updateMember("selectedWorkType", e.text)
             }}
           />

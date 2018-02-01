@@ -6,19 +6,11 @@ import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
 import { validateFormControl } from "../utils"
 import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
+import { IView } from "../model/View"
 
 @autobind
 export class ClientStore {
-  newProjectState: {
-    projectType: string
-    workType: string
-    newProjectChecked: boolean
-    newWorkChecked: boolean
-    projectTypeForm: {}[]
-    workTypeForm: {}[]
-    showWorkModal: boolean
-    showProjectModal: boolean
-  }
+
   constructor(private root: RootStore, private dataService: DataService) {}
   /**
    * @description
@@ -28,21 +20,11 @@ export class ClientStore {
    */
   @action
   async init(): Promise<void> {
-    this.projects = await this.dataService.fetchClientProjects()
+    const currentUser = this.root.sessionStore.currentUser
+
+    this.projects = await this.dataService.fetchClientActiveProjects(currentUser)
     this.newProject = observable.map(this.projects[0])
     this.viewState = this.viewState
-    runInAction(() => {
-      this.newProjectState = {
-        projectType: "",
-        workType: "",
-        newProjectChecked: false,
-        newWorkChecked: false,
-        projectTypeForm: [{}],
-        workTypeForm: [{}],
-        showWorkModal: false,
-        showProjectModal: false,
-      }
-    })
     this.choices = {
       project: [
         {
@@ -80,7 +62,7 @@ export class ClientStore {
   }
   @computed
   get newProjectFormControls(): Array<IFormControl> {
-    return this.dataService.getView(this.newProject["type"])
+    return this.dataService.getView(this.newProject.get("type") as string).formControls
   }
 
   choices
@@ -126,16 +108,18 @@ export class ClientStore {
 
   /***************************************
    * computed members
-   *****************************************/
+   ***************************************/
   @computed
   get ProjectTypeForm(): Array<IFormControl> {
-    return this.dataService.getView(this.newProject.get("type") as string)
+    return this.dataService.getView(this.newProject.get("type") as string).formControls
   }
   @computed
   get WorkTypeForm(): Array<IFormControl> {
-    return this.dataService.getView(this.newProject.get("type") as string)
+    return this.dataService.getView(this.newProject.get("type") as string).formControls
   }
-  /****** actions */
+  /***************************************
+   * actions
+   ***************************************/
 
   @action
   updateMember(m: string, v?: any) {
@@ -151,9 +135,9 @@ export class ClientStore {
     this.selectedWorkType = ""
   }
 
-  /**********************************
+  /*************************************
    * ref & util stuff
-   **********************************/
+   *************************************/
 
   @computed
   get DataService() {
@@ -188,10 +172,19 @@ export class ClientStore {
   get newWorkValidation(): {} {
     return this.WorkTypeForm.reduce((accumulator: {}, formControl: IFormControl) => {
       const fieldName: string = formControl.dataRef
-      const inputVal = this.newProject.get(fieldName)
+      const inputVal = this.newProject.get(fieldName) || undefined
       const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
       accumulator[fieldName] = error
       return accumulator
     }, {})
+//   }
+//   @computed get selectedProcessValidation(): {} {
+//     return this.selectedProcessFormControls.reduce((accumulator: {}, formControl: IFormControl) => {
+//         const fieldName: string = formControl.dataRef
+//         const inputVal = this.selectedProcess.get(fieldName)
+//         const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
+//         accumulator[fieldName] = error
+//         return accumulator
+//     }, {})
   }
 }
