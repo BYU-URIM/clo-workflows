@@ -7,7 +7,7 @@ import { IUser, IUserDto } from "../model/User"
 import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 import { IFormControl } from "./../model/FormControl"
-import { View } from "../model/View"
+import { IView } from "../model/View"
 
 export class DataService {
     constructor(
@@ -37,23 +37,27 @@ export class DataService {
         return user
     }
 
-    async fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return await this.dao.fetchEmployeeActiveProjects()
+    async fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProjects(employee)
     }
 
-    async fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {
-        return this.dao.fetchEmployeeActiveProcesses()
+    async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProcesses(employee)
     }
 
-    async fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>> {
-        return this.dao.fetchEmployeeActiveWorks()
+    async fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveWorks(employee)
     }
 
-    async fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return await this.dao.fetchClientActiveProjects()
+    async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchClientActiveProjects(client)
     }
 
-    getView(viewName: string): View {
-        return VIEWS[viewName].map(formControlName => deepCopy(FORM_CONTROLS[formControlName]))
+    getView(viewName: string): IView {
+        const normalizedView =  VIEWS[viewName]
+        return {
+            formControls: normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])),
+            dataSource: normalizedView.dataSource
+        }
     }
 }

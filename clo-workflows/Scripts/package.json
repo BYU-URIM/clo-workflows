@@ -5,7 +5,8 @@
   "scripts": {
     "dev:local": "webpack-dev-server --env.NODE_ENV=local --inline --hot --content-base dist",
     "dev:sharepoint": "webpack --watch --env.NODE_ENV=sharepoint",
-    "build": "webpack --env.NODE_ENV=sharepoint",
+    "build:local": "webpack --env.NODE_ENV=local",
+    "build:sharepoint": "webpack --env.NODE_ENV=sharepoint",
     "build:production": "webpack --env.Node_ENV=sharepoint --optimize-minimize",
     "test": "rimraf test_build/** && tsc --outDir test_build && Xcopy /E /I  \"./res\" \"./test_build/res\" && ava test_build/test --verbose",
     "lint": "tslint -c tslint.json 'src/**/*.ts*' && tslint -c tslint.json 'test/**/*.ts*'"
@@ -38,6 +39,7 @@
     "react-dom": "^16.1.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "reflect-metadata": "^0.1.10"
+    "reflect-metadata": "^0.1.10",
+    "sp-pnp-js": "^3.0.4"
   }
 }

@@ -9,7 +9,7 @@
       "noLib": false,
       "jsx": "react",
       "outDir": "dist",
-      "lib": ["es2015", "dom", "es2015.promise"],
+      "lib": ["es2015", "dom", "es2015.promise", "es2016.array.include"],
       "types": ["reflect-metadata"],
       "moduleResolution": "node",
       "emitDecoratorMetadata": true,

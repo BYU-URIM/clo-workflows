@@ -5,13 +5,13 @@ import { RootStore } from "../../src/store/RootStore"
 import { DataService } from "../../src/service/DataService"
 import { DataAccessFactory } from "../../src/dataAccess/DataAccessFactory"
 import { useStrict } from "mobx"
-import { when, mock, verify, instance, spy } from "ts-mockito"
+import { when, mock, verify, instance, spy, anything } from "ts-mockito"
 import { IUser } from "../../src/model/User"
 import { MockProjects, MockUsers } from "../../src/dataAccess/MockData"
 
 ava.test("root store creates all child stores when an employee logs in", async t => {
     const mockDataService = mock(DataService)
-    when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
+    const user = {
         name: "Connor Moody",
         username: "cmoody4",
         email: "cdmoody0604@gmail.com",
@@ -19,10 +19,10 @@ ava.test("root store creates all child stores when an employee logs in", async t
             name: "Administrator",
             permittedSteps: [],
         },
-    }))
-
-    when(mockDataService.fetchEmployeeActiveProjects()).thenReturn(Promise.resolve(MockProjects))
-    when(mockDataService.fetchClientActiveProjects()).thenReturn(Promise.resolve(MockProjects))
+    }
+    when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
+    when(mockDataService.fetchEmployeeActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchClientActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
 
     const rootStore: RootStore = new RootStore(instance(mockDataService))
     await rootStore.init()
@@ -33,7 +33,7 @@ ava.test("root store creates all child stores when an employee logs in", async t
 
 ava.test("root store creates all stores except employeeProcess store when client logs in", async t => {
     const mockDataService = mock(DataService)
-    when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
+    const user = {
         name: "Connor Moody",
         username: "cmoody4",
         email: "cdmoody0604@gmail.com",
@@ -41,9 +41,10 @@ ava.test("root store creates all stores except employeeProcess store when client
             name: "Anonymous",
             permittedSteps: [],
         },
-    }))
-    when(mockDataService.fetchEmployeeActiveProjects()).thenReturn(Promise.resolve(MockProjects))
-    when(mockDataService.fetchClientActiveProjects()).thenReturn(Promise.resolve(MockProjects))
+    }
+    when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
+    when(mockDataService.fetchEmployeeActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchClientActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
 
     const rootStore: RootStore = new RootStore(instance(mockDataService))
     await rootStore.init()
