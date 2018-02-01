@@ -18,9 +18,10 @@ export class EmployeeStore {
     ) {}
 
     @action async init(): Promise<void> {
-        this.projects = await this.dataService.fetchEmployeeActiveProjects()
-        this.works = await this.dataService.fetchEmployeeActiveWorks()
-        this.processes = await this.dataService.fetchEmployeeActiveProcesses()
+        const currentUser = this.root.sessionStore.currentUser
+        this.projects = await this.dataService.fetchEmployeeActiveProjects(currentUser)
+        this.works = await this.dataService.fetchEmployeeActiveWorks(currentUser)
+        this.processes = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
 
         this.selectedProject = observable.map()
         this.selectedWork = observable.map()

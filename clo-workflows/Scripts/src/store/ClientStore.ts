@@ -12,7 +12,7 @@ export class ClientStore {
     ) {}
 
     @action async init(): Promise<void> {
-        this.projects = await this.dataService.fetchClientActiveProjects()
+        this.projects = await this.dataService.fetchClientActiveProjects(this.root.sessionStore.currentUser)
         runInAction(() => {
             this.newProject = observable.map(this.projects[0])
             this.newProjectState = {projectType: "", workType:"", newProjectChecked:false, newWorkChecked:false}

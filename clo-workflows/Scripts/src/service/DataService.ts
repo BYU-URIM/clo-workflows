@@ -37,20 +37,20 @@ export class DataService {
         return user
     }
 
-    async fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return await this.dao.fetchEmployeeActiveProjects()
+    async fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProjects(employee)
     }
 
-    async fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {
-        return this.dao.fetchEmployeeActiveProcesses()
+    async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProcesses(employee)
     }
 
-    async fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>> {
-        return this.dao.fetchEmployeeActiveWorks()
+    async fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveWorks(employee)
     }
 
-    async fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return await this.dao.fetchClientActiveProjects()
+    async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchClientActiveProjects(client)
     }
 
     getView(viewName: string): View {
