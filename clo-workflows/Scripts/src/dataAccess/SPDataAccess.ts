@@ -1,33 +1,93 @@
 import { IDataAccess } from "./IDataAccess"
 import { ICloRequestElement } from "../model/CloRequestElement"
+import * as pnp from "sp-pnp-js"
+import { IUserDto, IUser } from "../model/User"
+import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
+import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 
 export class SPDataAccess implements IDataAccess {
 
-    fetchUser() {
-        return fetch("../_api/web/currentuser")
-            .then(res => res.json())
-            .then(data => ({
-                name: data.d.Title,
-                email: data.d.Email,
-                username: data.d.LoginName,
-                roleName: data.d.Group,
+    async fetchUser(): Promise<IUserDto> {
+        window["appweb"] = this.getAppWeb()
+        
+        const spUser = await this.getAppWeb().currentUser.get()
+        const roleNames = await this.getAppWeb().siteUsers.getById(spUser.Id).groups.get()
+
+        return {
+            name: spUser.Title,
+            email: spUser.Email,
+            username: spUser.LoginName,
+            roleName: (roleNames.length && roleNames[0]) || "Anonymous"
+        }
+    }
+
+    // TODO add filter string to query for smaller requests and filtering on the backend
+    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return this.getHostWeb().lists
+            .getByTitle(this.PROCESS_LIST_NAME)
+            .items
+            .filter(this.ACTIVE_FILTER_STRING)
+            .get()
+            .then((data: Array<ICloRequestElement>) => data.filter(item => {
+                employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
             }))
     }
 
-    fetchEmployeeActiveProcesses(): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(null)
+    fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return this.getHostWeb().lists
+            .getByTitle(this.PROJECT_LIST_NAME)
+            .items
+            .filter(this.ACTIVE_FILTER_STRING)
+            .get()
+            .then((data: Array<ICloRequestElement>) => data.filter(item => {
+                employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
+            }))
     }
 
-    fetchEmployeeActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(null)
+    fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return this.getHostWeb().lists
+            .getByTitle(this.WORKS_LIST_NAME)
+            .items
+            .filter(this.ACTIVE_FILTER_STRING)
+            .get()
+            .then((data: Array<ICloRequestElement>) => data.filter(item => {
+                employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
+            }))
     }
 
-    fetchEmployeeActiveWorks(): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(null)
+    fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
+        return this.getHostWeb().lists
+            .getByTitle(this.PROJECT_LIST_NAME)
+            .items
+            .filter(this.ACTIVE_FILTER_STRING)
+            .get()
+            .then((data: Array<ICloRequestElement>) => data.filter(item => {
+                return (item.submitter as string) === client.name
+            }))
     }
 
-    fetchClientActiveProjects(): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(null)
+
+    // helper methods and data
+    private readonly PROCESS_LIST_NAME: string = "processes"
+    private readonly PROJECT_LIST_NAME: string = "projects"
+    private readonly WORKS_LIST_NAME: string = "works"
+    private readonly NOTES_LIST_NAME: string = "notes"
+    private readonly ACTIVE_FILTER_STRING: string = "Step neq 'complete'"
+    private readonly HOST_WEB_URL = ""
+
+    private getAppWeb(): Web {
+        return pnp.sp.configure({
+            headers: { "Accept": "application/json; odata=verbose" },
+            credentials: "same-origin"
+        }, "../").web
+    }
+
+    private getHostWeb(): Web {
+        return pnp.sp.configure({
+                headers: { "Accept": "application/json; odata=verbose" },
+                credentials: "same-origin"
+            }, "../")
+            .crossDomainWeb("../", this.HOST_WEB_URL)
     }
 
 }
