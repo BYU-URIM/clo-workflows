@@ -15,6 +15,7 @@ import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/Choi
 import { Toggle } from "office-ui-fabric-react/lib/Toggle"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { ClientWorkType } from "./ClientWorkType"
+import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
 export interface IWorkTypeDropdownProps {
   workTypes: Array<string>
   setNewProjectState: any
@@ -36,12 +37,12 @@ const styles = {
 @inject("rootStore")
 @observer
 export class Client extends React.Component<any, any> {
-  public componentWillMount() {
-    this.sessionStore = this.props.rootStore.sessionStore
-    this.clientStore = this.props.rootStore.clientStore
-  }
-  sessionStore: SessionStore
-  clientStore: ClientStore
+    public componentWillMount() {
+        this.sessionStore = this.props.rootStore.sessionStore
+        this.clientStore = this.props.rootStore.clientStore
+    }
+    sessionStore: SessionStore
+    clientStore: ClientStore
 
   render() {
     const options = [{ key: "Header", text: "Work Types", itemType: Header }]

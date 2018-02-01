@@ -135,7 +135,7 @@
     },
     "Fast Track Number": {
         "displayName": "fastTrackNumber",
-        "dataRef": "processPayment",
+        "dataRef": "fastTrackNumber",
         "type": "number"
     },
     "Initial Request Completion": {
@@ -230,7 +230,7 @@
     },
     "Term": {
         "displayName": "Term",
-        "dataRef": "tee",
+        "dataRef": "term",
         "type": "text"
     },
     "MFN": {

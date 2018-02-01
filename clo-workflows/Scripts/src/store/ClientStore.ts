@@ -9,6 +9,16 @@ import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
 
 @autobind
 export class ClientStore {
+  newProjectState: {
+    projectType: string
+    workType: string
+    newProjectChecked: boolean
+    newWorkChecked: boolean
+    projectTypeForm: {}[]
+    workTypeForm: {}[]
+    showWorkModal: boolean
+    showProjectModal: boolean
+  }
   constructor(private root: RootStore, private dataService: DataService) {}
   /**
    * @description
@@ -21,6 +31,18 @@ export class ClientStore {
     this.projects = await this.dataService.fetchClientProjects()
     this.newProject = observable.map(this.projects[0])
     this.viewState = this.viewState
+    runInAction(() => {
+      this.newProjectState = {
+        projectType: "",
+        workType: "",
+        newProjectChecked: false,
+        newWorkChecked: false,
+        projectTypeForm: [{}],
+        workTypeForm: [{}],
+        showWorkModal: false,
+        showProjectModal: false,
+      }
+    })
     this.choices = {
       project: [
         {
@@ -44,7 +66,6 @@ export class ClientStore {
       ],
     }
   }
-  
 
   /**
    * @description Clietnt Data
@@ -102,10 +123,9 @@ export class ClientStore {
   @observable selectedProjectType?: string = undefined
   @observable newOrExistingWork: string
   @observable selectedWorkType?: string = undefined
-  
-  
+
   /***************************************
-   * computed members 
+   * computed members
    *****************************************/
   @computed
   get ProjectTypeForm(): Array<IFormControl> {
@@ -175,4 +195,3 @@ export class ClientStore {
     }, {})
   }
 }
-
