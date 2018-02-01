@@ -5,12 +5,8 @@ import { SearchBox } from "office-ui-fabric-react/lib/components/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/components/Checkbox"
 import FormControlGroup from "./FormControlGroup"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
-import { DefaultButton } from "office-ui-fabric-react/lib/Button"
-import { Label } from "office-ui-fabric-react/lib/Label"
 import { inject, observer } from "mobx-react"
-
 export interface IClientProjectTypeProps {
-
   clientStore: ClientStore
 }
 @inject("rootStore")

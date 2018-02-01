@@ -47,16 +47,7 @@ export class Client extends React.Component<any, any> {
     const options = [{ key: "Header", text: "Work Types", itemType: Header }]
     const { sessionStore, clientStore } = this
     const { newProject, viewState } = clientStore
-    const ops = [
-      {
-        key: "new",
-        text: "New Project",
-      },
-      {
-        key: "existing",
-        text: "Exisitng Project",
-      },
-    ]
+
 
     return (
       <div style={styles.main}>
@@ -64,38 +55,42 @@ export class Client extends React.Component<any, any> {
           <PivotItem linkText="New Request">
             <div style={styles.content}>
               {!clientStore.getViewState.newRequestVisible ? (
-                <PrimaryButton text="Start New Request" primary onClick={() => clientStore.updateMember("startNewRequest")} />
+                <PrimaryButton text="Start New Request" primary onClick={() => clientStore.updateMember("startedNewRequest")} />
               ) : (
                 <PrimaryButton text="Cancel Request" primary onClick={() => clientStore.clear()} />
               )}
-              {clientStore.startNewRequest && (
+              {clientStore.startedNewRequest && (
                 <ChoiceGroup
-                  selectedKey={clientStore.newOrExisting}
-                  options={ops}
-                  onChange={(event, selected) => clientStore.updateMember("newOrExisting", selected.key)}
+                  selectedKey={clientStore.newOrExistingProject}
+                  options={clientStore.choices.project}
+                  onChange={(event, selected) => clientStore.updateMember("newOrExistingProject", selected.key)}
                   label="Will your request be a part of a new or existing project?"
                 />
               )}
-              {clientStore.getViewState.newOrExisting === "new" && (
+              {clientStore.getViewState.newOrExistingProject === "new" && (
                 <div>
-                  <ClientProjectType clientStore={this.clientStore} />
+                  <ClientProjectType />
                 </div>
               )}
-              {clientStore.getViewState.newOrExisting === "existing" && <SearchBox onFocus={() => console.log("onFocus called")} onBlur={() => console.log("onBlur called")} style={styles.item} />}
-              {clientStore.newOrExisting === "existing" && <div>existing</div>}
+              {clientStore.getViewState.newOrExistingWork === "existing" && <SearchBox onFocus={() => console.log("onFocus called")} onBlur={() => console.log("onBlur called")} style={styles.item} />}
+              {clientStore.newOrExistingWork === "existing" && <div>existing</div>}
               {clientStore.getViewState.selectedProjectType && (
                 <ChoiceGroup
-                  selectedKey={clientStore.newOrExisting}
-                  options={ops}
-                  onChange={(event, selected) => clientStore.updateMember("newOrExisting", selected.key)}
-                  label="Will your request be a part of a new or existing project?"
+                  selectedKey={clientStore.newOrExistingWork}
+                  options={clientStore.choices.work}
+                  onChange={(event, selected) => clientStore.updateMember("newOrExistingWork", selected.key)}
+                  label="Start project from:"
                 />
+              )}
+                 {clientStore.getViewState.newOrExistingWork === "new" && (
+                <div>
+                  <ClientWorkType />
+                </div>
               )}
             </div>
           </PivotItem>
           <PivotItem linkText="Pending Requests">
             <Label>Pivot #2</Label>
-            <ClientWorkType clientStore={this.clientStore} styles={styles} />
           </PivotItem>
           <PivotItem linkText="Completed Requests">
             <Label>Pivot #2</Label>

@@ -35,6 +35,15 @@ export const MockProjects: Array<ICloRequestElement> = [
         copyrightOwner: "owner name",
         department: "Test department",
     },
+    {
+        type: "Theatrical",
+        id: 2,
+        title: "Another Theatrical Project",
+        descriptionOfWork: "More description stuff",
+        artist: "Miley Cyrus",
+        copyrightOwner: "Disney",
+        department: "Club Disney Department",
+    },
 ]
 
 export const MockProcesses: Array<ICloRequestElement> = [
