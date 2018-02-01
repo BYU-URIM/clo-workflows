@@ -7,7 +7,7 @@ import { IUser, IUserDto } from "../model/User"
 import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 import { IFormControl } from "./../model/FormControl"
-import { View } from "../model/View"
+import { IView } from "../model/View"
 
 export class DataService {
     constructor(
@@ -53,7 +53,11 @@ export class DataService {
         return await this.dao.fetchClientActiveProjects(client)
     }
 
-    getView(viewName: string): View {
-        return VIEWS[viewName].map(formControlName => deepCopy(FORM_CONTROLS[formControlName]))
+    getView(viewName: string): IView {
+        const normalizedView =  VIEWS[viewName]
+        return {
+            formControls: normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])),
+            dataSource: normalizedView.dataSource
+        }
     }
 }
