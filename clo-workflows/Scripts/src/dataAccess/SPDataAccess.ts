@@ -5,6 +5,7 @@ import { IUserDto, IUser } from "../model/User"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import * as DB_CONFIG from "../../res/json/DB_CONFIG.json"
+import { INote } from "../model/Note"
 
 export class SPDataAccess implements IDataAccess {
 
@@ -55,14 +56,27 @@ export class SPDataAccess implements IDataAccess {
     }
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
-        return this.getHostWeb().lists
-            .getByTitle(this.PROJECT_LIST_NAME)
-            .items
-            .filter(this.ACTIVE_FILTER_STRING)
+        return this.getHostWeb()
+            .lists.getByTitle(this.PROJECT_LIST_NAME)
+            .items.filter(this.ACTIVE_FILTER_STRING)
             .get()
             .then((data: Array<ICloRequestElement>) => data.filter(item => {
                 return (item.submitter as string) === client.name
             }))
+    }
+
+    fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+        return this.getHostWeb()
+            .lists.getByTitle(this.NOTES_LIST_NAME)
+            .items.filter(`projectId eq ${projectId}`)
+            .get()
+    }
+
+    fetchWorkNotes(workId: number): Promise<Array<INote>> {
+        return this.getHostWeb()
+            .lists.getByTitle(this.NOTES_LIST_NAME)
+            .items.filter(`workId eq ${workId}`)
+            .get()
     }
 
 

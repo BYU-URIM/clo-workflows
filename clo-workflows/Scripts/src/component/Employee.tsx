@@ -32,6 +32,7 @@ export class Employee extends React.Component<any, any> {
             <div style={wrapperStyles}>
                 <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
                 {
+                    /* Employee Dashboard */
                     employeeStore.currentView === EmployeeViewKey.Dashboard &&
                     <EmployeeDashboard />
                 }

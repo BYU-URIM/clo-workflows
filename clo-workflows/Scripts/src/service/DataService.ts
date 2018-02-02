@@ -8,6 +8,7 @@ import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 import { IFormControl } from "./../model/FormControl"
 import { IView } from "../model/View"
+import { INote } from "../model/Note"
 
 export class DataService {
     constructor(
@@ -51,6 +52,14 @@ export class DataService {
 
     async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         return await this.dao.fetchClientActiveProjects(client)
+    }
+
+    async fetchWorkNotes(workId: number): Promise<Array<INote>> {
+        return await this.dao.fetchWorkNotes(workId)
+    }
+
+    async fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+        return await this.dao.fetchProjectNotes(projectId)
     }
 
     getView(viewName: string): IView {

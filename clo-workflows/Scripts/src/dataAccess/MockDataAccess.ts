@@ -1,9 +1,10 @@
-import { MockUsersDtos, MockProjects, MockProcesses, MockWorks } from "./MockData"
+import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
 import { IRole } from "./../model/Role"
 import { IDataAccess } from "./IDataAccess"
 import { IUserDto, IUser } from "../model/User"
 import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
+import { INote } from "../model/Note"
 
 export class MockDataAccess implements IDataAccess {
 
@@ -25,5 +26,13 @@ export class MockDataAccess implements IDataAccess {
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
+    }
+
+    fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+        return Promise.resolve(deepCopy(MockNotes.filter(note => note.projectId === projectId)))
+    }
+
+    fetchWorkNotes(workId: number): Promise<Array<INote>> {
+        return Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === workId)))
     }
 }
