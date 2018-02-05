@@ -16,7 +16,7 @@ module.exports = function(env) {
                     test: /\.tsx?$/,
                     loader: 'ts-loader',
                     exclude: /node_modules/,
-                }
+                }                
             ]
         },
         resolve: {
@@ -25,7 +25,9 @@ module.exports = function(env) {
         plugins: [
             new webpack.DefinePlugin({
                 NODE_ENV: JSON.stringify(env.NODE_ENV)
-            })
+            }),
+            new webpack.HotModuleReplacementPlugin(),
+
         ]
     }
 };

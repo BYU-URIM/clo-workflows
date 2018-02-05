@@ -10,7 +10,6 @@ import { EmployeeDashboard } from "./EmployeeDashboard"
 import { HeaderBreadcrumb } from "./HeaderBreadcrumb"
 import { ProcessDetail } from "./ProcessDetail"
 
-
 const wrapperStyles = {
     marginLeft: 25,
 }
@@ -19,7 +18,6 @@ const wrapperStyles = {
 @autobind
 @observer
 export class Employee extends React.Component<any, any> {
-
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }
@@ -27,19 +25,13 @@ export class Employee extends React.Component<any, any> {
     private employeeStore: EmployeeStore
 
     public render() {
-        const { employeeStore} = this
+        const { employeeStore } = this
         return (
             <div style={wrapperStyles}>
                 <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
-                {
-                    employeeStore.currentView === EmployeeViewKey.Dashboard &&
-                    <EmployeeDashboard />
-                }
-                {
-                    /* Process Detail */
-                    employeeStore.currentView === EmployeeViewKey.ProcessDetail &&
-                    <ProcessDetail />
-                }
+                {employeeStore.currentView === EmployeeViewKey.Dashboard && <EmployeeDashboard />}
+                {/* Process Detail */
+                employeeStore.currentView === EmployeeViewKey.ProcessDetail && <ProcessDetail />}
             </div>
         )
     }

@@ -9,22 +9,20 @@ export interface IFormState {
 }
 
 export class SessionStore {
-    constructor(
-        private root: RootStore,
-        private dataService: DataService,
-    ) {}
+    constructor(private root: RootStore, private dataService: DataService, testing?: boolean) {
+        this.testing = true
+    }
+    @observable testing: boolean
 
     @observable currentUser: IUser
 
-    @action async init(): Promise<void> {
+    @action
+    async init(): Promise<void> {
         this.currentUser = await this.dataService.fetchUser()
-
     }
 
-    @computed get isEmployee(): boolean {
-        return this.currentUser
-            && this.currentUser.role
-            && this.currentUser.role.name !== "Anonymous"
+    @computed
+    get isEmployee(): boolean {
+        return this.currentUser && this.currentUser.role && this.currentUser.role.name !== "Anonymous"
     }
-
 }

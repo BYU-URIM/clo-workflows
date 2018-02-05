@@ -7,12 +7,11 @@ import { SPDataAccess } from "./SPDataAccess"
 // contains logic for creating a SPDataAccess or MockDataAccess depending on the environment
 
 export class DataAccessFactory {
-
     // creates and returns a data access object
     static getDao(): IDataAccess {
-        if(ENVIRONMENT === EnvType.LOCAL) {
+        if (ENVIRONMENT === EnvType.LOCAL) {
             return new MockDataAccess()
-        } else if(ENVIRONMENT === EnvType.SHAREPOINT) {
+        } else if (ENVIRONMENT === EnvType.SHAREPOINT) {
             return new SPDataAccess()
         } else {
             return null

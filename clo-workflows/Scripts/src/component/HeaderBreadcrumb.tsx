@@ -29,7 +29,6 @@ const wrapperStyles = {
 @autobind
 @observer
 export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IHeaderBreadcrumbState> {
-
     constructor(props: IHeaderBreadcrumbProps) {
         super(props)
         this.state = { hoverBreadcrumbKey: NONE_SELECTED }
@@ -38,11 +37,7 @@ export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IH
     public render() {
         return (
             <div style={wrapperStyles}>
-                <Breadcrumb
-                    items={this.props.items}
-                    onRenderItem={this.renderBreadcrumbItem}
-                    ariaLabel={ "Website breadcrumb" }
-                />
+                <Breadcrumb items={this.props.items} onRenderItem={this.renderBreadcrumbItem} ariaLabel={"Website breadcrumb"} />
             </div>
         )
     }
@@ -54,8 +49,8 @@ export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IH
                     text={item.text}
                     onClick={() => this.props.onClickItem(item.key)}
                     style={this.getBreadcrumbButtonStyle(item.key)}
-                    onMouseEnter={() => this.setState({hoverBreadcrumbKey: item.key})}
-                    onMouseLeave={() => this.setState({hoverBreadcrumbKey: NONE_SELECTED})}
+                    onMouseEnter={() => this.setState({ hoverBreadcrumbKey: item.key })}
+                    onMouseLeave={() => this.setState({ hoverBreadcrumbKey: NONE_SELECTED })}
                 />
             </div>
         )
@@ -63,10 +58,9 @@ export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IH
 
     private getBreadcrumbButtonStyle(itemKey: string) {
         return itemKey === this.state.hoverBreadcrumbKey
-                ? Object.assign({}, breadcrumbItemStyles, {backgroundColor: "#F0F0F0"})
-                : breadcrumbItemStyles
+            ? Object.assign({}, breadcrumbItemStyles, { backgroundColor: "#F0F0F0" })
+            : breadcrumbItemStyles
     }
-
 }
 
 // key indicating no breadcrumb is currently being hovered over

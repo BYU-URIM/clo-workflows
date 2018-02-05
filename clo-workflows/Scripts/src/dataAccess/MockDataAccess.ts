@@ -6,9 +6,12 @@ import { ICloRequestElement } from "../model/CloRequestElement"
 import { deepCopy } from "../utils"
 
 export class MockDataAccess implements IDataAccess {
+    fetchClientProjects(): Promise<ICloRequestElement[]> {
+        throw new Error("Method not implemented.")
+    }
 
     fetchUser(): Promise<IUserDto> {
-        return Promise.resolve(MockUsersDtos[1])
+        return Promise.resolve(MockUsersDtos[0])
     }
 
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
@@ -25,5 +28,8 @@ export class MockDataAccess implements IDataAccess {
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
+    }
+    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(null)
     }
 }

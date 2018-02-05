@@ -2,30 +2,41 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { IUser } from "../model/User"
 import Header from "./Header"
-import FormControlGroup from "./FormControlGroup"
-import {SessionStore} from "../store/SessionStore"
-import {ClientStore} from "../store/ClientStore"
-import {Dropdown} from "office-ui-fabric-react/lib/Dropdown"
+import { SessionStore } from "../store/SessionStore"
+import { ClientStore } from "../store/ClientStore"
+import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
 import { SearchBox } from "office-ui-fabric-react/lib/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
+// import { ClientWorkType } from "./ClientWorkType"
+import { ClientProjectType } from "./ClientProjectType"
+import { Label } from "office-ui-fabric-react/lib/Label"
+import { Pivot, PivotItem, PivotLinkSize, PivotLinkFormat } from "office-ui-fabric-react/lib/Pivot"
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup"
+import { Toggle } from "office-ui-fabric-react/lib/Toggle"
+import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
+import { ClientWorkType } from "./ClientWorkType"
 import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
 export interface IWorkTypeDropdownProps {
-  workTypes: Array<string>
-  setNewProjectState: any
+    workTypes: Array<string>
+    setNewProjectState: any
 }
 const styles = {
     main: {
-        maxWidth: "350px",
+        display: "inline-block",
+        maxWidth: "450px",
         margin: "10px",
     },
     item: {
         margin: "10px 0px",
     },
+    content: {
+        margin: "15px 0px",
+    },
 }
 
 @inject("rootStore")
 @observer
-export class Anonymous extends React.Component<any, any> {
+export class Client extends React.Component<any, any> {
     public componentWillMount() {
         this.sessionStore = this.props.rootStore.sessionStore
         this.clientStore = this.props.rootStore.clientStore
@@ -35,118 +46,66 @@ export class Anonymous extends React.Component<any, any> {
 
     render() {
         const options = [{ key: "Header", text: "Work Types", itemType: Header }]
-        const {sessionStore, clientStore} = this
-        const { newProject, newProjectState, DataService } = clientStore
+        const { sessionStore, clientStore } = this
+        const { newProject, viewState } = clientStore
+
         return (
             <div style={styles.main}>
-                <Dropdown
-                    className="WorkTypeDropdownClass"
-                    label="Select the Project Type:"
-                    selectedKey={
-                        clientStore.newProjectState.projectType
-                            ? clientStore.newProjectState.projectType
-                            : undefined
-                    }
-                    options={Array.from(PROJECT_TYPES).map((field) => ({
-                        text: field,
-                        value: field,
-                        key: field,
-                    }))}
-                    placeHolder="Select an Option"
-                    onChanged={(e) => clientStore.updateNewProjectState(
-                        {
-                            projectType: e.text,
-                            newProjectChecked:false,
-                            workType:"", newWorkChecked:false,
-                            testField:"working",
-                        },
-                    )}
-                    style={styles.item}
-                />
-                {
-                    clientStore.newProjectState.projectType && (
-                    <div>
-                        <SearchBox
-                            onFocus={() => console.log("onFocus called")}
-                            onBlur={() => console.log("onBlur called")}
-                            style={styles.item}
-                        />
-                        <br/>
-                        <Checkbox
-                            label="Create new project"
-                            style={styles.item}
-                            checked={clientStore.newProjectState.newProjectChecked}
-                            onChange={()=> clientStore.updateForm({newProjectChecked: !clientStore.newProjectState.newProjectChecked})}
-                            />
-                    </div>
-                    )
-                }
-                {
-                    (clientStore.currentnewProjectState.newProjectChecked) &&
-                        (
-                            <FormControlGroup
-                            data={newProject}
-                            formControls={clientStore
-                                .DataService()
-                                .getView(newProjectState.projectType)
-                                .formControls}
-                            validation={{}}
-                            onChange={clientStore.updateNewProject}
-                            />
-                        )
-
-                }
-                {newProjectState.newProjectChecked && (
-                    <div>
-                        <Dropdown
-                            label="Select the Work Type:"
-                            selectedKey={
-                                this.clientStore.newProjectState.workType
-                                    ? this.clientStore.newProjectState.workType
-                                    : undefined
-                            }
-                            options={Array.from(WORK_TYPES).map((field) => ({
-                                text: field,
-                                value: field,
-                                key: field,
-                            }))}
-                            placeHolder="Select an Option"
-                            onChanged={(e) => clientStore.updateNewProjectState({
-                                workType: e.text,
-                                newWorkChecked: false})}
-                            style={styles.item}
-                        />
-                    </div>
-                )}
-                {clientStore.newProjectState.workType && (
-                    <div>
-                        <SearchBox
-                            onFocus={() => console.log("onFocus called")}
-                            onBlur={() => console.log("onBlur called")}
-                        />
-                        <br/>
-                        <Checkbox
-                            label="request new work"
-                            style={styles.item}
-                            checked={clientStore.newProjectState.newWorkChecked}
-                            onChange={()=> clientStore.updateForm({
-                                newWorkChecked: !clientStore.newProjectState.newWorkChecked,
-                            })}
-                            />                    </div>
-                )}
-                {clientStore.newProjectState.newWorkChecked && (
-                    <div style={styles.item}>
-                        <FormControlGroup
-                            data={newProject}
-                            formControls={clientStore
-                                .DataService()
-                                .getView(newProjectState.projectType)
-                                .formControls}
-                            validation={{}}
-                            onChange={clientStore.updateNewProject}
-                        />
-                    </div>
-                )}
+                <Pivot linkSize={PivotLinkSize.large} linkFormat={PivotLinkFormat.tabs}>
+                    <PivotItem linkText="New Request">
+                        <div style={styles.content}>
+                            {!clientStore.getViewState.newRequestVisible ? (
+                                <PrimaryButton
+                                    text="Start New Request"
+                                    primary
+                                    onClick={() => clientStore.updateMember("startedNewRequest")}
+                                />
+                            ) : (
+                                <PrimaryButton text="Cancel Request" primary onClick={() => clientStore.clear()} />
+                            )}
+                            {clientStore.startedNewRequest && (
+                                <ChoiceGroup
+                                    selectedKey={clientStore.newOrExistingProject}
+                                    options={clientStore.choices.project}
+                                    onChange={(event, selected) => clientStore.updateMember("newOrExistingProject", selected.key)}
+                                    label="Will your request be a part of a new or existing project?"
+                                />
+                            )}
+                            {clientStore.getViewState.newOrExistingProject === "new" && (
+                                <div>
+                                    <ClientProjectType />
+                                </div>
+                            )}
+                            {clientStore.getViewState.newOrExistingWork === "existing" && (
+                                <SearchBox
+                                    onFocus={() => console.log("onFocus called")}
+                                    onBlur={() => console.log("onBlur called")}
+                                    style={styles.item}
+                                />
+                            )}
+                            {clientStore.newOrExistingWork === "existing" && <div>existing</div>}
+                            {clientStore.getViewState.selectedProjectType && (
+                                <ChoiceGroup
+                                    selectedKey={clientStore.getViewState.newOrExistingWork}
+                                    options={clientStore.choices.work}
+                                    onChange={(event, selected) => clientStore.updateMember("newOrExistingWork", selected.key)}
+                                    label="Start project from:"
+                                />
+                            )}
+                            {clientStore.getViewState.newOrExistingWork === "new" && (
+                                <div>
+                                    <ClientWorkType />
+                                </div>
+                            )}
+                        </div>
+                    </PivotItem>
+                    <PivotItem linkText="Pending Requests">
+                        <Label>Pivot #2</Label>
+                    </PivotItem>
+                    <PivotItem linkText="Completed Requests">
+                        <Label>Pivot #2</Label>
+                    </PivotItem>
+                </Pivot>
             </div>
         )
     }
