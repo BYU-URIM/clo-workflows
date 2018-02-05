@@ -14,7 +14,6 @@ const textStyle = {
 @inject("rootStore")
 @observer
 export class EmployeeDashboard extends React.Component<any, any> {
-
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }
@@ -26,25 +25,20 @@ export class EmployeeDashboard extends React.Component<any, any> {
         return (
             <div>
                 <RoleSteps />
-                {
-                    employeeStore.selectedStep &&
+                {employeeStore.selectedStep && (
                     <div style={wrapperStyle}>
                         <h2>{`${employeeStore.selectedStep} Active Processes`}</h2>
-                        {
-                            employeeStore.selectedStepProcessBriefs && employeeStore.selectedStepProcessBriefs.length
-                            ? (
-                                <NonScrollableList
-                                    selectable
-                                    items={employeeStore.selectedStepProcessBriefs}
-                                    onClickItem={employeeStore.selectProcess}
-                                />
-                            ) : (
-                                <div style={textStyle}>No Active Processes</div>
-                            )
-                        }
-
+                        {employeeStore.selectedStepProcessBriefs && employeeStore.selectedStepProcessBriefs.length ? (
+                            <NonScrollableList
+                                selectable
+                                items={employeeStore.selectedStepProcessBriefs}
+                                onClickItem={employeeStore.selectProcess}
+                            />
+                        ) : (
+                            <div style={textStyle}>No Active Processes</div>
+                        )}
                     </div>
-                }
+                )}
             </div>
         )
     }

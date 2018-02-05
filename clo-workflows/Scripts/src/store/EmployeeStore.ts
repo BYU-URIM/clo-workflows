@@ -13,12 +13,10 @@ import { INote } from "../model/Note";
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
 export class EmployeeStore {
-    constructor(
-        private root: RootStore,
-        private dataService: DataService,
-    ) {}
+    constructor(private root: RootStore, private dataService: DataService) {}
 
-    @action async init(): Promise<void> {
+    @action
+    async init(): Promise<void> {
         const currentUser = this.root.sessionStore.currentUser
         this.projects = await this.dataService.fetchEmployeeActiveProjects(currentUser)
         this.works = await this.dataService.fetchEmployeeActiveWorks(currentUser)
@@ -28,7 +26,6 @@ export class EmployeeStore {
         this.selectedWork = observable.map()
         this.selectedProcess = observable.map()
     }
-
 
     /*******************************************************************************************************/
     // WORKS
@@ -55,11 +52,13 @@ export class EmployeeStore {
     @observable projects: Array<ICloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
 
-    @computed get selectedProjectFormControls(): Array<IFormControl> {
+    @computed
+    get selectedProjectFormControls(): Array<IFormControl> {
         return this.dataService.getView(this.selectedProject.get("type") as string).formControls
     }
 
-    @action updateSelectedProject(fieldName: string, newVal: FormEntryType): void {
+    @action
+    updateSelectedProject(fieldName: string, newVal: FormEntryType): void {
         this.selectedProject.set(fieldName, newVal)
     }
 
@@ -73,10 +72,10 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     // STEPS
     @observable selectedStep: IStep
-    @action selectStep(step: IStep): void {
+    @action
+    selectStep(step: IStep): void {
         this.selectedStep = step
     }
-
 
     /*******************************************************************************************************/
     // PROCESSES
@@ -103,13 +102,15 @@ export class EmployeeStore {
         })
     }
 
-    @action updateSelectedProcess(fieldName: string, newVal: FormEntryType): void {
+    @action
+    updateSelectedProcess(fieldName: string, newVal: FormEntryType): void {
         this.selectedProcess.set(fieldName, newVal)
     }
 
     // TODO, this validation recomputes all fields each time, very inefficient
     // returns plain javascript object mapping field names to error strings
-    @computed get selectedProcessValidation(): {} {
+    @computed
+    get selectedProcessValidation(): {} {
         return this.selectedProcessFormControls.reduce((accumulator: {}, formControl: IFormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = this.selectedProcess.get(fieldName)
@@ -120,24 +121,28 @@ export class EmployeeStore {
     }
 
     // computes a plain JavaScript object mapping step names process counts
-    @computed get processCountsByStep(): {[stepName: string]: number} {
+    @computed
+    get processCountsByStep(): { [stepName: string]: number } {
         return this.processes.reduce((accumulator: any, process) => {
             const stepName: string = process.step as string
-            accumulator[stepName] !== undefined ? accumulator[stepName]++ : accumulator[stepName] = 1
+            accumulator[stepName] !== undefined ? accumulator[stepName]++ : (accumulator[stepName] = 1)
             return accumulator
         }, {})
     }
 
-    @computed private get selectedStepProcesses(): Array<ICloRequestElement> {
+    @computed
+    private get selectedStepProcesses(): Array<ICloRequestElement> {
         return this.processes.filter(process => process.step === this.selectedStep.name)
     }
 
-    @computed get selectedProcessFormControls(): Array<IFormControl> {
+    @computed
+    get selectedProcessFormControls(): Array<IFormControl> {
         return this.dataService.getView(this.selectedStep.view).formControls
     }
 
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
-    @computed get selectedStepProcessBriefs(): Array<IItemBrief> {
+    @computed
+    get selectedStepProcessBriefs(): Array<IItemBrief> {
         return this.selectedStepProcesses.map(process => {
             const processWork = this.works.find(work => work.id === process.workId)
             const processProject = this.projects.find(project => project.id === process.projectId)
@@ -159,25 +164,32 @@ export class EmployeeStore {
     //      Dashboard -> ProcessDetail -> WorkDetail | ProjectDetail
     @observable viewHierarchy: Array<EmployeeViewKey> = [EmployeeViewKey.Dashboard]
 
-    @computed get currentView(): EmployeeViewKey {
-        return this.viewHierarchy[this.viewHierarchy.length-1]
+    @computed
+    get currentView(): EmployeeViewKey {
+        return this.viewHierarchy[this.viewHierarchy.length - 1]
     }
 
-    @action reduceViewHierarchy(viewKeyString: string) {
+    @action
+    reduceViewHierarchy(viewKeyString: string) {
         this.viewHierarchy = this.viewHierarchy.slice(0, this.viewHierarchy.indexOf(viewKeyString as EmployeeViewKey) + 1)
     }
 
-    @action extendViewHierarchy(viewKey: EmployeeViewKey) {
+    @action
+    extendViewHierarchy(viewKey: EmployeeViewKey) {
         this.viewHierarchy.push(viewKey)
     }
 
-    @computed get breadcrumbItems(): Array<IBreadcrumbItem> {
+    @computed
+    get breadcrumbItems(): Array<IBreadcrumbItem> {
         return this.viewHierarchy.map(viewKey => {
             let text: string
-            if(viewKey === EmployeeViewKey.Dashboard) text = `${this.root.sessionStore.currentUser.role.name || ""} Dashboard`
-            else if(viewKey === EmployeeViewKey.ProcessDetail) text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("id") || ""} Detail`
-            else if(viewKey === EmployeeViewKey.ProjectDetail) text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("id") || ""} Detail`
-            else if(viewKey === EmployeeViewKey.WorkDetail) text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("id") || ""} Detail`
+            if (viewKey === EmployeeViewKey.Dashboard) text = `${this.root.sessionStore.currentUser.role.name || ""} Dashboard`
+            else if (viewKey === EmployeeViewKey.ProcessDetail)
+                text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("id") || ""} Detail`
+            else if (viewKey === EmployeeViewKey.ProjectDetail)
+                text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("id") || ""} Detail`
+            else if (viewKey === EmployeeViewKey.WorkDetail)
+                text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("id") || ""} Detail`
 
             return {
                 text,

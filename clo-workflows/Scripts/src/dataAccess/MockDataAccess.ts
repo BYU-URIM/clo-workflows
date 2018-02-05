@@ -7,9 +7,12 @@ import { deepCopy } from "../utils"
 import { INote } from "../model/Note"
 
 export class MockDataAccess implements IDataAccess {
+    fetchClientProjects(): Promise<ICloRequestElement[]> {
+        throw new Error("Method not implemented.")
+    }
 
     fetchUser(): Promise<IUserDto> {
-        return Promise.resolve(MockUsersDtos[1])
+        return Promise.resolve(MockUsersDtos[0])
     }
 
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
@@ -34,5 +37,9 @@ export class MockDataAccess implements IDataAccess {
 
     fetchWorkNotes(workId: number): Promise<Array<INote>> {
         return Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === workId)))
+    }
+
+    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(null)
     }
 }

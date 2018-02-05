@@ -11,9 +11,7 @@ import { IView } from "../model/View"
 import { INote } from "../model/Note"
 
 export class DataService {
-    constructor(
-        private dao: IDataAccess,
-    ) {}
+    constructor(private dao: IDataAccess) {}
 
     async fetchUser(): Promise<IUser> {
         const userDto: IUserDto = await this.dao.fetchUser()
@@ -63,10 +61,10 @@ export class DataService {
     }
 
     getView(viewName: string): IView {
-        const normalizedView =  VIEWS[viewName]
+        const normalizedView = VIEWS[viewName]
         return {
             formControls: normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])),
-            dataSource: normalizedView.dataSource
+            dataSource: normalizedView.dataSource,
         }
     }
 }

@@ -2,7 +2,7 @@ import * as React from "react"
 import { IUser } from "../model/User"
 import { Persona, PersonaInitialsColor } from "office-ui-fabric-react/lib/Persona"
 export interface IHeaderProps {
-  currentUser: IUser
+    currentUser: IUser
 }
 
 const wrapperStyles = {
@@ -25,21 +25,19 @@ const titleStyles = {
 } as React.CSSProperties
 
 const Header = (props: IHeaderProps) => {
-  const { currentUser } = props
-  return (
-    <div style={wrapperStyles}>
-        <div style={titleStyles}>
-            CLO Workflows
+    const { currentUser } = props
+    return (
+        <div style={wrapperStyles}>
+            <div style={titleStyles}>CLO Workflows</div>
+            <div style={personaStyles}>
+                <Persona
+                    size={4}
+                    initialsColor="#0078d7"
+                    primaryText={currentUser.name}
+                    secondaryText={`${currentUser.username} - ${currentUser.role.name}`}
+                />
+            </div>
         </div>
-        <div style={personaStyles}>
-            <Persona
-                size={4}
-                initialsColor="#0078d7"
-                primaryText={currentUser.name}
-                secondaryText={`${currentUser.username} - ${currentUser.role.name}`}
-            />
-        </div>
-    </div>
-  )
+    )
 }
 export default Header
