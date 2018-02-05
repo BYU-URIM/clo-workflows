@@ -61,7 +61,10 @@ export class Client extends React.Component<any, any> {
                                     onClick={() => clientStore.updateMember("startedNewRequest")}
                                 />
                             ) : (
-                                <PrimaryButton text="Cancel Request" primary onClick={() => clientStore.clear()} />
+                                <PrimaryButton 
+                                    text="Cancel Request" 
+                                    primary onClick={() => clientStore.clear()} 
+                                    />
                             )}
                             {clientStore.startedNewRequest && (
                                 <ChoiceGroup
