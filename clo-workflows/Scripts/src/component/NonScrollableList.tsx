@@ -56,9 +56,9 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
         return (
             <div style={this.props.style}>
                 <ul style={listStyles}>
-                {
-                    props.items.map((item, index) => (
-                        <div key={index}
+                    {props.items.map((item, index) => (
+                        <div
+                            key={index}
                             style={this.getListItemStyle(index)}
                             onMouseLeave={props.selectable ? this.onMouseLeaveListItem : null}
                             onMouseEnter={props.selectable ? () => this.onMouseEnterListItem(index) : null}
@@ -68,15 +68,16 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
                             <div style={listItemSubheaderStyles}>{item.subheader}</div>
                             <div>{item.body}</div>
                         </div>
-                    ))
-                }
+                    ))}
                 </ul>
             </div>
         )
     }
 
     private getListItemStyle(index: number) {
-        return this.state.hoverItemIndex === index ? {...listItemStyles, ...{backgroundColor: "#F5F5F5", cursor: "pointer"}} : listItemStyles
+        return this.state.hoverItemIndex === index
+            ? { ...listItemStyles, ...{ backgroundColor: "#F5F5F5", cursor: "pointer" } }
+            : listItemStyles
     }
 
     private onMouseLeaveListItem() {

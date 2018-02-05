@@ -2,17 +2,17 @@ import { IUserDto, IUser } from "../model/User"
 import { ICloRequestElement } from "../model/CloRequestElement"
 
 export const MockUsersDtos: Array<IUserDto> = [
+    // {
+    //     name: "Connor Moody",
+    //     email: "email@gmail.com",
+    //     username: "cmoody",
+    //     roleName: "Junior License Processor",
+    // },
     {
         name: "Connor Moody",
         email: "email@gmail.com",
         username: "cmoody",
         roleName: "Anonymous",
-    },
-    {
-        name: "Connor Moody",
-        email: "email@gmail.com",
-        username: "cmoody",
-        roleName: "Senior License Processor",
     },
 ]
 
@@ -22,7 +22,7 @@ export const MockUsers: Array<IUser> = [
         email: "email@gmail.com",
         username: "cmoody",
         role: null,
-    } ,
+    },
 ]
 
 export const MockProjects: Array<ICloRequestElement> = [
@@ -34,6 +34,15 @@ export const MockProjects: Array<ICloRequestElement> = [
         artist: "artist name",
         copyrightOwner: "owner name",
         department: "Test department",
+    },
+    {
+        type: "Theatrical",
+        id: 2,
+        title: "Another Theatrical Project",
+        descriptionOfWork: "More description stuff",
+        artist: "Miley Cyrus",
+        copyrightOwner: "Disney",
+        department: "Club Disney Department",
     },
 ]
 
