@@ -9,32 +9,32 @@ import { Modal } from "office-ui-fabric-react/lib/components/Modal"
 @inject("rootStore")
 @observer
 export class ClientWorkType extends React.Component<any, any> {
-  render() {
-    const {clientStore} = this.props.rootStore
-    
-    return (
-      <div style={{ minHeight: "500px" }}>
-          <Dropdown
-            label="Select the Work Type:"
-            selectedKey={clientStore.getViewState.selectedWorkType ? clientStore.getViewState.selectedWorkType : undefined}
-            options={clientStore.WorkTypesAsOptions.map(field => {
-              return field
-            })}
-            placeHolder="Select an Option"
-            onChanged={e => {
-              return clientStore.updateMember("selectedWorkType", e.text)
-            }}
-          />
+    render() {
+        const { clientStore } = this.props.rootStore
 
-        {clientStore.getViewState.selectedWorkType && (
-          <FormControlGroup
-          data={clientStore.newProject}
-          formControls={clientStore.getViewState.workTypeForm()}
-          validation={clientStore.newWorkValidation}
-          onChange={clientStore.updateNewProject}
-          />
-        )}
-      </div>
-    )
-  }
+        return (
+            <div style={{ minHeight: "500px" }}>
+                <Dropdown
+                    label="Select the Work Type:"
+                    selectedKey={clientStore.getViewState.selectedWorkType ? clientStore.getViewState.selectedWorkType : undefined}
+                    options={clientStore.WorkTypesAsOptions.map(field => {
+                        return field
+                    })}
+                    placeHolder="Select an Option"
+                    onChanged={e => {
+                        return clientStore.updateMember("selectedWorkType", e.text)
+                    }}
+                />
+
+                {clientStore.getViewState.selectedWorkType && (
+                    <FormControlGroup
+                        data={clientStore.newProject}
+                        formControls={clientStore.getViewState.workTypeForm()}
+                        validation={clientStore.newWorkValidation}
+                        onChange={clientStore.updateNewProject}
+                    />
+                )}
+            </div>
+        )
+    }
 }

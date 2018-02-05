@@ -7,64 +7,68 @@ import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import * as DB_CONFIG from "../../res/json/DB_CONFIG.json"
 
 export class SPDataAccess implements IDataAccess {
-
     async fetchUser(): Promise<IUserDto> {
         const spUser = await this.getAppWeb().currentUser.get()
-        const roleNames = await this.getAppWeb().siteUsers.getById(spUser.Id).groups.get()
+        const roleNames = await this.getAppWeb()
+            .siteUsers.getById(spUser.Id)
+            .groups.get()
 
         return {
             name: spUser.Title,
             email: spUser.Email,
             username: spUser.LoginName,
-            roleName: (roleNames.length && roleNames[0]) || "Anonymous"
+            roleName: (roleNames.length && roleNames[0]) || "Anonymous",
         }
     }
 
     // TODO add filter string to query for smaller requests and filtering on the backend
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return this.getHostWeb().lists
-            .getByTitle(this.PROCESS_LIST_NAME)
-            .items
-            .filter(this.ACTIVE_FILTER_STRING)
+        return this.getHostWeb()
+            .lists.getByTitle(this.PROCESS_LIST_NAME)
+            .items.filter(this.ACTIVE_FILTER_STRING)
             .get()
-            .then((data: Array<ICloRequestElement>) => data.filter(item => {
-                employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
-            }))
+            .then((data: Array<ICloRequestElement>) =>
+                data.filter(item => {
+                    employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
+                }),
+            )
     }
 
     fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return this.getHostWeb().lists
-            .getByTitle(this.PROJECT_LIST_NAME)
-            .items
-            .filter(this.ACTIVE_FILTER_STRING)
+        return this.getHostWeb()
+            .lists.getByTitle(this.PROJECT_LIST_NAME)
+            .items.filter(this.ACTIVE_FILTER_STRING)
             .get()
-            .then((data: Array<ICloRequestElement>) => data.filter(item => {
-                employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
-            }))
+            .then((data: Array<ICloRequestElement>) =>
+                data.filter(item => {
+                    employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
+                }),
+            )
     }
 
     fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return this.getHostWeb().lists
-            .getByTitle(this.WORKS_LIST_NAME)
-            .items
-            .filter(this.ACTIVE_FILTER_STRING)
+        return this.getHostWeb()
+            .lists.getByTitle(this.WORKS_LIST_NAME)
+            .items.filter(this.ACTIVE_FILTER_STRING)
             .get()
-            .then((data: Array<ICloRequestElement>) => data.filter(item => {
-                employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
-            }))
+            .then((data: Array<ICloRequestElement>) =>
+                data.filter(item => {
+                    employee.role.permittedSteps.map(step => step.name).includes(item.step as string)
+                }),
+            )
     }
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
-        return this.getHostWeb().lists
-            .getByTitle(this.PROJECT_LIST_NAME)
-            .items
-            .filter(this.ACTIVE_FILTER_STRING)
+        return this.getHostWeb()
+            .lists.getByTitle(this.PROJECT_LIST_NAME)
+            .items.filter(this.ACTIVE_FILTER_STRING)
             .get()
-            .then((data: Array<ICloRequestElement>) => data.filter(item => {
-                return (item.submitter as string) === client.name
-            }))
+            .then((data: Array<ICloRequestElement>) =>
+                data.filter(item => {
+                    return (item.submitter as string) === client.name
+                }),
+            )
     }
-
 
     // helper methods and data
     private readonly PROCESS_LIST_NAME: string = "processes"
@@ -75,24 +79,30 @@ export class SPDataAccess implements IDataAccess {
     private readonly HOST_WEB_URL = DB_CONFIG["hostUrl"]
 
     private getAppWeb(): Web {
-        return pnp.sp.configure({
-            headers: { "Accept": "application/json; odata=verbose" },
-            credentials: "same-origin"
-        }, "../").web
+        return pnp.sp.configure(
+            {
+                headers: { Accept: "application/json; odata=verbose" },
+                credentials: "same-origin",
+            },
+            "../",
+        ).web
     }
 
     fetchClientProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }
     private getHostWeb(): Web {
-        return pnp.sp.configure({
-                headers: { "Accept": "application/json; odata=verbose" },
-                credentials: "same-origin"
-            }, "../")
+        return pnp.sp
+            .configure(
+                {
+                    headers: { Accept: "application/json; odata=verbose" },
+                    credentials: "same-origin",
+                },
+                "../",
+            )
             .crossDomainWeb("../", this.HOST_WEB_URL)
     }
-    fetchClientCompletedProjects():Promise<Array<ICloRequestElement>> {
+    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
-    } 
-
+    }
 }

@@ -22,7 +22,7 @@ export const MockUsers: Array<IUser> = [
         email: "email@gmail.com",
         username: "cmoody",
         role: null,
-    } ,
+    },
 ]
 
 export const MockProjects: Array<ICloRequestElement> = [

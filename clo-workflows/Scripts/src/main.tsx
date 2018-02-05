@@ -19,6 +19,7 @@ rootStore.init().then(() => {
     ReactDom.render(
         <Provider rootStore={rootStore}>
             <App />
-        </Provider>
-    , root)
+        </Provider>,
+        root,
+    )
 })

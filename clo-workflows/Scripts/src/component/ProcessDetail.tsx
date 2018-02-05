@@ -37,7 +37,6 @@ const newNoteButtonStyles = {
 @inject("rootStore")
 @observer
 export class ProcessDetail extends React.Component<any, any> {
-
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }
@@ -59,9 +58,7 @@ export class ProcessDetail extends React.Component<any, any> {
                     <div style={newNoteButtonStyles}>
                         <PrimaryButton text="Add Note" primary />
                     </div>
-                    <NonScrollableList
-                        items={employeeStore.selectedProcessNotes}
-                    />
+                    <NonScrollableList items={employeeStore.selectedProcessNotes} />
                 </div>
             </div>
         )

@@ -10,52 +10,52 @@ import { IFormControl } from "./../model/FormControl"
 import { IView } from "../model/View"
 
 export class DataService {
-  constructor(private dao: IDataAccess) {}
+    constructor(private dao: IDataAccess) {}
 
-  async fetchUser(): Promise<IUser> {
-    const userDto: IUserDto = await this.dao.fetchUser()
+    async fetchUser(): Promise<IUser> {
+        const userDto: IUserDto = await this.dao.fetchUser()
 
-    // build out role from res JSON files
-    const role = {
-      name: userDto.roleName,
-      permittedSteps: [],
+        // build out role from res JSON files
+        const role = {
+            name: userDto.roleName,
+            permittedSteps: [],
+        }
+
+        // normalized roles contain strings for steps, map to actual step objects
+        role.permittedSteps = ROLES[userDto.roleName].permittedSteps.map(stepName => deepCopy(STEPS[stepName]))
+
+        // build user object from userDto and role
+        const user: IUser = {
+            name: userDto.name,
+            username: userDto.username,
+            email: userDto.username,
+            role,
+        }
+
+        return user
     }
 
-    // normalized roles contain strings for steps, map to actual step objects
-    role.permittedSteps = ROLES[userDto.roleName].permittedSteps.map(stepName => deepCopy(STEPS[stepName]))
-
-    // build user object from userDto and role
-    const user: IUser = {
-      name: userDto.name,
-      username: userDto.username,
-      email: userDto.username,
-      role,
+    async fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProjects(employee)
     }
 
-    return user
-  }
-
-  async fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
-    return await this.dao.fetchEmployeeActiveProjects(employee)
-  }
-
-  async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
-    return await this.dao.fetchEmployeeActiveProcesses(employee)
-  }
-
-  async fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
-    return await this.dao.fetchEmployeeActiveWorks(employee)
-  }
-
-  async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
-    return await this.dao.fetchClientActiveProjects(client)
-  }
-
-  getView(viewName: string): IView {
-    const normalizedView = VIEWS[viewName]
-    return {
-      formControls: normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])),
-      dataSource: normalizedView.dataSource,
+    async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveProcesses(employee)
     }
-  }
+
+    async fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchEmployeeActiveWorks(employee)
+    }
+
+    async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
+        return await this.dao.fetchClientActiveProjects(client)
+    }
+
+    getView(viewName: string): IView {
+        const normalizedView = VIEWS[viewName]
+        return {
+            formControls: normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])),
+            dataSource: normalizedView.dataSource,
+        }
+    }
 }
