@@ -43,7 +43,11 @@ export class EmployeeStore {
         this.selectedWork.set(fieldName, newVal)
     }
 
-    @observable selectedWorkNotes: Array<INote>
+    @observable selectedWorkNotes: Array<INote> = []
+    @observable selectedWorkNotesDisplayCount
+    @action changeSelectedWorkNotesDisplayCount(amount: number): void {
+        this.selectedWorkNotesDisplayCount += amount
+    }
 
 
     /*******************************************************************************************************/

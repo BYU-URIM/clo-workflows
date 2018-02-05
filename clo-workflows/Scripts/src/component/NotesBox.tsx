@@ -8,12 +8,12 @@ interface INotesBoxProps {
     title: string
     notes: INote[]
     onAddNote: () => void
+    displayCount: number
 }
 
 const notesWrapperStyles = {
     backgroundColor: "#F0F0F0",
     boxShadow: "2px 4px #D3D3D3",
-    // marginRight: "20%",
     maxWidth: 320,
     padding: 10,
 }
@@ -30,6 +30,7 @@ const newNoteButtonStyles = {
     justifyContent: "center",
 } as React.CSSProperties
 
+
 function NotesBox(props: INotesBoxProps) {
     return (
         <div style={notesWrapperStyles}>
@@ -38,7 +39,7 @@ function NotesBox(props: INotesBoxProps) {
                 <Button text="Add Note" primary />
             </div>
             <NonScrollableList
-                items={props.notes.map(note => ({
+                items={props.notes.slice(0, props.displayCount).map(note => ({
                     header: `${note.submitter} - ${note.dateSubmitted}`,
                     body: note.text,
                     id: note.workId || note.projectId

@@ -41,6 +41,7 @@ export class ProjectDetail extends React.Component<any,  IWorkDetailState> {
                             title="Project Notes"
                             notes={this.employeeStore.selectedProjectNotes}
                             onAddNote={() => null}
+                            displayCount={0}
                         />
                     </div>
                 ) : (

@@ -8,6 +8,17 @@ interface IWorkDetailState {
     isWorkExpanded: boolean
 }
 
+const wrapperStyle = {
+    background: "#F8F8F8",
+    width: "100%",
+    padding: "20 0",
+    marginBottom: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "flex-start"
+} as React.CSSProperties
+
 @inject("rootStore")
 @observer
 export class WorkDetail extends React.Component<any,  IWorkDetailState> {
@@ -25,11 +36,11 @@ export class WorkDetail extends React.Component<any,  IWorkDetailState> {
 
     public render() {
         return (
-            <div onClick={() => this.setState({isWorkExpanded: !this.state.isWorkExpanded})} style={{background: "#F8F8F8", width: "100%", padding: "20 0", textAlign: "center", marginBottom: 20}}>
+            <div onClick={() => this.setState({isWorkExpanded: !this.state.isWorkExpanded})} style={wrapperStyle}>
             { 
                 this.state.isWorkExpanded
                 ? (
-                    <div style={{display: "flex", flexDirection: "row", justifyContent: "space-around", alignItems: "flex-start"}}>
+                    <div style={/*{display: "flex", flexDirection: "row", justifyContent: "space-around", alignItems: "flex-start"}*/{width: "60%"}}>
                         <FormControlGroup
                             data={this.employeeStore.selectedWork}
                             formControls={this.employeeStore.selectedWorkFormControls}
@@ -37,19 +48,27 @@ export class WorkDetail extends React.Component<any,  IWorkDetailState> {
                             validation={{}}
                             width={350}
                         />
-                        <NotesBox
+                        {/* <NotesBox
                             title="Work Notes"
                             notes={this.employeeStore.selectedWorkNotes}
                             onAddNote={() => null}
-                        />
+                        /> */}
                     </div>
                 ) : (
-                    <div>
+                    <div style={{width: "60%"}}>
                         <div><strong>Work Name</strong></div>
                         <div>click to expand</div>
                     </div>
                 )
             }
+            <div style={{width: "40%"}}>
+                <NotesBox
+                    title="Work Notes"
+                    notes={this.employeeStore.selectedWorkNotes}
+                    onAddNote={() => null}
+                    displayCount={this.employeeStore.selectedWorkNotesDisplayCount}
+                />
+            </div>
         </div>
         )
     }
