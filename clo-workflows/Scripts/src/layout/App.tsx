@@ -7,7 +7,6 @@ import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
 import Header, { IHeaderProps } from "../component/Header"
 import { Employee } from "../component/Employee"
-import Testing from "../component/Testing"
 
 const backgroundStyles = {} as React.CSSProperties
 
