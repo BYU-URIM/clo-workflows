@@ -70,7 +70,10 @@ export class ClientStore {
         this.newProject.set(fieldName, newVal)
     }
 
-    // viewState holds all of the information that determines the current state of the view including info to track the request creation state, which options are displayed, which inputs are valid, etc.
+    /* viewState holds all of the information that determines the current
+    state of the view including info to track the request creation state,
+    which options are displayed, which inputs are valid, etc.
+    */
     /**
      * @description
      * @type {{
