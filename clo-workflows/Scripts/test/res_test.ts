@@ -95,10 +95,12 @@ ava.test("test that all views contain only valid formControl names and have corr
         tables: {
             listName: {
                 type: string ("list" | "library")
-                fiels: Array<string>
+                fields: Array<string>
             }
         }
     }
+    
+    // NOTE field names must be less than characters long and contain only capital and lowercase letters / numbers
 */
 ava.test("test that DB_CONFIG.json has the correct structure", t => {
   t.true(typeof DB_CONFIG["hostUrl"] === "string")
@@ -108,6 +110,11 @@ ava.test("test that DB_CONFIG.json has the correct structure", t => {
     const table = DB_CONFIG["tables"][tableName]
     t.true(table.type === "list" || table.type === "library")
     t.true(Array.isArray(table.fields))
+    
+    // make sure each field conforms to rules
+    table.fields.forEach(fieldName => {
+        t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)
+    })
   })
 })
 
