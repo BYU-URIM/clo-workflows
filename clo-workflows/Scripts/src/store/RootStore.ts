@@ -1,5 +1,5 @@
 import { Employee } from "./../component/Employee"
-import { DataService } from "../service/DataService"
+import { IDataService } from "../service/dataService/IDataService"
 import { action } from "mobx"
 import { ClientStore } from "./ClientStore"
 import { EmployeeStore } from "./EmployeeStore"
@@ -9,7 +9,7 @@ export class RootStore {
     clientStore: ClientStore // created for anyone logged into the app - all users, including employees can submit projects
     employeeStore: EmployeeStore // created for employees logged into the app
 
-    constructor(private dataService: DataService) {}
+    constructor(private dataService: IDataService) {}
 
     @action
     async init(): Promise<void> {

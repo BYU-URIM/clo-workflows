@@ -1,11 +1,12 @@
 import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
 import { SessionStore } from "../../src/store/SessionStore"
-import { DataService } from "../../src/service/DataService"
+import { IDataService } from "../../src/service/dataService/IDataService"
 import { RootStore } from "../../src/store/RootStore"
+import { MockDataService } from "../../src/service/dataService/MockDataService"
 
 ava.test("sessionStore recognizes employee", async t => {
-    const mockDataService = mock(DataService)
+    const mockDataService = mock(MockDataService)
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
         name: "Connor Moody",
         username: "cmoody4",
@@ -27,7 +28,7 @@ ava.test("sessionStore recognizes employee", async t => {
 })
 
 ava.test("sessionStore recognizes anonymous user", async t => {
-    const mockDataService = mock(DataService)
+    const mockDataService = mock(MockDataService)
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
         name: "Connor Moody",
         username: "cmoody4",

@@ -1,5 +1,4 @@
 import { RootStore } from "./RootStore"
-import { DataService } from "../service/DataService"
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
@@ -7,10 +6,12 @@ import { IFormControl } from "../model/FormControl"
 import { validateFormControl } from "../utils"
 import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
 import { IView } from "../model/View"
+import { IDataService } from "../service/dataService/IDataService"
+import { getView } from "../model/loader/resourceLoaders"
 
 @autobind
 export class ClientStore {
-    constructor(private root: RootStore, private dataService: DataService) {}
+    constructor(private root: RootStore, private dataService: IDataService) {}
     /**
      * @description
      * @author Tyler Gilland - @tgilland95
@@ -61,7 +62,7 @@ export class ClientStore {
     }
     @computed
     get newProjectFormControls(): Array<IFormControl> {
-        return this.dataService.getView(this.newProject.get("type") as string).formControls
+        return getView(this.newProject.get("type") as string).formControls
     }
 
     choices
@@ -113,11 +114,11 @@ export class ClientStore {
      ***************************************/
     @computed
     get ProjectTypeForm(): Array<IFormControl> {
-        return this.dataService.getView(this.newProject.get("type") as string).formControls
+        return getView(this.newProject.get("type") as string).formControls
     }
     @computed
     get WorkTypeForm(): Array<IFormControl> {
-        return this.dataService.getView(this.newProject.get("type") as string).formControls
+        return getView(this.newProject.get("type") as string).formControls
     }
     /***************************************
      * actions
