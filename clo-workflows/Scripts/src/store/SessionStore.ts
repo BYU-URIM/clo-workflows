@@ -1,7 +1,7 @@
 import { RootStore } from "./RootStore"
-import { DataService } from "../service/DataService"
 import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
+import { IDataService } from "../service/dataService/IDataService"
 
 export interface IFormState {
     newProjectChecked?: boolean
@@ -9,7 +9,7 @@ export interface IFormState {
 }
 
 export class SessionStore {
-    constructor(private root: RootStore, private dataService: DataService, testing?: boolean) {
+    constructor(private root: RootStore, private dataService: IDataService, testing?: boolean) {
         this.testing = true
     }
     @observable testing: boolean

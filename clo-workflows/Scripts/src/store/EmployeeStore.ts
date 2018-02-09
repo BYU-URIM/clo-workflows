@@ -1,5 +1,4 @@
 import { RootStore } from "./RootStore"
-import { DataService } from "../service/DataService"
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
@@ -8,12 +7,14 @@ import { IStep } from "../model/Step"
 import { IItemBrief } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl } from "../utils"
-import { INote } from "../model/Note";
+import { INote } from "../model/Note"
+import { IDataService } from "../service/dataService/IDataService"
+import { getView } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
 export class EmployeeStore {
-    constructor(private root: RootStore, private dataService: DataService) {}
+    constructor(private root: RootStore, private dataService: IDataService) {}
 
     @action
     async init(): Promise<void> {
@@ -33,7 +34,7 @@ export class EmployeeStore {
     @observable selectedWork: ObservableMap<FormEntryType>
 
     @computed get selectedWorkFormControls(): Array<IFormControl> {
-        return this.dataService.getView(this.selectedWork.get("type") as string).formControls
+        return getView(this.selectedWork.get("type") as string).formControls
     }
 
     @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
@@ -54,7 +55,7 @@ export class EmployeeStore {
 
     @computed
     get selectedProjectFormControls(): Array<IFormControl> {
-        return this.dataService.getView(this.selectedProject.get("type") as string).formControls
+        return getView(this.selectedProject.get("type") as string).formControls
     }
 
     @action
@@ -137,7 +138,7 @@ export class EmployeeStore {
 
     @computed
     get selectedProcessFormControls(): Array<IFormControl> {
-        return this.dataService.getView(this.selectedStep.view).formControls
+        return getView(this.selectedStep.view).formControls
     }
 
     // TODO make more efficient - cache requestElements by ID for quicker lookup?

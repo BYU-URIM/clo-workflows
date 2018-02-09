@@ -1,6 +1,6 @@
-import { IUserDto, IUser } from "../model/User"
-import { ICloRequestElement } from "../model/CloRequestElement"
-import { INote } from "../model/Note"
+import { IUserDto, IUser } from "../../model/User"
+import { ICloRequestElement } from "../../model/CloRequestElement"
+import { INote } from "../../model/Note"
 import { when } from "ts-mockito"
 
 export const MockUsersDtos: Array<IUserDto> = [
@@ -8,7 +8,7 @@ export const MockUsersDtos: Array<IUserDto> = [
         name: "Connor Moody",
         email: "email@gmail.com",
         username: "cmoody",
-        roleName: "Senior License Processor",
+        roleName: "Junior License Processor",
     },
     {
         name: "Connor Moody",

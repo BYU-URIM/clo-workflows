@@ -1,18 +1,25 @@
 import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
-import { IRole } from "./../model/Role"
-import { IDataAccess } from "./IDataAccess"
-import { IUserDto, IUser } from "../model/User"
-import { ICloRequestElement } from "../model/CloRequestElement"
-import { deepCopy } from "../utils"
-import { INote } from "../model/Note"
+import { IRole } from "../../model/Role"
+import { IUserDto, IUser } from "../../model/User"
+import { ICloRequestElement } from "../../model/CloRequestElement"
+import { deepCopy } from "../../utils"
+import { IDataService } from "./IDataService"
+import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
+import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
+import { INote } from "../../model/Note"
 
-export class MockDataAccess implements IDataAccess {
+export class MockDataService implements IDataService {
     fetchClientProjects(): Promise<ICloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
 
-    fetchUser(): Promise<IUserDto> {
-        return Promise.resolve(MockUsersDtos[0])
+    fetchUser(): Promise<IUser> {
+        const userDto = MockUsersDtos[0]
+        const role = {
+            name: userDto.roleName,
+            permittedSteps: ROLES[userDto.roleName].permittedSteps.map(stepName => deepCopy(STEPS[stepName]))
+        }
+        return Promise.resolve({ ...userDto, role })
     }
 
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
