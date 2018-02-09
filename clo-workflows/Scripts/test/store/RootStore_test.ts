@@ -2,15 +2,14 @@ import { SessionStore } from "./../../src/store/SessionStore"
 import { ClientStore } from "./../../src/store/ClientStore"
 import * as ava from "ava"
 import { RootStore } from "../../src/store/RootStore"
-import { DataService } from "../../src/service/DataService"
-import { DataAccessFactory } from "../../src/dataAccess/DataAccessFactory"
 import { useStrict } from "mobx"
 import { when, mock, verify, instance, spy, anything } from "ts-mockito"
 import { IUser } from "../../src/model/User"
-import { MockProjects, MockUsers } from "../../src/dataAccess/MockData"
+import { MockProjects, MockUsers } from "../../src/service/dataService/MockData"
+import { MockDataService } from "../../src/service/dataService/MockDataService"
 
 ava.test("root store creates all child stores when an employee logs in", async t => {
-  const mockDataService = mock(DataService)
+  const mockDataService = mock(MockDataService)
   const user = {
     name: "Connor Moody",
     username: "cmoody4",
@@ -32,7 +31,7 @@ ava.test("root store creates all child stores when an employee logs in", async t
 })
 
 ava.test("root store creates all stores except employeeProcess store when client logs in", async t => {
-  const mockDataService = mock(DataService)
+  const mockDataService = mock(MockDataService)
   const user = {
     name: "Connor Moody",
     username: "cmoody4",
