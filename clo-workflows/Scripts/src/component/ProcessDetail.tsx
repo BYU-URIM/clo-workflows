@@ -4,13 +4,13 @@ import { EmployeeStore } from "../store/EmployeeStore"
 import FormControlGroup from "./FormControlGroup"
 import { autobind } from "core-decorators"
 import { WorkDetail } from "./WorkDetail"
-import { ProjectDetail } from "./ProjectDetail";
-import { PrimaryButton } from "office-ui-fabric-react/lib/Button";
+import { ProjectDetail } from "./ProjectDetail"
+import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
+import { Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot"
 
 
 const wrapperStyles = {
-    margin: "40 0",
-    marginBottom: 40,
+    margin: "30 0",
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-start",
@@ -31,7 +31,8 @@ const processTitleStyles = {
 
 const processFormStyle = {
     background: "#F8F8F8",
-    padding: "20 25"
+    padding: "20 25",
+    marginTop: 40
 }
 
 interface IProcessDetailState {
@@ -78,11 +79,14 @@ export class ProcessDetail extends React.Component<any, IProcessDetailState> {
                     </div>
                 </div>
                 <div style={{width: "60%"}}>
-                    {/* Expandable work form and work notes */}
-                    <WorkDetail />
-
-                    {/* Expandable project form and project notes */}
-                    <ProjectDetail />
+                    <Pivot linkFormat={PivotLinkFormat.tabs} linkSize={PivotLinkSize.large}>
+                        <PivotItem linkText="Work">
+                            <WorkDetail />
+                        </PivotItem>
+                        <PivotItem linkText="Project">
+                            <ProjectDetail />
+                        </PivotItem>
+                    </Pivot>
                 </div>
 
             </div>

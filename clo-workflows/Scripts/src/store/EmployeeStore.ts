@@ -65,8 +65,10 @@ export class EmployeeStore {
 
     @observable selectedProjectNotes: Array<INote> = [
         {submitter: "employee name", dateSubmitted: "1/1/2015", text: "Sed ut perspiciatis unde omnis iste natus error sit", projectId: 1},
-        {submitter: "employee name", dateSubmitted: "1/1/2013", text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis", projectId: 2},
-        {submitter: "employee name", dateSubmitted: "1/1/2010", text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", projectId: 2},
+        {submitter: "employee name", dateSubmitted: "1/1/2013",
+            text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis", projectId: 2},
+        {submitter: "employee name", dateSubmitted: "1/1/2010",
+            text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", projectId: 2},
     ]
 
 

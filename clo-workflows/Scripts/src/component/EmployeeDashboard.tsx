@@ -27,7 +27,7 @@ export class EmployeeDashboard extends React.Component<any, any> {
                 <RoleSteps />
                 {employeeStore.selectedStep && (
                     <div style={wrapperStyle}>
-                        <h2>{`${employeeStore.selectedStep} Active Processes`}</h2>
+                        <h2>{`${employeeStore.selectedStep.name} Active Processes`}</h2>
                         {employeeStore.selectedStepProcessBriefs && employeeStore.selectedStepProcessBriefs.length ? (
                             <NonScrollableList
                                 selectable
