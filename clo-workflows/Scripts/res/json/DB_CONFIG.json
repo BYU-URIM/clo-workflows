@@ -1,6 +1,7 @@
 {
     "hostUrl": "urimdev2.byu.edu",
-    "tables": {
+    "defaultTables": ["Composed Looks", "Master Page Gallery", "MicroFeed"],
+    "tables":{
         "processes": {
             "type": "list",
             "fields": [
