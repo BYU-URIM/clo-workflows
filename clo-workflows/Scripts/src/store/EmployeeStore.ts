@@ -7,6 +7,7 @@ import { IStep } from "../model/Step"
 import { IItemBrief } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl } from "../utils"
+import { INote } from "../model/Note"
 import { IDataService } from "../service/dataService/IDataService"
 import { getView } from "../model/loader/resourceLoaders"
 
@@ -32,6 +33,21 @@ export class EmployeeStore {
     @observable works: Array<ICloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
 
+    @computed get selectedWorkFormControls(): Array<IFormControl> {
+        return getView(this.selectedWork.get("type") as string).formControls
+    }
+
+    @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
+        this.selectedWork.set(fieldName, newVal)
+    }
+
+    @observable selectedWorkNotes: Array<INote> = []
+    @observable selectedWorkNotesDisplayCount
+    @action changeSelectedWorkNotesDisplayCount(amount: number): void {
+        this.selectedWorkNotesDisplayCount += amount
+    }
+
+
     /*******************************************************************************************************/
     // PROJECTS
     @observable projects: Array<ICloRequestElement>
@@ -47,6 +63,15 @@ export class EmployeeStore {
         this.selectedProject.set(fieldName, newVal)
     }
 
+    @observable selectedProjectNotes: Array<INote> = [
+        {submitter: "employee name", dateSubmitted: "1/1/2015", text: "Sed ut perspiciatis unde omnis iste natus error sit", projectId: 1},
+        {submitter: "employee name", dateSubmitted: "1/1/2013",
+            text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis", projectId: 2},
+        {submitter: "employee name", dateSubmitted: "1/1/2010",
+            text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", projectId: 2},
+    ]
+
+
     /*******************************************************************************************************/
     // STEPS
     @observable selectedStep: IStep
@@ -61,11 +86,23 @@ export class EmployeeStore {
     @observable selectedProcess: ObservableMap<FormEntryType>
 
     // TODO project lookup should be more efficient, store as map ?
-    @action
-    selectProcess(itemBrief: IItemBrief): void {
+    @action async selectProcess(itemBrief: IItemBrief): Promise<void> {
         const selectedProcess: ICloRequestElement = this.processes.find(process => process.id === itemBrief.id)
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
+
+        const selectedWork = this.works.find(work => work.id === this.selectedProcess.get("workId"))
+        this.selectedWork = observable.map(selectedWork)
+
+        const selectedProject = this.works.find(project => project.id === this.selectedProcess.get("projectId"))
+        this.selectedProject = observable.map(selectedProject)
+        
+        const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("id") as number)
+        const projectNotes = await this.dataService.fetchProjectNotes(this.selectedProject.get("id") as number)
+        runInAction(() => {
+            this.selectedWorkNotes = workNotes
+            this.selectedProjectNotes = projectNotes
+        })
     }
 
     @action
@@ -121,12 +158,6 @@ export class EmployeeStore {
         })
     }
 
-    @observable
-    selectedProcessNotes: Array<IItemBrief> = [
-        { header: "1/1/2015", body: "Sed ut perspiciatis unde omnis iste natus error sit", id: 1 },
-        { header: "1/1/2013", body: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis", id: 2 },
-        { header: "1/1/2010", body: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", id: 2 },
-    ]
 
     /*******************************************************************************************************/
     // VIEWS
