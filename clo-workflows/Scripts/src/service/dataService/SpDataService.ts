@@ -9,7 +9,6 @@ import * as pnp from "sp-pnp-js"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import { IRole } from "../../model/Role"
 import { getRole } from "../../model/loader/resourceLoaders"
-import { MockNotes } from "./MockData"
 import { INote } from "../../model/Note"
 
 export class SpDataService implements IDataService {
@@ -79,11 +78,11 @@ export class SpDataService implements IDataService {
     }
 
     fetchProjectNotes(projectId: number): Promise<Array<INote>> {
-        return Promise.resolve(deepCopy(MockNotes.filter(note => note.projectId === projectId)))
+        return Promise.resolve(null)
     }
 
     fetchWorkNotes(workId: number): Promise<Array<INote>> {
-        return Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === workId)))
+        return Promise.resolve(null)
     }
 
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
