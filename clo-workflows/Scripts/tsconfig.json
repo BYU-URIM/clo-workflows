@@ -10,7 +10,7 @@
       "jsx": "react",
       "outDir": "dist",
       "lib": ["es2015", "dom", "es2015.promise", "es2016.array.include"],
-      "types": ["reflect-metadata"],
+      "types": ["reflect-metadata", "node"],
       "moduleResolution": "node",
       "emitDecoratorMetadata": true,
       "sourceMap": true,
@@ -23,6 +23,7 @@
     "include": [
         "src/**/*",
         "test/**/*",
-        "res/**/*"
+        "res/**/*",
+        "sp_config/**/*"
       ]
   }
