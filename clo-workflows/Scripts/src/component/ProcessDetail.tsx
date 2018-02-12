@@ -35,28 +35,15 @@ const processFormStyle = {
     marginTop: 40,
 }
 
-const projectWorkFormStyle = {
-    // width: "60%"
-}
-
-interface IProcessDetailState {
-    isWorkExpanded: boolean
-    isProjectExpanded: boolean
+const projectWorkSwitcherStyle = {
+    width: "60%"
 }
 
 
 @inject("rootStore")
 @autobind
 @observer
-export class ProcessDetail extends React.Component<any, IProcessDetailState> {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            isWorkExpanded: false,
-            isProjectExpanded: false
-        }
-    }
+export class ProcessDetail extends React.Component<any, any> {
 
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
@@ -82,7 +69,8 @@ export class ProcessDetail extends React.Component<any, IProcessDetailState> {
                         <PrimaryButton text="Submit Changes" onClick={() => null} />
                     </div>
                 </div>
-                <div style={projectWorkFormStyle}>
+                <div style={projectWorkSwitcherStyle}>
+                    {/* Project / Work switcher */}
                     <Pivot linkFormat={PivotLinkFormat.tabs} linkSize={PivotLinkSize.large}>
                         <PivotItem linkText="Work">
                             <WorkDetail />

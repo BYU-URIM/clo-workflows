@@ -65,8 +65,7 @@ import NotesBox from "./NotesBox"
 
 const wrapperStyle = {
     background: "#F8F8F8",
-    width: "100%",
-    padding: "20 20",
+    padding: "20 0",
     marginBottom: 20,
     display: "flex",
     flexDirection: "row",
@@ -94,7 +93,7 @@ export class ProjectDetail extends React.Component<any, any> {
     public render() {
         return (
             <div style={wrapperStyle}>
-                <div style={{width: "60%"}}>
+                <div>
                     <div style={titleStlyes}>View Project</div>
                     <FormControlGroup
                         data={this.employeeStore.selectedProject}
@@ -104,7 +103,7 @@ export class ProjectDetail extends React.Component<any, any> {
                         width={400}
                     />
                 </div>
-                <div style={{width: "40%"}}>
+                <div>
                     <NotesBox
                         title="Project Notes"
                         notes={this.employeeStore.selectedProjectNotes}
