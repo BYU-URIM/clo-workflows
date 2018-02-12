@@ -32,7 +32,11 @@ const processTitleStyles = {
 const processFormStyle = {
     background: "#F8F8F8",
     padding: "20 25",
-    marginTop: 40
+    marginTop: 40,
+}
+
+const projectWorkFormStyle = {
+    // width: "60%"
 }
 
 interface IProcessDetailState {
@@ -78,7 +82,7 @@ export class ProcessDetail extends React.Component<any, IProcessDetailState> {
                         <PrimaryButton text="Submit Changes" onClick={() => null} />
                     </div>
                 </div>
-                <div style={{width: "60%"}}>
+                <div style={projectWorkFormStyle}>
                     <Pivot linkFormat={PivotLinkFormat.tabs} linkSize={PivotLinkSize.large}>
                         <PivotItem linkText="Work">
                             <WorkDetail />
