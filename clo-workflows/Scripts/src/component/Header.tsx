@@ -9,7 +9,7 @@ const wrapperStyles = {
     backgroundColor: "#E8E8E8",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     width: "100%",
 } as React.CSSProperties
 
@@ -20,7 +20,7 @@ const personaStyles = {
 const titleStyles = {
     font: "65px Segoe UI, sans-serif",
     color: "#686868",
-    marginLeft: "20%",
+    margin: "0 15% 0 30%",
     alignSelf: "center",
 } as React.CSSProperties
 

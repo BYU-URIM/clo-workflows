@@ -14,7 +14,7 @@ const wrapperStyles = {
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-start",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
 } as React.CSSProperties
 
 const submitButtonStlyes = {
@@ -25,18 +25,19 @@ const submitButtonStlyes = {
 
 const processTitleStyles = {
     textAlign: "center",
-    marginBottom: "20",
-    font: "35px Segoe UI, sans-serif",
+    marginBottom: "10",
+    font: "30px Segoe UI, sans-serif",
 } as React.CSSProperties
 
 const processFormStyle = {
     background: "#F8F8F8",
     padding: "20 25",
     marginTop: 40,
+    marginRight: 35,
 }
 
 const projectWorkSwitcherStyle = {
-    width: "60%"
+    marginLeft: 35
 }
 
 
@@ -63,7 +64,7 @@ export class ProcessDetail extends React.Component<any, any> {
                         formControls={employeeStore.selectedProcessFormControls}
                         validation={employeeStore.selectedProcessValidation}
                         onChange={employeeStore.updateSelectedProcess}
-                        width={400}
+                        width={350}
                     />
                     <div style={submitButtonStlyes}>
                         <PrimaryButton text="Submit Changes" onClick={() => null} />

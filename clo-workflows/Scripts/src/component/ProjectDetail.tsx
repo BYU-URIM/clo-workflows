@@ -16,10 +16,13 @@ const wrapperStyle = {
 
 const titleStlyes = {
     textAlign: "center",
-    marginBottom: "20",
-    font: "35px Segoe UI, sans-serif",
+    marginBottom: "10",
+    font: "30px Segoe UI, sans-serif",
     width: 350
 } as React.CSSProperties
+
+const formColumnStyles = { padding: "0 20 0 30" }
+const notesColumnStyles = { padding: "0 30 0 20" }
 
 @inject("rootStore")
 @observer
@@ -34,17 +37,17 @@ export class ProjectDetail extends React.Component<any, any> {
     public render() {
         return (
             <div style={wrapperStyle}>
-                <div>
+                <div style={formColumnStyles}>
                     <div style={titleStlyes}>View Project</div>
                     <FormControlGroup
                         data={this.employeeStore.selectedProject}
                         formControls={this.employeeStore.selectedProjectFormControls}
                         onChange={this.employeeStore.updateSelectedProject}
                         validation={{}}
-                        width={400}
+                        width={350}
                     />
                 </div>
-                <div>
+                <div style={notesColumnStyles}>
                     <NotesBox
                         title="Project Notes"
                         notes={this.employeeStore.selectedProjectNotes}
