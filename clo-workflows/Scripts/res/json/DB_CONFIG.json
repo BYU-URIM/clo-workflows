@@ -1,11 +1,12 @@
 {
-    "hostUrl": "urimdev2.byu.edu",
+    "hostUrl": "https://urimdev2.byu.edu/clo_workflows_dev",
     "defaultTables": ["Composed Looks", "Master Page Gallery", "MicroFeed"],
     "tables":{
         "processes": {
             "type": "list",
             "fields": [
                 "id",
+                "step",
                 "projectId",
                 "workId",
                 "publicDomainResearch",

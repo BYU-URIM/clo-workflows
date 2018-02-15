@@ -14,7 +14,7 @@ const wrapperStyles = {
 } as React.CSSProperties
 
 const personaStyles = {
-    paddingTop: "18",
+    marginTop: 18,
 }
 
 const titleStyles = {
