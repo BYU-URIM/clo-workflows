@@ -1,6 +1,7 @@
 export enum EnvType {
     LOCAL = "local",
     SHAREPOINT = "sharepoint",
+    SHAREPOINT_PROXY = "sharepointProxy",
     OTHER = "other",
 }
 
@@ -16,6 +17,8 @@ function getEnvironment(nodeEnv: string = "local"): EnvType {
             return EnvType.LOCAL
         case "sharepoint":
             return EnvType.SHAREPOINT
+        case "sharepointProxy":
+            return EnvType.SHAREPOINT_PROXY
         default:
             return EnvType.OTHER
     }

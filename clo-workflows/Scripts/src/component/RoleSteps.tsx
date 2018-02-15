@@ -9,7 +9,7 @@ import { IStep } from "../model/Step"
 
 const wrapperStyles = { marginBottom: 40 }
 const stepButtonStyles = {
-    margin: "10 10 0 0",
+    margin: "10px 10px 0 0",
     height: 50,
 }
 const stepButtonRowStyles = {

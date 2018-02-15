@@ -2,15 +2,17 @@ import chalk from "chalk"
 import * as pnp from "sp-pnp-js"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
 
-import * as db from "../res/json/DB_CONFIG.json"
+import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig } from "./IUtil"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
+
 const DB_CONFIG = db as any
+
 export class Utils implements IUtil {
     pnpNodeSettings: IPnpNodeSettings
     config: any
     constructor(dbConfig: any) {
-        this.config = require("../config/private.json")
+        this.config = require("./private.json")
         this.pnpNodeSettings = {
             siteUrl: `${this.config.siteUrl}`,
             authOptions: this.config,
