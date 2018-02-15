@@ -12,7 +12,7 @@ interface IFormControlGroupProps {
     formControls: Array<IFormControl>
     validation: {}
     onChange: (fieldName: string, newVal: FormEntryType) => void
-    width?: number
+    width?: number | string
 }
 
 const styles = {

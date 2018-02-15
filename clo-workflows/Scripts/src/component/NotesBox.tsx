@@ -14,7 +14,7 @@ interface INotesBoxProps {
 const notesWrapperStyles = {
     backgroundColor: "#F0F0F0",
     boxShadow: "2px 4px #D3D3D3",
-    maxWidth: 320,
+    width: 300,
     padding: 10,
 }
 
