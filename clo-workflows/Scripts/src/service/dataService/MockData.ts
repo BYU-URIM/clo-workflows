@@ -30,7 +30,7 @@ export const MockUsers: Array<IUser> = [
 export const MockProjects: Array<ICloRequestElement> = [
     {
         type: "Theatrical",
-        id: 1,
+        Id: 1,
         title: "Test Theatrical Project",
         descriptionOfWork: "description...",
         artist: "artist name",
@@ -39,7 +39,7 @@ export const MockProjects: Array<ICloRequestElement> = [
     },
     {
         type: "Theatrical",
-        id: 2,
+        Id: 2,
         title: "Another Theatrical Project",
         descriptionOfWork: "More description stuff",
         artist: "Miley Cyrus",
@@ -50,70 +50,70 @@ export const MockProjects: Array<ICloRequestElement> = [
 
 export const MockProcesses: Array<ICloRequestElement> = [
     {
-        id: 1,
+        Id: 1,
         step: "Public Domain Research",
         projectId: 1,
         workId: 1,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 2,
+        Id: 2,
         step: "Public Domain Research",
         projectId: 1,
         workId: 2,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 3,
+        Id: 3,
         step: "Ownership Research",
         projectId: 1,
         workId: 3,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 4,
+        Id: 4,
         step: "Payment",
         projectId: 1,
         workId: 3,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 5,
+        Id: 5,
         step: "Public Domain Research",
         projectId: 1,
         workId: 1,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 6,
+        Id: 6,
         step: "Public Domain Research",
         projectId: 1,
         workId: 2,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 7,
+        Id: 7,
         step: "Ownership Research",
         projectId: 2,
         workId: 3,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 8,
+        Id: 8,
         step: "Payment",
         projectId: 2,
         workId: 3,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 9,
+        Id: 9,
         step: "Payment",
         projectId: 2,
         workId: 2,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 10,
+        Id: 10,
         step: "Payment",
         projectId: 2,
         workId: 3,
@@ -123,19 +123,19 @@ export const MockProcesses: Array<ICloRequestElement> = [
 
 export const MockWorks: Array<ICloRequestElement> = [
     {
-        id: 1,
+        Id: 1,
         type: "Music",
         title: "Song Name",
         artist: "Artist Name",
     },
     {
-        id: 2,
+        Id: 2,
         type: "Book",
         title: "Book Name",
         author: "Author Name",
     },
     {
-        id: 3,
+        Id: 3,
         type: "Article",
         title: "Article Name",
         author: "Author Name",

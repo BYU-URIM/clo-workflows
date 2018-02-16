@@ -1,7 +1,7 @@
 {
     "ID": {
         "displayName": "ID",
-        "dataRef": "id",
+        "dataRef": "Id",
         "type": "number"
     },
     "Project ID": {
@@ -165,7 +165,7 @@
     },
     "Title": {
         "displayName": "Title",
-        "dataRef": "title",
+        "dataRef": "Title",
         "type": "text"
     },
     "Department": {
@@ -439,7 +439,7 @@
     },
     "Author": {
         "displayName": "Author",
-        "dataRef": "author",
+        "dataRef": "authorName",
         "type": "text"
     },
     "Publisher": {

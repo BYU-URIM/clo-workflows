@@ -1,4 +1,4 @@
 import { utils } from "../Util"
 
-const main = async () => utils.deleteAll()
+const main = async () => await utils.deleteAll()
 main()

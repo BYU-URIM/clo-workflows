@@ -26,12 +26,12 @@ export class MockDataService implements IDataService {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
-    fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(deepCopy(MockProjects))
+    fetchProjectsById(ids: number[]): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
     }
 
-    fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(deepCopy(MockWorks))
+    fetchWorksById(ids: number[]): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(deepCopy(MockWorks.filter(project => ids.includes(project.Id as number))))
     }
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {

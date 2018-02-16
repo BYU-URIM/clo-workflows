@@ -19,9 +19,9 @@ export class EmployeeStore {
     @action
     async init(): Promise<void> {
         const currentUser = this.root.sessionStore.currentUser
-        this.projects = await this.dataService.fetchEmployeeActiveProjects(currentUser)
-        this.works = await this.dataService.fetchEmployeeActiveWorks(currentUser)
         this.processes = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
+        this.projects = await this.dataService.fetchProjectsById(this.processes.map(process => process.projectId as number))
+        this.works = await this.dataService.fetchWorksById(this.processes.map(process => process.workId as number))
 
         this.selectedProject = observable.map()
         this.selectedWork = observable.map()
@@ -87,14 +87,14 @@ export class EmployeeStore {
 
     // TODO project lookup should be more efficient, store as map ?
     @action async selectProcess(itemBrief: IItemBrief): Promise<void> {
-        const selectedProcess: ICloRequestElement = this.processes.find(process => process.id === itemBrief.id)
+        const selectedProcess: ICloRequestElement = this.processes.find(process => process.Id === itemBrief.id)
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
 
-        const selectedWork = this.works.find(work => work.id === this.selectedProcess.get("workId"))
+        const selectedWork = this.works.find(work => work.Id === this.selectedProcess.get("workId"))
         this.selectedWork = observable.map(selectedWork)
 
-        const selectedProject = this.works.find(project => project.id === this.selectedProcess.get("projectId"))
+        const selectedProject = this.works.find(project => project.Id === this.selectedProcess.get("projectId"))
         this.selectedProject = observable.map(selectedProject)
         
         const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("id") as number)
@@ -147,13 +147,13 @@ export class EmployeeStore {
     @computed
     get selectedStepProcessBriefs(): Array<IItemBrief> {
         return this.selectedStepProcesses.map(process => {
-            const processWork = this.works.find(work => work.id === process.workId)
-            const processProject = this.projects.find(project => project.id === process.projectId)
+            const processWork = this.works.find(work => work.Id === process.workId)
+            const processProject = this.projects.find(project => project.Id === process.projectId)
             return {
                 header: `${processProject.department} ${processWork.type} Process`,
                 subheader: `submitted to ${process.step} on ${process.dateSubmittedToCurrentStep}`,
                 body: `${processWork.title} - ${processWork.author || processWork.artist || processWork.composer}`,
-                id: process.id as number,
+                id: process.Id as number,
             }
         })
     }
