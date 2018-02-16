@@ -1,11 +1,12 @@
 {
     "hostUrl": "https://urimdev2.byu.edu/clo_workflows_dev",
     "defaultTables": ["Composed Looks", "Master Page Gallery", "MicroFeed"],
+    "defaultFields": ["Title", "Id"],
     "tables":{
         "processes": {
             "type": "list",
             "fields": [
-                "id",
+                "Id",
                 "step",
                 "projectId",
                 "workId",
@@ -32,9 +33,9 @@
         "projects": {
             "type": "library",
             "fields": [
-                "id",
+                "Id",
                 "type",
-                "title",
+                "Title",
                 "department",
                 "danceTitle",
                 "descriptionOfWork",
@@ -91,12 +92,12 @@
         "works": {
             "type": "list",
             "fields": [
-                "id",
+                "Id",
                 "type",
-                "title",
+                "Title",
                 "course",
                 "format",
-                "author",
+                "authorName",
                 "artist",
                 "publisher",
                 "yearPublished",

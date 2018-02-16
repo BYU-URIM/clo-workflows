@@ -12,8 +12,8 @@
     "build:production": "webpack --env.Node_ENV=sharepoint --optimize-minimize",
     "test": "rimraf test_build/** && tsc --outDir test_build && Xcopy /E /I  \"./res\" \"./test_build/res\" && ava test_build/test --verbose",
     "lint": "tslint -c tslint.json 'src/**/*.ts*' && tslint -c tslint.json 'test/**/*.ts*'",
-    "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/tasks/migrations/DeleteAll",
-    "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/tasks/migrations/CreateAll",
+    "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks//DeleteAll",
+    "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateAll",
     "sp:deleteAllAndCreateAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll && ts-node ./sp_config/migrations/tasks/CreateAll",
     "sp:proxyServer": "node ./sp_config/proxy-server/server.js"
   },

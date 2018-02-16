@@ -38,17 +38,6 @@ export class SpDataService implements IDataService {
         }
     }
 
-    async fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
-        const activeProjects: Array<ICloRequestElement> = await this.getHostWeb()
-            .lists.getByTitle(this.PROCESS_LIST_NAME)
-            .items.filter(this.ACTIVE_FILTER_STRING)
-            .get()
-
-        const permittedStepNames = employee.role.permittedSteps.map(step => step.name)
-        return activeProjects.filter(item => {
-            return permittedStepNames.includes(item.step as string)
-        })
-    }
 
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
@@ -63,15 +52,32 @@ export class SpDataService implements IDataService {
         })
     }
 
-    async fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
-        const activeWorks: Array<ICloRequestElement> = await this.getHostWeb()
-            .lists.getByTitle(this.WORKS_LIST_NAME)
-            .items.get()
+    async fetchProjectsById(ids: number[]): Promise<Array<ICloRequestElement>> {
+        const projects: Array<ICloRequestElement> = []
+        const batch = this.getHostWeb().createBatch()
+        for(const id of ids) {
+            const project = await this.getHostWeb()
+                .lists.getByTitle(this.PROJECT_LIST_NAME)
+                .items.getById(id)
+                /*.inBatch(batch)*/.get()
+            projects.push(project)
+        }
+        // await batch.execute()
+        return projects
+    }
 
-        const permittedStepNames = employee.role.permittedSteps.map(step => step.name)
-        return activeWorks.filter(item => {
-            return permittedStepNames.includes(item.step as string)
-        })
+    async fetchWorksById(ids: number[]): Promise<Array<ICloRequestElement>> {
+        const works: Array<ICloRequestElement> = []
+        const batch = this.getHostWeb().createBatch()
+        for(const id of ids) {
+            const project = await this.getHostWeb()
+                .lists.getByTitle(this.WORK_LIST_NAME)
+                .items.getById(id)
+                /*.inBatch(batch)*/.get()
+            works.push(project)
+        }
+        // await batch.execute()
+        return works
     }
 
     async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
@@ -83,11 +89,17 @@ export class SpDataService implements IDataService {
     }
 
     fetchProjectNotes(projectId: number): Promise<Array<INote>> {
-        return Promise.resolve(null)
+        return this.getHostWeb()
+            .lists.getById(this.NOTES_LIST_NAME)
+            .items.filter(`projectId eq '${projectId}'`)
+            .get()
     }
 
     fetchWorkNotes(workId: number): Promise<Array<INote>> {
-        return Promise.resolve(null)
+        return this.getHostWeb()
+            .lists.getById(this.NOTES_LIST_NAME)
+            .items.filter(`workId eq '${workId}'`)
+            .get()
     }
 
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
@@ -104,7 +116,7 @@ export class SpDataService implements IDataService {
     // helper data and methods
     private readonly PROCESS_LIST_NAME: string = "processes"
     private readonly PROJECT_LIST_NAME: string = "projects"
-    private readonly WORKS_LIST_NAME: string = "works"
+    private readonly WORK_LIST_NAME: string = "works"
     private readonly NOTES_LIST_NAME: string = "notes"
     private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete'"
     private readonly HOST_WEB_URL: string
