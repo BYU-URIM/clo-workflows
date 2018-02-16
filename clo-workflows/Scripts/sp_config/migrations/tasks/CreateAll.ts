@@ -8,8 +8,3 @@ const main = async () => {
 }
 
 main()
-
-// const CreateAll = async () => utils.validateDBConfig()
-// CreateAll().then(u =>{
-//     utils.createAll()
-// })
