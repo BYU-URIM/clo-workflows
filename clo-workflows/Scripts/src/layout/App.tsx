@@ -7,6 +7,8 @@ import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
 import Header, { IHeaderProps } from "../component/Header"
 import { Employee } from "../component/Employee"
+import { RootStore } from "../store/RootStore"
+import { LoadingPage } from "../component/LoadingPage"
 
 const backgroundStyles = {} as React.CSSProperties
 
@@ -24,24 +26,33 @@ initializeIcons()
 @observer
 export class App extends React.Component<any, any> {
     componentWillMount() {
-        this.sessionStore = this.props.rootStore.sessionStore
+        this.rootStore = this.props.rootStore
     }
 
-    private sessionStore: SessionStore
+    private rootStore: RootStore
+
     render() {
         return (
             <Fabric>
-                <Header currentUser={this.sessionStore.currentUser} />
-                <div style={backgroundStyles}>
-                    <div style={appContentStyles}>
-                        {this.sessionStore.isEmployee ? (
-                            <Employee currentUser={this.sessionStore.currentUser} />
-                        ) : (
-                            <Client currentUser={this.sessionStore.currentUser} />
-                        )}
-                    </div>
-                </div>
-                <DevTools />
+                { this.rootStore.initialized ? (
+                    /* data is initialized - render out app content (client / employee dashbpard) */
+                    <div>
+                        <Header currentUser={this.rootStore.sessionStore.currentUser} />
+                        <div style={backgroundStyles}>
+                            <div style={appContentStyles}>
+                                {this.rootStore.sessionStore.isEmployee ? (
+                                    <Employee currentUser={this.rootStore.sessionStore.currentUser} />
+                                ) : (
+                                    <Client currentUser={this.rootStore.sessionStore.currentUser} />
+                                )}
+                            </div>
+                        </div>
+                    </div> 
+                ) : (
+                    /* data is unitialized - render out loading page */
+                    <LoadingPage />
+                )}
+                {/* <DevTools /> */}
             </Fabric>
         )
     }
