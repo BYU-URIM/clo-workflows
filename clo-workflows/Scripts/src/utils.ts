@@ -1,5 +1,5 @@
 import { IFormControl } from "./model/FormControl"
-import { FormEntryType } from "./model/CloRequestElement"
+import { FormEntryType, ICloRequestElement } from "./model/CloRequestElement"
 
 export function deepCopy<T>(ob: T): T {
     return JSON.parse(JSON.stringify(ob))
@@ -39,4 +39,18 @@ export function getQueryStringParameter(paramToRetrieve: string) {
         throw new Error(`tried to get query string parameter from a URL that does not have query strings`)
     }
 
+}
+
+export function isObjectEmpty(object: {}): boolean {
+    return Object.keys(object).length === 0
+}
+
+export function filterNestedObject(object): ICloRequestElement {
+    return Object.keys(object)
+        // .filter(key => typeof object[key] !== "object" || object[key] == null)
+        .filter(key => object[key] !== null)
+        .reduce((accumulator, key) => {
+            accumulator[key] = object[key]
+            return accumulator
+        }, {})
 }

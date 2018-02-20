@@ -33,7 +33,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                     if (formControl.type === "text" || formControl.type === "datetime" || formControl.type === "number") {
                         return (
                             <TextField
-                                value={props.data.get(formControl.dataRef) as string}
+                                value={props.data.get(formControl.dataRef) as string || ""}
                                 errorMessage={props.validation[formControl.dataRef]}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
@@ -54,7 +54,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                         return (
                             <TextField
                                 multiline
-                                value={props.data.get(formControl.dataRef) as string}
+                                value={props.data.get(formControl.dataRef) as string || ""}
                                 errorMessage={props.validation[formControl.dataRef]}
                                 key={index}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
@@ -65,7 +65,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                         return (
                             <div style={checkboxStyles} key={index}>
                                 <Checkbox
-                                    checked={props.data.get(formControl.dataRef) as boolean}
+                                    checked={props.data.get(formControl.dataRef) === "true" ? true : false}
                                     label={formControl.displayName}
                                     onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) =>
                                         props.onChange(formControl.dataRef, isChecked)

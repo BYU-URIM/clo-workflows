@@ -6,7 +6,7 @@ import {
 
 const styles = {
     marginTop: "15%",
-    transform: "scale(3, 3)"
+    transform: "scale(2.5, 2.5)"
 } as React.CSSProperties
 
 export function LoadingPage() {
