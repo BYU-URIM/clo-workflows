@@ -27,7 +27,7 @@ export class EmployeeStore {
         this.selectedWork = observable.map()
         this.selectedProcess = observable.map()
 
-        this.asyncPendingLockout = false
+        this.setAsyncPendingLockout(false)
     }
 
 
