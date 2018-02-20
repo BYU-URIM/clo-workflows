@@ -1,6 +1,6 @@
 import { IUser, IUserDto } from "../../model/User"
 import { ICloRequestElement } from "../../model/CloRequestElement"
-import { deepCopy, getQueryStringParameter, filterNestedObject } from "../../utils"
+import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
 import { IView } from "../../model/View"
 import { IDataService, ListName } from "./IDataService"
@@ -49,7 +49,7 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
-            
+
         const permittedStepNames = employee.role.permittedSteps.map(step => step.name)
         return activeProcesses.filter(item => {
             return permittedStepNames.includes(item.step as string)

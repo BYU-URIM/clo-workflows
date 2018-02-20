@@ -41,16 +41,9 @@ export function getQueryStringParameter(paramToRetrieve: string) {
 
 }
 
-export function isObjectEmpty(object: {}): boolean {
-    return Object.keys(object).length === 0
-}
-
-export function filterNestedObject(object): ICloRequestElement {
-    return Object.keys(object)
-        // .filter(key => typeof object[key] !== "object" || object[key] == null)
-        .filter(key => object[key] !== null)
-        .reduce((accumulator, key) => {
-            accumulator[key] = object[key]
-            return accumulator
-        }, {})
+export function isObjectEmpty(ob: {}): boolean {
+    for(const key in ob) {
+        if(ob.hasOwnProperty(key) && ob[key]) return false
+    }
+    return true
 }

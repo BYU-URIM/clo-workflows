@@ -3,6 +3,7 @@ import { EmployeeStore } from "../store/EmployeeStore"
 import { inject, observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
 import NotesBox from "./NotesBox"
+import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 
 const wrapperStyle = {
     background: "#F8F8F8",
@@ -19,6 +20,12 @@ const titleStlyes = {
     marginBottom: "10",
     font: "30px Segoe UI, sans-serif",
     width: 350
+} as React.CSSProperties
+
+const submitButtonStlyes = {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: 30
 } as React.CSSProperties
 
 const formColumnStyles = { padding: "0 20 0 30" }
@@ -46,6 +53,12 @@ export class ProjectDetail extends React.Component<any, any> {
                         validation={{}}
                         width={350}
                     />
+                    <div style={submitButtonStlyes}>
+                        <PrimaryButton text="Submit Changes"
+                            onClick={this.employeeStore.submitSelectedProject}
+                            disabled={!this.employeeStore.canSubmitSelectedProject}
+                        />
+                    </div>
                 </div>
                 <div style={notesColumnStyles}>
                     <NotesBox

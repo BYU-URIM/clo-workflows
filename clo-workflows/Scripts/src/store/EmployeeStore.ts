@@ -58,6 +58,24 @@ export class EmployeeStore {
         this.selectedWorkNotesDisplayCount += amount
     }
 
+    @action
+    async submitSelectedWork(): Promise<void> {
+        this.setAsyncPendingLockout(true)
+
+        try {
+            await this.dataService.updateRequestElement(toJS(this.selectedWork) as any, ListName.WORKS)
+        } catch(error) {
+            console.log(error)
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+    }
+
+    @computed
+    get canSubmitSelectedWork(): boolean {
+        return !this.asyncPendingLockout
+    }
+
 
     /*******************************************************************************************************/
     // PROJECTS
@@ -82,6 +100,24 @@ export class EmployeeStore {
             text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", projectId: 2},
     ]
 
+    @action
+    async submitSelectedProject(): Promise<void> {
+        this.setAsyncPendingLockout(true)
+
+        try {
+            await this.dataService.updateRequestElement(toJS(this.selectedProject) as any, ListName.PROJECTS)
+        } catch(error) {
+            console.log(error)
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+    }
+
+    @computed
+    get canSubmitSelectedProject(): boolean {
+        return !this.asyncPendingLockout
+    }
+
 
     /*******************************************************************************************************/
     // STEPS
@@ -90,6 +126,7 @@ export class EmployeeStore {
     selectStep(step: IStep): void {
         this.selectedStep = step
     }
+
 
     /*******************************************************************************************************/
     // PROCESSES
@@ -105,7 +142,7 @@ export class EmployeeStore {
         const selectedWork = this.works.find(work => work.Id === Number(this.selectedProcess.get("workId")))
         this.selectedWork = observable.map(selectedWork)
 
-        const selectedProject = this.works.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
+        const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
         this.selectedProject = observable.map(selectedProject)
         
         const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("Id") as number)
@@ -123,7 +160,7 @@ export class EmployeeStore {
 
     @action
     async submitSelectedProcess(): Promise<void> {
-        this.asyncPendingLockout = true
+        this.setAsyncPendingLockout(true)
 
         try {
             await this.dataService.updateRequestElement(toJS(this.selectedProcess) as any, ListName.PROCESSES)

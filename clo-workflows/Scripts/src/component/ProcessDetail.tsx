@@ -69,7 +69,7 @@ export class ProcessDetail extends React.Component<any, any> {
                     <div style={submitButtonStlyes}>
                         <PrimaryButton text="Submit Changes"
                             onClick={this.employeeStore.submitSelectedProcess}
-                            disabled={this.employeeStore.canSubmitSelectedProcess}
+                            disabled={!this.employeeStore.canSubmitSelectedProcess}
                         />
                     </div>
                 </div>
