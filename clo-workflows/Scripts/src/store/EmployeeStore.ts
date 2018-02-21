@@ -1,14 +1,14 @@
 import { RootStore } from "./RootStore"
-import { action, ObservableMap, observable, runInAction, computed } from "mobx"
+import { action, ObservableMap, observable, runInAction, computed, toJS } from "mobx"
 import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
 import { IStep } from "../model/Step"
 import { IItemBrief } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
-import { validateFormControl } from "../utils"
+import { validateFormControl, isObjectEmpty } from "../utils"
 import { INote } from "../model/Note"
-import { IDataService } from "../service/dataService/IDataService"
+import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
@@ -20,13 +20,24 @@ export class EmployeeStore {
     async init(): Promise<void> {
         const currentUser = this.root.sessionStore.currentUser
         this.processes = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
-        this.projects = await this.dataService.fetchProjectsById(this.processes.map(process => process.projectId as number))
-        this.works = await this.dataService.fetchWorksById(this.processes.map(process => process.workId as number))
+        this.projects = await this.dataService.fetchRequestElementsById(this.processes.map(process => process.projectId as number), ListName.PROJECTS)
+        this.works = await this.dataService.fetchRequestElementsById(this.processes.map(process => process.workId as number), ListName.WORKS)
 
         this.selectedProject = observable.map()
         this.selectedWork = observable.map()
         this.selectedProcess = observable.map()
+
+        this.setAsyncPendingLockout(false)
     }
+
+
+    @observable
+    private asyncPendingLockout: boolean
+    
+    @action setAsyncPendingLockout(val: boolean) {
+        this.asyncPendingLockout = val
+    }
+
 
     /*******************************************************************************************************/
     // WORKS
@@ -38,13 +49,31 @@ export class EmployeeStore {
     }
 
     @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
-        this.selectedWork.set(fieldName, newVal)
+        this.selectedWork.set(fieldName, String(newVal))
     }
 
     @observable selectedWorkNotes: Array<INote> = []
     @observable selectedWorkNotesDisplayCount
     @action changeSelectedWorkNotesDisplayCount(amount: number): void {
         this.selectedWorkNotesDisplayCount += amount
+    }
+
+    @action
+    async submitSelectedWork(): Promise<void> {
+        this.setAsyncPendingLockout(true)
+
+        try {
+            await this.dataService.updateRequestElement(toJS(this.selectedWork) as any, ListName.WORKS)
+        } catch(error) {
+            console.log(error)
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+    }
+
+    @computed
+    get canSubmitSelectedWork(): boolean {
+        return !this.asyncPendingLockout
     }
 
 
@@ -60,7 +89,7 @@ export class EmployeeStore {
 
     @action
     updateSelectedProject(fieldName: string, newVal: FormEntryType): void {
-        this.selectedProject.set(fieldName, newVal)
+        this.selectedProject.set(fieldName, String(newVal))
     }
 
     @observable selectedProjectNotes: Array<INote> = [
@@ -71,6 +100,24 @@ export class EmployeeStore {
             text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", projectId: 2},
     ]
 
+    @action
+    async submitSelectedProject(): Promise<void> {
+        this.setAsyncPendingLockout(true)
+
+        try {
+            await this.dataService.updateRequestElement(toJS(this.selectedProject) as any, ListName.PROJECTS)
+        } catch(error) {
+            console.log(error)
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+    }
+
+    @computed
+    get canSubmitSelectedProject(): boolean {
+        return !this.asyncPendingLockout
+    }
+
 
     /*******************************************************************************************************/
     // STEPS
@@ -79,6 +126,7 @@ export class EmployeeStore {
     selectStep(step: IStep): void {
         this.selectedStep = step
     }
+
 
     /*******************************************************************************************************/
     // PROCESSES
@@ -91,14 +139,14 @@ export class EmployeeStore {
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
 
-        const selectedWork = this.works.find(work => work.Id === this.selectedProcess.get("workId"))
+        const selectedWork = this.works.find(work => work.Id === Number(this.selectedProcess.get("workId")))
         this.selectedWork = observable.map(selectedWork)
 
-        const selectedProject = this.works.find(project => project.Id === this.selectedProcess.get("projectId"))
+        const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
         this.selectedProject = observable.map(selectedProject)
         
-        const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("id") as number)
-        const projectNotes = await this.dataService.fetchProjectNotes(this.selectedProject.get("id") as number)
+        const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("Id") as number)
+        const projectNotes = await this.dataService.fetchProjectNotes(this.selectedProject.get("Id") as number)
         runInAction(() => {
             this.selectedWorkNotes = workNotes
             this.selectedProjectNotes = projectNotes
@@ -107,7 +155,24 @@ export class EmployeeStore {
 
     @action
     updateSelectedProcess(fieldName: string, newVal: FormEntryType): void {
-        this.selectedProcess.set(fieldName, newVal)
+        this.selectedProcess.set(fieldName, String(newVal))
+    }
+
+    @action
+    async submitSelectedProcess(): Promise<void> {
+        this.setAsyncPendingLockout(true)
+
+        try {
+            await this.dataService.updateRequestElement(toJS(this.selectedProcess) as any, ListName.PROCESSES)
+        } catch(error) {
+            console.log(error)
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+    }
+
+    @computed get canSubmitSelectedProcess(): boolean {
+        return !this.asyncPendingLockout && isObjectEmpty(this.selectedProcessValidation)
     }
 
     // TODO, this validation recomputes all fields each time, very inefficient
@@ -147,12 +212,12 @@ export class EmployeeStore {
     @computed
     get selectedStepProcessBriefs(): Array<IItemBrief> {
         return this.selectedStepProcesses.map(process => {
-            const processWork = this.works.find(work => work.Id === process.workId)
-            const processProject = this.projects.find(project => project.Id === process.projectId)
+            const processWork = this.works.find(work => work.Id === Number(process.workId))
+            const processProject = this.projects.find(project => project.Id === Number(process.projectId))
             return {
                 header: `${processProject.department} ${processWork.type} Process`,
                 subheader: `submitted to ${process.step} on ${process.dateSubmittedToCurrentStep}`,
-                body: `${processWork.title} - ${processWork.author || processWork.artist || processWork.composer}`,
+                body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
                 id: process.Id as number,
             }
         })

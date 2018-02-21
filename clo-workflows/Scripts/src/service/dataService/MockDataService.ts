@@ -3,7 +3,7 @@ import { IRole } from "../../model/Role"
 import { IUserDto, IUser } from "../../model/User"
 import { ICloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy } from "../../utils"
-import { IDataService } from "./IDataService"
+import { IDataService, ListName } from "./IDataService"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import { INote } from "../../model/Note"
@@ -26,12 +26,25 @@ export class MockDataService implements IDataService {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
-    fetchProjectsById(ids: number[]): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
+    fetchRequestElementsById(ids: number[], listName: ListName): Promise<ICloRequestElement[]> {
+        switch(listName) {
+            case ListName.PROJECTS:
+                return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
+            case ListName.WORKS:
+                return Promise.resolve(deepCopy(MockWorks.filter(work => ids.includes(work.Id as number))))
+            case ListName.PROJECTS:
+                return Promise.resolve(deepCopy(MockProcesses.filter(process => ids.includes(process.Id as number))))
+            default:
+                return Promise.resolve([])
+        }
+    }
+    
+    createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement> {
+        return Promise.resolve(null)
     }
 
-    fetchWorksById(ids: number[]): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(deepCopy(MockWorks.filter(project => ids.includes(project.Id as number))))
+    updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void> {
+        return Promise.resolve(null)
     }
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {

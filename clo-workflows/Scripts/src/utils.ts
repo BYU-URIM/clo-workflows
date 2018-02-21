@@ -1,5 +1,5 @@
 import { IFormControl } from "./model/FormControl"
-import { FormEntryType } from "./model/CloRequestElement"
+import { FormEntryType, ICloRequestElement } from "./model/CloRequestElement"
 
 export function deepCopy<T>(ob: T): T {
     return JSON.parse(JSON.stringify(ob))
@@ -39,4 +39,11 @@ export function getQueryStringParameter(paramToRetrieve: string) {
         throw new Error(`tried to get query string parameter from a URL that does not have query strings`)
     }
 
+}
+
+export function isObjectEmpty(ob: {}): boolean {
+    for(const key in ob) {
+        if(ob.hasOwnProperty(key) && ob[key]) return false
+    }
+    return true
 }

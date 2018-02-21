@@ -3,12 +3,15 @@ import { ICloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
 import { IView } from "../../model/View"
-import { IDataService } from "./IDataService"
+import { IDataService, ListName } from "./IDataService"
 import * as pnp from "sp-pnp-js"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import { IRole } from "../../model/Role"
 import { getRole } from "../../model/loader/resourceLoaders"
 import { INote } from "../../model/Note"
+import { ODataDefaultParser } from "sp-pnp-js"
+import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
+import { debug } from "util"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -16,6 +19,7 @@ export class SpDataService implements IDataService {
     constructor(appWebUrl: string, hostWebUrl: string) {
         this.APP_WEB_URL = appWebUrl
         this.HOST_WEB_URL = hostWebUrl
+        this.cloRequestElementParser = new CloRequestElementParser()
     }
 
     /*******************************************************************************************************/
@@ -42,9 +46,9 @@ export class SpDataService implements IDataService {
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
         const activeProcesses: Array<ICloRequestElement> = await this.getHostWeb()
-            .lists.getByTitle(this.PROCESS_LIST_NAME)
+            .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
-            .get()
+            .get(this.cloRequestElementParser)
 
         const permittedStepNames = employee.role.permittedSteps.map(step => step.name)
         return activeProcesses.filter(item => {
@@ -52,54 +56,54 @@ export class SpDataService implements IDataService {
         })
     }
 
-    async fetchProjectsById(ids: number[]): Promise<Array<ICloRequestElement>> {
+    async fetchRequestElementsById(ids: number[], listName: ListName): Promise<ICloRequestElement[]> {
         const projects: Array<ICloRequestElement> = []
         const batch = this.getHostWeb().createBatch()
         for(const id of ids) {
             const project = await this.getHostWeb()
-                .lists.getByTitle(this.PROJECT_LIST_NAME)
+                .lists.getByTitle(listName)
                 .items.getById(id)
-                /*.inBatch(batch)*/.get()
+                /*.inBatch(batch)*/.get(this.cloRequestElementParser)
             projects.push(project)
         }
         // await batch.execute()
         return projects
     }
 
-    async fetchWorksById(ids: number[]): Promise<Array<ICloRequestElement>> {
-        const works: Array<ICloRequestElement> = []
-        const batch = this.getHostWeb().createBatch()
-        for(const id of ids) {
-            const project = await this.getHostWeb()
-                .lists.getByTitle(this.WORK_LIST_NAME)
-                .items.getById(id)
-                /*.inBatch(batch)*/.get()
-            works.push(project)
-        }
-        // await batch.execute()
-        return works
+    async createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement> {
+        const result = await this.getHostWeb()
+            .lists.getByTitle(listName).items
+            .add(requestElement)
+        return result.data
+    }
+
+    async updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void> {
+        await this.getHostWeb()
+            .lists.getByTitle(listName)
+            .items.getById(requestElement.Id as number)
+            .update(requestElement)
     }
 
     async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         const activeProjects: Array<ICloRequestElement> = await this.getHostWeb()
-            .lists.getByTitle(this.PROJECT_LIST_NAME)
-            .items.get()
+            .lists.getByTitle(ListName.PROJECTS)
+            .items.get(this.cloRequestElementParser)
 
         return activeProjects.filter(item => item.submitter === client.name)
     }
 
-    fetchProjectNotes(projectId: number): Promise<Array<INote>> {
-        return this.getHostWeb()
-            .lists.getById(this.NOTES_LIST_NAME)
+    async fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.NOTES)
             .items.filter(`projectId eq '${projectId}'`)
-            .get()
+            .get(this.cloRequestElementParser)
     }
 
-    fetchWorkNotes(workId: number): Promise<Array<INote>> {
-        return this.getHostWeb()
-            .lists.getById(this.NOTES_LIST_NAME)
+    async fetchWorkNotes(workId: number): Promise<Array<INote>> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.NOTES)
             .items.filter(`workId eq '${workId}'`)
-            .get()
+            .get(this.cloRequestElementParser)
     }
 
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
@@ -114,13 +118,11 @@ export class SpDataService implements IDataService {
 
     /******************************************************************************************************/
     // helper data and methods
-    private readonly PROCESS_LIST_NAME: string = "processes"
-    private readonly PROJECT_LIST_NAME: string = "projects"
-    private readonly WORK_LIST_NAME: string = "works"
-    private readonly NOTES_LIST_NAME: string = "notes"
     private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete'"
     private readonly HOST_WEB_URL: string
     private readonly APP_WEB_URL: string
+    private readonly cloRequestElementParser: CloRequestElementParser
+    
 
     private getAppWeb(): Web {
         return pnp.sp.configure(
@@ -151,5 +153,51 @@ export class SpDataService implements IDataService {
         } else if(loginName.includes("|")) {
             return loginName.split("|")[1]
         } else return ""
+    }
+}
+
+
+// This custom parser filters out irrelevant fields and metadata from SharePoint REST responses to WORK, PROCESS, PROJECT, and NOTE queries
+// Only fields that are part of a CLO process, project, or request (as defined in res/DB_CONFIG.json) are preserved
+export class CloRequestElementParser extends ODataDefaultParser {
+    public constructor() {
+        super()
+        const tableNames = Object.keys(DB_CONFIG["tables"])
+        this.cloFieldSet = tableNames.reduce((curFieldSet: Set<string>, tableName: string) => {
+            const table = DB_CONFIG["tables"][tableName]
+            table.fields.forEach((fieldName: string) => curFieldSet.add(fieldName))
+            return curFieldSet
+        }, new Set())
+        this.cloFieldSet.add(DB_CONFIG["defaultFields"])
+    }
+
+     // set storing all fields specified in all tables of DB_CONFIG (as well as fields specified in DB_CONFIG.defaultFields)
+     // a set is used because it prevents duplicates (there are many field duplicates among the various tables), and because it provides fast lookup
+    private cloFieldSet: Set<string>
+
+    // this method is called automatically by PNP once for each request
+    public async parse(response: Response): Promise<any> {
+        // the ODataDefaultParser base method returns a JSON with all fields for the given list - a mix of CLO fields and garbage SP metadata fields
+        const parsedResponse = await super.parse(response)
+
+        // the parsedResponse may be an array of response objects or a single object, depending on what was requested
+        if(Array.isArray(parsedResponse)) {
+            return parsedResponse.map((singleResponseObject: {}) => this.filterSpResponseObject(singleResponseObject))
+        } else if(typeof parsedResponse === "object") {
+            return this.filterSpResponseObject(parsedResponse)
+        } else {
+            console.log("custom SpDataParser was unable to handle the data type of the response")
+            return parsedResponse
+        }
+    }
+
+    // this method filters out all fields that are not defined in the cloFieldSet
+    private filterSpResponseObject(spResponseObject: {}): {} {
+        return Object.keys(spResponseObject).reduce((filteredResponseObject: {}, spReponseFieldName: string) => {
+            if(this.cloFieldSet.has(spReponseFieldName)) {
+                filteredResponseObject[spReponseFieldName] = spResponseObject[spReponseFieldName]
+            }
+            return filteredResponseObject
+        }, {})
     }
 }

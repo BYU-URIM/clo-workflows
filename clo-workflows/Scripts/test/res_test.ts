@@ -15,14 +15,14 @@ import { IStep } from "../src/model/Step"
     }
 */
 ava.test("test json roles for correct shape", t => {
-  for (const roleName in ROLES) {
-    const role: { name: string; permittedSteps: string[] } = ROLES[roleName]
-    t.true(typeof role.name === "string")
-    t.true(Array.isArray(role.permittedSteps))
-    role.permittedSteps.forEach(stepName => {
-      t.truthy(STEPS[stepName]) // stepName string in permittedSteps array must refer to a step object
-    })
-  }
+    for (const roleName in ROLES) {
+        const role: { name: string; permittedSteps: string[] } = ROLES[roleName]
+        t.true(typeof role.name === "string")
+        t.true(Array.isArray(role.permittedSteps))
+        role.permittedSteps.forEach(stepName => {
+            t.truthy(STEPS[stepName]) // stepName string in permittedSteps array must refer to a step object
+        })
+    }
 })
 
 /*
@@ -55,17 +55,17 @@ ava.test("test json steps for correct shape", t => {
     }
 */
 ava.test("test form controls for correct shape", t => {
-  const formControlTypes = ["text", "choice", "checkbox", "textarea", "datetime", "number"]
+    const formControlTypes = ["text", "choice", "checkbox", "textarea", "datetime", "number"]
 
-  for (const formControlName in FORM_CONTROLS) {
-    const formControl: IFormControl = FORM_CONTROLS[formControlName]
-    t.true(typeof formControl.displayName === "string")
-    t.true(typeof formControl.dataRef === "string")
-    t.true(formControlTypes.includes(formControl.type))
-    if (formControl.type === "choice") {
-      t.true(Array.isArray(formControl.choices))
+    for (const formControlName in FORM_CONTROLS) {
+        const formControl: IFormControl = FORM_CONTROLS[formControlName]
+        t.true(typeof formControl.displayName === "string")
+        t.true(typeof formControl.dataRef === "string")
+        t.true(formControlTypes.includes(formControl.type))
+        if (formControl.type === "choice") {
+            t.true(Array.isArray(formControl.choices))
+        }
     }
-  }
 })
 
 /*
@@ -76,16 +76,16 @@ ava.test("test form controls for correct shape", t => {
     }
 */
 ava.test("test that all views contain only valid formControl names and have correct shape", t => {
-  for (const viewName in VIEWS) {
-    const view = VIEWS[viewName]
-    t.true(typeof view.dataSource === "string")
-    t.true(Array.isArray(view.formControls))
+    for (const viewName in VIEWS) {
+        const view = VIEWS[viewName]
+        t.true(typeof view.dataSource === "string")
+        t.true(Array.isArray(view.formControls))
 
-    const formControlNames: string[] = view.formControls
-    formControlNames.forEach(formControlName => {
-      t.truthy(FORM_CONTROLS[formControlName])
-    })
-  }
+        const formControlNames: string[] = view.formControls
+        formControlNames.forEach(formControlName => {
+            t.truthy(FORM_CONTROLS[formControlName])
+        })
+    }
 })
 
 /*
@@ -103,19 +103,19 @@ ava.test("test that all views contain only valid formControl names and have corr
     // NOTE field names must be less than characters long and contain only capital and lowercase letters / numbers
 */
 ava.test("test that DB_CONFIG.json has the correct structure", t => {
-  t.true(typeof DB_CONFIG["hostUrl"] === "string")
-  t.true(typeof DB_CONFIG["tables"] === "object")
+    t.true(typeof DB_CONFIG["hostUrl"] === "string")
+    t.true(typeof DB_CONFIG["tables"] === "object")
 
-  Object.keys(DB_CONFIG["tables"]).forEach((tableName: string) => {
-    const table = DB_CONFIG["tables"][tableName]
-    t.true(table.type === "list" || table.type === "library")
-    t.true(Array.isArray(table.fields))
+    Object.keys(DB_CONFIG["tables"]).forEach((tableName: string) => {
+        const table = DB_CONFIG["tables"][tableName]
+        t.true(table.type === "list" || table.type === "library")
+        t.true(Array.isArray(table.fields))
     
-    // make sure each field conforms to rules
-    table.fields.forEach(fieldName => {
-        t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)
+        // make sure each field conforms to rules
+        table.fields.forEach(fieldName => {
+            t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)
+        })
     })
-  })
 })
 
 /*
@@ -125,13 +125,13 @@ ava.test("test that DB_CONFIG.json has the correct structure", t => {
         second, each form control of that view has a data ref which must refer to a field from the view's data source (table)
 */
 ava.test("ensure that each form control dataRef references a valid field from the correct database schema", t => {
-  for (const viewName in VIEWS) {
-    const view = VIEWS[viewName]
-    const table = DB_CONFIG["tables"][view.dataSource]
+    for (const viewName in VIEWS) {
+        const view = VIEWS[viewName]
+        const table = DB_CONFIG["tables"][view.dataSource]
 
-    for (const formControlName of view.formControls) {
-      const formControl = FORM_CONTROLS[formControlName]
-      t.true(table.fields.includes(formControl.dataRef))
+        for (const formControlName of view.formControls) {
+            const formControl = FORM_CONTROLS[formControlName]
+            t.true(table.fields.includes(formControl.dataRef))
+        }
     }
-  }
 })

@@ -67,7 +67,10 @@ export class ProcessDetail extends React.Component<any, any> {
                         width={350}
                     />
                     <div style={submitButtonStlyes}>
-                        <PrimaryButton text="Submit Changes" onClick={() => null} />
+                        <PrimaryButton text="Submit Changes"
+                            onClick={this.employeeStore.submitSelectedProcess}
+                            disabled={!this.employeeStore.canSubmitSelectedProcess}
+                        />
                     </div>
                 </div>
                 <div style={projectWorkSwitcherStyle}>

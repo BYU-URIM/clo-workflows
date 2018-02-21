@@ -2,7 +2,7 @@ import * as React from "react"
 import { INote } from "../model/Note"
 import { observer } from "mobx-react"
 import { NonScrollableList } from "./NonScrollableList"
-import { Button } from "office-ui-fabric-react/lib/Button"
+import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 
 interface INotesBoxProps {
     title: string
@@ -25,6 +25,13 @@ const notesTitleStyles = {
     marginBottom: 8,
 } as React.CSSProperties
 
+const noNotesMessageStyles = {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: 200,
+    margin: "18px 0",
+} as React.CSSProperties
+
 const newNoteButtonStyles = {
     display: "flex",
     justifyContent: "center",
@@ -36,15 +43,24 @@ function NotesBox(props: INotesBoxProps) {
         <div style={notesWrapperStyles}>
             <div style={notesTitleStyles}>{props.title}</div>
             <div style={newNoteButtonStyles}>
-                <Button text="Add Note" primary />
+                <PrimaryButton text="Add Note" />
             </div>
-            <NonScrollableList
-                items={props.notes.slice(0, props.displayCount).map(note => ({
-                    header: `${note.submitter} - ${note.dateSubmitted}`,
-                    body: note.text,
-                    id: note.workId || note.projectId
-                }))}
-            />
+            { props.notes.length ?
+                ( 
+                    <NonScrollableList
+                        items={props.notes.slice(0, props.displayCount).map(note => ({
+                            header: `${note.submitter} - ${note.dateSubmitted}`,
+                            body: note.text,
+                            id: note.workId || note.projectId
+                        }))}
+                    /> 
+                ) : (    
+                    <div style={noNotesMessageStyles}>
+                        {`no ${props.title.toLowerCase()} have been submitted yet`}
+                    </div>
+                )
+            }
+
         </div>
     )
 }
