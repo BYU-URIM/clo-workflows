@@ -36,6 +36,9 @@ export class MockDataService implements IDataService {
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
+    fetchClientActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+        return Promise.resolve(deepCopy(MockProcesses))
+    }
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }
