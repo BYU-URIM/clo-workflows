@@ -13,12 +13,14 @@ useStrict(true)
 const root = document.getElementById("root")
 
 const rootStore = new RootStore(DataServiceFactory.getDataService())
+
+// TODO remove window rootStore reference
 window["rootStore"] = rootStore
-rootStore.init().then(() => {
-    ReactDom.render(
-        <Provider rootStore={rootStore}>
-            <App />
-        </Provider>,
-        root,
-    )
-})
+
+ReactDom.render(
+    <Provider rootStore={rootStore}>
+        <App />
+    </Provider>,
+    root,
+)
+rootStore.init()

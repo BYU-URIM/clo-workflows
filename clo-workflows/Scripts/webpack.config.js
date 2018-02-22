@@ -25,9 +25,7 @@ module.exports = function(env) {
         plugins: [
             new webpack.DefinePlugin({
                 NODE_ENV: JSON.stringify(env.NODE_ENV)
-            }),
-            new webpack.HotModuleReplacementPlugin(),
-
+            })
         ]
     }
 };

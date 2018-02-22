@@ -1,16 +1,18 @@
 import chalk from "chalk"
 import * as pnp from "sp-pnp-js"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
-
-import * as db from "../res/json/DB_CONFIG.json"
+import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig } from "./IUtil"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
+import { Util } from "sp-pnp-js"
+
 const DB_CONFIG = db as any
+
 export class Utils implements IUtil {
     pnpNodeSettings: IPnpNodeSettings
     config: any
     constructor(dbConfig: any) {
-        this.config = require("../config/private.json")
+        this.config = require("./private.json")
         this.pnpNodeSettings = {
             siteUrl: `${this.config.siteUrl}`,
             authOptions: this.config,
@@ -81,8 +83,12 @@ export class Utils implements IUtil {
         const y = x.then(async () => {
             const allfields = this.DB_CONFIG.tables[title].fields
             for (const field of allfields) {
-                await pnp.sp.web.lists.getByTitle(title).fields.addText(field)
-                console.log(chalk`{green created field}: {blue ${field}} `)
+                if(!this.DB_CONFIG.defaultFields.includes(field)) {
+                    await pnp.sp.web.lists.getByTitle(title).fields.addText(field)
+                    console.log(chalk`{green created field}: {blue ${field}} `)
+                } else {
+                    console.log(chalk`{green field already exists}: {blue ${field}} `)
+                }
             }
         })
     }
@@ -135,5 +141,4 @@ ERROR: INVALID  FIELD
     }
 }
 
-const u = (): Utils => new Utils(db)
-export const utils = u()
+export const utils = new Utils(db)

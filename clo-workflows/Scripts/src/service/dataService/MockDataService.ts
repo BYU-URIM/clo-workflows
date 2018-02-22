@@ -1,13 +1,19 @@
-import { MockUsersDtos, MockProjects, MockProcesses, MockWorks } from "./MockData"
-import { IRole } from "../../model/Role"
-import { IUserDto, IUser } from "../../model/User"
-import { ICloRequestElement } from "../../model/CloRequestElement"
-import { deepCopy } from "../../utils"
-import { IDataService } from "./IDataService"
-import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
+import * as STEPS from '../../../res/json/processing_config/PROCESS_STEPS.json';
+import * as ROLES from '../../../res/json/processing_config/USER_ROLES.json';
+import { ICloRequestElement } from '../../model/CloRequestElement';
+import { INote } from '../../model/Note';
+import { IUser } from '../../model/User';
+import { deepCopy } from '../../utils';
+import { IDataService, ListName } from './IDataService';
+import { MockNotes, MockProcesses, MockProjects, MockUsersDtos, MockWorks } from './MockData';
 
 export class MockDataService implements IDataService {
+    fetchEmployeeActiveProjects(employee: IUser): Promise<ICloRequestElement[]> {
+        throw new Error("Method not implemented.")
+    }
+    fetchEmployeeActiveWorks(employee: IUser): Promise<ICloRequestElement[]> {
+        throw new Error("Method not implemented.")
+    }
     fetchClientProjects(): Promise<ICloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
@@ -16,7 +22,7 @@ export class MockDataService implements IDataService {
         const userDto = MockUsersDtos[0]
         const role = {
             name: userDto.roleName,
-            permittedSteps: ROLES[userDto.roleName].permittedSteps.map(stepName => deepCopy(STEPS[stepName]))
+            permittedSteps: ROLES[userDto.roleName].permittedSteps.map(stepName => deepCopy(STEPS[stepName])),
         }
         return Promise.resolve({ ...userDto, role })
     }
@@ -25,12 +31,25 @@ export class MockDataService implements IDataService {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
-    fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(deepCopy(MockProjects))
+    fetchRequestElementsById(ids: number[], listName: ListName): Promise<ICloRequestElement[]> {
+        switch (listName) {
+            case ListName.PROJECTS:
+                return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
+            case ListName.WORKS:
+                return Promise.resolve(deepCopy(MockWorks.filter(work => ids.includes(work.Id as number))))
+            case ListName.PROJECTS:
+                return Promise.resolve(deepCopy(MockProcesses.filter(process => ids.includes(process.Id as number))))
+            default:
+                return Promise.resolve([])
+        }
     }
 
-    fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>> {
-        return Promise.resolve(deepCopy(MockWorks))
+    createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement> {
+        return Promise.resolve(null)
+    }
+
+    updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void> {
+        return Promise.resolve(null)
     }
 
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
@@ -39,6 +58,15 @@ export class MockDataService implements IDataService {
     fetchClientActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProcesses))
     }
+
+    fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+        return Promise.resolve(deepCopy(MockNotes.filter(note => note.projectId === projectId)))
+    }
+
+    fetchWorkNotes(workId: number): Promise<Array<INote>> {
+        return Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === workId)))
+    }
+
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }

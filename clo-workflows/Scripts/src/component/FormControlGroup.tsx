@@ -12,6 +12,7 @@ interface IFormControlGroupProps {
     formControls: Array<IFormControl>
     validation: {}
     onChange: (fieldName: string, newVal: FormEntryType) => void
+    width?: number | string
 }
 
 const styles = {
@@ -26,13 +27,13 @@ const checkboxStyles = {
 // renders an array of form controls which pull their information from the model object in props
 function FormControlGroup(props: IFormControlGroupProps) {
     return (
-        <div style={styles}>
+        <div style={props.width ? Object.assign({}, styles, {width: props.width}) : styles }>
             {props.formControls &&
                 props.formControls.map((formControl, index) => {
                     if (formControl.type === "text" || formControl.type === "datetime" || formControl.type === "number") {
                         return (
                             <TextField
-                                value={props.data.get(formControl.dataRef) as string}
+                                value={props.data.get(formControl.dataRef) as string || ""}
                                 errorMessage={props.validation[formControl.dataRef]}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
@@ -53,7 +54,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                         return (
                             <TextField
                                 multiline
-                                value={props.data.get(formControl.dataRef) as string}
+                                value={props.data.get(formControl.dataRef) as string || ""}
                                 errorMessage={props.validation[formControl.dataRef]}
                                 key={index}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
@@ -64,7 +65,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                         return (
                             <div style={checkboxStyles} key={index}>
                                 <Checkbox
-                                    checked={props.data.get(formControl.dataRef) as boolean}
+                                    checked={props.data.get(formControl.dataRef) === "true" ? true : false}
                                     label={formControl.displayName}
                                     onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) =>
                                         props.onChange(formControl.dataRef, isChecked)

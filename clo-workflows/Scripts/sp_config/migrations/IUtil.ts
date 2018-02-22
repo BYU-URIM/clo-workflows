@@ -18,5 +18,6 @@ export interface IData {
 }
 export interface IDBConfig {
     defaultTables: Array<string>
+    defaultFields: Array<string>
     tables: ITable
 }
