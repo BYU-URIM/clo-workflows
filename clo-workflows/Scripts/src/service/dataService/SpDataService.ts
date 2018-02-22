@@ -84,6 +84,17 @@ export class SpDataService implements IDataService {
     fetchClientProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
     }
+    async fetchClientActiveProcesses(client: IUser): Promise<Array<ICloRequestElement>> {
+        const activeProcesses: Array<ICloRequestElement> = await this.getHostWeb()
+            .lists.getByTitle(this.PROCESS_LIST_NAME)
+            .items.filter(this.ACTIVE_FILTER_STRING)
+            .get()
+
+        const permittedStepNames = client.role.permittedSteps.map(step => step.name)
+        return activeProcesses.filter(item => {
+            permittedStepNames.includes(item.step as string)
+        })
+    }
 
 
     /*******************************************************************************************************/
