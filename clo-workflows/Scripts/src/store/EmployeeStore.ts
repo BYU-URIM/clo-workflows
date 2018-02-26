@@ -6,7 +6,7 @@ import { IFormControl } from "../model/FormControl"
 import { IStep } from "../model/Step"
 import { IItemBrief } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
-import { validateFormControl, isObjectEmpty } from "../utils"
+import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView } from "../model/loader/resourceLoaders"
@@ -32,7 +32,7 @@ export class EmployeeStore {
 
 
     @observable
-    private asyncPendingLockout: boolean
+    asyncPendingLockout: boolean
     
     @action setAsyncPendingLockout(val: boolean) {
         this.asyncPendingLockout = val
@@ -53,10 +53,6 @@ export class EmployeeStore {
     }
 
     @observable selectedWorkNotes: Array<INote> = []
-    @observable selectedWorkNotesDisplayCount
-    @action changeSelectedWorkNotesDisplayCount(amount: number): void {
-        this.selectedWorkNotesDisplayCount += amount
-    }
 
     @action
     async submitSelectedWork(): Promise<void> {
@@ -76,6 +72,38 @@ export class EmployeeStore {
         return !this.asyncPendingLockout
     }
 
+    @observable workNoteEntry: string
+
+    @action updateWorkNoteEntry(newVal: string) {
+        this.workNoteEntry = newVal
+    }
+
+    @action async submitWorkNoteEntry(): Promise<boolean> {
+        this.setAsyncPendingLockout(true)
+
+        let submissionStatus = true
+        try {
+            const newNote = {
+                submitter: this.root.sessionStore.currentUser.name,
+                dateSubmitted: getFormattedDate(),
+                text: this.workNoteEntry,
+                workId: String(this.selectedWork.get("Id"))
+            }
+            await this.dataService.createNote(newNote, ListName.NOTES)
+            
+            // if submission is successful, clear the work note entry and add it to project notes
+            this.updateWorkNoteEntry("")
+            runInAction(() => this.selectedWorkNotes.unshift(newNote))
+        } catch(error) {
+            console.error(error)
+            submissionStatus = false
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+
+        return submissionStatus
+    }
+
 
     /*******************************************************************************************************/
     // PROJECTS
@@ -92,13 +120,7 @@ export class EmployeeStore {
         this.selectedProject.set(fieldName, String(newVal))
     }
 
-    @observable selectedProjectNotes: Array<INote> = [
-        {submitter: "employee name", dateSubmitted: "1/1/2015", text: "Sed ut perspiciatis unde omnis iste natus error sit", projectId: 1},
-        {submitter: "employee name", dateSubmitted: "1/1/2013",
-            text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis", projectId: 2},
-        {submitter: "employee name", dateSubmitted: "1/1/2010",
-            text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis", projectId: 2},
-    ]
+    @observable selectedProjectNotes: Array<INote>
 
     @action
     async submitSelectedProject(): Promise<void> {
@@ -116,6 +138,38 @@ export class EmployeeStore {
     @computed
     get canSubmitSelectedProject(): boolean {
         return !this.asyncPendingLockout
+    }
+
+    @observable projectNoteEntry: string
+
+    @action updateProjectNoteEntry(newVal: string) {
+        this.projectNoteEntry = newVal
+    }
+
+    @action async submitProjectNoteEntry(): Promise<boolean> {
+        this.setAsyncPendingLockout(true)
+
+        let submissionStatus = true
+        try {
+            const newNote = {
+                submitter: this.root.sessionStore.currentUser.name,
+                dateSubmitted: getFormattedDate(),
+                text: this.projectNoteEntry,
+                projectId: String(this.selectedProject.get("Id"))
+            }
+            await this.dataService.createNote(newNote, ListName.NOTES)
+            
+            // if submission is successful, clear the project note entry and add it to project notes
+            this.updateProjectNoteEntry("")
+            runInAction(() => this.selectedProjectNotes.unshift(newNote))
+        } catch(error) {
+            console.error(error)
+            submissionStatus = false
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+
+        return submissionStatus
     }
 
 
@@ -145,8 +199,8 @@ export class EmployeeStore {
         const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
         this.selectedProject = observable.map(selectedProject)
         
-        const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("Id") as number)
-        const projectNotes = await this.dataService.fetchProjectNotes(this.selectedProject.get("Id") as number)
+        const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("Id") as string)
+        const projectNotes = await this.dataService.fetchProjectNotes(this.selectedProject.get("Id") as string)
         runInAction(() => {
             this.selectedWorkNotes = workNotes
             this.selectedProjectNotes = projectNotes
