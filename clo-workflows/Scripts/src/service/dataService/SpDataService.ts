@@ -92,17 +92,19 @@ export class SpDataService implements IDataService {
         return activeProjects.filter(item => item.submitter === client.name)
     }
 
-    async fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+    async fetchProjectNotes(projectId: string): Promise<Array<INote>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`projectId eq '${projectId}'`)
+            .orderBy("Created", false /*ascending = false*/)
             .get(this.cloRequestElementParser)
     }
 
-    async fetchWorkNotes(workId: number): Promise<Array<INote>> {
+    async fetchWorkNotes(workId: string): Promise<Array<INote>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`workId eq '${workId}'`)
+            .orderBy("Created", false /*ascending = false*/)
             .get(this.cloRequestElementParser)
     }
 
@@ -113,6 +115,12 @@ export class SpDataService implements IDataService {
     
     fetchClientProjects(): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(null)
+    }
+
+    async createNote(note: INote, listName: ListName): Promise<void> {
+        await this.getHostWeb()
+            .lists.getByTitle(listName)
+            .items.add(note)        
     }
 
 

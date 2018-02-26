@@ -2,17 +2,18 @@ import * as React from "react"
 import { EmployeeStore } from "../store/EmployeeStore"
 import { inject, observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
-import NotesBox from "./NotesBox"
+import { NotesBox } from "./NotesBox"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 
 const wrapperStyle = {
-    background: "#F8F8F8",
     padding: "20 0",
     marginBottom: 20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
+    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)",
+    background: "#F8F8F8",
 } as React.CSSProperties
 
 const titleStlyes = {
@@ -64,8 +65,10 @@ export class WorkDetail extends React.Component<any, any> {
                     <NotesBox
                         title="Work Notes"
                         notes={this.employeeStore.selectedWorkNotes}
-                        onAddNote={() => null}
-                        displayCount={this.employeeStore.selectedWorkNotesDisplayCount}
+                        onSubmitNoteEntry={this.employeeStore.submitWorkNoteEntry}
+                        onUpdateNoteEntry={this.employeeStore.updateWorkNoteEntry}
+                        noteEntry={this.employeeStore.workNoteEntry}
+                        disableButtons={this.employeeStore.asyncPendingLockout}
                     />
                 </div>
             </div>
