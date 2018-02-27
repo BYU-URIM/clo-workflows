@@ -4,7 +4,7 @@
         "permittedSteps": [
             "Intake"
         ],
-        "rank": 6
+        "rank": 0
     },
     "Junior License Processor": {
         "name": "Junior License Processor",
@@ -16,7 +16,7 @@
             "Receipt of License",
             "Payment"
         ],
-        "rank": 5
+        "rank": 1
     },
     "Senior License Processor": {
         "name": "Senior License Processor",
@@ -29,7 +29,7 @@
             "Receipt of License",
             "Payment"
         ],
-        "rank": 4
+        "rank": 2
     },
     "Supervisor": {
         "name": "Supervisor",
@@ -47,13 +47,13 @@
         "permittedSteps": [
             "Process Payment"
         ],
-        "rank": 2
+        "rank": 4
     },
     "Administrator": {
         "name": "Administrator",
         "permittedSteps": [
             "Public Domain Research"
         ],
-        "rank": 1
+        "rank": 5
     }
 }

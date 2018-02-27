@@ -1,4 +1,4 @@
-import { IUser, IUserDto } from "../../model/User"
+import { User, IUserDto } from "../../model/User"
 import { ICloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
@@ -24,27 +24,28 @@ export class SpDataService implements IDataService {
 
     /*******************************************************************************************************/
     // IDataService interface implementation
-    async fetchUser(): Promise<IUser> {
+    async fetchUser(): Promise<User> {
         const rawUser = await this.getAppWeb().currentUser.get()
         const rawRoles: any[] = await this.getAppWeb().siteUsers.getById(rawUser.Id).groups.get()
         
-        // TODO support multiple roles instead of using only roleNames[0] ?
-        // const rawRole: any = (rawRoles.length && rawRoles[0]) || "Anonymous"
+        // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
+        const roleNames: string[] = rawRoles.length ? rawRoles.map(rawRole => rawRole.Title) : ["Anonymous"]
 
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
 
         // build user object from userDto and role
-        return {
-            name: rawUser.Title,
-            username: userName,
-            email: rawUser.Email,
-            roles: rawRoles.map(rawRole => getRole(rawRole.Title)),
-        }
+        return new User(
+            rawUser.Title,
+            userName,
+            rawUser.Email,
+            rawUser.Id,
+            roleNames.map(roleName => getRole(roleName))
+        )
     }
 
 
     // TODO add filter string to query for smaller requests and filtering on the backend
-    async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+    async fetchEmployeeActiveProcesses(employee: User): Promise<Array<ICloRequestElement>> {
         const activeProcesses: Array<ICloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
@@ -85,7 +86,7 @@ export class SpDataService implements IDataService {
             .update(requestElement)
     }
 
-    async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
+    async fetchClientActiveProjects(client: User): Promise<Array<ICloRequestElement>> {
         const activeProjects: Array<ICloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.get(this.cloRequestElementParser)

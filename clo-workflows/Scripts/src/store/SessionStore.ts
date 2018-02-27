@@ -1,5 +1,5 @@
 import { RootStore } from "./RootStore"
-import { IUser } from "../model/User"
+import { User } from "../model/User"
 import { observable, action, computed } from "mobx"
 import { IDataService } from "../service/dataService/IDataService"
 
@@ -9,12 +9,9 @@ export interface IFormState {
 }
 
 export class SessionStore {
-    constructor(private root: RootStore, private dataService: IDataService, testing?: boolean) {
-        this.testing = true
-    }
-    @observable testing: boolean
+    constructor(private root: RootStore, private dataService: IDataService) {}
 
-    @observable currentUser: IUser
+    @observable currentUser: User
 
     @action
     async init(): Promise<void> {
@@ -23,6 +20,6 @@ export class SessionStore {
 
     @computed
     get isEmployee(): boolean {
-        return this.currentUser && (this.currentUser.roles.length > 1 ||  this.currentUser.roles[0].name !== "Anonymous")
+        return this.currentUser && this.currentUser.primaryRole.name !== "Anonymous"
     }
 }

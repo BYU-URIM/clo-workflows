@@ -8,7 +8,7 @@ import { deepCopy } from "../../utils"
 
 
 // create model instances by loading raw JSON from res/json and denormalizing it
-// all loaders should always use deepCopy(JSON) to create an instance so that the global JSON definition is not mutated
+// all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
 
 export function getView(viewName: string): IView {
     const normalizedView = VIEWS[viewName]
@@ -22,7 +22,8 @@ export function getRole(roleName: string): IRole {
     const normalizedRole = ROLES[roleName]
     return {
         name: normalizedRole.name,
-        permittedSteps: normalizedRole.permittedSteps.map(stepName => deepCopy(STEPS[stepName]))
+        permittedSteps: normalizedRole.permittedSteps.map(stepName => deepCopy(STEPS[stepName])),
+        rank: normalizedRole.rank
     }
 
 }

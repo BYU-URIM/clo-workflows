@@ -1,8 +1,8 @@
 import * as React from "react"
-import { IUser } from "../model/User"
+import { User } from "../model/User"
 import { Persona, PersonaInitialsColor } from "office-ui-fabric-react/lib/Persona"
 export interface IHeaderProps {
-    currentUser: IUser
+    currentUser: User
 }
 
 const wrapperStyles = {
@@ -34,7 +34,7 @@ const Header = (props: IHeaderProps) => {
                     size={4}
                     initialsColor="#0078d7"
                     primaryText={currentUser.name}
-                    secondaryText={`${currentUser.username} - ${currentUser.roles[0].name}`}
+                    secondaryText={`${currentUser.username} - ${currentUser.primaryRole.name}`}
                 />
             </div>
         </div>
