@@ -24,7 +24,7 @@ interface INotesBoxState {
 const notesWrapperStyles = {
     backgroundColor: "#F0F0F0",
     boxShadow: "0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)",
-    width: 300,
+    width: 320,
     padding: 10,
 }
 
