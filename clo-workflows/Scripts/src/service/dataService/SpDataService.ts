@@ -29,7 +29,7 @@ export class SpDataService implements IDataService {
         const rawRoles: any[] = await this.getAppWeb().siteUsers.getById(rawUser.Id).groups.get()
         
         // TODO support multiple roles instead of using only roleNames[0] ?
-        const rawRole: any = (rawRoles.length && rawRoles[0]) || "Anonymous"
+        // const rawRole: any = (rawRoles.length && rawRoles[0]) || "Anonymous"
 
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
 
@@ -38,7 +38,7 @@ export class SpDataService implements IDataService {
             name: rawUser.Title,
             username: userName,
             email: rawUser.Email,
-            role: getRole(rawRole.Title),
+            roles: rawRoles.map(rawRole => getRole(rawRole.Title)),
         }
     }
 
@@ -50,7 +50,8 @@ export class SpDataService implements IDataService {
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
 
-        const permittedStepNames = employee.role.permittedSteps.map(step => step.name)
+        const permittedStepNames: string[] = []
+        employee.roles.forEach(role => role.permittedSteps.forEach(step => permittedStepNames.push(step.name)))
         return activeProcesses.filter(item => {
             return permittedStepNames.includes(item.step as string)
         })

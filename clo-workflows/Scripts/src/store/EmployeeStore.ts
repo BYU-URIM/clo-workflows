@@ -305,13 +305,18 @@ export class EmployeeStore {
     get breadcrumbItems(): Array<IBreadcrumbItem> {
         return this.viewHierarchy.map(viewKey => {
             let text: string
-            if (viewKey === EmployeeViewKey.Dashboard) text = `${this.root.sessionStore.currentUser.role.name || ""} Dashboard`
-            else if (viewKey === EmployeeViewKey.ProcessDetail)
-                text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("id") || ""} Detail`
+            if (viewKey === EmployeeViewKey.Dashboard) {
+                const breadcrumbName =  this.root.sessionStore.currentUser.roles.length === 1
+                    ? this.root.sessionStore.currentUser.roles[0].name
+                    : "Processor Dashboard"
+                    || ""
+                text = `${breadcrumbName} Dashboard`
+            } else if (viewKey === EmployeeViewKey.ProcessDetail)
+                text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("Id") || ""} Detail`
             else if (viewKey === EmployeeViewKey.ProjectDetail)
-                text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("id") || ""} Detail`
+                text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("Id") || ""} Detail`
             else if (viewKey === EmployeeViewKey.WorkDetail)
-                text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("id") || ""} Detail`
+                text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("Id") || ""} Detail`
 
             return {
                 text,

@@ -23,6 +23,6 @@ export class SessionStore {
 
     @computed
     get isEmployee(): boolean {
-        return this.currentUser && this.currentUser.role && this.currentUser.role.name !== "Anonymous"
+        return this.currentUser && (this.currentUser.roles.length > 1 ||  this.currentUser.roles[0].name !== "Anonymous")
     }
 }
