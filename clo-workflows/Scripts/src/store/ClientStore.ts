@@ -1,6 +1,6 @@
 import { RootStore } from "./RootStore"
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
-import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
+import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
 import { validateFormControl } from "../utils"
@@ -55,9 +55,9 @@ export class ClientStore {
      * @memberof ClientStore
      */
     @observable newProject: ObservableMap<FormEntryType>
-    @observable projects: Array<ICloRequestElement>
+    @observable projects: Array<CloRequestElement>
     @computed
-    get clientProjects(): Array<ICloRequestElement> {
+    get clientProjects(): Array<CloRequestElement> {
         return this.projects
     }
     @computed

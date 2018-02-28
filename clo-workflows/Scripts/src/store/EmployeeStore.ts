@@ -1,6 +1,6 @@
 import { RootStore } from "./RootStore"
-import { action, ObservableMap, observable, runInAction, computed, toJS } from "mobx"
-import { FormEntryType, ICloRequestElement } from "../model/CloRequestElement"
+import { action, ObservableMap, observable, runInAction, computed, toJS, IKeyValueMap } from "mobx"
+import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
 import { IStep } from "../model/Step"
@@ -41,7 +41,7 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // WORKS
-    @observable works: Array<ICloRequestElement>
+    @observable works: Array<CloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
 
     @computed get selectedWorkFormControls(): Array<IFormControl> {
@@ -59,7 +59,7 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            await this.dataService.updateRequestElement(toJS(this.selectedWork) as any, ListName.WORKS)
+            await this.dataService.updateRequestElement(this.selectedWork.toJS(), ListName.WORKS)
         } catch(error) {
             console.log(error)
         } finally {
@@ -107,7 +107,7 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // PROJECTS
-    @observable projects: Array<ICloRequestElement>
+    @observable projects: Array<CloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
 
     @computed
@@ -127,7 +127,7 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            await this.dataService.updateRequestElement(toJS(this.selectedProject) as any, ListName.PROJECTS)
+            await this.dataService.updateRequestElement(this.selectedProject.toJS(), ListName.PROJECTS)
         } catch(error) {
             console.log(error)
         } finally {
@@ -184,12 +184,12 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // PROCESSES
-    @observable processes: Array<ICloRequestElement>
+    @observable processes: Array<CloRequestElement>
     @observable selectedProcess: ObservableMap<FormEntryType>
 
     // TODO project lookup should be more efficient, store as map ?
     @action async selectProcess(itemBrief: IItemBrief): Promise<void> {
-        const selectedProcess: ICloRequestElement = this.processes.find(process => process.Id === itemBrief.id)
+        const selectedProcess: CloRequestElement = this.processes.find(process => process.Id === itemBrief.id)
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
 
@@ -217,7 +217,7 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            await this.dataService.updateRequestElement(toJS(this.selectedProcess) as any, ListName.PROCESSES)
+            await this.dataService.updateRequestElement(this.selectedProcess.toJS(), ListName.PROCESSES)
         } catch(error) {
             console.log(error)
         } finally {
@@ -253,7 +253,7 @@ export class EmployeeStore {
     }
 
     @computed
-    private get selectedStepProcesses(): Array<ICloRequestElement> {
+    private get selectedStepProcesses(): Array<CloRequestElement> {
         return this.processes.filter(process => process.step === this.selectedStep.name)
     }
 

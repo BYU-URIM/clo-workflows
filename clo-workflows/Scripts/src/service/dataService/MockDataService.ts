@@ -1,7 +1,7 @@
 import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
 import { IRole } from "../../model/Role"
 import { IUserDto, IUser, User } from "../../model/User"
-import { ICloRequestElement } from "../../model/CloRequestElement"
+import { CloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy } from "../../utils"
 import { IDataService, ListName } from "./IDataService"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
@@ -10,7 +10,7 @@ import { INote } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
 
 export class MockDataService implements IDataService {
-    fetchClientProjects(): Promise<ICloRequestElement[]> {
+    fetchClientProjects(): Promise<CloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
 
@@ -26,11 +26,11 @@ export class MockDataService implements IDataService {
         return Promise.resolve(user)
     }
 
-    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>> {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
-    fetchRequestElementsById(ids: number[], listName: ListName): Promise<ICloRequestElement[]> {
+    fetchRequestElementsById(ids: number[], listName: ListName): Promise<CloRequestElement[]> {
         switch(listName) {
             case ListName.PROJECTS:
                 return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
@@ -43,15 +43,15 @@ export class MockDataService implements IDataService {
         }
     }
     
-    createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement> {
+    createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement> {
         return Promise.resolve(null)
     }
 
-    updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void> {
+    updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void> {
         return Promise.resolve(null)
     }
 
-    fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
+    fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
 
@@ -63,7 +63,7 @@ export class MockDataService implements IDataService {
         return Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === workId)))
     }
 
-    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
+    fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
         return Promise.resolve(null)
     }
 

@@ -1,5 +1,5 @@
 import { IUser, User, IUserDto } from "../../model/User"
-import { ICloRequestElement } from "../../model/CloRequestElement"
+import { CloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
 import { IView } from "../../model/View"
@@ -55,8 +55,8 @@ export class SpDataService implements IDataService {
 
 
     // TODO add filter string to query for smaller requests and filtering on the backend
-    async fetchEmployeeActiveProcesses(employee: User): Promise<Array<ICloRequestElement>> {
-        const activeProcesses: Array<ICloRequestElement> = await this.getHostWeb()
+    async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
+        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
@@ -68,8 +68,8 @@ export class SpDataService implements IDataService {
         })
     }
 
-    async fetchRequestElementsById(ids: number[], listName: ListName): Promise<ICloRequestElement[]> {
-        const projects: Array<ICloRequestElement> = []
+    async fetchRequestElementsById(ids: number[], listName: ListName): Promise<CloRequestElement[]> {
+        const projects: Array<CloRequestElement> = []
         const batch = this.getHostWeb().createBatch()
         for(const id of ids) {
             const project = await this.getHostWeb()
@@ -82,22 +82,22 @@ export class SpDataService implements IDataService {
         return projects
     }
 
-    async createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement> {
+    async createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement> {
         const result = await this.getHostWeb()
             .lists.getByTitle(listName).items
             .add(requestElement)
         return result.data
     }
 
-    async updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void> {
+    async updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void> {
         await this.getHostWeb()
             .lists.getByTitle(listName)
             .items.getById(requestElement.Id as number)
             .update(requestElement)
     }
 
-    async fetchClientActiveProjects(client: User): Promise<Array<ICloRequestElement>> {
-        const activeProjects: Array<ICloRequestElement> = await this.getHostWeb()
+    async fetchClientActiveProjects(client: User): Promise<Array<CloRequestElement>> {
+        const activeProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.get(this.cloRequestElementParser)
 
@@ -120,12 +120,12 @@ export class SpDataService implements IDataService {
             .get(this.cloRequestElementParser)
     }
 
-    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
+    fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
         return Promise.resolve(null)
     }
 
     
-    fetchClientProjects(): Promise<Array<ICloRequestElement>> {
+    fetchClientProjects(): Promise<Array<CloRequestElement>> {
         return Promise.resolve(null)
     }
 
