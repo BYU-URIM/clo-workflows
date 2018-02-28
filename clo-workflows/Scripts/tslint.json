@@ -22,7 +22,8 @@
         "curly": false,
         "no-consecutive-blank-lines": [true, 2],
         "no-string-literal": false,
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "variable-name": false
     },
     "rulesDirectory": []
 }

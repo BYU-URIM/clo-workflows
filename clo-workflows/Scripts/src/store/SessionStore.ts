@@ -9,12 +9,10 @@ export interface IFormState {
 }
 
 export class SessionStore {
-    constructor(private root: RootStore, private dataService: IDataService, testing?: boolean) {
-        this.testing = true
-    }
-    @observable testing: boolean
+    constructor(private root: RootStore, private dataService: IDataService) {}
 
     @observable currentUser: IUser
+    @observable testProp: {prop: string, nest: {a: boolean}}
 
     @action
     async init(): Promise<void> {
@@ -23,6 +21,6 @@ export class SessionStore {
 
     @computed
     get isEmployee(): boolean {
-        return this.currentUser && this.currentUser.role && this.currentUser.role.name !== "Anonymous"
+        return this.currentUser && this.currentUser.primaryRole.name !== "Anonymous"
     }
 }

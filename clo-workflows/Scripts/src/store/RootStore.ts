@@ -6,7 +6,7 @@ import { EmployeeStore } from "./EmployeeStore"
 import { SessionStore } from "./SessionStore"
 export class RootStore {
     sessionStore: SessionStore
-    clientStore: ClientStore // created for anyone logged into the app - all users, including employees can submit projects
+    clientStore: ClientStore // created for any anonymous (non-employee) user logged into the app
     employeeStore: EmployeeStore // created for employees logged into the app
 
     constructor(private dataService: IDataService) {}
@@ -19,16 +19,17 @@ export class RootStore {
         // only allow initialization if not previously initialized
         if(!this.initialized) {
             this.sessionStore = new SessionStore(this, this.dataService)
-            this.clientStore = new ClientStore(this, this.dataService)
 
             // order of initializations matters - session store must be initialized first because other stores depend on user info
             await this.sessionStore.init()
-            await this.clientStore.init()
 
             // create and initialize the employee store if the current user is an employee
             if (this.sessionStore.isEmployee) {
                 this.employeeStore = new EmployeeStore(this, this.dataService)
                 await this.employeeStore.init()
+            } else {
+                this.clientStore = new ClientStore(this, this.dataService)
+                await this.clientStore.init()
             }
 
             runInAction(() => this.initialized = true)

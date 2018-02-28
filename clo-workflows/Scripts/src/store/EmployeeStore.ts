@@ -283,7 +283,7 @@ export class EmployeeStore {
     // the view heirarchy refers to nested pages an employee has visited within the page heirarchy
     // the first view in the array is the "home" page, the last view in the array is the currently viewed page
     // The hierarchy is as follows:
-    //      Dashboard -> ProcessDetail -> WorkDetail | ProjectDetail
+    //      Dashboard -> ProcessDetail
     @observable viewHierarchy: Array<EmployeeViewKey> = [EmployeeViewKey.Dashboard]
 
     @computed
@@ -305,13 +305,10 @@ export class EmployeeStore {
     get breadcrumbItems(): Array<IBreadcrumbItem> {
         return this.viewHierarchy.map(viewKey => {
             let text: string
-            if (viewKey === EmployeeViewKey.Dashboard) text = `${this.root.sessionStore.currentUser.role.name || ""} Dashboard`
+            if (viewKey === EmployeeViewKey.Dashboard)
+                text =  "Processor Dashboard"
             else if (viewKey === EmployeeViewKey.ProcessDetail)
-                text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("id") || ""} Detail`
-            else if (viewKey === EmployeeViewKey.ProjectDetail)
-                text = `${this.selectedProject.get("type") || ""} Project ${this.selectedProject.get("id") || ""} Detail`
-            else if (viewKey === EmployeeViewKey.WorkDetail)
-                text = `${this.selectedWork.get("type") || ""} Work ${this.selectedWork.get("id") || ""} Detail`
+                text = `${this.selectedProcess.get("type") || ""} Process ${this.selectedProcess.get("Id") || ""} Detail`
 
             return {
                 text,
@@ -325,7 +322,5 @@ export class EmployeeStore {
 
 export enum EmployeeViewKey {
     Dashboard = "DASHBOARD",
-    ProcessDetail = "PROCESS_DETAIL",
-    ProjectDetail = "PROJECT_DETAIL",
-    WorkDetail = "WORK_DETAIL",
+    ProcessDetail = "PROCESS_DETAIL"
 }

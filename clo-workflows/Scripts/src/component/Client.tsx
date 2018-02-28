@@ -1,6 +1,5 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { IUser } from "../model/User"
 import Header from "./Header"
 import { SessionStore } from "../store/SessionStore"
 import { ClientStore } from "../store/ClientStore"

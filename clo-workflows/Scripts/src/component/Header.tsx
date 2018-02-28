@@ -34,7 +34,7 @@ const Header = (props: IHeaderProps) => {
                     size={4}
                     initialsColor="#0078d7"
                     primaryText={currentUser.name}
-                    secondaryText={`${currentUser.username} - ${currentUser.role.name}`}
+                    secondaryText={`${currentUser.username} - ${currentUser.primaryRole.name}`}
                 />
             </div>
         </div>

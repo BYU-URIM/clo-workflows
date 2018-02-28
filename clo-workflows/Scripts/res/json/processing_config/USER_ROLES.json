@@ -3,7 +3,8 @@
         "name": "Anonymous",
         "permittedSteps": [
             "Intake"
-        ]
+        ],
+        "rank": 0
     },
     "Junior License Processor": {
         "name": "Junior License Processor",
@@ -14,7 +15,8 @@
             "Response from Rights Holder Received",
             "Receipt of License",
             "Payment"
-        ]
+        ],
+        "rank": 1
     },
     "Senior License Processor": {
         "name": "Senior License Processor",
@@ -26,7 +28,8 @@
             "Response from Rights Holder Received",
             "Receipt of License",
             "Payment"
-        ]
+        ],
+        "rank": 2
     },
     "Supervisor": {
         "name": "Supervisor",
@@ -36,18 +39,19 @@
             "Exemption Approval",
             "CLO Response to Rights Holder",
             "Supervisor Signature"
-        ]
+        ],
+        "rank": 3
     },
     "Admin Assistant": {
         "name": "Admin Assistant",
         "permittedSteps": [
             "Process Payment"
-        ]
+        ],
+        "rank": 4
     },
     "Administrator": {
         "name": "Administrator",
-        "permittedSteps": [
-            "Public Domain Research"
-        ]
+        "permittedSteps": [],
+        "rank": 5
     }
 }
