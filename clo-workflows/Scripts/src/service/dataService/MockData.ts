@@ -1,5 +1,5 @@
 import { IUserDto, User } from "../../model/User"
-import { ICloRequestElement } from "../../model/CloRequestElement"
+import { CloRequestElement } from "../../model/CloRequestElement"
 import { INote } from "../../model/Note"
 import { when } from "ts-mockito"
 
@@ -30,7 +30,7 @@ export const MockUsers: Array<User> = [
     )
 ]
 
-export const MockProjects: Array<ICloRequestElement> = [
+export const MockProjects: Array<CloRequestElement> = [
     {
         type: "Theatrical",
         Id: 1,
@@ -51,7 +51,7 @@ export const MockProjects: Array<ICloRequestElement> = [
     },
 ]
 
-export const MockProcesses: Array<ICloRequestElement> = [
+export const MockProcesses: Array<CloRequestElement> = [
     {
         Id: 1,
         step: "Public Domain Research",
@@ -124,7 +124,7 @@ export const MockProcesses: Array<ICloRequestElement> = [
     },
 ]
 
-export const MockWorks: Array<ICloRequestElement> = [
+export const MockWorks: Array<CloRequestElement> = [
     {
         Id: 1,
         type: "Music",

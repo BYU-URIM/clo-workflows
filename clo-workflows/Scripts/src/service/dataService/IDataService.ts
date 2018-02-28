@@ -1,18 +1,18 @@
-import { ICloRequestElement } from "../../model/CloRequestElement"
+import { CloRequestElement } from "../../model/CloRequestElement"
 import { INote } from "../../model/Note"
 import { IUser } from "../../model/User"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
-    fetchClientProjects(): Promise<Array<ICloRequestElement>>
-    fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>>
-    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>>
-    fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>>
+    fetchClientProjects(): Promise<Array<CloRequestElement>>
+    fetchClientCompletedProjects(): Promise<Array<CloRequestElement>>
+    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>>
+    fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>>
     fetchWorkNotes(workId: string): Promise<Array<INote>>
     fetchProjectNotes(projectId: string): Promise<Array<INote>>
-    fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<ICloRequestElement>>
-    createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement>
-    updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void>
+    fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
+    createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>
+    updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void>
     createNote(note: INote, listName: ListName): Promise<void>
 }
 

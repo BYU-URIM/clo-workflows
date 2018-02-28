@@ -68,7 +68,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                     checked={props.data.get(formControl.dataRef) === "true" ? true : false}
                                     label={formControl.displayName}
                                     onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) =>
-                                        props.onChange(formControl.dataRef, isChecked)
+                                        props.onChange(formControl.dataRef, String(isChecked))
                                     }
                                 />
                             </div>
