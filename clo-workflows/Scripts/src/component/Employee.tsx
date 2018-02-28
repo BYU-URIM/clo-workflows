@@ -1,5 +1,4 @@
 import * as React from "react"
-import { IUser } from "../model/User"
 import { inject, observer } from "mobx-react"
 import { EmployeeStore, EmployeeViewKey } from "../store/EmployeeStore"
 import FormControlGroup from "./FormControlGroup"

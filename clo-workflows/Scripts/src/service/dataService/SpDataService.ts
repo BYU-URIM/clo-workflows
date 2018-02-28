@@ -1,4 +1,4 @@
-import { User, IUserDto } from "../../model/User"
+import { IUser, User, IUserDto } from "../../model/User"
 import { ICloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
@@ -24,7 +24,7 @@ export class SpDataService implements IDataService {
 
     /*******************************************************************************************************/
     // IDataService interface implementation
-    async fetchUser(): Promise<User> {
+    async fetchUser(): Promise<IUser> {
         const rawUser = await this.getAppWeb().currentUser.get()
         const rawRoles: any[] = await this.getAppWeb().siteUsers.getById(rawUser.Id).groups.get()
         

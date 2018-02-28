@@ -1,8 +1,8 @@
 import * as React from "react"
-import { User } from "../model/User"
+import { IUser } from "../model/User"
 import { Persona, PersonaInitialsColor } from "office-ui-fabric-react/lib/Persona"
 export interface IHeaderProps {
-    currentUser: User
+    currentUser: IUser
 }
 
 const wrapperStyles = {

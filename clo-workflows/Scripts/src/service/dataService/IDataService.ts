@@ -1,13 +1,13 @@
 import { ICloRequestElement } from "../../model/CloRequestElement"
 import { INote } from "../../model/Note"
-import { User } from "../../model/User"
+import { IUser } from "../../model/User"
 
 export interface IDataService {
-    fetchUser(): Promise<User>
+    fetchUser(): Promise<IUser>
     fetchClientProjects(): Promise<Array<ICloRequestElement>>
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>>
-    fetchEmployeeActiveProcesses(employee: User): Promise<Array<ICloRequestElement>>
-    fetchClientActiveProjects(client: User): Promise<Array<ICloRequestElement>>
+    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>>
+    fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>>
     fetchWorkNotes(workId: string): Promise<Array<INote>>
     fetchProjectNotes(projectId: string): Promise<Array<INote>>
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<ICloRequestElement>>

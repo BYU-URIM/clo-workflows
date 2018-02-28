@@ -1,6 +1,6 @@
 import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
 import { IRole } from "../../model/Role"
-import { IUserDto, User } from "../../model/User"
+import { IUserDto, IUser, User } from "../../model/User"
 import { ICloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy } from "../../utils"
 import { IDataService, ListName } from "./IDataService"
@@ -14,7 +14,7 @@ export class MockDataService implements IDataService {
         throw new Error("Method not implemented.")
     }
 
-    fetchUser(): Promise<User> {
+    fetchUser(): Promise<IUser> {
         const userDto = MockUsersDtos[0]
         const user = new User(
             userDto.name,
@@ -26,7 +26,7 @@ export class MockDataService implements IDataService {
         return Promise.resolve(user)
     }
 
-    fetchEmployeeActiveProcesses(employee: User): Promise<Array<ICloRequestElement>> {
+    fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
@@ -51,7 +51,7 @@ export class MockDataService implements IDataService {
         return Promise.resolve(null)
     }
 
-    fetchClientActiveProjects(client: User): Promise<Array<ICloRequestElement>> {
+    fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
 

@@ -1,5 +1,5 @@
 import { RootStore } from "./RootStore"
-import { User } from "../model/User"
+import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 import { IDataService } from "../service/dataService/IDataService"
 
@@ -11,7 +11,8 @@ export interface IFormState {
 export class SessionStore {
     constructor(private root: RootStore, private dataService: IDataService) {}
 
-    @observable currentUser: User
+    @observable currentUser: IUser
+    @observable testProp: {prop: string, nest: {a: boolean}}
 
     @action
     async init(): Promise<void> {
