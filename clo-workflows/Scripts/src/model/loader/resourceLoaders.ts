@@ -25,5 +25,8 @@ export function getRole(roleName: string): IRole {
         permittedSteps: normalizedRole.permittedSteps.map(stepName => deepCopy(STEPS[stepName])),
         rank: normalizedRole.rank
     }
+}
 
+export function getRoleNames(): string[] {
+    return Object.keys(ROLES)
 }

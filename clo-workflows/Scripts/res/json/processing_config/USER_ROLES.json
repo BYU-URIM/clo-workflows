@@ -51,9 +51,7 @@
     },
     "Administrator": {
         "name": "Administrator",
-        "permittedSteps": [
-            "Public Domain Research"
-        ],
+        "permittedSteps": [],
         "rank": 5
     }
 }
