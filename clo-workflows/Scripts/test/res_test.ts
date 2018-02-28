@@ -33,18 +33,27 @@ ava.test("test json roles for correct shape", t => {
         name: string
         stepId: number
         view: string // string referring to a view defined in VIEWS.json
+        submitterIdDataRef: string
+        submitterDateDataRef: string
     }
+    also ensure that the submitterIdDataRef and submitterDateDataRef refer to valid field names in the databse schema for the process table
+    as defined in res/DB_CONFIG
 */
 ava.test("test json steps for correct shape", t => {
-  for (const stepName in STEPS) {
-    const step: IStep = STEPS[stepName]
-    t.true(typeof step.name === "string")
-    t.regex(String(step.stepId), /[0-9]+/)
-    t.not(step.view, undefined)
-    if (step.view) {
-      t.truthy(VIEWS[step.view]) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
+    const processFieldNames: string[] = DB_CONFIG["tables"].processes.fields
+
+    for (const stepName in STEPS) {
+        const step: IStep = STEPS[stepName]
+        t.true(typeof step.name === "string")
+        t.regex(String(step.stepId), /[0-9]+/)
+        t.not(step.view, undefined)
+        if (step.view) {
+            t.truthy(VIEWS[step.view]) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
+        }
+        
+        t.true(processFieldNames.includes(step.submitterIdDataRef))
+        t.true(processFieldNames.includes(step.submissionDateDataRef))
     }
-  }
 })
 
 /*
