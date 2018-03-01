@@ -1,12 +1,12 @@
-import { autobind } from 'core-decorators';
-import { action, computed, observable, ObservableMap } from 'mobx';
+import { autobind } from "core-decorators"
+import { action, computed, observable, ObservableMap } from "mobx"
 
-import { FormEntryType, ICloRequestElement, PROJECT_TYPES, WORK_TYPES } from '../model/CloRequestElement';
-import { IFormControl } from '../model/FormControl';
-import { getView } from '../model/loader/resourceLoaders';
-import { IDataService } from '../service/dataService/IDataService';
-import { validateFormControl } from '../utils';
-import { RootStore } from './RootStore';
+import { FormEntryType, ICloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../model/CloRequestElement"
+import { IFormControl } from "../model/FormControl"
+import { getView } from "../model/loader/resourceLoaders"
+import { IDataService } from "../service/dataService/IDataService"
+import { validateFormControl } from "../utils"
+import { RootStore } from "./RootStore"
 
 @autobind
 export class ClientStore {
@@ -21,9 +21,22 @@ export class ClientStore {
     async init(): Promise<void> {
         const currentUser = this.root.sessionStore.currentUser
 
-        this.projects = await this.dataService.fetchClientActiveProjects(currentUser)
-        this.processes = await this.dataService.fetchClientActiveProcesses(currentUser)
-        this.newProject = observable.map(this.projects[0])
+        this.projects = await this.dataService.fetchClientProjects().then(projs => {
+            return this.currentUserId().then(cuid => {
+                return projs.filter(pg => {
+                    return pg.submitterId === cuid.toString()
+                })
+            })
+        })
+        this.processes = await this.dataService.fetchClientProcesses(currentUser).then(procs => {
+            return this.currentUserId().then(async cuid => {
+                let projectIds = this.projects.map(p => p.Id)
+                return procs.filter(pg => {
+                    return projectIds.includes(Number(pg.projectId))
+                })
+            })
+        })
+        this.newProject = (await this.projects.length) > 0 ? observable.map(this.projects[0]) : observable.map()
         this.viewState = this.viewState
     }
 
@@ -78,6 +91,10 @@ export class ClientStore {
             projectTypeForm: (): Array<IFormControl> => this.ProjectTypeForm,
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
         }
+    }
+    @computed
+    get currentUserId() {
+        return async () => await this.dataService.fetchCurrentUserId()
     }
     /****************************************
      * viewState members
