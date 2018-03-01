@@ -30,7 +30,7 @@ export class ClientStore {
         })
         this.processes = await this.dataService.fetchClientProcesses(currentUser).then(procs => {
             return this.currentUserId().then(async cuid => {
-                let projectIds = this.projects.map(p => p.Id)
+                const projectIds = this.projects.map(p => p.Id)
                 return procs.filter(pg => {
                     return projectIds.includes(Number(pg.projectId))
                 })

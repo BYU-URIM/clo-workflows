@@ -56,7 +56,7 @@ export class SpDataService implements IDataService {
         return new User(rawUser.Title, userName, rawUser.Email, rawUser.Id, roleNames.map(roleName => getRole(roleName)))
     }
     async fetchCurrentUserId() {
-        let currentUserId = await this.getAppWeb().currentUser.get()
+        const currentUserId = await this.getAppWeb().currentUser.get()
         return currentUserId.UserId.NameId
     }
 
@@ -131,7 +131,7 @@ export class SpDataService implements IDataService {
     }
 
     async fetchClientProjects(): Promise<Array<CloRequestElement>> {
-        let clientProjects: Array<CloRequestElement> = await this.getHostWeb()
+        const clientProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.get()
         return clientProjects
