@@ -4,6 +4,8 @@ import { IUser } from "../../model/User"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
+    fetchClientProcesses(client: IUser): Promise<Array<CloRequestElement>>
+    fetchCurrentUserId():any
     fetchClientProjects(): Promise<Array<CloRequestElement>>
     fetchClientCompletedProjects(): Promise<Array<CloRequestElement>>
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>>

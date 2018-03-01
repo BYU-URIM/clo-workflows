@@ -1,13 +1,12 @@
-import { RootStore } from "./RootStore"
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
-import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
+
+import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../model/CloRequestElement"
 import { IFormControl } from "../model/FormControl"
-import { validateFormControl } from "../utils"
-import { WORK_TYPES, PROJECT_TYPES } from "../model/CloRequestElement"
-import { IView } from "../model/View"
-import { IDataService } from "../service/dataService/IDataService"
 import { getView } from "../model/loader/resourceLoaders"
+import { IDataService } from "../service/dataService/IDataService"
+import { validateFormControl } from "../utils"
+import { RootStore } from "./RootStore"
 
 @autobind
 export class ClientStore {
@@ -22,31 +21,23 @@ export class ClientStore {
     async init(): Promise<void> {
         const currentUser = this.root.sessionStore.currentUser
 
-        this.projects = await this.dataService.fetchClientActiveProjects(currentUser)
-        this.newProject = observable.map(this.projects[0])
+        this.projects = await this.dataService.fetchClientProjects().then(projs => {
+            return this.currentUserId().then(cuid => {
+                return projs.filter(pg => {
+                    return pg.submitterId === cuid.toString()
+                })
+            })
+        })
+        this.processes = await this.dataService.fetchClientProcesses(currentUser).then(procs => {
+            return this.currentUserId().then(async cuid => {
+                const projectIds = this.projects.map(p => p.Id)
+                return procs.filter(pg => {
+                    return projectIds.includes(Number(pg.projectId))
+                })
+            })
+        })
+        this.newProject = (await this.projects.length) > 0 ? observable.map(this.projects[0]) : observable.map()
         this.viewState = this.viewState
-        this.choices = {
-            project: [
-                {
-                    key: "new",
-                    text: "New Project",
-                },
-                {
-                    key: "existing",
-                    text: "Exisitng Project",
-                },
-            ],
-            work: [
-                {
-                    key: "existing",
-                    text: "Choose from existing Work",
-                },
-                {
-                    key: "new",
-                    text: "Request new Work",
-                },
-            ],
-        }
     }
 
     /**
@@ -56,6 +47,7 @@ export class ClientStore {
      */
     @observable newProject: ObservableMap<FormEntryType>
     @observable projects: Array<CloRequestElement>
+    @observable processes: Array<CloRequestElement>
     @computed
     get clientProjects(): Array<CloRequestElement> {
         return this.projects
@@ -99,6 +91,10 @@ export class ClientStore {
             projectTypeForm: (): Array<IFormControl> => this.ProjectTypeForm,
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
         }
+    }
+    @computed
+    get currentUserId() {
+        return async () => await this.dataService.fetchCurrentUserId()
     }
     /****************************************
      * viewState members
@@ -180,14 +176,5 @@ export class ClientStore {
             accumulator[fieldName] = error
             return accumulator
         }, {})
-        //   }
-        //   @computed get selectedProcessValidation(): {} {
-        //     return this.selectedProcessFormControls.reduce((accumulator: {}, formControl: IFormControl) => {
-        //         const fieldName: string = formControl.dataRef
-        //         const inputVal = this.selectedProcess.get(fieldName)
-        //         const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
-        //         accumulator[fieldName] = error
-        //         return accumulator
-        //     }, {})
     }
 }

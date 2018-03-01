@@ -28,7 +28,8 @@
                 "processPayment",
                 "fastTrackNumber",
                 "initialRequestCompletion",
-                "finalRequestCompletion"
+                "finalRequestCompletion",
+                "submitterId"
             ]
         },
         "projects": {
@@ -88,7 +89,8 @@
                 "accountCode",
                 "censoring",
                 "additionalEdits",
-                "cloDetermination"
+                "cloDetermination",
+                "submitterId"
             ]
         },
         "works": {
