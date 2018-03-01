@@ -1,5 +1,5 @@
 import { IFormControl } from "./model/FormControl"
-import { FormEntryType, ICloRequestElement } from "./model/CloRequestElement"
+import { FormEntryType, CloRequestElement } from "./model/CloRequestElement"
 
 export function deepCopy<T>(ob: T): T {
     return JSON.parse(JSON.stringify(ob))
@@ -46,4 +46,9 @@ export function isObjectEmpty(ob: {}): boolean {
         if(ob.hasOwnProperty(key) && ob[key]) return false
     }
     return true
+}
+
+export function getFormattedDate() {
+    const date = new Date()
+    return `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
 }

@@ -1,32 +1,56 @@
-import { ICloRequestElement } from "../../model/CloRequestElement"
-import { IUser, IUserDto } from "../../model/User"
+import { IUserDto, User } from "../../model/User"
+import { CloRequestElement } from "../../model/CloRequestElement"
 import { INote } from "../../model/Note"
 
 export const MockUsersDtos: Array<IUserDto> = [
-    // {
-    //     name: "Connor Moody",
-    //     email: "email@gmail.com",
-    //     username: "cmoody",
-    //     roleName: "Junior License Processor",
-    // },
     {
         name: "Connor Moody",
         email: "email@gmail.com",
         username: "cmoody",
-        roleName: "Anonymous",
+        Id: "1234-5678",
+        roleNames: ["Junior License Processor"],
     },
-]
-
-export const MockUsers: Array<IUser> = [
     {
         name: "Connor Moody",
         email: "email@gmail.com",
         username: "cmoody",
-        role: null,
+        Id: "1234-5678",
+        roleNames: ["Anonymous"],
     },
 ]
 
-export const MockProcesses: Array<ICloRequestElement> = [
+export const MockUsers: Array<User> = [
+    new User(
+        "Connor Moody",
+        "cmoody",
+        "email@gmail.com",
+        "1234-5678",
+        []
+    )
+]
+
+export const MockProjects: Array<CloRequestElement> = [
+    {
+        type: "Theatrical",
+        Id: 1,
+        title: "Test Theatrical Project",
+        descriptionOfWork: "description...",
+        artist: "artist name",
+        copyrightOwner: "owner name",
+        department: "Test department",
+    },
+    {
+        type: "Theatrical",
+        Id: 2,
+        title: "Another Theatrical Project",
+        descriptionOfWork: "More description stuff",
+        artist: "Miley Cyrus",
+        copyrightOwner: "Disney",
+        department: "Club Disney Department",
+    },
+]
+
+export const MockProcesses: Array<CloRequestElement> = [
     {
         Id: 1,
         step: "Public Domain Research",
@@ -99,80 +123,7 @@ export const MockProcesses: Array<ICloRequestElement> = [
     },
 ]
 
-export const MockProjects: Array<ICloRequestElement> = [
-    {
-        id: 11,
-        step: "Payment",
-        projectId: 2,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/1/2018",
-    },
-    {
-        id: 12,
-        step: "Payment",
-        projectId: 2,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/1/2018",
-    },
-    {
-        id: 13,
-        step: "Payment",
-        projectId: 2,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/1/2018",
-    },
-    {
-        id: 14,
-        step: "Payment",
-        projectId: 2,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/1/2018",
-    },
-    {
-        id: 15,
-        step: "Payment",
-        projectId: 3,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/17/2018",
-    },
-    {
-        id: 16,
-        step: "Payment",
-        projectId: 3,
-        workId: 1,
-        dateSubmittedToCurrentStep: "11/1/2018",
-    },
-    {
-        id: 17,
-        step: "Payment",
-        projectId: 3,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/14/2018",
-    },
-    {
-        id: 18,
-        step: "Payment",
-        projectId: 3,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/1/2018",
-    },
-    {
-        id: 19,
-        step: "Payment",
-        projectId: 3,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/3/2018",
-    },
-    {
-        id: 20,
-        step: "Payment",
-        projectId: 3,
-        workId: 1,
-        dateSubmittedToCurrentStep: "1/5/2018",
-    },
-]
-
-export const MockWorks: Array<ICloRequestElement> = [
+export const MockWorks: Array<CloRequestElement> = [
     {
         Id: 1,
         type: "Music",
@@ -198,78 +149,73 @@ export const MockNotes: Array<INote> = [
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
-        projectId: 1,
+        projectId: "1"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
-        projectId: 1,
+        projectId: "1"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2010",
         text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis",
-        projectId: 2,
+        projectId: "2"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
-        projectId: 2,
-    },
-    {
-        submitter: "employee name",
-        dateSubmitted: "1/1/2013",
-        text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
-        workId: 1,
+        projectId: "2",
+        workId: "1"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2010",
         text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis",
-        workId: 1,
+        workId: "1"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
-        workId: 1,
+        workId: "1"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
-        workId: 2,
+        workId: "2"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2010",
         text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis",
-        workId: 2,
+        workId: "2"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
-        workId: 2,
+        workId: "2"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
-        workId: 3,
+        workId: "3"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
-        workId: 3,
+        workId: "1"
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
-        workId: 1,
+        workId: "1"
     },
 ]

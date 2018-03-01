@@ -34,11 +34,10 @@ const processFormStyle = {
     padding: "20 25",
     marginTop: 40,
     marginRight: 35,
+    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)"
 }
 
-const projectWorkSwitcherStyle = {
-    marginLeft: 35
-}
+const projectWorkSwitcherStyle = { marginLeft: 35 }
 
 
 @inject("rootStore")

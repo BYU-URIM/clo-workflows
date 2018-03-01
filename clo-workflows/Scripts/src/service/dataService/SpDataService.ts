@@ -1,5 +1,5 @@
-import { IUser, IUserDto } from "../../model/User"
-import { ICloRequestElement } from "../../model/CloRequestElement"
+import { IUser, User, IUserDto } from "../../model/User"
+import { CloRequestElement } from "../../model/CloRequestElement"
 import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
 import { IView } from "../../model/View"
@@ -7,7 +7,7 @@ import { IDataService, ListName } from "./IDataService"
 import * as pnp from "sp-pnp-js"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import { IRole } from "../../model/Role"
-import { getRole } from "../../model/loader/resourceLoaders"
+import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
 import { INote } from "../../model/Note"
 import { ODataDefaultParser } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
@@ -18,7 +18,7 @@ import { debug } from "util"
 
 window["pnp"] = pnp
 export class SpDataService implements IDataService {
-    fetchEmployeeActiveWorks(employee: IUser): Promise<ICloRequestElement[]> {
+    fetchEmployeeActiveWorks(employee: IUser): Promise<CloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
     constructor(appWebUrl: string, hostWebUrl: string) {
@@ -35,39 +35,47 @@ export class SpDataService implements IDataService {
             .siteUsers.getById(rawUser.Id)
             .groups.get()
 
-        // TODO support multiple roles instead of using only roleNames[0] ?
-        // const rawRole: any = (rawRoles.length && rawRoles[2]) || { Title: "Anonymous"}
-        const rawRole: any = { Title: "Anonymous" }
+        const rawSpGroups: any[] = await this.getAppWeb()
+            .siteUsers.getById(rawUser.Id)
+            .groups.get()
+        const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title)
 
+        // resolve roles from the SharePoint groups the user is a member of
+        let roleNames: string[]
+        // if a user is part of the administrator group, that user receives every other role (besides anonymous)
+        // TODO more generalizable way to make administrator have every role?
+        if (spGroupNames.includes("Administrator")) {
+            roleNames = getRoleNames().filter(roleName => roleName !== "Anonymous" && roleName !== "Administrator")
+        } else {
+            // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
+            // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
+            roleNames = spGroupNames.length ? spGroupNames : ["Anonymous"]
+        }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         // build user object from userDto and role
-        return {
-            name: rawUser.Title,
-            username: userName,
-            email: rawUser.Email,
-            role: getRole(rawRole.Title),
-        }
+        return new User(rawUser.Title, userName, rawUser.Email, rawUser.Id, roleNames.map(roleName => getRole(roleName)))
     }
-    async fetchCurrentUserId(){
+    async fetchCurrentUserId() {
         let currentUserId = await this.getAppWeb().currentUser.get()
         return currentUserId.UserId.NameId
     }
 
     // TODO add filter string to query for smaller requests and filtering on the backend
-    async fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
-        const activeProcesses: Array<ICloRequestElement> = await this.getHostWeb()
+    async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
+        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
 
-        const permittedStepNames = employee.role.permittedSteps.map(step => step.name)
+        const permittedStepNames: string[] = []
+        employee.roles.forEach(role => role.permittedSteps.forEach(step => permittedStepNames.push(step.name)))
         return activeProcesses.filter(item => {
             return permittedStepNames.includes(item.step as string)
         })
     }
 
-    async fetchRequestElementsById(ids: number[], listName: ListName): Promise<ICloRequestElement[]> {
-        const projects: Array<ICloRequestElement> = []
+    async fetchRequestElementsById(ids: number[], listName: ListName): Promise<CloRequestElement[]> {
+        const projects: Array<CloRequestElement> = []
         const batch = this.getHostWeb().createBatch()
         for (const id of ids) {
             const project = await this.getHostWeb()
@@ -80,60 +88,64 @@ export class SpDataService implements IDataService {
         return projects
     }
 
-    async createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement> {
+    async createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement> {
         const result = await this.getHostWeb()
             .lists.getByTitle(listName)
             .items.add(requestElement)
         return result.data
     }
 
-    async updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void> {
+    async updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void> {
         await this.getHostWeb()
             .lists.getByTitle(listName)
             .items.getById(requestElement.Id as number)
             .update(requestElement)
     }
 
-    async fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
-        const activeProjects: Array<ICloRequestElement> = await this.getHostWeb()
+    async fetchClientActiveProjects(client: User): Promise<Array<CloRequestElement>> {
+        const activeProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.get(this.cloRequestElementParser)
 
         return activeProjects.filter(item => item.submitter === client.name)
     }
 
-    async fetchProjectNotes(projectId: number): Promise<Array<INote>> {
+    async fetchProjectNotes(projectId: string): Promise<Array<INote>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`projectId eq '${projectId}'`)
+            .orderBy("Created", false /*ascending = false*/)
             .get(this.cloRequestElementParser)
     }
 
-    async fetchWorkNotes(workId: number): Promise<Array<INote>> {
-        return await this.getHostWeb()
+    async fetchWorkNotes(workId: string): Promise<Array<INote>> {
+        return this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`workId eq '${workId}'`)
+            .orderBy("Created", false /*ascending = false*/)
             .get(this.cloRequestElementParser)
     }
 
-    async fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>> {
+    async fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
         return Promise.resolve(null)
     }
 
-    async fetchClientProjects(): Promise<Array<ICloRequestElement>> {
-        let clientProjects: Array<ICloRequestElement> = await this.getHostWeb()
-            .lists.getByTitle(ListName.PROJECTS).items.get()        
+    async fetchClientProjects(): Promise<Array<CloRequestElement>> {
+        let clientProjects: Array<CloRequestElement> = await this.getHostWeb()
+            .lists.getByTitle(ListName.PROJECTS)
+            .items.get()
         return clientProjects
-
     }
-    async fetchClientProcesses(client: IUser): Promise<Array<ICloRequestElement>> {
-        const activeProcesses: Array<ICloRequestElement> = await this.getHostWeb()
+    async fetchClientProcesses(client: IUser): Promise<Array<CloRequestElement>> {
+        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
-            .items
-            .get(this.cloRequestElementParser)
-
-        const permittedStepNames = client.role.permittedSteps.map(step => step.name)
+            .items.get(this.cloRequestElementParser)
         return activeProcesses
+    }
+    async createNote(note: INote, listName: ListName): Promise<void> {
+        await this.getHostWeb()
+            .lists.getByTitle(listName)
+            .items.add(note)
     }
 
     /******************************************************************************************************/
@@ -173,8 +185,6 @@ export class SpDataService implements IDataService {
             return loginName.split("|")[1]
         } else return ""
     }
-    
-
 }
 
 // This custom parser filters out irrelevant fields and metadata from SharePoint REST responses to WORK, PROCESS, PROJECT, and NOTE queries

@@ -7,6 +7,7 @@
             "type": "list",
             "fields": [
                 "Id",
+                "submitterId",
                 "step",
                 "projectId",
                 "workId",
@@ -36,6 +37,7 @@
             "fields": [
                 "Id",
                 "type",
+                "submitterId",
                 "Title",
                 "department",
                 "danceTitle",
@@ -95,6 +97,7 @@
             "type": "list",
             "fields": [
                 "Id",
+                "submitterId",
                 "type",
                 "Title",
                 "course",

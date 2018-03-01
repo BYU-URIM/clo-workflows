@@ -12,12 +12,14 @@ import { IStep } from "../src/model/Step"
     {
         name: string
         permittedSteps: Array<string> // strings must be keys in the steps JSON
+        rank: number
     }
 */
 ava.test("test json roles for correct shape", t => {
     for (const roleName in ROLES) {
-        const role: { name: string; permittedSteps: string[] } = ROLES[roleName]
+        const role: { name: string; permittedSteps: string[], rank: number } = ROLES[roleName]
         t.true(typeof role.name === "string")
+        t.true(Number.isInteger(role.rank))
         t.true(Array.isArray(role.permittedSteps))
         role.permittedSteps.forEach(stepName => {
             t.truthy(STEPS[stepName]) // stepName string in permittedSteps array must refer to a step object

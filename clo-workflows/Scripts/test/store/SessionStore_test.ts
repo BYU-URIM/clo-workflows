@@ -4,18 +4,20 @@ import { SessionStore } from "../../src/store/SessionStore"
 import { IDataService } from "../../src/service/dataService/IDataService"
 import { RootStore } from "../../src/store/RootStore"
 import { MockDataService } from "../../src/service/dataService/MockDataService"
+import { IUser } from "../../src/model/User"
+import { getRole } from "../../src/model/loader/resourceLoaders"
 
 ava.test("sessionStore recognizes employee", async t => {
     const mockDataService = mock(MockDataService)
-    when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
+    const user: IUser = {
         name: "Connor Moody",
         username: "cmoody4",
-        email: "cdmoody0604@gmail.com",
-        role: {
-            name: "Administrator",
-            permittedSteps: [],
-        },
-    }))
+        email: "email@gmail.com",
+        Id: "1234-5678",
+        roles: [getRole("Administrator")],
+        primaryRole: getRole("Administrator")
+    }
+    when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
 
     const mockRootStore = mock(RootStore)
 
@@ -29,15 +31,15 @@ ava.test("sessionStore recognizes employee", async t => {
 
 ava.test("sessionStore recognizes anonymous user", async t => {
     const mockDataService = mock(MockDataService)
-    when(mockDataService.fetchUser()).thenReturn(Promise.resolve({
+    const user: IUser = {
         name: "Connor Moody",
         username: "cmoody4",
-        email: "cdmoody0604@gmail.com",
-        role: {
-            name: "Anonymous",
-            permittedSteps: [],
-        },
-    }))
+        email: "email@gmail.com",
+        Id: "1234-5678",
+        roles: [getRole("Anonymous")],
+        primaryRole: getRole("Anonymous")
+    }
+    when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
 
     const mockRootStore = mock(RootStore)
 
