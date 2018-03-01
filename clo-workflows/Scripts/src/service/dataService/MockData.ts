@@ -108,17 +108,17 @@ export const MockProcesses: Array<CloRequestElement> = [
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 9,
+        Id: 9,
         step: "Payment",
         projectId: 2,
         workId: 2,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
     {
-        id: 10,
+        Id: 10,
         step: "Payment",
         projectId: 2,
-        workId: 1,
+        workId: 3,
         dateSubmittedToCurrentStep: "1/1/2018",
     },
 ]
@@ -141,7 +141,7 @@ export const MockWorks: Array<CloRequestElement> = [
         type: "Article",
         title: "Article Name",
         author: "Author Name",
-    },
+    }
 ]
 
 export const MockNotes: Array<INote> = [
@@ -167,7 +167,12 @@ export const MockNotes: Array<INote> = [
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
-        projectId: "2",
+        projectId: "2"
+    },
+    {
+        submitter: "employee name",
+        dateSubmitted: "1/1/2013",
+        text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
         workId: "1"
     },
     {
