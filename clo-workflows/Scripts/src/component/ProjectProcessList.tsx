@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react"
 import { DefaultButton, DetailsList, IGroup } from "office-ui-fabric-react"
 import * as React from "react"
 
-import { ICloRequestElement } from "../model/CloRequestElement"
+import { CloRequestElement } from "../model/CloRequestElement"
 import { ClientStore } from "../store/ClientStore"
 
 /*******************************
@@ -42,7 +42,7 @@ export class ProjectProcessList extends React.Component<any, any> {
         this._processes = []
         this.clientStore = this.props.rootStore.clientStore
         this._projects = this.clientStore.projects
-            .map((proj: ICloRequestElement): IProjectGroup => ({
+            .map((proj: CloRequestElement): IProjectGroup => ({
                 key: proj.Id.toString(),
                 name: proj.Title.toString(),
                 count: this.clientStore.processes.filter(proc => {
