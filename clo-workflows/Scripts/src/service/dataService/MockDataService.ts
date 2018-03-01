@@ -8,6 +8,9 @@ import { IDataService, ListName } from './IDataService';
 import { MockNotes, MockProcesses, MockProjects, MockUsersDtos, MockWorks } from './MockData';
 
 export class MockDataService implements IDataService {
+    fetchCurrentUserId() {
+        throw new Error("Method not implemented.");
+    }
     fetchEmployeeActiveProjects(employee: IUser): Promise<ICloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
@@ -55,7 +58,7 @@ export class MockDataService implements IDataService {
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
-    fetchClientActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
+    fetchClientProcesses(employee: IUser): Promise<Array<ICloRequestElement>> {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 

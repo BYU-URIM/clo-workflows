@@ -7,8 +7,7 @@ export interface IDataService {
     fetchClientProjects(): Promise<Array<ICloRequestElement>>
     fetchClientCompletedProjects(): Promise<Array<ICloRequestElement>>
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<ICloRequestElement>>
-    fetchEmployeeActiveProjects(employee: IUser): Promise<Array<ICloRequestElement>>
-    fetchClientActiveProcesses(client: IUser): Promise<Array<ICloRequestElement>>
+    fetchClientProcesses(client: IUser): Promise<Array<ICloRequestElement>>
     fetchEmployeeActiveWorks(employee: IUser): Promise<Array<ICloRequestElement>>
     fetchClientActiveProjects(client: IUser): Promise<Array<ICloRequestElement>>
     fetchWorkNotes(workId: number): Promise<Array<INote>>
@@ -16,6 +15,7 @@ export interface IDataService {
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<ICloRequestElement>>
     createRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<ICloRequestElement>
     updateRequestElement(requestElement: ICloRequestElement, listName: ListName): Promise<void>
+    fetchCurrentUserId():any
 }
 
 export enum ListName {
