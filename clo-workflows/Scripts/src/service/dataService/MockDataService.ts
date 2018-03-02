@@ -76,4 +76,10 @@ export class MockDataService implements IDataService {
     createNote(note: INote, listName: ListName): Promise<void> {
         return Promise.resolve()
     }
+    createProjectFolder(){
+        return Promise.resolve()
+    }
+    createClientProcess(){
+        return Promise.resolve()
+    }
 }
