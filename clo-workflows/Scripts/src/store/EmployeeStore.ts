@@ -388,7 +388,12 @@ export class EmployeeStore {
     @action
     private replaceElementInListById(newItem: CloRequestElement, list: Array<any>): boolean {
         const staleItemIndex = list.findIndex(listItem => listItem.Id === newItem.Id)
-        list[staleItemIndex] = newItem
+
+        if(staleItemIndex !== -1) {
+            list[staleItemIndex] = newItem
+            return true
+        }
+        return false
     }
 }
 

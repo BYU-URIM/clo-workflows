@@ -24,19 +24,19 @@ interface INotesBoxState {
 const notesWrapperStyles = {
     backgroundColor: "#F0F0F0",
     boxShadow: "0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)",
-    width: 320,
-    padding: 10,
+    width: "320px",
+    padding: "10px",
 }
 
 const notesTitleStyles = {
     textAlign: "center",
     font: "26px Segoe UI, sans-serif",
-    marginBottom: 8,
+    marginBottom: "8px",
 } as React.CSSProperties
 
 const noNotesMessageStyles = {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: "20px",
     fontWeight: 200,
     margin: "18px 0",
 } as React.CSSProperties

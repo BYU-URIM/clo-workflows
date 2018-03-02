@@ -424,10 +424,10 @@
             "Existing License Approval",
             "Exemption Analysis",
             "Exemption Approval",
-            "Licensing Exchange",
+            "Licensing Exchange"
         ]
     },
-    "Ownership Research Direct to Rights Holders": {
+    "Ownership Research Direct to Rights Holder": {
         "dataSource": "processes",
         "formControls": [
             "Public Domain Research",
