@@ -10,6 +10,8 @@ import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView, getStep } from "../model/loader/resourceLoaders"
+import { MessageBarType, MessageBar } from "office-ui-fabric-react/lib/MessageBar"
+import { IMessageProps } from "../component/Message"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -28,14 +30,6 @@ export class EmployeeStore {
         this.selectedProcess = observable.map()
 
         this.setAsyncPendingLockout(false)
-    }
-
-
-    @observable
-    asyncPendingLockout: boolean
-    
-    @action setAsyncPendingLockout(val: boolean) {
-        this.asyncPendingLockout = val
     }
 
 
@@ -63,10 +57,10 @@ export class EmployeeStore {
             const updatedWork = this.selectedWork.toJS()
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
             this.replaceElementInListById(updatedWork, this.works)
-            // TODO raise user facing success message
+            this.postMessage({messageText: "work successfully submitted", messageType: MessageBarType.success})
         } catch(error) {
             console.log(error)
-            // TODO raise user facing error message
+            this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -99,9 +93,11 @@ export class EmployeeStore {
             // if submission is successful, clear the work note entry and add it to project notes
             this.updateWorkNoteEntry("")
             runInAction(() => this.selectedWorkNotes.unshift(newNote))
+            this.postMessage({messageText: "successfully submitted note", messageType: MessageBarType.success})
         } catch(error) {
             console.error(error)
             submissionStatus = false
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -136,10 +132,10 @@ export class EmployeeStore {
             const updatedProject = this.selectedProject.toJS()
             await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
             this.replaceElementInListById(updatedProject, this.projects)
-            // TODO raise user facing success message
+            this.postMessage({messageText: "project successfully submitted", messageType: MessageBarType.success})
         } catch(error) {
             console.log(error)
-            // TODO raise user facing error message
+            this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -235,11 +231,11 @@ export class EmployeeStore {
             this.replaceElementInListById(updatedProcess, this.processes)
             // clear out selectedProcess, selected project, and selected work
             this.clearSelectedRequestElements()
-            // TODO raise user facing success
+            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
 
         } catch(error) {
             console.log(error)
-            // TODO raise user facing error
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -269,11 +265,11 @@ export class EmployeeStore {
             // return user back to dashboard by "popping off" the current view from the view heirarchy stack
             this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
 
-            // TODO raise user facing success message
+            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
 
         } catch(error) {
             console.log(error)
-            // TODO raise user facing error
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -375,7 +371,22 @@ export class EmployeeStore {
     }
 
 
-    // Miscellaneous helper functions
+    /*******************************************************************************************************/
+    // MISCELLANEOUS MEMBERS AND HELPER METHODS
+    /*******************************************************************************************************/
+    @observable asyncPendingLockout: boolean
+    @action setAsyncPendingLockout(val: boolean) {
+        this.asyncPendingLockout = val
+    }
+
+    @observable message: IMessageProps
+    @action postMessage(message: IMessageProps, displayTime: number = 5000) {
+        this.message = message
+        setTimeout(action(() => {
+            this.message = null
+        }), displayTime)
+    }
+
     @action
     private clearSelectedRequestElements(): void {
         this.selectedProcess.clear()
