@@ -52,7 +52,7 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.Id,
-        [getRole("Anonymous")]
+            userRoleNames.map(roleName => getRole(roleName))
         )
     }
     async fetchCurrentUserId() {
