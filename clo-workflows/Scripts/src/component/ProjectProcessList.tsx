@@ -25,17 +25,15 @@ export interface IColumns {
 export interface IProjectGroup extends IGroup {
     submitterId: string
 }
-export interface IColumnsArray {}
 
 @inject("rootStore")
 @observer
 export class ProjectProcessList extends React.Component<any, any> {
     private selection: Selection
     clientStore: ClientStore
-    // processes are items in details list
-    _processes: any
+    /* processes for items in details list */
+    _processes: Array<{}>
     _columns: Array<IColumns>
-    // projects are groups in details list
     _projects: IProjectGroup[]
     constructor(props: {}) {
         super(props)
@@ -55,12 +53,16 @@ export class ProjectProcessList extends React.Component<any, any> {
                 i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
                 return e
             })
-        this.clientStore.processes.map(_proj => {
+        this.clientStore.processes.map(proc => {
             this._processes.push({
-                ..._proj,
+                Id: proc.Id,
+                projectId: proc.projectId,
+                submitterId: proc.submitterId,
+                Title: proc.Title,
+                ...proc,
             })
         })
-        const fields = ["Id", "Title", "payment", "processPayment", "requestSubmitted", "step", "workId", "submitterId"]
+        const fields = ["Id", "Title", "workId", "submitterId"]
         this._columns = fields.map((f, i): IColumns => ({
             key: f,
             name: f.split(/(?=[A-Z])/).join(" "),
