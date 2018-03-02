@@ -18,9 +18,6 @@ import { debug } from "util"
 
 window["pnp"] = pnp
 export class SpDataService implements IDataService {
-    fetchEmployeeActiveWorks(employee: IUser): Promise<CloRequestElement[]> {
-        throw new Error("Method not implemented.")
-    }
     constructor(appWebUrl: string, hostWebUrl: string) {
         this.APP_WEB_URL = appWebUrl
         this.HOST_WEB_URL = hostWebUrl
@@ -31,13 +28,7 @@ export class SpDataService implements IDataService {
     // IDataService interface implementation
     async fetchUser(): Promise<IUser> {
         const rawUser = await this.getAppWeb().currentUser.get()
-        const rawRoles: any[] = await this.getAppWeb()
-            .siteUsers.getById(rawUser.Id)
-            .groups.get()
-
-        const rawSpGroups: any[] = await this.getAppWeb()
-            .siteUsers.getById(rawUser.Id)
-            .groups.get()
+        const rawSpGroups: any[] = await this.getAppWeb().siteUsers.getById(rawUser.Id).groups.get()
         const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title)
 
         // resolve roles from the SharePoint groups the user is a member of
@@ -47,19 +38,25 @@ export class SpDataService implements IDataService {
         if (spGroupNames.includes("Administrator")) {
             roleNames = getRoleNames().filter(roleName => roleName !== "Anonymous" && roleName !== "Administrator")
         } else {
-            // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
-            // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
+        // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
+        // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
             roleNames = spGroupNames.length ? spGroupNames : ["Anonymous"]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         // build user object from userDto and role
-        return new User(rawUser.Title, userName, rawUser.Email, rawUser.Id, roleNames.map(roleName => getRole(roleName)))
+        return new User(
+            rawUser.Title,
+            userName,
+            rawUser.Email,
+            rawUser.Id,
+        [getRole("Anonymous")]
+        )
     }
     async fetchCurrentUserId() {
         const currentUserId = await this.getAppWeb().currentUser.get()
         return currentUserId.UserId.NameId
     }
-
+    
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
         const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
@@ -106,8 +103,8 @@ export class SpDataService implements IDataService {
         const activeProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.get(this.cloRequestElementParser)
-
-        return activeProjects.filter(item => item.submitter === client.name)
+        
+        return activeProjects.filter(item => item.submitterId === client.name)
     }
 
     async fetchProjectNotes(projectId: string): Promise<Array<INote>> {
@@ -119,7 +116,7 @@ export class SpDataService implements IDataService {
     }
 
     async fetchWorkNotes(workId: string): Promise<Array<INote>> {
-        return this.getHostWeb()
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`workId eq '${workId}'`)
             .orderBy("Created", false /*ascending = false*/)
@@ -145,7 +142,25 @@ export class SpDataService implements IDataService {
     async createNote(note: INote, listName: ListName): Promise<void> {
         await this.getHostWeb()
             .lists.getByTitle(listName)
-            .items.add(note)
+            .items.add(note)        
+    }
+    async createProjectFolder(){
+        await this.getHostWeb().folders.get().then(async(folders) => {
+            await folders.map(folder => {
+                console.log(folder)
+            })
+        })
+    }
+    async createClientProcess(process): Promise<void>{
+        const p = {
+            submitterId: await this.fetchCurrentUserId(),
+            Title : "pnp submitted process yay",
+            projectId: "4"
+        }
+        console.log(p)
+        await this.getHostWeb().lists.getByTitle(ListName.PROCESSES).items.add( p).then(res => {
+            console.log(res)
+        })
     }
 
     /******************************************************************************************************/
@@ -154,7 +169,7 @@ export class SpDataService implements IDataService {
     private readonly HOST_WEB_URL: string
     private readonly APP_WEB_URL: string
     private readonly cloRequestElementParser: CloRequestElementParser
-
+    
     private getAppWeb(): Web {
         return pnp.sp.configure(
             {
@@ -201,8 +216,8 @@ export class CloRequestElementParser extends ODataDefaultParser {
         this.cloFieldSet.add(DB_CONFIG["defaultFields"])
     }
 
-    // set storing all fields specified in all tables of DB_CONFIG (as well as fields specified in DB_CONFIG.defaultFields)
-    // a set is used because it prevents duplicates (there are many field duplicates among the various tables), and because it provides fast lookup
+     // set storing all fields specified in all tables of DB_CONFIG (as well as fields specified in DB_CONFIG.defaultFields)
+     // a set is used because it prevents duplicates (there are many field duplicates among the various tables), and because it provides fast lookup
     private cloFieldSet: Set<string>
 
     // this method is called automatically by PNP once for each request
