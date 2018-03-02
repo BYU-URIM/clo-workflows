@@ -1,7 +1,7 @@
 import { IFormControl } from "./FormControl"
 import { CloRequestElement } from "./CloRequestElement"
 
-type StepName =
+export type StepName =
     | "Intake"
     | "Work Approval"
     | "Public Domain Research"
@@ -25,7 +25,7 @@ type StepName =
     | "Complete"
 
 export interface IStep {
-    name: string // string identifier used mostly for display purposes
+    name: StepName // string identifier used mostly for display purposes
     stepId: number
     view: string // contains the name of a view, which is a list of form controls displayed at this step
     submitterIdDataRef: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
