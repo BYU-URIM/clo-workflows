@@ -10,7 +10,7 @@
         "name": "Junior License Processor",
         "permittedSteps": [
             "Existing License",
-            "Ownership Research",
+            "Ownership Research Licensing Exchange",
             "Request Submitted",
             "Response from Rights Holder Received",
             "Receipt of License",
@@ -23,7 +23,7 @@
         "permittedSteps": [
             "Public Domain Research",
             "Exemption Analysis",
-            "Ownership Research",
+            "Ownership Research Direct to Rights Holder",
             "Request Submitted",
             "Response from Rights Holder Received",
             "Receipt of License",

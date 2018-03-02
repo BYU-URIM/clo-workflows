@@ -1,7 +1,7 @@
 import { IKeyValueMap } from "mobx"
 // Request Element is a process, project, or work
 // it is a plain javascript object sent from the server containing form data
-// an alternate and identical definition would be CloRequestElement {[field: string]: FormEntryType}
+// an alternate and identical definition would be interface CloRequestElement {[field: string]: FormEntryType}
 export type CloRequestElement = IKeyValueMap<FormEntryType>
 
 // ensures that values of a CloRequestElement are serializable primitive values (no functions or nested objects)

@@ -23,7 +23,8 @@
         "no-consecutive-blank-lines": [true, 2],
         "no-string-literal": false,
         "max-classes-per-file": false,
-        "variable-name": false
+        "variable-name": false,
+        "one-variable-per-declaration": false
     },
     "rulesDirectory": []
 }

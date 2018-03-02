@@ -76,8 +76,8 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
 
     private getListItemStyle(index: number) {
         return this.state.hoverItemIndex === index
-            ? { ...listItemStyles, ...{ backgroundColor: "#F5F5F5", cursor: "pointer" } }
-            : listItemStyles
+        ? { ...listItemStyles, ...{ backgroundColor: "#F0F0F0", cursor: "pointer" } } // highlighted color
+        : listItemStyles // resting color
     }
 
     private onMouseLeaveListItem() {

@@ -5,6 +5,7 @@ import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.j
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import { deepCopy } from "../../utils"
+import { StepName, IStep } from "../Step"
 
 
 // create model instances by loading raw JSON from res/json and denormalizing it
@@ -25,6 +26,10 @@ export function getRole(roleName: string): IRole {
         permittedSteps: normalizedRole.permittedSteps.map(stepName => deepCopy(STEPS[stepName])),
         rank: normalizedRole.rank
     }
+}
+
+export function getStep(stepName: StepName): IStep {
+    return deepCopy(STEPS[stepName])
 }
 
 export function getRoleNames(): string[] {

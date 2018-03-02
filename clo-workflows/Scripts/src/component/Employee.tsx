@@ -8,6 +8,7 @@ import { autobind } from "core-decorators"
 import { EmployeeDashboard } from "./EmployeeDashboard"
 import { HeaderBreadcrumb } from "./HeaderBreadcrumb"
 import { ProcessDetail } from "./ProcessDetail"
+import { Message } from "./Message"
 
 const wrapperStyles = {
     marginLeft: 25,
@@ -32,8 +33,8 @@ export class Employee extends React.Component<any, any> {
                     onClickItem={employeeStore.reduceViewHierarchy} 
                     />
                 {employeeStore.currentView === EmployeeViewKey.Dashboard && <EmployeeDashboard />}
-                {/* Process Detail */
-                employeeStore.currentView === EmployeeViewKey.ProcessDetail && <ProcessDetail />}
+                {employeeStore.currentView === EmployeeViewKey.ProcessDetail && <ProcessDetail />}
+                {employeeStore.message && <Message {...employeeStore.message} />}
             </div>
         )
     }
