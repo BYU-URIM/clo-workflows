@@ -3,13 +3,15 @@ import { action, ObservableMap, observable, runInAction, computed, toJS, IKeyVal
 import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
-import { IStep } from "../model/Step"
+import { IStep, StepName, getNextStepName } from "../model/Step"
 import { IItemBrief } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView } from "../model/loader/resourceLoaders"
+import { getView, getStep } from "../model/loader/resourceLoaders"
+import { MessageBarType, MessageBar } from "office-ui-fabric-react/lib/MessageBar"
+import { IMessageProps } from "../component/Message"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -31,16 +33,9 @@ export class EmployeeStore {
     }
 
 
-    @observable
-    asyncPendingLockout: boolean
-    
-    @action setAsyncPendingLockout(val: boolean) {
-        this.asyncPendingLockout = val
-    }
-
-
     /*******************************************************************************************************/
     // WORKS
+    /*******************************************************************************************************/
     @observable works: Array<CloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
 
@@ -59,9 +54,13 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            await this.dataService.updateRequestElement(this.selectedWork.toJS(), ListName.WORKS)
+            const updatedWork = this.selectedWork.toJS()
+            await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
+            this.replaceElementInListById(updatedWork, this.works)
+            this.postMessage({messageText: "work successfully submitted", messageType: MessageBarType.success})
         } catch(error) {
             console.log(error)
+            this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -94,9 +93,11 @@ export class EmployeeStore {
             // if submission is successful, clear the work note entry and add it to project notes
             this.updateWorkNoteEntry("")
             runInAction(() => this.selectedWorkNotes.unshift(newNote))
+            this.postMessage({messageText: "successfully submitted note", messageType: MessageBarType.success})
         } catch(error) {
             console.error(error)
             submissionStatus = false
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -107,6 +108,7 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // PROJECTS
+    /*******************************************************************************************************/
     @observable projects: Array<CloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
 
@@ -127,9 +129,13 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            await this.dataService.updateRequestElement(this.selectedProject.toJS(), ListName.PROJECTS)
+            const updatedProject = this.selectedProject.toJS()
+            await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
+            this.replaceElementInListById(updatedProject, this.projects)
+            this.postMessage({messageText: "project successfully submitted", messageType: MessageBarType.success})
         } catch(error) {
             console.log(error)
+            this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -162,9 +168,11 @@ export class EmployeeStore {
             // if submission is successful, clear the project note entry and add it to project notes
             this.updateProjectNoteEntry("")
             runInAction(() => this.selectedProjectNotes.unshift(newNote))
+            this.postMessage({messageText: "note successfully submitted", messageType: MessageBarType.success})
         } catch(error) {
             console.error(error)
             submissionStatus = false
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -175,6 +183,7 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // STEPS
+    /*******************************************************************************************************/
     @observable selectedStep: IStep
     @action
     selectStep(step: IStep): void {
@@ -184,6 +193,7 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // PROCESSES
+    /*******************************************************************************************************/
     @observable processes: Array<CloRequestElement>
     @observable selectedProcess: ObservableMap<FormEntryType>
 
@@ -217,12 +227,55 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            await this.dataService.updateRequestElement(this.selectedProcess.toJS(), ListName.PROCESSES)
+            const updatedProcess = this.selectedProcess.toJS()
+            await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
+            // replace cached process with successfully submitted selectedProcess
+            this.replaceElementInListById(updatedProcess, this.processes)
+            // clear out selectedProcess, selected project, and selected work
+            this.clearSelectedRequestElements()
+            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
+
         } catch(error) {
             console.log(error)
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }
+    }
+
+    @action async submitSelectedProcessToNextStep() {
+        this.setAsyncPendingLockout(true)
+
+        const curProcess: CloRequestElement = this.selectedProcess.toJS()
+        const nextStepName: StepName = getNextStepName(curProcess)
+        const nextStep: IStep = getStep(nextStepName)
+        const nextStepProcess = {...curProcess, ...{
+            step: nextStepName,
+            [nextStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
+            [nextStep.submissionDateDataRef]: getFormattedDate()
+        }}
+
+        try {
+            await this.dataService.updateRequestElement(nextStepProcess, ListName.PROCESSES)
+
+            // replace cached process with successfully submitted nextProcess
+            this.replaceElementInListById(nextStepProcess, this.processes)
+
+            // clear out selectedProcess, selectedWork, and selected project
+            this.clearSelectedRequestElements()
+            
+            // return user back to dashboard by "popping off" the current view from the view heirarchy stack
+            this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
+
+            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
+
+        } catch(error) {
+            console.log(error)
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+
     }
 
     @computed get canSubmitSelectedProcess(): boolean {
@@ -317,6 +370,43 @@ export class EmployeeStore {
                 isCurrentItem: viewKey === this.currentView,
             }
         })
+    }
+
+
+    /*******************************************************************************************************/
+    // MISCELLANEOUS MEMBERS AND HELPER METHODS
+    /*******************************************************************************************************/
+    @observable asyncPendingLockout: boolean
+    @action setAsyncPendingLockout(val: boolean) {
+        this.asyncPendingLockout = val
+    }
+
+    @observable message: IMessageProps
+    @action postMessage(message: IMessageProps, displayTime: number = 5000) {
+        this.message = message
+        setTimeout(action(() => {
+            this.message = null
+        }), displayTime)
+    }
+
+    @action
+    private clearSelectedRequestElements(): void {
+        this.selectedProcess.clear()
+        this.selectedProject.clear()
+        this.selectedWork.clear()
+    }
+
+    // finds the item with the with the same ID as the new item and replaces the stale item with the new item
+    // true if replacement was successfull, false if not (stale list item was not found) 
+    @action
+    private replaceElementInListById(newItem: CloRequestElement, list: Array<any>): boolean {
+        const staleItemIndex = list.findIndex(listItem => listItem.Id === newItem.Id)
+
+        if(staleItemIndex !== -1) {
+            list[staleItemIndex] = newItem
+            return true
+        }
+        return false
     }
 }
 

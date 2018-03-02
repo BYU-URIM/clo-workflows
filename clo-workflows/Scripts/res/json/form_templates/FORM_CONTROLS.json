@@ -37,7 +37,8 @@
             "CC",
             "Library Database",
             "Terms of Use",
-            "Permission from Rights Holder"
+            "Permission from Rights Holder",
+            "None"
         ]
     },
     "Existing License Approval": {
@@ -144,7 +145,8 @@
         "type": "choice",
         "choices": [
             "Signed license to be sent",
-            "Signed license sent to rights holder"
+            "Signed license sent to rights holder",
+            "Received fully executed license"
         ],
         "defaultValue": "Signed license to be sent"
     },

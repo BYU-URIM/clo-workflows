@@ -24,19 +24,19 @@ interface INotesBoxState {
 const notesWrapperStyles = {
     backgroundColor: "#F0F0F0",
     boxShadow: "0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)",
-    width: 320,
-    padding: 10,
+    width: "320px",
+    padding: "10px",
 }
 
 const notesTitleStyles = {
     textAlign: "center",
     font: "26px Segoe UI, sans-serif",
-    marginBottom: 8,
+    marginBottom: "8px",
 } as React.CSSProperties
 
 const noNotesMessageStyles = {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: "20px",
     fontWeight: 200,
     margin: "18px 0",
 } as React.CSSProperties
@@ -66,7 +66,10 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
             displayCount: this.DEAFULT_DISPLAY_COUNT,
             // at what interval the display count may be incrased by when the "view __ more notes" button is clicked
             // has a default value of 3, unless there are fewer than 3 notes remaining to display
-            displayCountChangeInterval: Math.min(this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL, props.notes.length - this.DEAFULT_DISPLAY_COUNT),
+            displayCountChangeInterval: Math.min(
+                this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL,
+                this.zeroFloor(props.notes.length - this.DEAFULT_DISPLAY_COUNT)
+            ),
         }
     }
 
@@ -77,7 +80,10 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
         if(nextProps.notes.length !== this.props.notes.length) {
             this.setState({
                 displayCount: this.DEAFULT_DISPLAY_COUNT,
-                displayCountChangeInterval: Math.min(this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL, nextProps.notes.length - this.DEAFULT_DISPLAY_COUNT),
+                displayCountChangeInterval: Math.min(
+                    this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL,
+                    this.zeroFloor(nextProps.notes.length - this.DEAFULT_DISPLAY_COUNT)
+                ),
             })
         }
     }
@@ -150,7 +156,10 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
             this.setState({
                 isDisplayNoteEntry: false,
                 displayCount: this.DEAFULT_DISPLAY_COUNT,
-                displayCountChangeInterval: Math.min(this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL, this.props.notes.length - this.DEAFULT_DISPLAY_COUNT),
+                displayCountChangeInterval: Math.min(
+                    this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL,
+                    this.zeroFloor(this.props.notes.length - this.DEAFULT_DISPLAY_COUNT)
+                ),
             })
         }
     }
@@ -161,9 +170,16 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
             const newDisplayCount = this.state.displayCount + this.state.displayCountChangeInterval
             this.setState({
                 displayCount: newDisplayCount,
-                displayCountChangeInterval: Math.min(this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL, this.props.notes.length - newDisplayCount)
+                displayCountChangeInterval: Math.min(
+                    this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL,
+                    this.props.notes.length - newDisplayCount
+                ),
             })
         }
+    }
+
+    private zeroFloor(val: number): number {
+        return val >= 0 ? val : 0
     }
 
 }

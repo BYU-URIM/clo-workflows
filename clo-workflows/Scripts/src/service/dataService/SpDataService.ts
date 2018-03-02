@@ -28,17 +28,20 @@ export class SpDataService implements IDataService {
         const rawUser = await this.getAppWeb().currentUser.get()
         const rawSpGroups: any[] = await this.getAppWeb().siteUsers.getById(rawUser.Id).groups.get()
         const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title)
+        const allRoleNames = getRoleNames()
 
         // resolve roles from the SharePoint groups the user is a member of
-        let roleNames: string[]
+        let userRoleNames: string[]
         // if a user is part of the administrator group, that user receives every other role (besides anonymous)
         // TODO more generalizable way to make administrator have every role?
         if(spGroupNames.includes("Administrator")) {
-            roleNames = getRoleNames().filter(roleName => roleName !== "Anonymous" && roleName !== "Administrator")
+            userRoleNames = allRoleNames.filter(roleName => roleName !== "Anonymous" && roleName !== "Administrator")
         } else {
         // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
         // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
-            roleNames = spGroupNames.length ? spGroupNames : ["Anonymous"]
+            userRoleNames = spGroupNames.length
+                ? spGroupNames.filter(spGroupName => allRoleNames.includes(spGroupName))
+                : ["Anonymous"]
         }
 
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
@@ -49,7 +52,7 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.Id,
-            roleNames.map(roleName => getRole(roleName))
+            userRoleNames.map(roleName => getRole(roleName))
         )
     }
 
