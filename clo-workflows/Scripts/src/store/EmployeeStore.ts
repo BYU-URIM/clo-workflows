@@ -168,9 +168,11 @@ export class EmployeeStore {
             // if submission is successful, clear the project note entry and add it to project notes
             this.updateProjectNoteEntry("")
             runInAction(() => this.selectedProjectNotes.unshift(newNote))
+            this.postMessage({messageText: "note successfully submitted", messageType: MessageBarType.success})
         } catch(error) {
             console.error(error)
             submissionStatus = false
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
         } finally {
             this.setAsyncPendingLockout(false)
         }

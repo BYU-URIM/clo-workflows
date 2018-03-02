@@ -106,13 +106,13 @@ export class Utils implements IUtil {
         const allowedChars = /^[0-9a-zA-Z]+$/
 
         const hasBadChars = !field.match(allowedChars)
-        const hasTooManyChars = field.length >= 32
+        const hasTooManyChars = field.length > 32
         if (hasBadChars || hasTooManyChars) {
             console.log(chalk`{red
 ____________________________________________________________________________________________                
 ERROR: INVALID  FIELD
 }{yellow info: please make sure your table fields are:
-    - less than 32 characters 
+    - less or equal to than 32 characters 
     - contain alphanumeric characters only}
     
 {cyan failed on field with value ' {white.underline.bgRed  ${field} } '} 
