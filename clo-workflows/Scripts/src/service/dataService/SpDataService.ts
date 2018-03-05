@@ -47,19 +47,17 @@ export class SpDataService implements IDataService {
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         // build user object from userDto and role
+        const userId = await this.getAppWeb().currentUser.get()
+
         return new User(
             rawUser.Title,
             userName,
             rawUser.Email,
-            rawUser.Id,
-            userRoleNames.map(roleName => getRole(roleName))
+            rawUser.UserId.NameId,
+            // userRoleNames.map(roleName => getRole(roleName))
+            [getRole("Anonymous")]
         )
     }
-    async fetchCurrentUserId() {
-        const currentUserId = await this.getAppWeb().currentUser.get()
-        return currentUserId.UserId.NameId
-    }
-    
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
         const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
@@ -160,7 +158,7 @@ export class SpDataService implements IDataService {
          * fake data for now, just to get the calls right 
          */
         const p = {
-            submitterId: await this.fetchCurrentUserId(),
+            submitterId: process.userId,
             Title : "pnp submitted process yay",
             projectId: "4"
         }

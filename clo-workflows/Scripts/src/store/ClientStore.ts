@@ -7,6 +7,7 @@ import { getView } from "../model/loader/resourceLoaders"
 import { IDataService } from "../service/dataService/IDataService"
 import { validateFormControl } from "../utils"
 import { RootStore } from "./RootStore"
+import { User } from "../model/User";
 
 @autobind
 export class ClientStore {
@@ -19,22 +20,20 @@ export class ClientStore {
      */
     @action
     async init(): Promise<void> {
-        const currentUser = this.root.sessionStore.currentUser
+        this.currentUser = this.root.sessionStore.currentUser
+        
 
         this.projects = await this.dataService.fetchClientProjects().then(projs => {
-            return this.currentUserId().then(cuid => {
+            
                 return projs.filter(pg => {
-                    return pg.submitterId === cuid.toString()
+                    return pg.submitterId === this.currentUser.Id
                 })
-            })
         })
-        this.processes = await this.dataService.fetchClientProcesses(currentUser).then(procs => {
-            return this.currentUserId().then(async cuid => {
+        this.processes = await this.dataService.fetchClientProcesses(this.currentUser).then(procs => {
                 const projectIds = this.projects.map(p => p.Id)
                 return procs.filter(pg => {
                     return projectIds.includes(Number(pg.projectId))
                 })
-            })
         })
         this.newProject = (await this.projects.length) > 0 ? observable.map(this.projects[0]) : observable.map()
         this.viewState = this.viewState
@@ -48,6 +47,7 @@ export class ClientStore {
     @observable newProject: ObservableMap<FormEntryType>
     @observable projects: Array<CloRequestElement>
     @observable processes: Array<CloRequestElement>
+    currentUser
     @computed
     get clientProjects(): Array<CloRequestElement> {
         return this.projects
@@ -92,10 +92,7 @@ export class ClientStore {
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
         }
     }
-    @computed
-    get currentUserId() {
-        return async () => await this.dataService.fetchCurrentUserId()
-    }
+
     /****************************************
      * viewState members
      ****************************************/
@@ -110,7 +107,9 @@ export class ClientStore {
      ***************************************/
     @computed
     get ProjectTypeForm(): Array<IFormControl> {
-        return getView(this.newProject.get("type") as string).formControls
+        
+        return getView("Synch").formControls
+        // return getView(this.newProject.get("type") as string).formControls
     }
     @computed
     get WorkTypeForm(): Array<IFormControl> {
