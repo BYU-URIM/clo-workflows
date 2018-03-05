@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { CloRequestElement } from "../model/CloRequestElement"
 import { ClientStore } from "../store/ClientStore"
-
+import {PanelMediumExample} from "./FormPanel"
 /*******************************
  * TODO:
  * display title instead of project id
@@ -74,6 +74,9 @@ export class ProjectProcessList extends React.Component<any, any> {
     }
 
     public render() {
+        const addNewProject = () => {
+            
+        }
         return (
             <div>
                 <DefaultButton onClick={() => console.log(this)} text="Add an item" />
@@ -84,6 +87,7 @@ export class ProjectProcessList extends React.Component<any, any> {
                     columns={this._columns}
                     groupProps={{ showEmptyGroups: true }}
                 />
+                <PanelMediumExample />
             </div>
         )
     }
