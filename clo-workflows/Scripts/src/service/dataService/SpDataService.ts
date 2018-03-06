@@ -103,7 +103,7 @@ export class SpDataService implements IDataService {
     async fetchClientActiveProjects(client: User): Promise<Array<CloRequestElement>> {
         const activeProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.get(this.cloRequestElementParser)
+            .items.filter(this.ACTIVE_FILTER_STRING).get(this.cloRequestElementParser)
         
         return activeProjects.filter(item => item.submitterId === client.name)
     }
@@ -131,28 +131,25 @@ export class SpDataService implements IDataService {
     async fetchClientProjects(): Promise<Array<CloRequestElement>> {
         const clientProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.get()
+            .items.get(this.cloRequestElementParser)
         return clientProjects
     }
-    async fetchClientProcesses(client: IUser): Promise<Array<CloRequestElement>> {
-        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchClientProcesses(): Promise<Array<CloRequestElement>> {
+        const clientProcesses: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.get(this.cloRequestElementParser)
-        return activeProcesses
+        return clientProcesses
     }
     async createNote(note: INote, listName: ListName): Promise<void> {
         await this.getHostWeb()
             .lists.getByTitle(listName)
             .items.add(note)        
     }
-    async createProjectFolder(){
-        await this.getHostWeb().folders.get().then(async(folders) => {
-            await folders.map(folder => {
-                console.log(folder)
-            })
-        })
+    async createProject(projectData:{}):Promise<void>{
+        return await this.getHostWeb().lists.getByTitle(ListName.PROJECTS).items.add(projectData).then(console.log).catch(console.log)
+        
     }
-    async createClientProcess(process): Promise<void>{
+    async createProcess(process): Promise<void>{
         /**
          * TODO: take in data from use form
          * fake data for now, just to get the calls right 
@@ -163,9 +160,7 @@ export class SpDataService implements IDataService {
             projectId: "4"
         }
         console.log(p)
-        await this.getHostWeb().lists.getByTitle(ListName.PROCESSES).items.add( p).then(res => {
-            console.log(res)
-        })
+        await this.getHostWeb().lists.getByTitle(ListName.PROCESSES).items.add( p).then(console.log)
     }
 
     /******************************************************************************************************/

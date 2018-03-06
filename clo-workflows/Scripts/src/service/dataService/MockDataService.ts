@@ -57,7 +57,7 @@ export class MockDataService implements IDataService {
     fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
     }
-    fetchClientProcesses(employee: IUser): Promise<Array<CloRequestElement>> {
+    fetchClientProcesses(): Promise<Array<CloRequestElement>> {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
@@ -76,10 +76,10 @@ export class MockDataService implements IDataService {
     createNote(note: INote, listName: ListName): Promise<void> {
         return Promise.resolve()
     }
-    createProjectFolder(){
+    createProject(){
         return Promise.resolve()
     }
-    createClientProcess(){
+    createProcess(){
         return Promise.resolve()
     }
 }

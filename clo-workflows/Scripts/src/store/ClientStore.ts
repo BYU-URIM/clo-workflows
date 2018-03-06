@@ -7,43 +7,23 @@ import { getView } from "../model/loader/resourceLoaders"
 import { IDataService } from "../service/dataService/IDataService"
 import { validateFormControl } from "../utils"
 import { RootStore } from "./RootStore"
-import { User } from "../model/User";
+import { User } from "../model/User"
+import {Selection} from "office-ui-fabric-react"
 
 @autobind
 export class ClientStore {
     constructor(private root: RootStore, private dataService: IDataService) {}
-    /**
-     * @description
-     * @author Tyler Gilland - @tgilland95
-     * @returns {Promise<void>}
-     * @memberof ClientStore
-     */
     @action
     async init(): Promise<void> {
         this.currentUser = this.root.sessionStore.currentUser
-        
-
-        this.projects = await this.dataService.fetchClientProjects().then(projs => {
+        await this.fetchClientProjects()
+        await this.fetchClientProcesses()
+        this.selectedProject = new Selection({
             
-                return projs.filter(pg => {
-                    return pg.submitterId === this.currentUser.Id
-                })
-        })
-        this.processes = await this.dataService.fetchClientProcesses(this.currentUser).then(procs => {
-                const projectIds = this.projects.map(p => p.Id)
-                return procs.filter(pg => {
-                    return projectIds.includes(Number(pg.projectId))
-                })
         })
         this.newProject = (await this.projects.length) > 0 ? observable.map(this.projects[0]) : observable.map()
-        this.viewState = this.viewState
     }
 
-    /**
-     * @description Clietnt Data
-     * @type {ObservableMap<FormEntryType>}
-     * @memberof ClientStore
-     */
     @observable newProject: ObservableMap<FormEntryType>
     @observable projects: Array<CloRequestElement>
     @observable processes: Array<CloRequestElement>
@@ -56,40 +36,55 @@ export class ClientStore {
     get newProjectFormControls(): Array<IFormControl> {
         return getView(this.newProject.get("type") as string).formControls
     }
-
-    choices
     @action
-    updateNewProject(fieldName: string, newVal: FormEntryType): void {
+    handleSelectionChange(e: {projectId:string}){
+        this.selectedProject.selectToKey(e.projectId)
+    }
+    @action
+    async updateNewProject(fieldName: string, newVal: FormEntryType) {
         this.newProject.set(fieldName, newVal)
+    }
+    @action
+    async submitNewProject(projectDetails: {}): Promise<void> {
+        await this.dataService.createProject(projectDetails).then(async () => {
+            await this.fetchClientProjects()
+        })
+    }
+    @action
+    async fetchClientProjects() {
+        this.projects = await this.dataService.fetchClientProjects().then(projs => {
+            return projs.filter(p => {
+                return p.submitterId === this.currentUser.Id
+            })
+        })
+    }
+    @action
+    async fetchClientProcesses() {
+        this.processes = await this.dataService.fetchClientProcesses().then(projs => {
+            return projs.filter(p => {
+                return p.submitterId === this.currentUser.Id
+            })
+        })
     }
 
     /* viewState holds all of the information that determines the current
     state of the view including info to track the request creation state,
     which options are displayed, which inputs are valid, etc.
     */
-    /**
-     * @description
-     * @type {{
-     *     newRequestVisible: boolean
-     *     projectTypeForm?: Array<IFormControl>
-     *   }}
-     * @memberof ClientStore
-     */
-    @observable
-    viewState: {
-        newRequestVisible: boolean
-        projectTypeForm?: Array<IFormControl>
-    }
+
     @computed
-    get getViewState() {
+    get viewState() {
         return {
             newRequestVisible: this.startedNewRequest,
             newOrExistingProject: this.newOrExistingProject,
             newOrExistingWork: this.newOrExistingWork,
+            selectedProject: this.selectedProject,
             selectedProjectType: this.selectedProjectType,
             selectedWorkType: this.selectedWorkType,
             projectTypeForm: (): Array<IFormControl> => this.ProjectTypeForm,
+            isSelectedProject : this.isSelectedProject,
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
+            showProjectPanel: this.showProjectPanel,
         }
     }
 
@@ -99,22 +94,29 @@ export class ClientStore {
     @observable startedNewRequest = false
     @observable newOrExistingProject: string
     @observable selectedProjectType?: string = undefined
+    @observable selectedProject: Selection
+    @observable isSelectedProject: boolean = false
     @observable newOrExistingWork: string
     @observable selectedWorkType?: string = undefined
+    @observable showProjectPanel: boolean = false
+    @observable showProcessPanel: boolean = false
 
     /***************************************
      * computed members
      ***************************************/
     @computed
     get ProjectTypeForm(): Array<IFormControl> {
-        
-        return getView("Synch").formControls
-        // return getView(this.newProject.get("type") as string).formControls
+        return getView(this.viewState.selectedProjectType).formControls
     }
     @computed
     get WorkTypeForm(): Array<IFormControl> {
-        return getView(this.newProject.get("type") as string).formControls
+        return getView(this.viewState.selectedWorkType).formControls
     }
+    @action
+    IsSelectedProject(){
+        this.isSelectedProject = !(this.selectedProject.getSelectedCount() === 0)
+    }
+
     /***************************************
      * actions
      ***************************************/
@@ -123,14 +125,10 @@ export class ClientStore {
     updateMember(m: string, v?: any) {
         !v ? (this[m] = !this[m]) : (this[m] = v)
     }
-
     @action
-    clear() {
-        this.startedNewRequest = false
-        this.newOrExistingProject = ""
-        this.newOrExistingWork = ""
-        this.selectedProjectType = ""
-        this.selectedWorkType = ""
+    updateViewState = (m: string, v?: string | boolean | undefined) => {
+        v ? this[m] = v
+        : this[m] = undefined
     }
 
     /*************************************
