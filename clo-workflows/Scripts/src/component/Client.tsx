@@ -8,7 +8,6 @@ import { ProjectProcessList } from "./ProjectProcessList"
 /******************************
  * TODO:
  * decide wether or not to keep this, and if so what will be handled
-
  ******************************/
 @inject("rootStore")
 @observer
@@ -21,6 +20,6 @@ export class Client extends React.Component<any, any> {
     clientStore: ClientStore
 
     render() {
-        return <ProjectProcessList />
+        return <ProjectProcessList clientStore={this.clientStore} />
     }
 }
