@@ -54,24 +54,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
         super(props)
         this.clientStore = this.props.clientStore
         this._processes = []
-        this._projects = this.clientStore.projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: i.toString(),
-                data: {
-                    projectId: proj.Id,
-                },
-                name: proj.Title.toString(),
-                count: this.clientStore.processes.filter(proc => {
-                    return proj.Id === Number(proc.projectId)
-                }).length,
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
-            .map((e, i, a) => {
-                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                return e
-            })
+        
         this.clientStore.processes.map((proc, i) => {
             this._processes.push({
                 key: i.toString(),
@@ -114,6 +97,24 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
         }
     }
     public render() {
+        this._projects = this.clientStore.projects
+            .map((proj: CloRequestElement, i): IProjectGroup => ({
+                key: i.toString(),
+                data: {
+                    projectId: proj.Id,
+                },
+                name: proj.Title.toString(),
+                count: this.clientStore.processes.filter(proc => {
+                    return proj.Id === Number(proc.projectId)
+                }).length,
+                submitterId: proj.submitterId.toString(),
+                startIndex: 0,
+                isShowingAll: false,
+            }))
+            .map((e, i, a) => {
+                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
+                return e
+            })
         return (
             <div>
                 <ProjectFormModal
