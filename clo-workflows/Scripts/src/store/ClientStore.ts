@@ -160,11 +160,8 @@ export class ClientStore {
     async submitNewProject(projectDetails): Promise<void> {
         projectDetails.submitterId = this.currentUser.Id
         projectDetails.type = this.viewState.selectedProjectType
-        console.log(projectDetails)
-        await this.dataService.createProject(projectDetails).then(async () => {
-            await this.fetchClientProjects()
-        })
-        await this.fetchClientProjects()
+        await this.dataService.createProject(projectDetails)
+        runInAction(()=>this.projects.push(projectDetails))
         this.closeProjectModal()
     }
 
@@ -173,10 +170,7 @@ export class ClientStore {
         workDetails.submitterId = this.currentUser.Id
         workDetails.type = this.viewState.selectedWorkType
         console.log(workDetails)
-        await this.dataService.createWork(workDetails).then(async () => {
-            await this.fetchClientProjects()
-            await this.fetchClientProcesses()
-        })
+        await this.dataService.createWork(workDetails)
         this.closeWorkModal()
     }
 
@@ -184,11 +178,7 @@ export class ClientStore {
     async submitProcess(processDetails): Promise<void> {
         processDetails.submitterId = this.currentUser.Id
         processDetails.type = this.viewState.selectedProjectType
-        await this.dataService.createProcess(processDetails).then(async () => {
-            await this.fetchClientProjects()
-            await this.fetchClientProcesses()
-        })
-        await this.fetchClientProjects()
+        await this.dataService.createProcess(processDetails)
         this.closeProcessModal()
     }
     @action
