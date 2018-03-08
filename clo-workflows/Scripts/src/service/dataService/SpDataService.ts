@@ -9,7 +9,7 @@ import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import { IRole } from "../../model/Role"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
 import { INote } from "../../model/Note"
-import { ODataDefaultParser } from "sp-pnp-js"
+import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
 
@@ -28,7 +28,9 @@ export class SpDataService implements IDataService {
     // IDataService interface implementation
     async fetchUser(): Promise<IUser> {
         const rawUser = await this.getAppWeb().currentUser.get()
-        const rawSpGroups: any[] = await this.getAppWeb().siteUsers.getById(rawUser.Id).groups.get()
+        const rawSpGroups: any[] = await this.getAppWeb()
+            .siteUsers.getById(rawUser.Id)
+            .groups.get()
         const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title)
         const allRoleNames = getRoleNames()
 
@@ -36,14 +38,12 @@ export class SpDataService implements IDataService {
         let userRoleNames: string[]
         // if a user is part of the administrator group, that user receives every other role (besides anonymous)
         // TODO more generalizable way to make administrator have every role?
-        if(spGroupNames.includes("Administrator")) {
+        if (spGroupNames.includes("Administrator")) {
             userRoleNames = allRoleNames.filter(roleName => roleName !== "Anonymous" && roleName !== "Administrator")
         } else {
-        // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
-        // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
-            userRoleNames = spGroupNames.length
-                ? spGroupNames.filter(spGroupName => allRoleNames.includes(spGroupName))
-                : ["Anonymous"]
+            // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
+            // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
+            userRoleNames = spGroupNames.length ? spGroupNames.filter(spGroupName => allRoleNames.includes(spGroupName)) : ["Anonymous"]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         // build user object from userDto and role
@@ -55,7 +55,7 @@ export class SpDataService implements IDataService {
             rawUser.Email,
             rawUser.UserId.NameId,
             // userRoleNames.map(roleName => getRole(roleName))
-            [getRole("Anonymous")]
+            [getRole("Anonymous")],
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
@@ -103,8 +103,9 @@ export class SpDataService implements IDataService {
     async fetchClientActiveProjects(client: User): Promise<Array<CloRequestElement>> {
         const activeProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.filter(this.ACTIVE_FILTER_STRING).get(this.cloRequestElementParser)
-        
+            .items.filter(this.ACTIVE_FILTER_STRING)
+            .get(this.cloRequestElementParser)
+
         return activeProjects.filter(item => item.submitterId === client.name)
     }
 
@@ -140,27 +141,31 @@ export class SpDataService implements IDataService {
             .items.get(this.cloRequestElementParser)
         return clientProcesses
     }
+    async fetchWorks(): Promise<Array<CloRequestElement>> {
+        const works: Array<CloRequestElement> = await this.getHostWeb()
+            .lists.getByTitle(ListName.WORKS)
+            .items.get(this.cloRequestElementParser)
+        return works
+    }
     async createNote(note: INote, listName: ListName): Promise<void> {
         await this.getHostWeb()
             .lists.getByTitle(listName)
-            .items.add(note)        
+            .items.add(note)
     }
-    async createProject(projectData:{}):Promise<void>{
-        return await this.getHostWeb().lists.getByTitle(ListName.PROJECTS).items.add(projectData).then(console.log).catch(console.log)
-        
+    async createProject(projectData: {}): Promise<ItemAddResult> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.PROJECTS)
+            .items.add(projectData)
     }
-    async createProcess(process): Promise<void>{
-        /**
-         * TODO: take in data from use form
-         * fake data for now, just to get the calls right 
-         */
-        const p = {
-            submitterId: process.userId,
-            Title : "pnp submitted process yay",
-            projectId: "4"
-        }
-        console.log(p)
-        await this.getHostWeb().lists.getByTitle(ListName.PROCESSES).items.add( p).then(console.log)
+    async createProcess(process): Promise<ItemAddResult> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.PROCESSES)
+            .items.add(process)
+    }
+    async createWork(work): Promise<ItemAddResult> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.WORKS)
+            .items.add(work)
     }
 
     /******************************************************************************************************/
@@ -169,7 +174,7 @@ export class SpDataService implements IDataService {
     private readonly HOST_WEB_URL: string
     private readonly APP_WEB_URL: string
     private readonly cloRequestElementParser: CloRequestElementParser
-    
+
     private getAppWeb(): Web {
         return pnp.sp.configure(
             {
@@ -216,8 +221,8 @@ export class CloRequestElementParser extends ODataDefaultParser {
         this.cloFieldSet.add(DB_CONFIG["defaultFields"])
     }
 
-     // set storing all fields specified in all tables of DB_CONFIG (as well as fields specified in DB_CONFIG.defaultFields)
-     // a set is used because it prevents duplicates (there are many field duplicates among the various tables), and because it provides fast lookup
+    // set storing all fields specified in all tables of DB_CONFIG (as well as fields specified in DB_CONFIG.defaultFields)
+    // a set is used because it prevents duplicates (there are many field duplicates among the various tables), and because it provides fast lookup
     private cloFieldSet: Set<string>
 
     // this method is called automatically by PNP once for each request

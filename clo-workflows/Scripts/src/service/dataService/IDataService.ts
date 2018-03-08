@@ -1,6 +1,7 @@
 import { CloRequestElement } from "../../model/CloRequestElement"
 import { INote } from "../../model/Note"
 import { IUser } from "../../model/User"
+import { ItemAddResult } from "sp-pnp-js/lib/pnp"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
@@ -10,19 +11,20 @@ export interface IDataService {
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>>
     fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>>
     fetchWorkNotes(workId: string): Promise<Array<INote>>
+    fetchWorks(): Promise<Array<CloRequestElement>>
     fetchProjectNotes(projectId: string): Promise<Array<INote>>
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>
     createNote(note: INote, listName: ListName): Promise<void>
-    createProject(ProjectData:{}):Promise<void>
-    createProcess(process: any):Promise<void>
+    createProject(ProjectData: {}): Promise<ItemAddResult>
+    createProcess(ProjectData: {}): Promise<ItemAddResult>
+    createWork(ProjectData: {}): Promise<ItemAddResult>
     updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void>
-    
 }
 
 export enum ListName {
     WORKS = "works",
     PROCESSES = "processes",
     PROJECTS = "projects",
-    NOTES = "notes"
+    NOTES = "notes",
 }

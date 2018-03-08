@@ -8,8 +8,13 @@ import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import { INote } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
+import { ItemAddResult } from "sp-pnp-js/lib/pnp"
+import { IKeyValueMap } from "mobx"
 
 export class MockDataService implements IDataService {
+    fetchWorks(): Promise<IKeyValueMap<string | number>[]> {
+        throw new Error("Method not implemented.")
+    }
     fetchCurrentUserId() {
         throw new Error("Method not implemented.")
     }
@@ -76,10 +81,13 @@ export class MockDataService implements IDataService {
     createNote(note: INote, listName: ListName): Promise<void> {
         return Promise.resolve()
     }
-    createProject(){
-        return Promise.resolve()
+    createProject(): Promise<ItemAddResult> {
+        return
     }
-    createProcess(){
-        return Promise.resolve()
+    createProcess(): Promise<ItemAddResult> {
+        return
+    }
+    createWork(): Promise<ItemAddResult> {
+        return
     }
 }
