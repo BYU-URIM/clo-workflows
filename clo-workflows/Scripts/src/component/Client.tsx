@@ -5,10 +5,7 @@ import { ClientStore } from "../store/ClientStore"
 import { SessionStore } from "../store/SessionStore"
 import Header from "./Header"
 import { ProjectProcessList } from "./ProjectProcessList"
-/******************************
- * TODO:
- * decide wether or not to keep this, and if so what will be handled
- ******************************/
+
 @inject("rootStore")
 @observer
 export class Client extends React.Component<any, any> {
