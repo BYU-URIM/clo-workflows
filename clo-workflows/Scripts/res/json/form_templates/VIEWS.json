@@ -2,8 +2,6 @@
     "Synch": {
         "dataSource": "projects",
         "formControls": [
-            "ID",
-            "Type",
             "Title",
             "Department",
             "Dance Title",
@@ -37,8 +35,6 @@
     "Arranging": {
         "dataSource": "projects",
         "formControls": [
-            "ID",
-            "Type",
             "Title",
             "Department",
             "Timing",
@@ -72,8 +68,6 @@
     "Masters": {
         "dataSource": "projects",
         "formControls": [
-            "Type",
-            "ID",
             "Title",
             "Department",
             "Artist",
@@ -102,8 +96,7 @@
     "Grand": {
         "dataSource": "projects",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Title",
             "Department",
             "Dance Title",
@@ -137,8 +130,7 @@
     "Theatrical": {
         "dataSource": "projects",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Title",
             "Department",
             "Description of Work",
@@ -161,8 +153,7 @@
     "Movies": {
         "dataSource": "projects",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Title",
             "Department",
             "Copyright Owner",
@@ -193,8 +184,7 @@
     "Images": {
         "dataSource": "projects",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Title",
             "Department",
             "Description of Work",
@@ -212,8 +202,7 @@
     "Music": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
@@ -231,8 +220,7 @@
     "Book": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
@@ -252,8 +240,7 @@
     "Article": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
@@ -276,8 +263,7 @@
     "Book Chapter": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
@@ -298,8 +284,7 @@
     "Image": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
@@ -317,8 +302,7 @@
     "Video": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
@@ -334,8 +318,7 @@
     "Website": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Title",
             "Author",
@@ -348,8 +331,7 @@
     "Other": {
         "dataSource": "works",
         "formControls": [
-            "Type",
-            "ID",
+            
             "Course",
             "Format",
             "Title",
