@@ -10,8 +10,6 @@ import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView, getStep } from "../model/loader/resourceLoaders"
-import { MessageBarType, MessageBar } from "office-ui-fabric-react/lib/MessageBar"
-import { IMessageProps } from "../component/Message"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -57,10 +55,10 @@ export class EmployeeStore {
             const updatedWork = this.selectedWork.toJS()
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
             this.replaceElementInListById(updatedWork, this.works)
-            this.postMessage({messageText: "work successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "work successfully submitted", messageType: "success"})
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -93,11 +91,11 @@ export class EmployeeStore {
             // if submission is successful, clear the work note entry and add it to project notes
             this.updateWorkNoteEntry("")
             runInAction(() => this.selectedWorkNotes.unshift(newNote))
-            this.postMessage({messageText: "successfully submitted note", messageType: MessageBarType.success})
+            this.postMessage({messageText: "successfully submitted note", messageType: "success"})
         } catch(error) {
             console.error(error)
             submissionStatus = false
-            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -132,10 +130,10 @@ export class EmployeeStore {
             const updatedProject = this.selectedProject.toJS()
             await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
             this.replaceElementInListById(updatedProject, this.projects)
-            this.postMessage({messageText: "project successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "project successfully submitted", messageType: "success"})
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -168,11 +166,11 @@ export class EmployeeStore {
             // if submission is successful, clear the project note entry and add it to project notes
             this.updateProjectNoteEntry("")
             runInAction(() => this.selectedProjectNotes.unshift(newNote))
-            this.postMessage({messageText: "note successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "note successfully submitted", messageType: "error"})
         } catch(error) {
             console.error(error)
             submissionStatus = false
-            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -233,11 +231,11 @@ export class EmployeeStore {
             this.replaceElementInListById(updatedProcess, this.processes)
             // clear out selectedProcess, selected project, and selected work
             this.clearSelectedRequestElements()
-            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "process successfully submitted", messageType: "success"})
 
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -267,11 +265,11 @@ export class EmployeeStore {
             // return user back to dashboard by "popping off" the current view from the view heirarchy stack
             this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
 
-            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "process successfully submitted", messageType: "success"})
 
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -381,8 +379,8 @@ export class EmployeeStore {
         this.asyncPendingLockout = val
     }
 
-    @observable message: IMessageProps
-    @action postMessage(message: IMessageProps, displayTime: number = 5000) {
+    @observable message: any
+    @action postMessage(message: any, displayTime: number = 5000) {
         this.message = message
         setTimeout(action(() => {
             this.message = null
