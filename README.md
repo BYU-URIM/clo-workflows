@@ -46,3 +46,26 @@ block diagram of major components:
    )
    ```
    
+## Business Logic - Request Elements
+Each copyright licensing request is broken up into pieces to make it easier to manage.
+These pieces are diagrammed and described below:
+![clo workflows model - request elements](https://user-images.githubusercontent.com/19392776/37231219-9d97025a-23a7-11e8-95df-09b068c5780f.png)
+
+  ### Projects
+  A Project contains all of the information for how a department plans to use the work(s) they request.
+  Clients input this information during request intake.
+  A Projects contains information such as venue, audience size, and number of showings.
+  You can think of it as an event for which one or many works may be requested.
+  All project fields are found here: https://docs.google.com/spreadsheets/d/12fGr_gjksTJAjtNUFMIAAQ1WF4ms45uasYCQOCO031w/edit?usp=sharing
+  
+  ### Processes
+  A Process represents the request to use a work within the context of a project.
+  Employees modify different parts of a process during the approval process.
+  A process is always paired with the work that is being requested (workId), and contains a reference to the project it will be used in (projectId).
+  There are also metadata fields corresponding to each step in the approval process, indicating whether or not a process has passed a given step.
+  As a process progresses, it becomes visible to different employees responsible for different approval steps.
+  
+  ### Works
+  A work contians all relevant metadata about about the requested song, dance, movie, etc.
+  Clients may input a new work during request intake or they may reference a previously submitted work.
+  All work fields are found here: https://docs.google.com/spreadsheets/d/1vGkzYIOZE2k62cmGciDJA8EsEgI82pr6CrJGi5aX0L4/edit?usp=sharing
