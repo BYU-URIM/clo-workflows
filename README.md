@@ -22,7 +22,7 @@ block diagram of major components:
    **Session Store** holds information about the current user.
    
    **Root Store** contains references to each child store, and passes a reference to itself to each child store so that any child store can reference any other child store.
-   The parent store adds no other functionality to the app.
+   The root store adds no other functionality to the app.
    
    ### Data Service
    The data service exposes CRUD operations for current and past projects, processes, works, and notes that are stored in the database.
