@@ -3,13 +3,28 @@ This app handles copyright request intake and management for the Copyright Lisce
 
 ## Architecture
 block diagram of major components:
-![clo-workflows architecture](https://user-images.githubusercontent.com/19392776/36082209-82501fc4-0f64-11e8-8235-0165667dd015.png)
+![clo-workflows architecture - page 1](https://user-images.githubusercontent.com/19392776/37235376-5c7164b4-23bb-11e8-99f5-9fd256dfde96.png)
   ### Stores
    App data is managed through Mobx stores. Make sure to read Mobx documentation and tutorials before contributing to this app.
    Each store contains the data and business logic for a sub domain of the app data (i.e Requests, Session, etc...). 
    Stores communicate directly with services (send / recieve data) and indirectly with react components (cause re-renders when observable data changes).
    Store data can only be mutated through class methods marked as Mobx @actions.
-   The parent store contains references to each child store, and passes a reference to itself to each child store so that any child store can reference any other child store.
+   #### Client Store
+   The client store is only created if the current user is anonymous (non-employee).
+   This store holds all in active projects and processes that the current user has submitted.
+   The client store manages the view state necessary for displaying active projects and manages the intake of new projects.
+   
+   #### Employee Store
+   The employee store is only created if the current user is a member of a CLO Employee SharePoint group.
+   This store holds all active projects and processes that are currently in processing steps which are viewable by the current user's role.
+   The employee store manages the view state necessary for displaying an "employee dashboard" (active processes grouped by roles).
+   It also contains view state for displaying an individual process detail. 
+   
+   #### Session Store
+   The session store holds information about the current user.
+   
+   #### Root Store
+   The root store contains references to each child store, and passes a reference to itself to each child store so that any child store can reference any other child store.
    The parent store adds no other functionality to the app.
    
    ### Data Service
