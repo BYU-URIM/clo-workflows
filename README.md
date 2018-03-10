@@ -9,22 +9,19 @@ block diagram of major components:
    Each store contains the data and business logic for a sub domain of the app data (i.e Requests, Session, etc...). 
    Stores communicate directly with services (send / recieve data) and indirectly with react components (cause re-renders when observable data changes).
    Store data can only be mutated through class methods marked as Mobx @actions.
-   *#### Client Store
-   The client store is only created if the current user is anonymous (non-employee).
+   
+   **Client Store** is only created if the current user is anonymous (non-employee).
    This store holds all in active projects and processes that the current user has submitted.
    The client store manages the view state necessary for displaying active projects and manages the intake of new projects.
    
-   *#### Employee Store
-   The employee store is only created if the current user is a member of a CLO Employee SharePoint group.
+   **Employee Store** is only created if the current user is a member of a CLO Employee SharePoint group.
    This store holds all active projects and processes that are currently in processing steps which are viewable by the current user's role.
    The employee store manages the view state necessary for displaying an "employee dashboard" (active processes grouped by roles).
    It also contains view state for displaying an individual process detail. 
    
-   *#### Session Store
-   The session store holds information about the current user.
+   **Session Store** holds information about the current user.
    
-   *#### Root Store
-   The root store contains references to each child store, and passes a reference to itself to each child store so that any child store can reference any other child store.
+   **Root Store** contains references to each child store, and passes a reference to itself to each child store so that any child store can reference any other child store.
    The parent store adds no other functionality to the app.
    
    ### Data Service
@@ -61,6 +58,7 @@ block diagram of major components:
    )
    ```
    
+
 ## Business Logic - Request Elements
 Each copyright licensing request is broken up into pieces to make it easier to manage.
 These pieces are diagrammed and described below:
