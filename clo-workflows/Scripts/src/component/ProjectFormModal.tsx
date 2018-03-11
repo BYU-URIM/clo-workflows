@@ -6,7 +6,7 @@ import { Modal } from "office-ui-fabric-react/lib/Modal"
 
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
@@ -53,6 +53,8 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     onChanged={e => {
                         props.togglePanel("selectedProjectType", e.text)
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
+
                 />
                 {props.clientStore.viewState.selectedProjectType && (
                     <div>
@@ -60,7 +62,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newProject}
                             formControls={props.clientStore.viewState.projectTypeForm()}
                             validation={props.clientStore.newProjectValidation}
-                            onChange={props.clientStore.updateNewProject}
+                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_PROJECT)}
                         />
                     </div>
                 )}
@@ -69,6 +71,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     description="Create the new project"
                     onClick={() => props.clientStore.submitNewProject(props.clientStore.newProject.toJSON())}
                     text="Create Project"
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 <br/><br/>
                 <DefaultButton
@@ -77,6 +80,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     onClick={() => {
                         props.clientStore.closeProjectModal()
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 <DefaultButton
                     text="Close"
@@ -84,6 +88,8 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     onClick={() => {
                         props.togglePanel("showProjectModal", false)
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
+
                 />
             </div>
             <br/><br/>

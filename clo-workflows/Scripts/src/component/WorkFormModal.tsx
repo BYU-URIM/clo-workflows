@@ -5,9 +5,8 @@ import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import FormControlGroup from "./FormControlGroup"
-
 
 export interface IFormPanelProps {
     clientStore: ClientStore
@@ -30,12 +29,10 @@ const WorkFormModal = (props: IFormPanelProps) => {
                     padding: "32px",
                 }}
             >
-            <h2>New Work Form</h2>
+                <h2>New Work Form</h2>
                 <Dropdown
                     label="Select the Work Type:"
-                    selectedKey={
-                        props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined
-                    }
+                    selectedKey={props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined}
                     options={props.clientStore.WorkTypesAsOptions.map((field, index) => ({
                         text: field.text,
                         value: field.text,
@@ -43,12 +40,10 @@ const WorkFormModal = (props: IFormPanelProps) => {
                     }))}
                     style={{
                         width: "200px",
-                        margin: "20px 0px"
+                        margin: "20px 0px",
                     }}
                     placeHolder={
-                        props.clientStore.viewState.selectedWorkType
-                            ? props.clientStore.viewState.selectedWorkType
-                            : "select a Work type"
+                        props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work type"
                     }
                     onChanged={e => {
                         props.togglePanel("selectedWorkType", e.text)
@@ -60,25 +55,28 @@ const WorkFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newWork}
                             formControls={props.clientStore.viewState.workTypeForm()}
                             validation={props.clientStore.newWorkValidation}
-                            onChange={props.clientStore.updateNewWork}
+                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_WORK)}
                         />
                     </div>
                 )}
                 <PrimaryButton
                     description="Submit Work Request"
-                    onClick={(e) => {
+                    onClick={e => {
                         console.log(e)
-                        props.clientStore.submitNewWork(props.clientStore.newWork.toJSON())}
-                    }
+                        props.clientStore.submitNewWork(props.clientStore.newWork.toJSON())
+                    }}
                     text="Submit Work Request"
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
-                <br/><br/>
+                <br />
+                <br />
                 <DefaultButton
                     description="close without submitting"
                     text="Clear and Cancel"
                     onClick={() => {
                         props.clientStore.closeWorkModal()
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 <DefaultButton
                     text="Close"
@@ -86,10 +84,10 @@ const WorkFormModal = (props: IFormPanelProps) => {
                     onClick={() => {
                         props.togglePanel("showWorkModal", false)
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
             </div>{" "}
         </Modal>
-
     )
 }
 export default observer(WorkFormModal)

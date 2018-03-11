@@ -5,7 +5,7 @@ import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
@@ -48,6 +48,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     onChanged={e => {
                         props.togglePanel("selectedWorkType", e.text)
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 {props.clientStore.viewState.selectedWorkType && (
                     <div>
@@ -55,7 +56,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newProcess}
                             formControls={props.clientStore.viewState.workTypeForm()}
                             validation={props.clientStore.newWorkValidation}
-                            onChange={props.clientStore.updateNewProcess}
+                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_PROCESS)}
                         />
                     </div>
                 )}
@@ -65,6 +66,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                         props.clientStore.submitProcess(props.clientStore.newProcess.toJSON())
                     }}
                     text="Submit Work Request"
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 <br />
                 <br />
@@ -74,6 +76,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     onClick={() => {
                         props.clientStore.closeProcessModal()
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 <DefaultButton
                     text="Close"
@@ -81,6 +84,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     onClick={() => {
                         props.togglePanel("showProcessModal", false)
                     }}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
             </div>{" "}
         </Modal>
