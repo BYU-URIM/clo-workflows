@@ -8,7 +8,14 @@ import { IDataService } from "../service/dataService/IDataService"
 import { validateFormControl } from "../utils"
 import { RootStore } from "./RootStore"
 import { User } from "../model/User"
-import { Selection, SelectionMode } from "office-ui-fabric-react"
+import { Selection, SelectionMode, MessageBarType } from "office-ui-fabric-react"
+import { IMessageProps } from "../component/Message"
+
+export enum OBJECT_TYPES {
+    NEW_PROJECT = "newProject",
+    NEW_WORK = "newWork",
+    NEW_PROCESS = "newProcess"
+}
 
 @autobind
 export class ClientStore {
@@ -18,15 +25,13 @@ export class ClientStore {
         this.currentUser = this.root.sessionStore.currentUser
         await this.fetchClientProjects()
         await this.fetchClientProcesses()
-        this.selectedProject = new Selection({
-            selectionMode: SelectionMode.multiple,
-            onSelectionChanged: () => {
-                console.log("the selection was changed in the store")
-            },
-        })
+        this.selectedProject = observable.map()
         this.newProject = observable.map()
         this.newProcess = observable.map()
         this.newWork = observable.map()
+        this.setAsyncPendingLockout(false)
+
+
     }
 
     @observable newProject: ObservableMap<FormEntryType>
@@ -42,7 +47,7 @@ export class ClientStore {
     /* the selected work type, defaults to undefined */
     @observable selectedWorkType: string = undefined
     /* the Selection object used to selectedProject */
-    @observable selectedProject: Selection
+    @observable selectedProject: ObservableMap<FormEntryType>
     /* should the project modal be visible or not */
     @observable showProjectModal: boolean = false
     /* should the process modal be visible or not */
@@ -88,6 +93,7 @@ export class ClientStore {
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
             showProjectModal: this.showProjectModal,
             showProcessModal: this.showProcessModal,
+            message: this.message
         }
     }
 
@@ -137,13 +143,7 @@ export class ClientStore {
             return accumulator
         }, {})
     }
-
     /************ Actions ***************/
-
-    @action
-    handleSelectionChange(e: { projectId: string }) {
-        this.selectedProject.selectToKey(e.projectId)
-    }
     @action
     async updateNewProject(fieldName: string, newVal: FormEntryType) {
         this.newProject.set(fieldName, newVal)
@@ -158,11 +158,21 @@ export class ClientStore {
     }
     @action
     async submitNewProject(projectDetails): Promise<void> {
-        projectDetails.submitterId = this.currentUser.Id
-        projectDetails.type = this.viewState.selectedProjectType
-        await this.dataService.createProject(projectDetails)
-        runInAction(()=>this.projects.push(projectDetails))
+        this.setAsyncPendingLockout(true)
+        try {
+
+            projectDetails.submitterId = this.currentUser.Id
+            projectDetails.type = this.viewState.selectedProjectType
+            await this.dataService.createProject(projectDetails)
+            runInAction(() => this.projects.push(projectDetails))
+        } catch(err){
+            console.log(err)
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
         this.closeProjectModal()
+        this.postMessage({messageText: "work successfully submitted", messageType: MessageBarType.success})
+
     }
 
     @action
@@ -226,5 +236,42 @@ export class ClientStore {
     @action
     updateViewState = (m: string, v?: string | boolean | undefined) => {
         v ? (this[m] = v) : (this[m] = undefined)
+    }
+
+    /* lockup */
+    @observable asyncPendingLockout: boolean
+    @action
+    setAsyncPendingLockout(val: boolean) {
+        this.asyncPendingLockout = val
+    }
+
+    @observable message: IMessageProps
+    @action
+    postMessage(message: IMessageProps, displayTime: number = 5000) {
+        this.message = message
+        setTimeout(
+            action(() => {
+                this.message = null
+            }),
+            displayTime,
+        )
+    }
+
+    @action
+    private clearSelectedRequestElements(): void {
+        this.viewState.selectedProject.clear()
+    }
+
+    // finds the item with the with the same ID as the new item and replaces the stale item with the new item
+    // true if replacement was successfull, false if not (stale list item was not found)
+    @action
+    private replaceElementInListById(newItem: CloRequestElement, list: Array<any>): boolean {
+        const staleItemIndex = list.findIndex(listItem => listItem.Id === newItem.Id)
+
+        if (staleItemIndex !== -1) {
+            list[staleItemIndex] = newItem
+            return true
+        }
+        return false
     }
 }
