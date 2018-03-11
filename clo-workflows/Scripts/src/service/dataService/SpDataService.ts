@@ -157,12 +157,12 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
-    async createProcess(process): Promise<ItemAddResult> {
+    async createProcess(process:{}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.add(process)
     }
-    async createWork(work): Promise<ItemAddResult> {
+    async createWork(work:{}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.add(work)
