@@ -3,7 +3,7 @@ import { EmployeeStore } from "../store/EmployeeStore"
 import { inject, observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
 import { NotesBox } from "./NotesBox"
-import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
+import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -26,11 +26,14 @@ const titleStlyes = {
 const submitButtonStlyes = {
     display: "flex",
     justifyContent: "center",
-    marginTop: 30
+    marginTop: 30,
+    marginRight: 25
 } as React.CSSProperties
 
-const formColumnStyles = { padding: "0 20 0 30" }
-const notesColumnStyles = { padding: "0 30 0 20" }
+const editButtonStyles = { transform: "translateX(-25px)" }
+const workHeaderStyles = { display: "flex" } as React.CSSProperties
+const formColumnStyles = { padding: "0 8 0 30" }
+const notesColumnStyles = { padding: "0 30 0 8" }
 
 @inject("rootStore")
 @observer
@@ -46,7 +49,15 @@ export class WorkDetail extends React.Component<any, any> {
         return (
             <div style={wrapperStyle}>
                 <div style={formColumnStyles}>
-                    <div style={titleStlyes}>View Work</div>
+                    <div style={workHeaderStyles}>
+                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedWork ? "Edit Work" : "View Work"}</div>
+                        <div style={editButtonStyles}>
+                            <IconButton
+                                iconProps={ {iconName: "edit"} }
+                                onClick={this.employeeStore.toggleCanEditSelectedWork}
+                            />
+                        </div>
+                    </div>
                     <FormControlGroup
                         data={this.employeeStore.selectedWork}
                         formControls={this.employeeStore.selectedWorkFormControls}
@@ -54,12 +65,15 @@ export class WorkDetail extends React.Component<any, any> {
                         validation={{}}
                         width={350}
                     />
-                    <div style={submitButtonStlyes}>
-                        <PrimaryButton text="Submit Changes"
-                            onClick={this.employeeStore.submitSelectedWork}
-                            disabled={!this.employeeStore.canSubmitSelectedWork}
-                        />
-                    </div>
+                    {
+                        this.employeeStore.canEditSelectedWork &&
+                        <div style={submitButtonStlyes}>
+                            <PrimaryButton text="Submit Changes"
+                                onClick={this.employeeStore.submitSelectedWork}
+                                disabled={!this.employeeStore.canSubmitSelectedWork}
+                            />
+                        </div>
+                    }
                 </div>
                 <div style={notesColumnStyles}>
                     <NotesBox
