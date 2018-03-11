@@ -9,7 +9,7 @@ import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView, getStep } from "../model/loader/resourceLoaders"
+import { getView, getStep, getViewAndMakeReadonly } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -36,9 +36,12 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     @observable works: Array<CloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
+    @observable canEditSelectedWork: boolean = false
 
     @computed get selectedWorkFormControls(): Array<IFormControl> {
-        return getView(this.selectedWork.get("type") as string).formControls
+        return this.canEditSelectedWork
+            ? getView(this.selectedWork.get("type") as string).formControls
+            : getViewAndMakeReadonly(this.selectedWork.get("type") as string).formControls
     }
 
     @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
@@ -103,16 +106,23 @@ export class EmployeeStore {
         return submissionStatus
     }
 
+    @action toggleCanEditSelectedWork() {
+        this.canEditSelectedWork = !this.canEditSelectedWork
+    }
+
 
     /*******************************************************************************************************/
     // PROJECTS
     /*******************************************************************************************************/
     @observable projects: Array<CloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
+    @observable canEditSelectedProject: boolean = false
 
     @computed
     get selectedProjectFormControls(): Array<IFormControl> {
-        return getView(this.selectedProject.get("type") as string).formControls
+        return this.canEditSelectedProject
+            ? getView(this.selectedProject.get("type") as string).formControls
+            : getViewAndMakeReadonly(this.selectedProject.get("type") as string).formControls
     }
 
     @action
@@ -176,6 +186,10 @@ export class EmployeeStore {
         }
 
         return submissionStatus
+    }
+
+    @action toggleCanEditSelectedProject() {
+        this.canEditSelectedProject = !this.canEditSelectedProject
     }
 
 
