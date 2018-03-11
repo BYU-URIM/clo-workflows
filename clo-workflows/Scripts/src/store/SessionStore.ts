@@ -12,7 +12,6 @@ export class SessionStore {
     constructor(private root: RootStore, private dataService: IDataService) {}
 
     @observable currentUser: IUser
-    @observable testProp: {prop: string, nest: {a: boolean}}
 
     @action
     async init(): Promise<void> {

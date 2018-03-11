@@ -38,6 +38,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
                                 key={index}
+                                disabled={formControl.readonly}
                             />
                         )
                     } else if (formControl.type === "choice") {
@@ -48,6 +49,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 onChanged={(option: IDropdownOption) => props.onChange(formControl.dataRef, option.text)}
                                 label={formControl.displayName}
                                 key={index}
+                                disabled={formControl.readonly}
                             />
                         )
                     } else if (formControl.type === "textarea") {
@@ -59,6 +61,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 key={index}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
+                                disabled={formControl.readonly}
                             />
                         )
                     } else if (formControl.type === "checkbox") {
@@ -70,6 +73,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                     onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) =>
                                         props.onChange(formControl.dataRef, String(isChecked))
                                     }
+                                    disabled={formControl.readonly}
                                 />
                             </div>
                         )
