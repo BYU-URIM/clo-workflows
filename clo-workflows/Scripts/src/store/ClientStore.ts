@@ -14,7 +14,7 @@ import { IMessageProps } from "../component/Message"
 export enum OBJECT_TYPES {
     NEW_PROJECT = "newProject",
     NEW_WORK = "newWork",
-    NEW_PROCESS = "newProcess"
+    NEW_PROCESS = "newProcess",
 }
 
 @autobind
@@ -30,15 +30,19 @@ export class ClientStore {
         this.newProcess = observable.map()
         this.newWork = observable.map()
         this.setAsyncPendingLockout(false)
-
-
     }
-
+    /* observable object to store data for new project as it is received, provides values for controlled create forms */
     @observable newProject: ObservableMap<FormEntryType>
+    /* observable object to store data for new process as it is received, provides values for controlled create forms */
     @observable newProcess: ObservableMap<FormEntryType>
+    /* observable object to store data for new work as it is received, provides values for controlled create forms */
     @observable newWork: ObservableMap<FormEntryType>
+    /* all of the projects ever created by the currentUser */
     @observable projects: Array<CloRequestElement>
+    /* all of the work requests that exist on the projects associated with the currentUser id */
     @observable processes: Array<CloRequestElement>
+    /* the current works returned from the filtered works query */
+    @observable works: Array<CloRequestElement>
 
     /*********** observables for viewState *************/
 
@@ -61,14 +65,6 @@ export class ClientStore {
     /************ Computed Values ****************/
 
     @computed
-    get clientProjects(): Array<CloRequestElement> {
-        return this.projects
-    }
-    @computed
-    get newProjectFormControls(): Array<IFormControl> {
-        return getView(this.newProject.get("type") as string).formControls
-    }
-    @computed
     get ProjectTypeForm(): Array<IFormControl> {
         return getView(this.viewState.selectedProjectType).formControls
     }
@@ -77,10 +73,9 @@ export class ClientStore {
         return getView(this.viewState.selectedWorkType).formControls
     }
 
-    /*****************
-     * viewState holds all of the information that determines the current
-     * state of the view including info to track the request creation state,
-     * which options are displayed, which inputs are valid, etc.
+    /**
+     * @description All state dictated by the user's direct interactions with the UI (selected project, )
+     *
      */
 
     @computed
@@ -93,7 +88,7 @@ export class ClientStore {
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
             showProjectModal: this.showProjectModal,
             showProcessModal: this.showProcessModal,
-            message: this.message
+            message: this.message,
         }
     }
 
@@ -146,36 +141,44 @@ export class ClientStore {
     /************ Actions ***************/
     @action
     async updateObject(fieldName: string, newVal: FormEntryType, objToUpdate?: OBJECT_TYPES) {
-        objToUpdate
-        ? this[objToUpdate].set(fieldName, newVal)
-        : this[fieldName] = newVal
+        objToUpdate ? this[objToUpdate].set(fieldName, newVal) : (this[fieldName] = newVal)
     }
     @action
     async submitNewProject(projectDetails): Promise<void> {
         this.setAsyncPendingLockout(true)
         try {
-
             projectDetails.submitterId = this.currentUser.Id
             projectDetails.type = this.viewState.selectedProjectType
             await this.dataService.createProject(projectDetails)
             runInAction(() => this.projects.push(projectDetails))
-        } catch(err){
-            console.log(err)
+            this.postMessage({ messageText: "project successfully created", messageType: MessageBarType.success })
+        } catch (error) {
+            console.log(error)
+            this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: MessageBarType.error })
         } finally {
             this.setAsyncPendingLockout(false)
+            this.closeProjectModal()
         }
-        this.closeProjectModal()
-        this.postMessage({messageText: "work successfully submitted", messageType: MessageBarType.success})
-
     }
 
     @action
     async submitNewWork(workDetails): Promise<void> {
-        workDetails.submitterId = this.currentUser.Id
-        workDetails.type = this.viewState.selectedWorkType
-        console.log(workDetails)
-        await this.dataService.createWork(workDetails)
-        this.closeWorkModal()
+        this.setAsyncPendingLockout(true)
+        try {
+            workDetails.submitterId = this.currentUser.Id
+            workDetails.type = this.viewState.selectedWorkType
+            await this.dataService.createWork(workDetails)
+            this.postMessage({ messageText: "new work request successfully created", messageType: MessageBarType.success })
+        } catch (error) {
+            console.log(error)
+            this.postMessage({
+                messageText: "there was a problem submitting your new Work request, try again",
+                messageType: MessageBarType.error,
+            })
+        } finally {
+            this.setAsyncPendingLockout(false)
+            this.closeWorkModal()
+        }
     }
 
     @action
@@ -232,8 +235,9 @@ export class ClientStore {
         v ? (this[m] = v) : (this[m] = undefined)
     }
 
-    /* lockup */
+    /* boolean value indicating if the inputs should all be disabled , use while awaiting http requests */
     @observable asyncPendingLockout: boolean
+
     @action
     setAsyncPendingLockout(val: boolean) {
         this.asyncPendingLockout = val
@@ -247,7 +251,7 @@ export class ClientStore {
             action(() => {
                 this.message = null
             }),
-            displayTime,
+            displayTime
         )
     }
 
@@ -256,6 +260,7 @@ export class ClientStore {
         this.viewState.selectedProject.clear()
     }
 
+    /* TODO: implement this */
     // finds the item with the with the same ID as the new item and replaces the stale item with the new item
     // true if replacement was successfull, false if not (stale list item was not found)
     @action
