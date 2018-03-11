@@ -1,5 +1,5 @@
 import * as ava from "ava"
-import { getView, getRole, getStep } from "../../src/model/loader/resourceLoaders"
+import { getView, getRole, getStep, getViewAndMakeReadonly } from "../../src/model/loader/resourceLoaders"
 import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
@@ -13,17 +13,56 @@ import { StepName } from "../../src/model/Step"
     }
 */
 ava.test("test that getView() correctly builds a View Object", t => {
-    const view = getView(Object.keys(VIEWS)[0])
+    const testViewName = Object.keys(VIEWS)[0]
+    const jsonViewDefinition = VIEWS[testViewName]
+    const view = getView(testViewName)
 
     t.true(typeof view.dataSource === "string")
     t.true(Array.isArray(view.formControls))
-    view.formControls.forEach(formControl => {
-        t.true(typeof formControl.displayName === "string")
-        t.true(typeof formControl.dataRef === "string")
-        t.true(typeof formControl.type === "string")
-    })
+
+    // ensure that each readonly form control has the correct shape and that readonly is set to true
+    if(jsonViewDefinition.readonlyFormControls) {
+        jsonViewDefinition.readonlyFormControls.forEach(formControlName => {
+            const jsonFormControlDefinition = FORM_CONTROLS[formControlName]
+            const formControl = view.formControls.find(curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName)
+    
+            t.true(typeof formControl.displayName === "string")
+            t.true(typeof formControl.dataRef === "string")
+            t.true(typeof formControl.type === "string")
+            t.true(formControl.readonly)
+        })
+    }
+
+    // ensure that each standard form control has the correct shape and that readonly is set to false
+    if(jsonViewDefinition.formControls) {
+        jsonViewDefinition.formControls.forEach(formControlName => {
+            const jsonFormControlDefinition = FORM_CONTROLS[formControlName]
+            const formControl = view.formControls.find(curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName)
+    
+            t.true(typeof formControl.displayName === "string")
+            t.true(typeof formControl.dataRef === "string")
+            t.true(typeof formControl.type === "string")
+            t.falsy(formControl.readonly)
+        })
+    }
+
+    // ensure that the constructed view object has the correct number of form controls
+    // (sum of readonly form controls and standard form controls === length of total form controls)
+    let numFormControls = 0
+    numFormControls += jsonViewDefinition.readonlyFormControls ? jsonViewDefinition.readonlyFormControls.length : 0
+    numFormControls += jsonViewDefinition.formControls ? jsonViewDefinition.formControls.length : 0
+    t.true(view.formControls.length === numFormControls)
 })
 
+
+// ensure that getViewAndMakeReadonly creates a view with all readonly form controls
+ava.test("test that getViewAndMakeReadonly creates a view with all readonly form controls", t => {
+    const testViewName = Object.keys(VIEWS)[0]
+    const view = getViewAndMakeReadonly(testViewName)
+    view.formControls.forEach(formControl => {
+        t.true(formControl.readonly)
+    })
+})
 
 /* ensure that getRole() correctly builds role object with shape
     {

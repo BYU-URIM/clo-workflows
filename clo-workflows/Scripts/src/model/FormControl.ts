@@ -4,7 +4,7 @@ export interface IFormControl {
     type: FormControlType
     choices?: Array<string>
     defaultValue?: any
-    displayOnly?: boolean
+    readonly?: boolean
     required?: boolean
 }
 

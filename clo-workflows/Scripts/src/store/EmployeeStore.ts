@@ -320,7 +320,7 @@ export class EmployeeStore {
             const processWork = this.works.find(work => work.Id === Number(process.workId))
             const processProject = this.projects.find(project => project.Id === Number(process.projectId))
             return {
-                header: `${processProject.department} ${processWork.type} Process`,
+                header: `${processProject.department || ""} ${processWork.type || ""} Process`,
                 subheader: `submitted to ${process.step} on ${process.dateSubmittedToCurrentStep}`,
                 body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
                 id: process.Id as number,
