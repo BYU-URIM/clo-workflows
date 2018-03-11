@@ -16,9 +16,9 @@ export interface IDataService {
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>
     createNote(note: INote, listName: ListName): Promise<void>
-    createProject(ProjectData: {}): Promise<ItemAddResult>
-    createProcess(ProjectData: {}): Promise<ItemAddResult>
-    createWork(ProjectData: {}): Promise<ItemAddResult>
+    createProject(projectData: {}): Promise<ItemAddResult>
+    createProcess(processtData: {}): Promise<ItemAddResult>
+    createWork(workData: {}): Promise<ItemAddResult>
     updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void>
 }
 
