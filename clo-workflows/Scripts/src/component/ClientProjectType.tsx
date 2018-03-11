@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import { SearchBox } from "office-ui-fabric-react/lib/components/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/components/Checkbox"
 import FormControlGroup from "./FormControlGroup"
@@ -39,7 +39,7 @@ export class ClientProjectType extends React.Component<any, any> {
                             data={this.clientStore.newProject}
                             formControls={this.clientStore.viewState.projectTypeForm()}
                             validation={this.clientStore.newProjectValidation}
-                            onChange={this.clientStore.updateNewProject}
+                            onChange={(fieldName, value ) => this.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_PROJECT)}
                         />
                     </div>
                 )}
