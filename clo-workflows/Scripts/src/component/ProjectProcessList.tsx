@@ -15,10 +15,11 @@ import {
 import * as React from "react"
 
 import { CloRequestElement } from "../model/CloRequestElement"
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import ProjectFormModal from "./ProjectFormModal"
 import ProcessFormModal from "./ProcessFormModal"
 import WorkFormModal from "./WorkFormModal"
+import { Message } from "./Message"
 
 /*******************************
  * TODO:
@@ -54,7 +55,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
         super(props)
         this.clientStore = this.props.clientStore
         this._processes = []
-        
+
         this.clientStore.processes.map((proc, i) => {
             this._processes.push({
                 key: i.toString(),
@@ -88,7 +89,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                         text="Add a Process"
                         key={renderHeaderProps.group.key}
                         onClick={e => {
-                            this.clientStore.updateNewProcess("projectId", renderHeaderProps.group.data.projectId)
+                            this.clientStore.updateObject("projectId", renderHeaderProps.group.data.projectId, OBJECT_TYPES.NEW_PROCESS)
                             this.clientStore.updateViewState("showProcessModal", true)
                         }}
                     />
@@ -115,6 +116,9 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                 i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
                 return e
             })
+        /** TODO: After Demo
+         *  these 3 modal forms need abstracted out for Dryer code,
+         */
         return (
             <div>
                 <ProjectFormModal
@@ -135,7 +139,6 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                         this.clientStore.updateViewState(m, v)
                     }}
                 />
-
                 <CommandBar
                     items={[
                         {
@@ -162,8 +165,8 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                         showEmptyGroups: true,
                         onRenderHeader: this._onRenderHeader,
                     }}
-                    selection={this.clientStore.selectedProject}
                 />
+                {this.clientStore.message && <Message {...this.clientStore.message} />}
             </div>
         )
     }
