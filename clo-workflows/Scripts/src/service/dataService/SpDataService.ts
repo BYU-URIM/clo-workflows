@@ -16,7 +16,6 @@ import { debug } from "util"
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
 
-window["pnp"] = pnp
 export class SpDataService implements IDataService {
     constructor(appWebUrl: string, hostWebUrl: string) {
         this.APP_WEB_URL = appWebUrl
