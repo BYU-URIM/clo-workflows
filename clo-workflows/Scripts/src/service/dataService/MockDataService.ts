@@ -10,6 +10,9 @@ import { INote } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
 
 export class MockDataService implements IDataService {
+    fetchCurrentUserId() {
+        throw new Error("Method not implemented.")
+    }
     fetchClientProjects(): Promise<CloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
@@ -21,7 +24,7 @@ export class MockDataService implements IDataService {
             userDto.username,
             userDto.email,
             userDto.Id,
-            userDto.roleNames.map(roleName => getRole(roleName))
+            userDto.roleNames.map(roleName => getRole(roleName)),
         )
         return Promise.resolve(user)
     }
@@ -31,7 +34,7 @@ export class MockDataService implements IDataService {
     }
 
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<CloRequestElement[]> {
-        switch(listName) {
+        switch (listName) {
             case ListName.PROJECTS:
                 return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
             case ListName.WORKS:
@@ -42,7 +45,7 @@ export class MockDataService implements IDataService {
                 return Promise.resolve([])
         }
     }
-    
+
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement> {
         return Promise.resolve(null)
     }
@@ -53,6 +56,9 @@ export class MockDataService implements IDataService {
 
     fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
+    }
+    fetchClientProcesses(employee: IUser): Promise<Array<CloRequestElement>> {
+        return Promise.resolve(deepCopy(MockProcesses))
     }
 
     fetchProjectNotes(projectId: string): Promise<Array<INote>> {
@@ -68,6 +74,12 @@ export class MockDataService implements IDataService {
     }
 
     createNote(note: INote, listName: ListName): Promise<void> {
+        return Promise.resolve()
+    }
+    createProjectFolder(){
+        return Promise.resolve()
+    }
+    createClientProcess(){
         return Promise.resolve()
     }
 }

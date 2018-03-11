@@ -4,6 +4,8 @@ import { IUser } from "../../model/User"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
+    fetchClientProcesses(client: IUser): Promise<Array<CloRequestElement>>
+    fetchCurrentUserId():any
     fetchClientProjects(): Promise<Array<CloRequestElement>>
     fetchClientCompletedProjects(): Promise<Array<CloRequestElement>>
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>>
@@ -12,8 +14,10 @@ export interface IDataService {
     fetchProjectNotes(projectId: string): Promise<Array<INote>>
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>
-    updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void>
     createNote(note: INote, listName: ListName): Promise<void>
+    createProjectFolder():void
+    createClientProcess(process: any):Promise<void>
+    updateRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<void>
 }
 
 export enum ListName {

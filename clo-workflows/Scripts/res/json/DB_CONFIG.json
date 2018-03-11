@@ -126,7 +126,8 @@
                 "accountCode",
                 "censoring",
                 "additionalEdits",
-                "cloDetermination"
+                "cloDetermination",
+                "submitterId"
             ]
         },
         "works": {
