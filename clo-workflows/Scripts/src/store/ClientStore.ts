@@ -145,16 +145,10 @@ export class ClientStore {
     }
     /************ Actions ***************/
     @action
-    async updateNewProject(fieldName: string, newVal: FormEntryType) {
-        this.newProject.set(fieldName, newVal)
-    }
-    @action
-    async updateNewProcess(fieldName: string, newVal: FormEntryType) {
-        this.newProcess.set(fieldName, newVal)
-    }
-    @action
-    async updateNewWork(fieldName: string, newVal: FormEntryType) {
-        this.newWork.set(fieldName, newVal)
+    async updateObject(fieldName: string, newVal: FormEntryType, objToUpdate?: OBJECT_TYPES) {
+        objToUpdate
+        ? this[objToUpdate].set(fieldName, newVal)
+        : this[fieldName] = newVal
     }
     @action
     async submitNewProject(projectDetails): Promise<void> {
