@@ -62,7 +62,6 @@ const WorkFormModal = (props: IFormPanelProps) => {
                 <PrimaryButton
                     description="Submit Work Request"
                     onClick={e => {
-                        console.log(e)
                         props.clientStore.submitNewWork(props.clientStore.newWork.toJSON())
                     }}
                     text="Submit Work Request"

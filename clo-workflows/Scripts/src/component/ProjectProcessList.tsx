@@ -160,7 +160,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                     groups={this._projects}
                     columns={this._columns}
                     checkboxVisibility={CheckboxVisibility.hidden}
-                    onRenderRow={(props, defaultRender) => <div onClick={e => console.log(e, props)}>{defaultRender(props)}</div>}
+                    onRenderRow={(props, defaultRender) => <div>{defaultRender(props)}</div>}
                     groupProps={{
                         showEmptyGroups: true,
                         onRenderHeader: this._onRenderHeader,
