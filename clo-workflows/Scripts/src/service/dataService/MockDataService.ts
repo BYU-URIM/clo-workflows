@@ -8,8 +8,16 @@ import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import { INote } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
+import { ItemAddResult } from "sp-pnp-js/lib/pnp"
+import { IKeyValueMap } from "mobx"
 
 export class MockDataService implements IDataService {
+    fetchWorks(): Promise<IKeyValueMap<string | number>[]> {
+        throw new Error("Method not implemented.")
+    }
+    fetchCurrentUserId() {
+        throw new Error("Method not implemented.")
+    }
     fetchClientProjects(): Promise<CloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
@@ -21,7 +29,7 @@ export class MockDataService implements IDataService {
             userDto.username,
             userDto.email,
             userDto.Id,
-            userDto.roleNames.map(roleName => getRole(roleName))
+            userDto.roleNames.map(roleName => getRole(roleName)),
         )
         return Promise.resolve(user)
     }
@@ -31,7 +39,7 @@ export class MockDataService implements IDataService {
     }
 
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<CloRequestElement[]> {
-        switch(listName) {
+        switch (listName) {
             case ListName.PROJECTS:
                 return Promise.resolve(deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
             case ListName.WORKS:
@@ -42,7 +50,7 @@ export class MockDataService implements IDataService {
                 return Promise.resolve([])
         }
     }
-    
+
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement> {
         return Promise.resolve(null)
     }
@@ -53,6 +61,9 @@ export class MockDataService implements IDataService {
 
     fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>> {
         return Promise.resolve(deepCopy(MockProjects))
+    }
+    fetchClientProcesses(): Promise<Array<CloRequestElement>> {
+        return Promise.resolve(deepCopy(MockProcesses))
     }
 
     fetchProjectNotes(projectId: string): Promise<Array<INote>> {
@@ -69,5 +80,14 @@ export class MockDataService implements IDataService {
 
     createNote(note: INote, listName: ListName): Promise<void> {
         return Promise.resolve()
+    }
+    createProject(): Promise<ItemAddResult> {
+        return
+    }
+    createProcess(): Promise<ItemAddResult> {
+        return
+    }
+    createWork(): Promise<ItemAddResult> {
+        return
     }
 }

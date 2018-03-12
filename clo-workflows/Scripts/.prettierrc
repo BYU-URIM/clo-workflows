@@ -7,7 +7,7 @@
   "jsxBracketSameLine": false,
   "bracketSpacing": true,
   "useTabs": false,
-  "trailingComma": "all",
+  "trailingComma": "es5",
   "overrides": [
     
   ]

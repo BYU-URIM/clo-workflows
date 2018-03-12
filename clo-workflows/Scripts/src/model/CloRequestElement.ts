@@ -8,6 +8,6 @@ export type CloRequestElement = IKeyValueMap<FormEntryType>
 export type FormEntryType = string | number
 
 // TODO should these be in JSON??
-export const WORK_TYPES = ["Music", "Book", "Article", "Book Chapter", "Image", "Video", "Website", "Other", "Musical Work"]
+export const WORK_TYPES = ["Music", "Book", "Article", "Book Chapter", "Image", "Video", "Website", "Other"]
 
 export const PROJECT_TYPES = ["Synch", "Arranging", "Masters", "Grand", "Theatrical", "Movies", "Images"]

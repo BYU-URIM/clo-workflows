@@ -1,7 +1,6 @@
 import { IUserDto, User } from "../../model/User"
 import { CloRequestElement } from "../../model/CloRequestElement"
 import { INote } from "../../model/Note"
-import { when } from "ts-mockito"
 
 export const MockUsersDtos: Array<IUserDto> = [
     {

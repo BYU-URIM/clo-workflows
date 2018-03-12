@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import { SearchBox } from "office-ui-fabric-react/lib/components/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/components/Checkbox"
 import FormControlGroup from "./FormControlGroup"
@@ -10,35 +10,36 @@ import { inject, observer } from "mobx-react"
 @inject("rootStore")
 @observer
 export class ClientProjectType extends React.Component<any, any> {
+    clientStore: ClientStore
     render() {
-        const { clientStore } = this.props.rootStore
+        this.clientStore = this.props.rootStore.clientStore
         return (
             <div>
                 <Dropdown
                     label="Select the Project Type:"
-                    selectedKey={clientStore.getViewState.selectedProjectType ? clientStore.getViewState.selectedProjectType : undefined}
-                    options={clientStore.ProjectTypesAsOptions.map((field, index) => ({
+                    selectedKey={this.clientStore.viewState.selectedProjectType ? this.clientStore.viewState.selectedProjectType : undefined}
+                    options={this.clientStore.ProjectTypesAsOptions.map((field, index) => ({
                         text: field.text,
                         value: field.text,
                         key: field.text,
                     }))}
                     placeHolder={
-                        clientStore.getViewState.selectedProjectType
-                            ? clientStore.getViewState.selectedProjectType
+                        this.clientStore.viewState.selectedProjectType
+                            ? this.clientStore.viewState.selectedProjectType
                             : "select a project type"
                     }
                     onChanged={e => {
-                        clientStore.updateMember("selectedProjectType", e.text)
+                        this.clientStore.updateMember("selectedProjectType", e.text)
                     }}
                 />
 
-                {clientStore.getViewState.selectedProjectType && (
+                {this.clientStore.viewState.selectedProjectType && (
                     <div>
                         <FormControlGroup
-                            data={clientStore.newProject}
-                            formControls={clientStore.getViewState.projectTypeForm()}
-                            validation={clientStore.newProjectValidation}
-                            onChange={clientStore.updateNewProject}
+                            data={this.clientStore.newProject}
+                            formControls={this.clientStore.viewState.projectTypeForm()}
+                            validation={this.clientStore.newProjectValidation}
+                            onChange={(fieldName, value ) => this.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_PROJECT)}
                         />
                     </div>
                 )}
