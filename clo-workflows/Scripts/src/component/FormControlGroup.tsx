@@ -20,9 +20,9 @@ const styles = {
     margin: "0 0",
 }
 
-const checkboxStyles = {
-    margin: "20 0",
-}
+const checkboxStyles = { margin: "20 0", }
+
+const disabledInputBackground = { backgroundColor: "#F0F0F0" }
 
 // renders an array of form controls which pull their information from the model object in props
 function FormControlGroup(props: IFormControlGroupProps) {
@@ -38,6 +38,8 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
                                 key={index}
+                                disabled={formControl.readonly}
+                                style={formControl.readonly && disabledInputBackground }
                             />
                         )
                     } else if (formControl.type === "choice") {
@@ -48,6 +50,8 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 onChanged={(option: IDropdownOption) => props.onChange(formControl.dataRef, option.text)}
                                 label={formControl.displayName}
                                 key={index}
+                                disabled={formControl.readonly}
+                                style={formControl.readonly && disabledInputBackground }
                             />
                         )
                     } else if (formControl.type === "textarea") {
@@ -59,6 +63,8 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 key={index}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
+                                disabled={formControl.readonly}
+                                style={formControl.readonly && disabledInputBackground }
                             />
                         )
                     } else if (formControl.type === "checkbox") {
@@ -70,6 +76,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                     onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) =>
                                         props.onChange(formControl.dataRef, String(isChecked))
                                     }
+                                    disabled={formControl.readonly}
                                 />
                             </div>
                         )

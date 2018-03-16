@@ -9,9 +9,7 @@ import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView, getStep } from "../model/loader/resourceLoaders"
-import { MessageBarType, MessageBar } from "office-ui-fabric-react/lib/MessageBar"
-import { IMessageProps } from "../component/Message"
+import { getView, getStep, getViewAndMakeReadonly, getStepById } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -38,9 +36,14 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     @observable works: Array<CloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
+    @observable canEditSelectedWork: boolean = false
 
     @computed get selectedWorkFormControls(): Array<IFormControl> {
-        return getView(this.selectedWork.get("type") as string).formControls
+        if(this.selectedWork.size !== 0) {
+            return this.canEditSelectedWork
+            ? getView(this.selectedWork.get("type") as string).formControls
+            : getViewAndMakeReadonly(this.selectedWork.get("type") as string).formControls
+        }
     }
 
     @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
@@ -57,10 +60,10 @@ export class EmployeeStore {
             const updatedWork = this.selectedWork.toJS()
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
             this.replaceElementInListById(updatedWork, this.works)
-            this.postMessage({messageText: "work successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "work successfully submitted", messageType: "success"})
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -93,16 +96,20 @@ export class EmployeeStore {
             // if submission is successful, clear the work note entry and add it to project notes
             this.updateWorkNoteEntry("")
             runInAction(() => this.selectedWorkNotes.unshift(newNote))
-            this.postMessage({messageText: "successfully submitted note", messageType: MessageBarType.success})
+            this.postMessage({messageText: "successfully submitted note", messageType: "success"})
         } catch(error) {
             console.error(error)
             submissionStatus = false
-            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
 
         return submissionStatus
+    }
+
+    @action toggleCanEditSelectedWork() {
+        this.canEditSelectedWork = !this.canEditSelectedWork
     }
 
 
@@ -111,10 +118,15 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     @observable projects: Array<CloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
+    @observable canEditSelectedProject: boolean = false
 
     @computed
     get selectedProjectFormControls(): Array<IFormControl> {
-        return getView(this.selectedProject.get("type") as string).formControls
+        if(this.selectedProject.size !== 0) {
+            return this.canEditSelectedProject
+                ? getView(this.selectedProject.get("type") as string).formControls
+                : getViewAndMakeReadonly(this.selectedProject.get("type") as string).formControls
+        }
     }
 
     @action
@@ -122,7 +134,7 @@ export class EmployeeStore {
         this.selectedProject.set(fieldName, String(newVal))
     }
 
-    @observable selectedProjectNotes: Array<INote>
+    @observable selectedProjectNotes: Array<INote> = []
 
     @action
     async submitSelectedProject(): Promise<void> {
@@ -132,10 +144,10 @@ export class EmployeeStore {
             const updatedProject = this.selectedProject.toJS()
             await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
             this.replaceElementInListById(updatedProject, this.projects)
-            this.postMessage({messageText: "project successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "project successfully submitted", messageType: "success"})
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -168,16 +180,20 @@ export class EmployeeStore {
             // if submission is successful, clear the project note entry and add it to project notes
             this.updateProjectNoteEntry("")
             runInAction(() => this.selectedProjectNotes.unshift(newNote))
-            this.postMessage({messageText: "note successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "note successfully submitted", messageType: "success"})
         } catch(error) {
             console.error(error)
             submissionStatus = false
-            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
 
         return submissionStatus
+    }
+
+    @action toggleCanEditSelectedProject() {
+        this.canEditSelectedProject = !this.canEditSelectedProject
     }
 
 
@@ -227,17 +243,24 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            const updatedProcess = this.selectedProcess.toJS()
+            const currentStep = getStep(this.selectedProcess.get("step") as StepName)
+            let updatedProcess = this.selectedProcess.toJS()
+            updatedProcess = {...updatedProcess, ...{
+                step: getNextStepName(updatedProcess),
+                [currentStep.submissionDateDataRef]: getFormattedDate(),
+                [currentStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
+            }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess
             this.replaceElementInListById(updatedProcess, this.processes)
             // clear out selectedProcess, selected project, and selected work
             this.clearSelectedRequestElements()
-            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
+            this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
+            this.postMessage({messageText: "process successfully submitted", messageType: "success"})
 
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -267,11 +290,11 @@ export class EmployeeStore {
             // return user back to dashboard by "popping off" the current view from the view heirarchy stack
             this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
 
-            this.postMessage({messageText: "process successfully submitted", messageType: MessageBarType.success})
+            this.postMessage({messageText: "process successfully submitted", messageType: "success"})
 
         } catch(error) {
             console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: MessageBarType.error})
+            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: "error"})
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -321,9 +344,13 @@ export class EmployeeStore {
         return this.selectedStepProcesses.map(process => {
             const processWork = this.works.find(work => work.Id === Number(process.workId))
             const processProject = this.projects.find(project => project.Id === Number(process.projectId))
+            // to get the date when the process arrived at the current step for processing, look at the previous step submission date
+            const currentStep = getStep(process.step as StepName)
+            const previousStep = getStepById(currentStep.stepId-1)
+            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateDataRef]
             return {
-                header: `${processProject.department} ${processWork.type} Process`,
-                subheader: `submitted to ${process.step} on ${process.dateSubmittedToCurrentStep}`,
+                header: `${processProject.department || ""} ${processWork.type || ""} Process`,
+                subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
                 body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
                 id: process.Id as number,
             }
@@ -381,8 +408,8 @@ export class EmployeeStore {
         this.asyncPendingLockout = val
     }
 
-    @observable message: IMessageProps
-    @action postMessage(message: IMessageProps, displayTime: number = 5000) {
+    @observable message: any
+    @action postMessage(message: any, displayTime: number = 5000) {
         this.message = message
         setTimeout(action(() => {
             this.message = null

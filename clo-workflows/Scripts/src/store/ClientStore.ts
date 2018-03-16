@@ -1,15 +1,14 @@
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { autobind } from "core-decorators"
-
 import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../model/CloRequestElement"
 import { IFormControl } from "../model/FormControl"
-import { getView } from "../model/loader/resourceLoaders"
+import { getView, getStep } from "../model/loader/resourceLoaders"
 import { IDataService } from "../service/dataService/IDataService"
-import { validateFormControl } from "../utils"
+import { validateFormControl, getFormattedDate } from "../utils"
 import { RootStore } from "./RootStore"
 import { User } from "../model/User"
-import { Selection, SelectionMode, MessageBarType } from "office-ui-fabric-react"
-import { IMessageProps } from "../component/Message"
+import { Selection, SelectionMode } from "office-ui-fabric-react"
+import { getNextStepName, StepName } from "../model/Step"
 
 export enum OBJECT_TYPES {
     NEW_PROJECT = "newProject",
@@ -155,13 +154,12 @@ export class ClientStore {
             projectDetails.type = this.viewState.selectedProjectType
             await this.dataService.createProject(projectDetails)
             runInAction(() => this.projects.push(projectDetails))
-            this.postMessage({ messageText: "project successfully created", messageType: MessageBarType.success })
+            this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
-            console.log(error)
-            this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: MessageBarType.error })
+            console.error(error)
+            this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: "error" })
         } finally {
             this.setAsyncPendingLockout(false)
-            this.closeProjectModal()
         }
     }
 
@@ -172,31 +170,81 @@ export class ClientStore {
             workDetails.submitterId = this.currentUser.Id
             workDetails.type = this.viewState.selectedWorkType
             await this.dataService.createWork(workDetails)
-            this.postMessage({ messageText: "new work request successfully created", messageType: MessageBarType.success })
+            this.postMessage({ messageText: "new work request successfully created", messageType: "success" })
         } catch (error) {
-            console.log(error)
+            console.error(error)
             this.postMessage({
                 messageText: "there was a problem submitting your new Work request, try again",
-                messageType: MessageBarType.error,
+                messageType: "error",
             })
         } finally {
             this.setAsyncPendingLockout(false)
-            this.closeWorkModal()
         }
     }
 
     @action
     async submitProcess(processDetails): Promise<void> {
-        console.log(processDetails)
-        processDetails.submitterId = this.currentUser.Id
-        processDetails.type = this.viewState.selectedProjectType
-        console.log(Array.from(this.works).find(e => {
-            console.log(e.Id, processDetails.projectId, e.Id===processDetails.projectId)
-            return e.Id===processDetails.projectId
-        }))
-        // await this.dataService.createProcess(processDetails)
-        this.closeProcessModal()
+        this.setAsyncPendingLockout(true)
+        try {
+            processDetails.submitterId = this.currentUser.Id
+            processDetails.type = this.viewState.selectedProjectType
+            processDetails.projectId = String(processDetails.projectId) // TODO find where this is originally assigned
+            await this.dataService.createProcess(processDetails)
+        } catch(error) {
+            console.error(error)
+            this.postMessage({
+                messageText: "there was a problem submitting your new Process request, try again",
+                messageType: "error"
+            })
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
     }
+
+    // this submits a new work AND the process it is paired with
+    // TODO combine this with submit process and submit work
+    // TODO make this work with batching so that we can roll back if one fails
+    // TODO do we need process.submitterId and process.currentStepSubmitterId ???
+    // @action async submitNewWorkRequest(): Promise<void> {
+    //     this.setAsyncPendingLockout(true)
+    //     try {
+    //         const workDetails = this.newWork.toJSON()
+    //         // create new work
+    //         workDetails.submitterId = this.currentUser.Id
+    //         workDetails.type = this.viewState.selectedWorkType
+    //         const workCreateInfo = await this.dataService.createWork(workDetails)
+    //         workDetails.Id = workCreateInfo.data.Id
+    //         // this.works.push(workDetails)
+
+    //         // create new project
+    //         const currentStep = getStep("Intake")
+    //         const process = {
+    //             Title: `${workDetails.Title} process`,
+    //             projectId: String(this.newProcess.get("projectId")),
+    //             workId: String(workCreateInfo.data.Id),
+    //             submitterId: this.currentUser.Id,
+    //             step: currentStep.name,
+    //             [currentStep.submitterIdDataRef]: this.currentUser.Id,
+    //             [currentStep.submissionDateDataRef]: getFormattedDate(),
+    //         }
+
+    //         const nextStepName: StepName = getNextStepName(process)
+    //         process.step = nextStepName
+
+    //         await this.dataService.createProcess(process)
+    //         runInAction(() => this.processes.push(process)) // TODO this is not re-rendering ProjectProcess list
+    //         this.closeProcessModal()
+
+    //     } catch(error) {
+    //         console.error(error)
+    //         this.postMessage({
+    //             messageText: "there was a problem submitting your new work request, try again",
+    //             messageType: "error"
+    //         })
+    //     } finally {
+    //         this.setAsyncPendingLockout(false)
+    //     }
+    // }
     @action
     closeProjectModal() {
         this.newProject = observable.map()
@@ -220,20 +268,14 @@ export class ClientStore {
 
     @action
     async fetchClientProjects() {
-        this.projects = await this.dataService.fetchClientProjects().then(projs => {
-            return projs.filter(p => {
-                return p.submitterId === this.currentUser.Id
-            })
-        })
+        this.projects = await this.dataService.fetchClientProjects()
+        this.projects = this.projects.filter(proj => proj.submitterId === this.currentUser.Id)
     }
 
     @action
     async fetchClientProcesses() {
-        this.processes = await this.dataService.fetchClientProcesses().then(projs => {
-            return projs.filter(p => {
-                return p.submitterId === this.currentUser.Id
-            })
-        })
+        this.processes = await this.dataService.fetchClientProcesses()
+        this.processes  = this.processes.filter(proc => proc.submitterId === this.currentUser.Id)
     }
     @action
     async fetchWorks() {
@@ -261,9 +303,9 @@ export class ClientStore {
         this.asyncPendingLockout = val
     }
 
-    @observable message: IMessageProps
+    @observable message: any
     @action
-    postMessage(message: IMessageProps, displayTime: number = 5000) {
+    postMessage(message: any, displayTime: number = 5000) {
         this.message = message
         setTimeout(
             action(() => {

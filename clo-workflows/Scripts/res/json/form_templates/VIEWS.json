@@ -354,52 +354,76 @@
     },
     "Public Domain Approval": {
         "dataSource": "processes",
+        "readonlyFormControls": [
+            "Public Domain Research"
+        ],
         "formControls": [
-            "Public Domain Research",
             "Public Domain Approval"
         ]
     },
     "Existing License": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
-            "Public Domain Approval",
+            "Public Domain Approval"
+        ],
+        "formControls": [
             "Existing License"
         ]
     },
     "Existing License Approval": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
-            "Existing License",
+            "Existing License"
+        ],
+        "formControls": [
             "Existing License Approval"
         ]
     },
     "Exemption Analysis": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
-            "Existing License Approval",
+            "Existing License Approval"
+        ],
+        "formControls": [
             "Exemption Analysis"
         ]
     },
     "Exemption Approval": {
         "dataSource": "processes",
+        "readonlyFormControls": [
+            "Public Domain Research",
+            "Public Domain Approval",
+            "Existing License",
+            "Existing License Approval",
+            "Exemption Analysis"
+        ],
         "formControls": [
+            "Exemption Approval"
+        ]
+    },
+    "Ownership Research Licensing Exchange": {
+        "dataSource": "processes",
+        "readnolyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
             "Existing License Approval",
             "Exemption Analysis",
             "Exemption Approval"
+        ],
+        "formControls": [
+            "Licensing Exchange"
         ]
     },
-    "Ownership Research Licensing Exchange": {
+    "Ownership Research Direct to Rights Holder": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -407,11 +431,14 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange"
+        ],
+        "formControls": [
+            "Direct to Rights Holders"
         ]
     },
-    "Ownership Research Direct to Rights Holder": {
+    "Request Submitted": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -420,11 +447,14 @@
             "Exemption Approval",
             "Licensing Exchange",
             "Direct to Rights Holders"
+        ],
+        "formControls": [
+            "Request Submitted"
         ]
     },
-    "Request Submitted": {
+    "Response from Rights Holder Received": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -434,11 +464,14 @@
             "Licensing Exchange",
             "Direct to Rights Holders",
             "Request Submitted"
+        ],
+        "formControls": [
+            "Rights Holder Response"
         ]
     },
-    "Response from Rights Holder Received": {
+    "CLO Response to Rights Holder": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -449,26 +482,14 @@
             "Direct to Rights Holders",
             "Request Submitted",
             "Rights Holder Response"
-        ]
-    },
-    "CLO Response to Rights Holder": {
-        "dataSource": "processes",
+        ],
         "formControls": [
-            "Public Domain Research",
-            "Public Domain Approval",
-            "Existing License",
-            "Existing License Approval",
-            "Exemption Analysis",
-            "Exemption Approval",
-            "Licensing Exchange",
-            "Direct to Rights Holders",
-            "Request Submitted",
             "CLO Response to Rights Holder"
         ]
     },
     "Receipt of License": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -478,13 +499,16 @@
             "Licensing Exchange",
             "Direct to Rights Holders",
             "Request Submitted",
-            "CLO Response to Rights Holder",
+            "Rights Holder Response",
+            "CLO Response to Rights Holder"
+        ],
+        "formControls": [
             "Receipt of License"
         ]
     },
     "Supervisor Signature": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -494,14 +518,17 @@
             "Licensing Exchange",
             "Direct to Rights Holders",
             "Request Submitted",
+            "Rights Holder Response",
             "CLO Response to Rights Holder",
-            "Receipt of License",
+            "Receipt of License"
+        ],
+        "formControls": [
             "Supervisor Signature"
         ]
     },
     "Payment": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -511,15 +538,18 @@
             "Licensing Exchange",
             "Direct to Rights Holders",
             "Request Submitted",
+            "Rights Holder Response",
             "CLO Response to Rights Holder",
             "Receipt of License",
-            "Supervisor Signature",
+            "Supervisor Signature"
+        ],
+        "formControls": [
             "Payment"
         ]
     },
     "Process Payment": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -529,17 +559,20 @@
             "Licensing Exchange",
             "Direct to Rights Holders",
             "Request Submitted",
+            "Rights Holder Response",
             "CLO Response to Rights Holder",
             "Receipt of License",
             "Supervisor Signature",
-            "Payment",
+            "Payment"
+        ],
+        "formControls": [
             "Process Payment",
             "Fast Track Number"
         ]
     },
     "Initial Request Completion": {
         "dataSource": "processes",
-        "formControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -549,6 +582,31 @@
             "Licensing Exchange",
             "Direct to Rights Holders",
             "Request Submitted",
+            "Rights Holder Response",
+            "CLO Response to Rights Holder",
+            "Receipt of License",
+            "Supervisor Signature",
+            "Payment",
+            "Process Payment",
+            "Fast Track Number"
+        ],
+        "formControls": [
+            "Initial Request Completion"
+        ]
+    },
+    "Final Request Completion": {
+        "dataSource": "processes",
+        "readonlyFormControls": [
+            "Public Domain Research",
+            "Public Domain Approval",
+            "Existing License",
+            "Existing License Approval",
+            "Exemption Analysis",
+            "Exemption Approval",
+            "Licensing Exchange",
+            "Direct to Rights Holders",
+            "Request Submitted",
+            "Rights Holder Response",
             "CLO Response to Rights Holder",
             "Receipt of License",
             "Supervisor Signature",
@@ -556,27 +614,8 @@
             "Process Payment",
             "Fast Track Number",
             "Initial Request Completion"
-        ]
-    },
-    "Final Request Completion": {
-        "dataSource": "processes",
+        ],
         "formControls": [
-            "Public Domain Research",
-            "Public Domain Approval",
-            "Existing License",
-            "Existing License Approval",
-            "Exemption Analysis",
-            "Exemption Approval",
-            "Licensing Exchange",
-            "Direct to Rights Holders",
-            "Request Submitted",
-            "CLO Response to Rights Holder",
-            "Receipt of License",
-            "Supervisor Signature",
-            "Payment",
-            "Process Payment",
-            "Fast Track Number",
-            "Initial Request Completion",
             "Final Request Completion"
         ]
     }

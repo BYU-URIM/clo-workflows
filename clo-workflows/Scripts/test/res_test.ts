@@ -83,6 +83,7 @@ ava.test("test form controls for correct shape", t => {
     ensure that all views contain references to exisiting form controls and have correct shape
     {
         dataSource: string
+        readonlyFormControls: Array<IFormControl>
         formControls: Array<IFormControl>
     }
 */
@@ -90,12 +91,22 @@ ava.test("test that all views contain only valid formControl names and have corr
     for (const viewName in VIEWS) {
         const view = VIEWS[viewName]
         t.true(typeof view.dataSource === "string")
-        t.true(Array.isArray(view.formControls))
 
-        const formControlNames: string[] = view.formControls
-        formControlNames.forEach(formControlName => {
-            t.truthy(FORM_CONTROLS[formControlName])
-        })
+        if(view.formControls) {
+            t.true(Array.isArray(view.formControls))
+            const formControlNames: string[] = view.formControls
+            formControlNames.forEach(formControlName => {
+                t.truthy(FORM_CONTROLS[formControlName])
+            })
+        }
+
+        if(view.readonlyFormControls) {
+            t.true(Array.isArray(view.readonlyFormControls))
+            const formControlNames: string[] = view.readonlyFormControls
+            formControlNames.forEach(formControlName => {
+                t.truthy(FORM_CONTROLS[formControlName])
+            })
+        }
     }
 })
 

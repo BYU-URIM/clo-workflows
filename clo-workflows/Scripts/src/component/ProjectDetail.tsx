@@ -3,7 +3,7 @@ import { EmployeeStore } from "../store/EmployeeStore"
 import { inject, observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
 import { NotesBox } from "./NotesBox"
-import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
+import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -29,8 +29,10 @@ const submitButtonStlyes = {
     marginTop: 30
 } as React.CSSProperties
 
-const formColumnStyles = { padding: "0 20 0 30" }
-const notesColumnStyles = { padding: "0 30 0 20" }
+const projectHeaderStyles = { display: "flex" }
+const editButtonStyles = { transform: "translateX(-25px)" }
+const formColumnStyles = { padding: "0 8 0 30" }
+const notesColumnStyles = { padding: "0 30 0 8" }
 
 @inject("rootStore")
 @observer
@@ -46,7 +48,15 @@ export class ProjectDetail extends React.Component<any, any> {
         return (
             <div style={wrapperStyle}>
                 <div style={formColumnStyles}>
-                    <div style={titleStlyes}>View Project</div>
+                    <div style={projectHeaderStyles}>
+                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedProject ? "Edit Project" : "View Project"}</div>
+                        <div style={editButtonStyles}>
+                            <IconButton
+                                iconProps={ {iconName: "edit"} }
+                                onClick={this.employeeStore.toggleCanEditSelectedProject}
+                            />
+                        </div>
+                    </div>
                     <FormControlGroup
                         data={this.employeeStore.selectedProject}
                         formControls={this.employeeStore.selectedProjectFormControls}
@@ -54,12 +64,15 @@ export class ProjectDetail extends React.Component<any, any> {
                         validation={{}}
                         width={350}
                     />
-                    <div style={submitButtonStlyes}>
-                        <PrimaryButton text="Submit Changes"
-                            onClick={this.employeeStore.submitSelectedProject}
-                            disabled={!this.employeeStore.canSubmitSelectedProject}
-                        />
-                    </div>
+                    {
+                        this.employeeStore.canEditSelectedProject &&
+                        <div style={submitButtonStlyes}>
+                            <PrimaryButton text="Submit Changes"
+                                onClick={this.employeeStore.submitSelectedProject}
+                                disabled={!this.employeeStore.canSubmitSelectedProject}
+                            />
+                        </div>
+                    }
                 </div>
                 <div style={notesColumnStyles}>
                     <NotesBox

@@ -15,119 +15,119 @@
     },
     "Public Domain Approval": {
         "name": "Public Domain Approval",
-        "stepId": 1,
+        "stepId": 2,
         "view": "Public Domain Approval",
         "submitterIdDataRef": "publicDomainApprovalSubId",
         "submissionDateDataRef": "publicDomainApprovalSubDate"
     },
     "Existing License": {
         "name": "Existing License",
-        "stepId": 2,
+        "stepId": 3,
         "view": "Existing License",
         "submitterIdDataRef": "existingLicenseSubId",
         "submissionDateDataRef": "existingLicenseSubDate"
     },
     "Existing License Approval": {
         "name": "Existing License Approval",
-        "stepId": 3,
+        "stepId": 4,
         "view": "Existing License Approval",
         "submitterIdDataRef": "existingLicenseApprovalSubId",
         "submissionDateDataRef": "existingLicenseApprovalSubDate"
     },
     "Exemption Analysis": {
         "name": "Exemption Analysis",
-        "stepId": 4,
+        "stepId": 5,
         "view": "Exemption Analysis",
         "submitterIdDataRef": "exemptionAnalysisSubId",
         "submissionDateDataRef": "exemptionAnalysisSubDate"
     },
     "Exemption Approval": {
         "name": "Exemption Approval",
-        "stepId": 5,
+        "stepId": 6,
         "view": "Exemption Approval",
         "submitterIdDataRef": "exemptionApprovalSubId",
         "submissionDateDataRef": "exemptionApprovalSubDate"
     },
     "Ownership Research Licensing Exchange": {
         "name": "Ownership Research Licensing Exchange",
-        "stepId": 6,
+        "stepId": 7,
         "view": "Ownership Research Licensing Exchange",
         "submitterIdDataRef": "ownershipLicenseExchangeSubId",
         "submissionDateDataRef": "ownershipLicenseExchangeSubDate"
     },
     "Ownership Research Direct to Rights Holder": {
         "name": "Ownership Research Direct to Rights Holder",
-        "stepId": 7,
+        "stepId": 8,
         "view": "Ownership Research Direct to Rights Holder",
         "submitterIdDataRef": "ownershipRightsHolderSubId",
         "submissionDateDataRef": "ownershipRightsHolderSubDate"
     },
     "Request Submitted": {
         "name": "Request Submitted",
-        "stepId": 8,
+        "stepId": 9,
         "view": "Request Submitted",
         "submitterIdDataRef": "researchSubmittedSubId",
         "submissionDateDataRef": "researchSubmittedSubId"
     },
     "Response from Rights Holder Received": {
         "name": "Response from Rights Holder Received",
-        "stepId": 9,
+        "stepId": 10,
         "view": "Response from Rights Holder Received",
         "submitterIdDataRef": "responseFromRightsHolderSubId",
         "submissionDateDataRef": "responseFromRightsHolderSubDate"
     },
     "CLO Response to Rights Holder": {
         "name": "CLO Response to Rights Holder",
-        "stepId": 10,
+        "stepId": 11,
         "view": "CLO Response to Rights Holder",
         "submitterIdDataRef": "CLOResponseToRightsHolderSubId",
         "submissionDateDataRef": "CLOResponseToRightsHolderSubDate"
     },
     "Receipt of License": {
         "name": "Receipt of License",
-        "stepId": 11,
+        "stepId": 12,
         "view": "Receipt of License",
         "submitterIdDataRef": "receiptOfLicenseSubId",
         "submissionDateDataRef": "receiptOfLicenseSubId"
     },
     "Supervisor Signature": {
         "name": "Supervisor Signature",
-        "stepId": 12,
+        "stepId": 13,
         "view": "Supervisor Signature",
         "submitterIdDataRef": "supervisorSignatureSubId",
         "submissionDateDataRef": "supervisorSignatureSubDate"
     },
     "Payment": {
         "name": "Payment",
-        "stepId": 13,
+        "stepId": 14,
         "view": "Payment",
         "submitterIdDataRef": "paymentSubId",
         "submissionDateDataRef": "paymentSubDate"
     },
     "Process Payment": {
         "name": "Process Payment",
-        "stepId": 14,
+        "stepId": 15,
         "view": "Process Payment",
         "submitterIdDataRef": "processPaymentSubId",
         "submissionDateDataRef": "processPaymentSubDate"
     },
     "Initial Request Completion": {
         "name": "Initial Request Completion",
-        "stepId": 15,
+        "stepId": 16,
         "view": "Initial Request Completion",
         "submitterIdDataRef": "initialRequestCompletionSubId",
         "submissionDateDataRef": "initialRequestCompletionSubDate"
     },
     "Final Request Completion": {
         "name": "Final Request Completion",
-        "stepId": 16,
+        "stepId": 17,
         "view": "Final Request Completion",
         "submitterIdDataRef": "finalRequestCompletionSubId",
         "submissionDateDataRef": "finalRequestCompletionSubDate"
     },
     "Complete": {
         "name": "Complete",
-        "stepId": 17,
+        "stepId": 18,
         "view": null,
         "submitterIdDataRef": "completeSubId",
         "submissionDateDataRef": "completeSubDate"
