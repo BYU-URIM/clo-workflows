@@ -25,6 +25,7 @@ export class ClientStore {
         this.currentUser = this.root.sessionStore.currentUser
         await this.fetchClientProjects()
         await this.fetchClientProcesses()
+        await this.fetchWorks()
         this.selectedProject = observable.map()
         this.newProject = observable.map()
         this.newProcess = observable.map()
@@ -223,6 +224,15 @@ export class ClientStore {
         this.processes = await this.dataService.fetchClientProcesses().then(projs => {
             return projs.filter(p => {
                 return p.submitterId === this.currentUser.Id
+            })
+        })
+    }
+    @action
+    async fetchWorks() {
+        this.works = await this.dataService.fetchWorks().then(works => {
+            console.log(works)
+            return works.filter(work => {
+                return work
             })
         })
     }
