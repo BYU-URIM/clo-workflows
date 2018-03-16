@@ -21,6 +21,6 @@ ReactDom.render(
     <Provider rootStore={rootStore}>
         <App />
     </Provider>,
-    root,
+    root
 )
 rootStore.init()

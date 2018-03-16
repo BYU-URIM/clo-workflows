@@ -35,13 +35,11 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     label="Select the Work:"
                     selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
                     options={props.clientStore.works.map((field, index) => {
-                        return (
-                            {
-                                text: field.Title,
-                                value: field.Title,
-                                key: field.Id
-                            }
-                        )
+                        return {
+                            text: field.Title,
+                            value: field.Title,
+                            key: field.Id,
+                        }
                     })}
                     style={{
                         width: "200px",
@@ -61,13 +59,15 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newProcess}
                             formControls={props.clientStore.viewState.workTypeForm()}
                             validation={props.clientStore.newWorkValidation}
-                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_WORK)}
+                            onChange={(fieldName, value) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_WORK)}
                         />
                     </div>
                 )}
                 <PrimaryButton
                     description="Submit Process Request"
-                    onClick={props.clientStore.submitNewWorkRequest}
+                    onClick={e => {
+                        props.clientStore.submitProcess(props.clientStore.newProcess.toJSON())
+                    }}
                     text="Submit Work Request"
                     disabled={props.clientStore.asyncPendingLockout}
                 />
