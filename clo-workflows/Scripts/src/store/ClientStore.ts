@@ -53,6 +53,8 @@ export class ClientStore {
     @observable selectedWorkType: string = undefined
     /* the Selection object used to selectedProject */
     @observable selectedProject: ObservableMap<FormEntryType>
+    /* the currently selected work when adding a process to a project */
+    @observable selectedWork: {}
     /* should the project modal be visible or not */
     @observable showProjectModal: boolean = false
     /* should the process modal be visible or not */
@@ -85,6 +87,7 @@ export class ClientStore {
             selectedProject: this.selectedProject,
             selectedProjectType: this.selectedProjectType,
             selectedWorkType: this.selectedWorkType,
+            selectedWork:{},
             projectTypeForm: (): Array<IFormControl> => this.ProjectTypeForm,
             workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
             showProjectModal: this.showProjectModal,
@@ -184,9 +187,14 @@ export class ClientStore {
 
     @action
     async submitProcess(processDetails): Promise<void> {
+        console.log(processDetails)
         processDetails.submitterId = this.currentUser.Id
         processDetails.type = this.viewState.selectedProjectType
-        await this.dataService.createProcess(processDetails)
+        console.log(Array.from(this.works).find(e => {
+            console.log(e.Id, processDetails.projectId, e.Id===processDetails.projectId)
+            return e.Id===processDetails.projectId
+        }))
+        // await this.dataService.createProcess(processDetails)
         this.closeProcessModal()
     }
     @action
