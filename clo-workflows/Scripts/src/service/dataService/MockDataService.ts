@@ -75,7 +75,7 @@ export class MockDataService implements IDataService {
     }
 
     fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
-        return Promise.resolve(null)
+        return Promise.resolve([])
     }
 
     createNote(note: INote, listName: ListName): Promise<void> {

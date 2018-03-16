@@ -14,6 +14,7 @@ import { IFormControl } from "../FormControl"
 
 export function getView(viewName: string): IView {
     const normalizedView = VIEWS[viewName]
+    if(!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formControls array and the readonlyFormControls array
     // the readonlyFormControls appear first followed by the standard formControls
@@ -62,6 +63,17 @@ export function getStep(stepName: StepName): IStep {
     return deepCopy(STEPS[stepName])
 }
 
+export function getStepById(id: number): IStep {
+    for(const stepName in STEPS) {
+        const step: IStep = STEPS[stepName]
+        if(step.stepId === id) return deepCopy(step)
+    }
+}
+
+export function getStepNames(): string[] {
+    return Object.keys(STEPS)
+}
+ 
 export function getRoleNames(): string[] {
     return Object.keys(ROLES)
 }

@@ -46,6 +46,8 @@ ava.test("root store creates sessionStore, client store when client logs in", as
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
     when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(Promise.resolve(MockProjects))
     when(mockDataService.fetchClientActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchClientProjects()).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchClientProcesses()).thenReturn(Promise.resolve(MockProcesses))
 
     const rootStore: RootStore = new RootStore(instance(mockDataService))
     await rootStore.init()
