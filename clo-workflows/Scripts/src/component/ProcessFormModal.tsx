@@ -31,13 +31,17 @@ const ProcessFormModal = (props: IFormPanelProps) => {
             >
                 <h2>New Process Form</h2>
                 <Dropdown
-                    label="Select the Work Type:"
+                    label="Select the Work:"
                     selectedKey={props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined}
-                    options={props.clientStore.WorkTypesAsOptions.map((field, index) => ({
-                        text: field.text,
-                        value: field.text,
-                        key: field.text,
-                    }))}
+                    options={props.clientStore.works.map((field, index) => {
+                        return (
+                            {
+                                text: field.Title,
+                                value: field.Title,
+                                key: field.Id
+                            }
+                        )
+                    })}
                     style={{
                         width: "200px",
                         margin: "20px 0px",
