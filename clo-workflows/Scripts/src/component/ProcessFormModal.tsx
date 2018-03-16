@@ -32,7 +32,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                 <h2>New Process Form</h2>
                 <Dropdown
                     label="Select the Work:"
-                    selectedKey={props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined}
+                    selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
                     options={props.clientStore.works.map((field, index) => {
                         return (
                             {
@@ -50,7 +50,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                         props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work type"
                     }
                     onChanged={e => {
-                        props.togglePanel("selectedWorkType", e.text)
+                        props.clientStore.updateViewState("selectedWork", e.data)
                     }}
                     disabled={props.clientStore.asyncPendingLockout}
                 />
