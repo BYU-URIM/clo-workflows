@@ -25,6 +25,7 @@ export class SpDataService implements IDataService {
 
     /*******************************************************************************************************/
     // IDataService interface implementation
+    /******************************************************************************************************/
     async fetchUser(): Promise<IUser> {
         const rawUser = await this.getAppWeb().currentUser.get()
         const rawSpGroups: any[] = await this.getAppWeb()
@@ -124,6 +125,7 @@ export class SpDataService implements IDataService {
             .get(this.cloRequestElementParser)
     }
 
+    // TODO implement
     async fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
         return Promise.resolve(null)
     }
@@ -169,6 +171,7 @@ export class SpDataService implements IDataService {
 
     /******************************************************************************************************/
     // helper data and methods
+    /******************************************************************************************************/
     private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete'"
     private readonly HOST_WEB_URL: string
     private readonly APP_WEB_URL: string

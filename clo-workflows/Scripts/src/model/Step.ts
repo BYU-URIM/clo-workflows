@@ -39,12 +39,14 @@ export function getNextStepName(process: CloRequestElement): StepName {
     const curStepName: StepName = process.step as StepName
     switch(curStepName) {
         case "Intake":
-            if(process.approved === "true") {
-                return "Public Domain Research"
-            } else if(process.approved === "false") {
-                return "Work Approval"
-            }
-            return curStepName
+            return "Public Domain Research"
+            // TODO implement work approval field / step
+            // if(process.workApproved === "true") {
+            //     return "Public Domain Research"
+            // } else if(process.workApproved === "false") {
+            //     return "Work Approval"
+            // }
+            // return curStepName
 
         case "Work Approval":
             return "Public Domain Research"

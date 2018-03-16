@@ -52,7 +52,7 @@ export class App extends React.Component<any, any> {
                     /* data is unitialized - render out loading page */
                     <LoadingPage />
                 )}
-                <DevTools />
+                {/*<DevTools />*/}
             </Fabric>
         )
     }

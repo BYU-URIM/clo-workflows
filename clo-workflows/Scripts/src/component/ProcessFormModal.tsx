@@ -13,6 +13,7 @@ export interface IFormPanelProps {
     togglePanel(m: string, v: string | boolean)
 }
 
+// TODO this is mixing works and processes together
 const ProcessFormModal = (props: IFormPanelProps) => {
     return (
         <Modal
@@ -56,15 +57,13 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newProcess}
                             formControls={props.clientStore.viewState.workTypeForm()}
                             validation={props.clientStore.newWorkValidation}
-                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_PROCESS)}
+                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_WORK)}
                         />
                     </div>
                 )}
                 <PrimaryButton
                     description="Submit Process Request"
-                    onClick={e => {
-                        props.clientStore.submitProcess(props.clientStore.newProcess.toJSON())
-                    }}
+                    onClick={props.clientStore.submitNewWorkRequest}
                     text="Submit Work Request"
                     disabled={props.clientStore.asyncPendingLockout}
                 />

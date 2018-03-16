@@ -9,7 +9,7 @@ import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView, getStep, getViewAndMakeReadonly } from "../model/loader/resourceLoaders"
+import { getView, getStep, getViewAndMakeReadonly, getStepById } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -39,9 +39,11 @@ export class EmployeeStore {
     @observable canEditSelectedWork: boolean = false
 
     @computed get selectedWorkFormControls(): Array<IFormControl> {
-        return this.canEditSelectedWork
+        if(this.selectedWork.size !== 0) {
+            return this.canEditSelectedWork
             ? getView(this.selectedWork.get("type") as string).formControls
             : getViewAndMakeReadonly(this.selectedWork.get("type") as string).formControls
+        }
     }
 
     @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
@@ -120,9 +122,11 @@ export class EmployeeStore {
 
     @computed
     get selectedProjectFormControls(): Array<IFormControl> {
-        return this.canEditSelectedProject
-            ? getView(this.selectedProject.get("type") as string).formControls
-            : getViewAndMakeReadonly(this.selectedProject.get("type") as string).formControls
+        if(this.selectedProject.size !== 0) {
+            return this.canEditSelectedProject
+                ? getView(this.selectedProject.get("type") as string).formControls
+                : getViewAndMakeReadonly(this.selectedProject.get("type") as string).formControls
+        }
     }
 
     @action
@@ -130,7 +134,7 @@ export class EmployeeStore {
         this.selectedProject.set(fieldName, String(newVal))
     }
 
-    @observable selectedProjectNotes: Array<INote>
+    @observable selectedProjectNotes: Array<INote> = []
 
     @action
     async submitSelectedProject(): Promise<void> {
@@ -176,7 +180,7 @@ export class EmployeeStore {
             // if submission is successful, clear the project note entry and add it to project notes
             this.updateProjectNoteEntry("")
             runInAction(() => this.selectedProjectNotes.unshift(newNote))
-            this.postMessage({messageText: "note successfully submitted", messageType: "error"})
+            this.postMessage({messageText: "note successfully submitted", messageType: "success"})
         } catch(error) {
             console.error(error)
             submissionStatus = false
@@ -239,12 +243,19 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
 
         try {
-            const updatedProcess = this.selectedProcess.toJS()
+            const currentStep = getStep(this.selectedProcess.get("step") as StepName)
+            let updatedProcess = this.selectedProcess.toJS()
+            updatedProcess = {...updatedProcess, ...{
+                step: getNextStepName(updatedProcess),
+                [currentStep.submissionDateDataRef]: getFormattedDate(),
+                [currentStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
+            }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess
             this.replaceElementInListById(updatedProcess, this.processes)
             // clear out selectedProcess, selected project, and selected work
             this.clearSelectedRequestElements()
+            this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
             this.postMessage({messageText: "process successfully submitted", messageType: "success"})
 
         } catch(error) {
@@ -333,9 +344,13 @@ export class EmployeeStore {
         return this.selectedStepProcesses.map(process => {
             const processWork = this.works.find(work => work.Id === Number(process.workId))
             const processProject = this.projects.find(project => project.Id === Number(process.projectId))
+            // to get the date when the process arrived at the current step for processing, look at the previous step submission date
+            const currentStep = getStep(process.step as StepName)
+            const previousStep = getStepById(currentStep.stepId-1)
+            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateDataRef]
             return {
                 header: `${processProject.department || ""} ${processWork.type || ""} Process`,
-                subheader: `submitted to ${process.step} on ${process.dateSubmittedToCurrentStep}`,
+                subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
                 body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
                 id: process.Id as number,
             }

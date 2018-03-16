@@ -13,13 +13,14 @@ import {
     CommandButton,
 } from "office-ui-fabric-react"
 import * as React from "react"
-
 import { CloRequestElement } from "../model/CloRequestElement"
 import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import ProjectFormModal from "./ProjectFormModal"
 import ProcessFormModal from "./ProcessFormModal"
 import WorkFormModal from "./WorkFormModal"
 import { Message } from "./Message"
+import { getStep, getStepNames } from "../model/loader/resourceLoaders"
+import { StepName } from "../model/Step"
 
 /*******************************
  * TODO:
@@ -56,16 +57,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
         this.clientStore = this.props.clientStore
         this._processes = []
 
-        this.clientStore.processes.map((proc, i) => {
-            this._processes.push({
-                key: i.toString(),
-                Id: proc.Id,
-                projectId: proc.projectId,
-                submitterId: proc.submitterId,
-                Title: proc.Title,
-            })
-        })
-        const fields = ["Title", "workId", "submitterId"]
+        const fields = ["Title", "step"]
         this._columns = fields.map((f, i): IColumns => ({
             key: i.toString(),
             name: f.split(/(?=[A-Z])/).join(" "),
@@ -98,6 +90,18 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
         }
     }
     public render() {
+        // TODO should probably be moved to store
+        this.clientStore.processes.map((proc, i) => {
+            this._processes.push({
+                key: i.toString(),
+                Id: proc.Id,
+                projectId: proc.projectId,
+                Title: proc.Title,
+                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length} `
+            })
+        })
+
+        // TODO this is a lot of logic - should probably be moved to store
         this._projects = this.clientStore.projects
             .map((proj: CloRequestElement, i): IProjectGroup => ({
                 key: i.toString(),
@@ -147,12 +151,12 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                             icon: "Add",
                             onClick: () => this.clientStore.updateViewState("showProjectModal", true),
                         },
-                        {
+                        /*{ TODO add back in when separation is clear between add process / add work
                             key: "addNewWork",
                             name: "Add New Work",
                             icon: "Add",
                             onClick: () => this.clientStore.updateViewState("showWorkModal", true),
-                        },
+                        },*/
                     ]}
                 />
                 <DetailsList
