@@ -1,5 +1,5 @@
 import { observer } from "mobx-react"
-import { Dropdown } from "office-ui-fabric-react"
+import { Dropdown, Checkbox } from "office-ui-fabric-react"
 import { DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
@@ -31,6 +31,10 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                 }}
             >
                 <h2>New Process Form</h2>
+                <Checkbox 
+                    label={"add a new work"}
+
+                />
                 <Dropdown
                     label="Select the Work:"
                     selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
@@ -59,7 +63,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newProcess}
                             formControls={props.clientStore.viewState.workTypeForm()}
                             validation={props.clientStore.newWorkValidation}
-                            onChange={(fieldName, value) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_WORK)}
+                            onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, OBJECT_TYPES.NEW_WORK)}
                         />
                     </div>
                 )}

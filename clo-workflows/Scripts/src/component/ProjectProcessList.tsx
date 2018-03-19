@@ -81,7 +81,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                         text="Add a Process"
                         key={renderHeaderProps.group.key}
                         onClick={e => {
-                            this.clientStore.updateObject("projectId", renderHeaderProps.group.data.projectId, OBJECT_TYPES.NEW_PROCESS)
+                            this.clientStore.updateClientStoreMember("projectId", renderHeaderProps.group.data.projectId, OBJECT_TYPES.NEW_PROCESS)
                             this.clientStore.updateViewState("showProcessModal", true)
                         }}
                     />

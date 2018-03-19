@@ -142,9 +142,8 @@ export class ClientStore {
         }, {})
     }
     /************ Actions ***************/
-    /* TODO: fix this naming, what the heck is update object?! */
     @action
-    async updateObject(fieldName: string, newVal: FormEntryType, objToUpdate?: OBJECT_TYPES) {
+    async updateClientStoreMember(fieldName: string, newVal: FormEntryType, objToUpdate?: OBJECT_TYPES) {
         objToUpdate ? this[objToUpdate].set(fieldName, newVal) : (this[fieldName] = newVal)
     }
     @action
