@@ -125,11 +125,6 @@ export class SpDataService implements IDataService {
             .get(this.cloRequestElementParser)
     }
 
-    // TODO implement
-    async fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
-        return Promise.resolve(null)
-    }
-
     async fetchClientProjects(): Promise<Array<CloRequestElement>> {
         const clientProjects: Array<CloRequestElement> = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
