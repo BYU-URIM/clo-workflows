@@ -16,8 +16,9 @@ import * as React from "react"
 import { CloRequestElement } from "../model/CloRequestElement"
 import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import ProjectFormModal from "./ProjectFormModal"
-import ProcessFormModal from "./ProcessFormModal"
 import WorkFormModal from "./WorkFormModal"
+import ProcessFormModal from "./ProcessFormModal"
+
 import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
@@ -81,7 +82,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                         text="Add a Process"
                         key={renderHeaderProps.group.key}
                         onClick={e => {
-                            this.clientStore.updateClientStoreMember("projectId", renderHeaderProps.group.data.projectId, OBJECT_TYPES.NEW_PROCESS)
+                            this.clientStore.updateClientStoreMember("projectId", renderHeaderProps.group.data.projectId, "newProcess")
                             this.clientStore.updateViewState("showProcessModal", true)
                         }}
                     />
@@ -92,12 +93,13 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
     public render() {
         // TODO should probably be moved to store
         this.clientStore.processes.map((proc, i) => {
+            console.log(proc)
             this._processes.push({
                 key: i.toString(),
                 Id: proc.Id,
                 projectId: proc.projectId,
                 Title: proc.Title,
-                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length} `
+                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
             })
         })
 
@@ -132,12 +134,6 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                     }}
                 />
                 <ProcessFormModal
-                    clientStore={this.clientStore}
-                    togglePanel={(m, v?) => {
-                        this.clientStore.updateViewState(m, v)
-                    }}
-                />
-                <WorkFormModal
                     clientStore={this.clientStore}
                     togglePanel={(m, v?) => {
                         this.clientStore.updateViewState(m, v)
