@@ -7,6 +7,7 @@ import * as React from "react"
 
 import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
 import FormControlGroup from "./FormControlGroup"
+import WorkFormModal from "./WorkFormModal"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
@@ -31,47 +32,45 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                 }}
             >
                 <h2>New Process Form</h2>
-                <Checkbox 
+                <Checkbox
                     label={"add a new work"}
-
+                    checked={props.clientStore.workIsNew}
+                    onChange={(m, v) => {
+                        if (!v) props.clientStore.closeWorkForm()
+                        props.clientStore.updateClientStoreMember("workIsNew", v)
+                    }}
                 />
-                <Dropdown
-                    label="Select the Work:"
-                    selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
-                    options={props.clientStore.works.map((field, index) => {
-                        return {
-                            text: field.Title,
-                            value: field.Title,
-                            key: field.Id,
+                {props.clientStore.workIsNew ? (
+                    <WorkFormModal clientStore={props.clientStore} togglePanel={props.togglePanel} />
+                ) : (
+                    <Dropdown
+                        label="Select the Work:"
+                        selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
+                        options={props.clientStore.works.map((field, index) => {
+                            return {
+                                text: field.Title,
+                                value: field.Title,
+                                key: field.Id,
+                            }
+                        })}
+                        style={{
+                            width: "200px",
+                            margin: "20px 0px",
+                        }}
+                        placeHolder={
+                            props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work"
                         }
-                    })}
-                    style={{
-                        width: "200px",
-                        margin: "20px 0px",
-                    }}
-                    placeHolder={
-                        props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work type"
-                    }
-                    onChanged={e => {
-                        props.clientStore.updateViewState("selectedWork", e.data)
-                    }}
-                    disabled={props.clientStore.asyncPendingLockout}
-                />
-                {props.clientStore.viewState.selectedWorkType && (
-                    <div>
-                        <FormControlGroup
-                            data={props.clientStore.newProcess}
-                            formControls={props.clientStore.viewState.workTypeForm()}
-                            validation={props.clientStore.newWorkValidation}
-                            onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, OBJECT_TYPES.NEW_WORK)}
-                        />
-                    </div>
+                        onChanged={e => {
+                            console.log(e.key)
+                            props.clientStore.updateClientStoreMember("selectedWork", e.key)
+                        }}
+                        disabled={props.clientStore.asyncPendingLockout}
+                    />
                 )}
+
                 <PrimaryButton
                     description="Submit Process Request"
-                    onClick={e => {
-                        props.clientStore.submitProcess(props.clientStore.newProcess.toJSON())
-                    }}
+                    onClick={props.clientStore.submitNewWorkProcess}
                     text="Submit Work Request"
                     disabled={props.clientStore.asyncPendingLockout}
                 />
