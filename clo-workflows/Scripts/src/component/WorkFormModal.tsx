@@ -5,7 +5,7 @@ import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
 
-import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore"
 import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
@@ -15,9 +15,7 @@ export interface IFormPanelProps {
 
 const WorkFormModal = (props: IFormPanelProps) => {
     return (
-        <div
-            style={{marginBottom: "20px"}}
-            >
+        <div style={{ marginBottom: "20px" }}>
             <h2>New Work Form</h2>
             <Dropdown
                 label="Select the Work Type:"
