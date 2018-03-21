@@ -2,19 +2,15 @@ import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { autobind } from "core-decorators"
 import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../model/CloRequestElement"
 import { IFormControl } from "../model/FormControl"
-import { getView, getStep } from "../model/loader/resourceLoaders"
+import { getView, getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { IDataService } from "../service/dataService/IDataService"
 import { validateFormControl, getFormattedDate } from "../utils"
 import { RootStore } from "./RootStore"
 import { User } from "../model/User"
 import { Selection, SelectionMode } from "office-ui-fabric-react"
 import { getNextStepName, StepName } from "../model/Step"
-
-export enum OBJECT_TYPES {
-    NEW_PROJECT = "newProject",
-    NEW_WORK = "newWork",
-    NEW_PROCESS = "newProcess",
-}
+import { IWork } from "../model/Work"
+import { IProjectGroup } from "../component/ProjectProcessList"
 
 @autobind
 export class ClientStore {
@@ -22,9 +18,14 @@ export class ClientStore {
     @action
     async init(): Promise<void> {
         this.currentUser = this.root.sessionStore.currentUser
-        await this.fetchClientProjects()
+        this.viewData = {
+            _processes: [],
+            _projects: [],
+        }
         await this.fetchClientProcesses()
+        await this.fetchClientProjects()
         await this.fetchWorks()
+
         this.selectedProject = observable.map()
         this.newProject = observable.map()
         this.newProcess = observable.map()
@@ -42,7 +43,12 @@ export class ClientStore {
     /* all of the work requests that exist on the projects associated with the currentUser id */
     @observable processes: Array<CloRequestElement>
     /* the current works returned from the filtered works query */
-    @observable works: Array<CloRequestElement>
+    @observable works: Array<IWork>
+    @observable
+    viewData: {
+        _processes: Array<{}>
+        _projects: Array<IProjectGroup>
+    }
 
     /*********** observables for viewState *************/
 
@@ -53,7 +59,7 @@ export class ClientStore {
     /* the Selection object used to selectedProject */
     @observable selectedProject: ObservableMap<FormEntryType>
     /* the currently selected work when adding a process to a project */
-    @observable selectedWork: {}
+    @observable selectedWork: number
     /* should the project modal be visible or not */
     @observable showProjectModal: boolean = false
     /* should the process modal be visible or not */
@@ -76,11 +82,6 @@ export class ClientStore {
     get WorkTypeForm(): Array<IFormControl> {
         return getView(this.viewState.selectedWorkType).formControls
     }
-
-    /**
-     * @description All state dictated by the user's direct interactions with the UI (selected project, )
-     *
-     */
 
     @computed
     get viewState() {
@@ -144,6 +145,10 @@ export class ClientStore {
             return accumulator
         }, {})
     }
+    @computed
+    get clientViewData() {
+        return this.viewData
+    }
     /************ Actions ***************/
     @action
     async updateClientStoreMember(fieldName: string, newVal: FormEntryType | boolean, objToUpdate?: string) {
@@ -186,14 +191,13 @@ export class ClientStore {
     }
 
     @action
-    async submitProcess(processDetails): Promise<void> {
+    async submitProcess(processDetails: ObservableMap<FormEntryType> = this.newProcess): Promise<void> {
         this.setAsyncPendingLockout(true)
+        this.newProcess.set("submitterId", this.currentUser.Id)
         try {
-            processDetails.submitterId = this.currentUser.Id
-            processDetails.type = this.viewState.selectedProjectType
-            processDetails.projectId = String(processDetails.projectId) // TODO find where this is originally assigned
-            console.log(processDetails)
-            // await this.dataService.createProcess(processDetails)
+            // processDetails.step = getNextStepName(processDetails, "Intake")
+            console.log(processDetails.toJS())
+            await this.dataService.createProcess(processDetails.toJS())
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -202,25 +206,23 @@ export class ClientStore {
             })
         } finally {
             this.setAsyncPendingLockout(false)
+            runInAction(() => this.fetchClientProcesses())
         }
     }
     /**
-     * 
+     *
      * TODO: add title and other details like step to the processDetails
      */
     @action
     async submitNewWorkProcess() {
         this.setAsyncPendingLockout(true)
-        let newWorkId
         if (this.workIsNew) {
-            console.log("here")
-            const newWorkDetails = this.newWork.toJS()
             try {
-                newWorkDetails.submitterId = this.currentUser.Id
-                newWorkDetails.type = this.selectedProjectType
-                console.log(newWorkDetails)
-                await this.dataService.createWork(newWorkDetails).then(project => {
-                    newWorkId = project.data.Id
+                this.newWork.set("type", this.selectedWorkType)
+                console.log(this.newWork)
+                await this.dataService.createWork(this.newWork.toJS()).then(work => {
+                    console.log(work)
+                    this.selectedWork = work.data.Id.toString()
                 })
             } catch (error) {
                 console.error(error)
@@ -232,15 +234,14 @@ export class ClientStore {
                 this.setAsyncPendingLockout(false)
             }
         }
-        const processDetails = this.newProcess.toJS()
         try {
-            console.log(newWorkId)
-            processDetails.step = "Intake"
-            processDetails.submitterId = this.currentUser.Id
-            processDetails.type = this.viewState.selectedProjectType
-            processDetails.projectId = String(processDetails.projectId)
-            processDetails.workId = this.selectedWork? String(this.selectedWork) :String(newWorkId)
-            await this.dataService.createProcess(processDetails)
+            // processDetails.step = getNextStepName(processDetails, "Intake")
+            this.newProcess.set("step", "Intake")
+            this.workIsNew
+                ? this.newProcess.set("Title", this.newWork.get("Title"))
+                : this.newProcess.set("Title", this.works.find(work => work.Id === this.selectedWork).Title)
+            this.newProcess.set("workId", this.selectedWork.toString())
+            await this.submitProcess()
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -249,6 +250,11 @@ export class ClientStore {
             })
         } finally {
             this.setAsyncPendingLockout(false)
+            this.postMessage({
+                messageText: "the new Process request was submitted successfully",
+                messageType: "success",
+            })
+            this.updateClientStoreMember("showProcessModal", false)
         }
     }
 
@@ -274,15 +280,54 @@ export class ClientStore {
     }
 
     @action
+    handleAddNewProcess(projectId: string) {
+        this.newProcess.set("projectId", projectId)
+        this.newProcess.set("submitterId", this.currentUser.Id)
+        this.newWork.set("submitterId", this.currentUser.Id)
+        this.updateViewState("showProcessModal", true)
+    }
+
+    @action
     async fetchClientProjects() {
         this.projects = await this.dataService.fetchClientProjects()
         this.projects = this.projects.filter(proj => proj.submitterId === this.currentUser.Id)
+        this.viewData._projects = this.projects
+            .map((proj: CloRequestElement, i): IProjectGroup => ({
+                key: i.toString(),
+                data: {
+                    projectId: proj.Id,
+                },
+                name: proj.Title.toString(),
+                count: this.processes.filter(proc => {
+                    return proj.Id === Number(proc.projectId)
+                }).length,
+                submitterId: proj.submitterId.toString(),
+                startIndex: 0,
+                isShowingAll: false,
+            }))
+            .map((e, i, a) => {
+                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
+                return e
+            })
     }
 
     @action
     async fetchClientProcesses() {
         this.processes = await this.dataService.fetchClientProcesses()
-        this.processes = this.processes.filter(proc => proc.submitterId === this.currentUser.Id)
+        /* this sorting keps the process order lined up with project order
+        this probably needs to be changed to something more stable longterm */
+        this.processes = this.processes
+            .filter(proc => proc.submitterId === this.currentUser.Id)
+            .sort((a, b) => Number(a.projectId) - Number(b.projectId))
+        runInAction(()=> this.viewData._processes = this.processes.map((proc, i) => {
+            return {
+                key: i.toString(),
+                Id: proc.Id,
+                projectId: proc.projectId,
+                Title: proc.Title,
+                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
+            }
+        }))
     }
     @action
     async fetchWorks() {

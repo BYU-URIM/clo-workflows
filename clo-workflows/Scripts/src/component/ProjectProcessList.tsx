@@ -14,7 +14,7 @@ import {
 } from "office-ui-fabric-react"
 import * as React from "react"
 import { CloRequestElement } from "../model/CloRequestElement"
-import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore"
 import ProjectFormModal from "./ProjectFormModal"
 import WorkFormModal from "./WorkFormModal"
 import ProcessFormModal from "./ProcessFormModal"
@@ -82,8 +82,8 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                         text="Add a Process"
                         key={renderHeaderProps.group.key}
                         onClick={e => {
-                            this.clientStore.updateClientStoreMember("projectId", renderHeaderProps.group.data.projectId, "newProcess")
-                            this.clientStore.updateViewState("showProcessModal", true)
+                            console.log(renderHeaderProps.group.data.projectId.toString())
+                            this.clientStore.handleAddNewProcess(renderHeaderProps.group.data.projectId.toString())
                         }}
                     />
                 </div>
@@ -91,37 +91,8 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
         }
     }
     public render() {
-        // TODO should probably be moved to store
-        this.clientStore.processes.map((proc, i) => {
-            console.log(proc)
-            this._processes.push({
-                key: i.toString(),
-                Id: proc.Id,
-                projectId: proc.projectId,
-                Title: proc.Title,
-                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
-            })
-        })
-
-        // TODO this is a lot of logic - should probably be moved to store
-        this._projects = this.clientStore.projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: i.toString(),
-                data: {
-                    projectId: proj.Id,
-                },
-                name: proj.Title.toString(),
-                count: this.clientStore.processes.filter(proc => {
-                    return proj.Id === Number(proc.projectId)
-                }).length,
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
-            .map((e, i, a) => {
-                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                return e
-            })
+        this._processes = this.clientStore.viewData._processes
+        this._projects = this.clientStore.viewData._projects
         /** TODO: After Demo
          *  these 3 modal forms need abstracted out for Dryer code,
          */
@@ -147,17 +118,11 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                             icon: "Add",
                             onClick: () => this.clientStore.updateViewState("showProjectModal", true),
                         },
-                        /*{ TODO add back in when separation is clear between add process / add work
-                            key: "addNewWork",
-                            name: "Add New Work",
-                            icon: "Add",
-                            onClick: () => this.clientStore.updateViewState("showWorkModal", true),
-                        },*/
                     ]}
                 />
                 <DetailsList
-                    items={this._processes}
-                    groups={this._projects}
+                    items={this.clientStore.viewData._processes}
+                    groups={this.clientStore.viewData._projects}
                     columns={this._columns}
                     checkboxVisibility={CheckboxVisibility.hidden}
                     onRenderRow={(props, defaultRender) => <div>{defaultRender(props)}</div>}
