@@ -6,7 +6,7 @@ import { Modal } from "office-ui-fabric-react/lib/Modal"
 
 import * as React from "react"
 
-import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore"
 import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
@@ -22,7 +22,6 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                 props.togglePanel("showProjectModal", false)
             }}
             isBlocking={true}
-            
         >
             <div
                 style={{
@@ -43,7 +42,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     }))}
                     style={{
                         width: "200px",
-                        margin: "20px 0px"
+                        margin: "20px 0px",
                     }}
                     placeHolder={
                         props.clientStore.viewState.selectedProjectType
@@ -54,7 +53,6 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                         props.togglePanel("selectedProjectType", e.text)
                     }}
                     disabled={props.clientStore.asyncPendingLockout}
-
                 />
                 {props.clientStore.viewState.selectedProjectType && (
                     <div>
@@ -62,18 +60,19 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                             data={props.clientStore.newProject}
                             formControls={props.clientStore.viewState.projectTypeForm()}
                             validation={props.clientStore.newProjectValidation}
-                            onChange={(fieldName, value ) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
+                            onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>
                 )}
-                
+
                 <PrimaryButton
                     description="Create the new project"
                     onClick={() => props.clientStore.submitNewProject(props.clientStore.newProject.toJSON())}
                     text="Create Project"
                     disabled={props.clientStore.asyncPendingLockout}
                 />
-                <br/><br/>
+                <br />
+                <br />
                 <DefaultButton
                     description="close without submitting"
                     text="Clear and Cancel"
@@ -89,10 +88,10 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                         props.togglePanel("showProjectModal", false)
                     }}
                     disabled={props.clientStore.asyncPendingLockout}
-
                 />
             </div>
-            <br/><br/>
+            <br />
+            <br />
         </Modal>
     )
 }
