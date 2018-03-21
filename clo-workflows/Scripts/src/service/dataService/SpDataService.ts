@@ -12,6 +12,7 @@ import { INote } from "../../model/Note"
 import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
+import { IWork } from "../../model/Work"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -137,8 +138,8 @@ export class SpDataService implements IDataService {
             .items.get(this.cloRequestElementParser)
         return clientProcesses
     }
-    async fetchWorks(): Promise<Array<CloRequestElement>> {
-        const works: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchWorks(): Promise<Array<IWork>> {
+        const works: Array<IWork> = await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
         return works
@@ -153,12 +154,12 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
-    async createProcess(process:{}): Promise<ItemAddResult> {
+    async createProcess(process: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.add(process)
     }
-    async createWork(work:{}): Promise<ItemAddResult> {
+    async createWork(work: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.add(work)
@@ -178,7 +179,7 @@ export class SpDataService implements IDataService {
                 headers: { Accept: "application/json; odata=verbose" },
                 credentials: "same-origin",
             },
-            "../",
+            "../"
         ).web
     }
 
@@ -189,7 +190,7 @@ export class SpDataService implements IDataService {
                     headers: { Accept: "application/json; odata=verbose" },
                     credentials: "same-origin",
                 },
-                "../",
+                "../"
             )
             .crossDomainWeb(this.APP_WEB_URL, this.HOST_WEB_URL)
     }

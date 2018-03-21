@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
-import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore"
 import { SearchBox } from "office-ui-fabric-react/lib/components/SearchBox"
 import { Checkbox } from "office-ui-fabric-react/lib/components/Checkbox"
 import FormControlGroup from "./FormControlGroup"
@@ -17,7 +17,9 @@ export class ClientProjectType extends React.Component<any, any> {
             <div>
                 <Dropdown
                     label="Select the Project Type:"
-                    selectedKey={this.clientStore.viewState.selectedProjectType ? this.clientStore.viewState.selectedProjectType : undefined}
+                    selectedKey={
+                        this.clientStore.viewState.selectedProjectType ? this.clientStore.viewState.selectedProjectType : undefined
+                    }
                     options={this.clientStore.ProjectTypesAsOptions.map((field, index) => ({
                         text: field.text,
                         value: field.text,
@@ -28,9 +30,7 @@ export class ClientProjectType extends React.Component<any, any> {
                             ? this.clientStore.viewState.selectedProjectType
                             : "select a project type"
                     }
-                    onChanged={e => {
-                        this.clientStore.updateMember("selectedProjectType", e.text)
-                    }}
+                    onChanged={e => this.clientStore.updateMember("selectedProjectType", e.text)}
                 />
 
                 {this.clientStore.viewState.selectedProjectType && (
@@ -39,7 +39,7 @@ export class ClientProjectType extends React.Component<any, any> {
                             data={this.clientStore.newProject}
                             formControls={this.clientStore.viewState.projectTypeForm()}
                             validation={this.clientStore.newProjectValidation}
-                            onChange={(fieldName, value ) => this.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
+                            onChange={(fieldName, value) => this.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>
                 )}
