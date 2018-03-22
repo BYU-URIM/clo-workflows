@@ -115,9 +115,11 @@ export class ClientStore {
     @computed
     get CurrentFormValidation(): {} {
         const typeToValidate = this.selectedWorkType ? this.WorkTypeForm : this.ProjectTypeForm
+        const newInstanceOfType = this.selectedWorkType ? this.newWork : this.newProject
+
         return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
                 const fieldName: string = formControl.dataRef
-                const inputVal = this.newProject.get(fieldName) || undefined
+                const inputVal = newInstanceOfType.get(fieldName) || undefined
                 const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
                 accumulator[fieldName] = error
                 return accumulator
