@@ -67,7 +67,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
 
                 <PrimaryButton
                     description="Create the new project"
-                    onClick={() => props.clientStore.submitNewProject(props.clientStore.newProject.toJSON())}
+                    onClick={() => props.clientStore.processClientRequest()}
                     text="Create Project"
                     disabled={props.clientStore.asyncPendingLockout}
                 />

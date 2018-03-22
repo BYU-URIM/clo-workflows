@@ -6,35 +6,24 @@ import { getView, getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { IDataService } from "../service/dataService/IDataService"
 import { validateFormControl, getFormattedDate } from "../utils"
 import { RootStore } from "./RootStore"
-import { User } from "../model/User"
+import { User, IUser } from "../model/User"
 import { getNextStepName, StepName } from "../model/Step"
 import { IWork } from "../model/Work"
 import { IProjectGroup } from "../component/ProjectProcessList"
 
+type ClientObsMap = ObservableMap<FormEntryType>
+
 @autobind
 export class ClientStore {
-    constructor(private root: RootStore, private dataService: IDataService) {}
-    @action
-    async init(): Promise<void> {
-        this.currentUser = this.root.sessionStore.currentUser
-        this.client_processes = observable.array()
-        this.client_projects = observable.array()
-        await this.fetchClientProcesses()
-        await this.fetchClientProjects()
-        await this.fetchWorks()
 
-        this.selectedProject = observable.map()
-        this.newProject = observable.map()
-        this.newProcess = observable.map()
-        this.newWork = observable.map()
-        this.setAsyncPendingLockout(false)
-    }
+    /* current user object */
+    @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* observable object to store data for new project as it is received, provides values for controlled create forms */
-    @observable newProject: ObservableMap<FormEntryType>
+    @observable newProject: ClientObsMap
     /* observable object to store data for new process as it is received, provides values for controlled create forms */
-    @observable newProcess: ObservableMap<FormEntryType>
+    @observable newProcess: ClientObsMap
     /* observable object to store data for new work as it is received, provides values for controlled create forms */
-    @observable newWork: ObservableMap<FormEntryType>
+    @observable newWork: ClientObsMap
     /* all of the projects ever created by the currentUser */
     @observable projects: Array<CloRequestElement>
     /* all of the work requests that exist on the projects associated with the currentUser id */
@@ -46,107 +35,83 @@ export class ClientStore {
 
     /*********** observables for viewState *************/
 
+    @observable clientSelections?: ClientObsMap
     /* the selected project type, defaults to undefined */
     @observable selectedProjectType?: string = undefined
     /* the selected work type, defaults to undefined */
-    @observable selectedWorkType: string = undefined
-    /* the Selection object used to selectedProject */
-    @observable selectedProject: ObservableMap<FormEntryType>
-    /* the currently selected work when adding a process to a project */
-    @observable selectedWork: number
+    @observable selectedWorkId: number
     /* should the project modal be visible or not */
+    @observable selectedWorkType: string = undefined
+    /* the project to add process to */
+    @observable selectedProjectId: string
+    /* the currently selected work when adding a process to a project */
     @observable showProjectModal: boolean = false
     /* should the process modal be visible or not */
     @observable showProcessModal: boolean = false
-    /* should the work modal be visible or not */
-    @observable showWorkModal: boolean = false
     /* is the work on the new process new */
     @observable workIsNew: boolean = false
+    /* what is the message to show? */
+    @observable message: any
+    /* boolean value indicating if the inputs should all be disabled , use while awaiting http requests */
+    @observable asyncPendingLockout: boolean
 
-    /* current user object */
-    currentUser
-
-    /************ Computed Values ****************/
-
-    @computed
-    get ProjectTypeForm(): Array<IFormControl> {
-        return getView(this.viewState.selectedProjectType).formControls
+    @observable
+    selected: {
+        projectId: string
+        projectType: string
+        workId: string
+        workType: string
     }
-    @computed
-    get WorkTypeForm(): Array<IFormControl> {
-        return getView(this.viewState.selectedWorkType).formControls
-    }
+    /************************************************
+     * #######################
+     * ##### Actions TOC #####
+     * #######################
+     * # init tasks
+     * # utility functions
+     * # dataService interactions #
+     *
+     ************************************************/
 
-    @computed
-    get viewState() {
-        return {
-            selectedProject: this.selectedProject,
-            selectedProjectType: this.selectedProjectType,
-            selectedWorkType: this.selectedWorkType,
-            selectedWork: {},
-            projectTypeForm: (): Array<IFormControl> => this.ProjectTypeForm,
-            workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
-            showProjectModal: this.showProjectModal,
-            showProcessModal: this.showProcessModal,
-            message: this.message,
-            workIsNew: this.workIsNew,
-        }
-    }
+    constructor(private root: RootStore, private dataService: IDataService) {}
 
-    @computed
-    get DataService() {
-        return this.dataService
-    }
+    @action
+    async init(): Promise<void> {
+        await this.fetchClientProcesses()
+        await this.fetchClientProjects()
+        await this.fetchWorks()
 
-    @computed
-    get TypesAsOptions() {
-        return {
-            PROJECTS: PROJECT_TYPES.map(e => ({
-                key: e,
-                text: e,
-            })),
-            WORKS: WORK_TYPES.map(e => ({
-                key: e,
-                text: e,
-            })),
-        }
+        this.currentUser = this.root.sessionStore.currentUser
+        this.client_processes = observable.array()
+        this.client_projects = observable.array()
+
+        await this.initInputMaps()
+        this.setAsyncPendingLockout(false)
     }
 
-    @computed
-    get CurrentFormValidation(): {} {
-        const typeToValidate = this.selectedWorkType ? this.WorkTypeForm : this.ProjectTypeForm
-        const newInstanceOfType = this.selectedWorkType ? this.newWork : this.newProject
-
-        return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
-                const fieldName: string = formControl.dataRef
-                const inputVal = newInstanceOfType.get(fieldName) || undefined
-                const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
-                accumulator[fieldName] = error
-                return accumulator
-            }, {})
+    private initInputMaps = (): void => {
+        this.newProject = this.getClientObsMap()
+        this.newWork = this.getClientObsMap()
+        this.newProcess = this.getClientObsMap()
     }
 
-    @computed
-    get clientProcesses() {
-        return this.client_processes
+    private initUIDescriptors = (): void => {
+        this.clientSelections = this.getClientObsMap()
     }
-    @computed
-    get clientProjects() {
-        return this.client_projects
-    }
-    /************ Actions ***************/
+
+
+    private getClientObsMap = (): ClientObsMap => observable.map([["submitterId", this.currentUser.Id]])
+
     @action
     async updateClientStoreMember(fieldName: string, newVal: FormEntryType | boolean, objToUpdate?: string) {
         objToUpdate ? this[objToUpdate].set(fieldName, newVal) : (this[fieldName] = newVal)
     }
     @action
-    async submitNewProject(projectDetails): Promise<void> {
+    async submitProject(): Promise<void> {
         this.setAsyncPendingLockout(true)
+        this.newProject.set("type", this.viewState.selectedProjectType)
         try {
-            projectDetails.submitterId = this.currentUser.Id
-            projectDetails.type = this.viewState.selectedProjectType
-            await this.dataService.createProject(projectDetails)
-            runInAction(() => this.projects.push(projectDetails))
+            await this.dataService.createProject(this.newProject.toJS())
+            // runInAction(() => this.projects.push(projectDetails))
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -157,32 +122,12 @@ export class ClientStore {
     }
 
     @action
-    async submitNewWork(workDetails): Promise<void> {
+    async submitWork(): Promise<void> {
         this.setAsyncPendingLockout(true)
         try {
-            workDetails.submitterId = this.currentUser.Id
-            workDetails.type = this.viewState.selectedWorkType
-            await this.dataService.createWork(workDetails)
-            this.postMessage({ messageText: "new work request successfully created", messageType: "success" })
-        } catch (error) {
-            console.error(error)
-            this.postMessage({
-                messageText: "there was a problem submitting your new Work request, try again",
-                messageType: "error",
-            })
-        } finally {
-            this.setAsyncPendingLockout(false)
-        }
-    }
-
-    @action
-    async submitProcess(processDetails: ObservableMap<FormEntryType> = this.newProcess): Promise<void> {
-        this.setAsyncPendingLockout(true)
-        this.newProcess.set("submitterId", this.currentUser.Id)
-        try {
-            // processDetails.step = getNextStepName(processDetails, "Intake")
-            console.log(processDetails.toJS())
-            await this.dataService.createProcess(processDetails.toJS())
+            this.newWork.set("type", this.selectedWorkType)
+            const work = await this.dataService.createWork(this.newWork.toJS())
+            this.updateClientStoreMember("selectedWorkId", work.data.Id.toString())
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -191,40 +136,25 @@ export class ClientStore {
             })
         } finally {
             this.setAsyncPendingLockout(false)
-            runInAction(() => this.fetchClientProcesses())
-            runInAction(() => this.fetchClientProjects())
         }
     }
 
     @action
-    async submitNewWorkProcess() {
+    async submitProcess(): Promise<void> {
         this.setAsyncPendingLockout(true)
-        if (this.workIsNew) {
-            try {
-                this.newWork.set("type", this.selectedWorkType)
-                console.log(this.newWork)
-                await this.dataService.createWork(this.newWork.toJS()).then(work => {
-                    console.log(work)
-                    this.selectedWork = work.data.Id.toString()
-                })
-            } catch (error) {
-                console.error(error)
-                this.postMessage({
-                    messageText: "there was a problem submitting your new Process request, try again",
-                    messageType: "error",
-                })
-            } finally {
-                this.setAsyncPendingLockout(false)
-            }
-        }
         try {
             // processDetails.step = getNextStepName(processDetails, "Intake")
             this.newProcess.set("step", "Intake")
             this.workIsNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set("Title", this.works.find(work => work.Id === this.selectedWork).Title)
-            this.newProcess.set("workId", this.selectedWork.toString())
-            await this.submitProcess()
+                : this.newProcess.set("Title", this.works.find(work => work.Id === this.selectedWorkId).Title)
+            this.newProcess.set("workId", this.selectedWorkId.toString())
+            console.log(this.newProcess)
+            await this.dataService.createProcess(this.newProcess.toJS())
+            this.postMessage({
+                messageText: "the new Process request was submitted successfully",
+                messageType: "success",
+            })
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -233,12 +163,14 @@ export class ClientStore {
             })
         } finally {
             this.setAsyncPendingLockout(false)
-            this.postMessage({
-                messageText: "the new Process request was submitted successfully",
-                messageType: "success",
-            })
             this.updateClientStoreMember("showProcessModal", false)
         }
+    }
+
+    @action
+    async processClientRequest() {
+        if (this.workIsNew) await this.submitWork()
+        await this.submitProcess()
     }
 
     @action
@@ -265,7 +197,6 @@ export class ClientStore {
     @action
     handleAddNewProcess(projectId: string) {
         this.newProcess.set("projectId", projectId)
-        this.newProcess.set("submitterId", this.currentUser.Id)
         this.newWork.set("submitterId", this.currentUser.Id)
         this.updateViewState("showProcessModal", true)
     }
@@ -329,15 +260,11 @@ export class ClientStore {
         v ? (this[m] = v) : (this[m] = undefined)
     }
 
-    /* boolean value indicating if the inputs should all be disabled , use while awaiting http requests */
-    @observable asyncPendingLockout: boolean
-
     @action
     setAsyncPendingLockout(val: boolean) {
         this.asyncPendingLockout = val
     }
 
-    @observable message: any
     @action
     postMessage(message: any, displayTime: number = 5000) {
         this.message = message
@@ -347,11 +274,6 @@ export class ClientStore {
             }),
             displayTime
         )
-    }
-
-    @action
-    private clearSelectedRequestElements(): void {
-        this.viewState.selectedProject.clear()
     }
 
     /* TODO: implement this */
@@ -366,5 +288,71 @@ export class ClientStore {
             return true
         }
         return false
+    }
+
+    /************ Computed Values ****************/
+
+    @computed
+    get TypesAsOptions() {
+        return {
+            PROJECTS: PROJECT_TYPES.map(e => ({
+                key: e,
+                text: e,
+            })),
+            WORKS: WORK_TYPES.map(e => ({
+                key: e,
+                text: e,
+            })),
+        }
+    }
+
+    @computed
+    get ProjectTypeForm(): Array<IFormControl> {
+        return getView(this.viewState.selectedProjectType).formControls
+    }
+    @computed
+    get WorkTypeForm(): Array<IFormControl> {
+        return getView(this.viewState.selectedWorkType).formControls
+    }
+
+    @computed
+    get viewState() {
+        return {
+            selectedProjectType: this.selectedProjectType,
+            selectedWorkType: this.selectedWorkType,
+            selectedWork: {},
+            projectTypeForm: (): Array<IFormControl> => this.ProjectTypeForm,
+            workTypeForm: (): Array<IFormControl> => this.WorkTypeForm,
+            showProjectModal: this.showProjectModal,
+            showProcessModal: this.showProcessModal,
+            message: this.message,
+            workIsNew: this.workIsNew,
+        }
+    }
+
+    @computed
+    get DataService() {
+        return this.dataService
+    }
+
+    @computed
+    get CurrentFormValidation(): {} {
+        const typeToValidate = this.selectedWorkType ? this.WorkTypeForm : this.ProjectTypeForm
+        const newInstanceOfType = this.selectedWorkType ? this.newWork : this.newProject
+        return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
+            const fieldName: string = formControl.dataRef
+            const inputVal = newInstanceOfType.get(fieldName) || undefined
+            const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
+            accumulator[fieldName] = error
+            return accumulator
+        }, {})
+    }
+    @computed
+    get clientProcesses() {
+        return this.client_processes
+    }
+    @computed
+    get clientProjects() {
+        return this.client_projects
     }
 }

@@ -62,7 +62,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                         }
                         onChanged={e => {
                             console.log(e.key)
-                            props.clientStore.updateClientStoreMember("selectedWork", e.key)
+                            props.clientStore.updateClientStoreMember("selectedWorkId", e.key)
                         }}
                         disabled={props.clientStore.asyncPendingLockout}
                     />
@@ -70,7 +70,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
 
                 <PrimaryButton
                     description="Submit Process Request"
-                    onClick={props.clientStore.submitNewWorkProcess}
+                    onClick={props.clientStore.processClientRequest}
                     text="Submit Work Request"
                     disabled={props.clientStore.asyncPendingLockout}
                 />

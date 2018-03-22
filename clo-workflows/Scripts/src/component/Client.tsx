@@ -39,9 +39,7 @@ export class Client extends React.Component<any, any> {
                     _projects={this.clientStore.clientProjects}
                     message={this.clientStore.message}
                     handleSubmit={(projectId: any) => this.clientStore.handleAddNewProcess(projectId)}
-                    updateViewState={(k: string, v: any) => {
-                        this.clientStore.updateViewState(k, v)
-                    }}
+                    updateViewState={(k: string, v: any) => this.clientStore.updateViewState(k, v)}
                 />
                 {this.clientStore.message && <Message {...this.clientStore.message} />}
             </div>
