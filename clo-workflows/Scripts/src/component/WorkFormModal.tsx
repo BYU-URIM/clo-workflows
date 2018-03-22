@@ -41,7 +41,7 @@ const WorkFormModal = (props: IFormPanelProps) => {
                     <FormControlGroup
                         data={props.clientStore.newWork}
                         formControls={props.clientStore.viewState.workTypeForm()}
-                        validation={props.clientStore.newValidation}
+                        validation={props.clientStore.CurrentFormValidation}
                         onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newWork")}
                     />
                 </div>
