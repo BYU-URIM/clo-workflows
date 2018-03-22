@@ -56,7 +56,7 @@ export class SpDataService implements IDataService {
             rawUser.Email,
             rawUser.UserId.NameId,
             // userRoleNames.map(roleName => getRole(roleName))
-            [getRole("Anonymous")],
+            [getRole("Anonymous")]
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
@@ -126,23 +126,23 @@ export class SpDataService implements IDataService {
             .get(this.cloRequestElementParser)
     }
 
-    async fetchClientProjects(): Promise<Array<CloRequestElement>> {
-        const clientProjects: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchClientProjects(submittreId: string): Promise<Array<CloRequestElement>> {
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.get(this.cloRequestElementParser)
-        return clientProjects
+            .items.filter(`submitterId eq '${submittreId}'`)
+            .get(this.cloRequestElementParser)
     }
-    async fetchClientProcesses(): Promise<Array<CloRequestElement>> {
-        const clientProcesses: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchClientProcesses(submittreId: string): Promise<Array<CloRequestElement>> {
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
-            .items.get(this.cloRequestElementParser)
-        return clientProcesses
+            .items.filter(`submitterId eq '${submittreId}'`)
+            .orderBy("projectId", true).orderBy("Id", true)
+            .get(this.cloRequestElementParser)
     }
     async fetchWorks(): Promise<Array<IWork>> {
-        const works: Array<IWork> = await this.getHostWeb()
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
-        return works
     }
     async createNote(note: INote, listName: ListName): Promise<void> {
         await this.getHostWeb()
@@ -154,6 +154,8 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
+
+    /* this sorting keps the process order lined up with project order this probably needs to be changed to something more stable longterm */
     async createProcess(process: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
