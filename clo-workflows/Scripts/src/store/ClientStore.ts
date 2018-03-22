@@ -7,7 +7,6 @@ import { IDataService } from "../service/dataService/IDataService"
 import { validateFormControl, getFormattedDate } from "../utils"
 import { RootStore } from "./RootStore"
 import { User } from "../model/User"
-import { Selection, SelectionMode } from "office-ui-fabric-react"
 import { getNextStepName, StepName } from "../model/Step"
 import { IWork } from "../model/Work"
 import { IProjectGroup } from "../component/ProjectProcessList"
@@ -18,10 +17,8 @@ export class ClientStore {
     @action
     async init(): Promise<void> {
         this.currentUser = this.root.sessionStore.currentUser
-        this.viewData = {
-            _processes: [],
-            _projects: [],
-        }
+        this.client_processes = observable.array()
+        this.client_projects = observable.array()
         await this.fetchClientProcesses()
         await this.fetchClientProjects()
         await this.fetchWorks()
@@ -44,11 +41,8 @@ export class ClientStore {
     @observable processes: Array<CloRequestElement>
     /* the current works returned from the filtered works query */
     @observable works: Array<IWork>
-    @observable
-    viewData: {
-        _processes: Array<{}>
-        _projects: Array<IProjectGroup>
-    }
+    @observable client_processes: Array<{}>
+    @observable client_projects: Array<IProjectGroup>
 
     /*********** observables for viewState *************/
 
@@ -105,26 +99,19 @@ export class ClientStore {
     }
 
     @computed
-    get ProjectTypesAsOptions() {
-        return PROJECT_TYPES.map(e => ({
-            key: e,
-            text: e,
-        }))
+    get TypesAsOptions() {
+        return {
+            PROJECTS: PROJECT_TYPES.map(e => ({
+                key: e,
+                text: e,
+            })),
+            WORKS: WORK_TYPES.map(e => ({
+                key: e,
+                text: e,
+            }))
+        }
     }
-    @computed
-    get WorkTypesAsOptions() {
-        return WORK_TYPES.map(e => ({
-            key: e,
-            text: e,
-        }))
-    }
-    @computed
-    get ProcessTypesAsOptions() {
-        return WORK_TYPES.map(e => ({
-            key: e,
-            text: e,
-        }))
-    }
+
     @computed
     get newProjectValidation(): {} {
         return this.ProjectTypeForm.reduce((accumulator: {}, formControl: IFormControl) => {
@@ -146,8 +133,12 @@ export class ClientStore {
         }, {})
     }
     @computed
-    get clientViewData() {
-        return this.viewData
+    get clientProcesses() {
+        return this.client_processes
+    }
+    @computed
+    get clientProjects() {
+        return this.client_projects
     }
     /************ Actions ***************/
     @action
@@ -207,12 +198,10 @@ export class ClientStore {
         } finally {
             this.setAsyncPendingLockout(false)
             runInAction(() => this.fetchClientProcesses())
+            runInAction(() => this.fetchClientProjects())
         }
     }
-    /**
-     *
-     * TODO: add title and other details like step to the processDetails
-     */
+
     @action
     async submitNewWorkProcess() {
         this.setAsyncPendingLockout(true)
@@ -288,58 +277,57 @@ export class ClientStore {
     }
 
     @action
-    async fetchClientProjects() {
-        this.projects = await this.dataService.fetchClientProjects()
-        this.projects = this.projects.filter(proj => proj.submitterId === this.currentUser.Id)
-        this.viewData._projects = this.projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: i.toString(),
-                data: {
-                    projectId: proj.Id,
-                },
-                name: proj.Title.toString(),
-                count: this.processes.filter(proc => {
-                    return proj.Id === Number(proc.projectId)
-                }).length,
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
-            .map((e, i, a) => {
-                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                return e
-            })
+    fetchClientProjects = async () => {
+        const projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
+        this.projects = projects
+        runInAction(
+            () =>
+                (this.client_projects = projects
+                    .map((proj: CloRequestElement, i): IProjectGroup => ({
+                        key: i.toString(),
+                        data: {
+                            projectId: proj.Id,
+                        },
+                        name: proj.Title.toString(),
+                        count: this.clientProcesses.filter(proc => {
+                            // @ts-ignore
+                            return proj.Id === Number(proc.projectId)
+                        }).length,
+                        submitterId: proj.submitterId.toString(),
+                        startIndex: 0,
+                        isShowingAll: false,
+                    }))
+                    .map((e, i, a) => {
+                        i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
+                        return e
+                    }))
+        )
     }
 
     @action
-    async fetchClientProcesses() {
-        this.processes = await this.dataService.fetchClientProcesses()
-        /* this sorting keps the process order lined up with project order
-        this probably needs to be changed to something more stable longterm */
-        this.processes = this.processes
-            .filter(proc => proc.submitterId === this.currentUser.Id)
-            .sort((a, b) => Number(a.projectId) - Number(b.projectId))
-        runInAction(()=> this.viewData._processes = this.processes.map((proc, i) => {
-            return {
-                key: i.toString(),
-                Id: proc.Id,
-                projectId: proc.projectId,
-                Title: proc.Title,
-                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
-            }
-        }))
+    fetchClientProcesses = async () => {
+        const processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
+        this.processes = processes
+
+        runInAction(
+            () =>
+                (this.client_processes = processes.map((proc, i) => {
+                    return {
+                        key: i.toString(),
+                        Id: proc.Id,
+                        projectId: proc.projectId,
+                        Title: proc.Title,
+                        step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
+                    }
+                }))
+        )
     }
     @action
-    async fetchWorks() {
-        this.works = await this.dataService.fetchWorks().then(works => {
-            console.log(works)
-            return works.filter(work => {
-                return work
-            })
-        })
+    fetchWorks = async () => {
+        this.works = await this.dataService.fetchWorks()
     }
     @action
-    updateMember(m: string, v?: any) {
+    updateMember = (m: string, v?: any) => {
         !v ? (this[m] = !this[m]) : (this[m] = v)
     }
     @action
