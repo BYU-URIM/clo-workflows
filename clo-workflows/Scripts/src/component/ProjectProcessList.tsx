@@ -95,7 +95,6 @@ export const ProjectProcessList = (props: IProjectProcessListProps) => {
                     onRenderHeader: _onRenderHeader,
                 }}
             />
-            {props.message && <Message {...props.message} />}
         </div>
     )
 }

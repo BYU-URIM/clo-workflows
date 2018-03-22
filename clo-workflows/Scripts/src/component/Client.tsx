@@ -7,6 +7,7 @@ import Header from "./Header"
 import { ProjectProcessList } from "./ProjectProcessList"
 import ProjectFormModal from "./ProjectFormModal"
 import ProcessFormModal from "./ProcessFormModal"
+import { Message } from "./Message"
 
 @inject("rootStore")
 @observer
@@ -42,6 +43,7 @@ export class Client extends React.Component<any, any> {
                         this.clientStore.updateViewState(k, v)
                     }}
                 />
+                {this.clientStore.message && <Message {...this.clientStore.message} />}
             </div>
         )
     }
