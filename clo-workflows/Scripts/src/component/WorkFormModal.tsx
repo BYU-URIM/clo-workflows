@@ -20,7 +20,7 @@ const WorkFormModal = (props: IFormPanelProps) => {
             <Dropdown
                 label="Select the Work Type:"
                 selectedKey={props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined}
-                options={props.clientStore.WorkTypesAsOptions.map((field, index) => ({
+                options={props.clientStore.TypesAsOptions.WORKS.map((field, index) => ({
                     text: field.text,
                     value: field.text,
                     key: field.text,

@@ -35,7 +35,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     selectedKey={
                         props.clientStore.viewState.selectedProjectType ? props.clientStore.viewState.selectedProjectType : undefined
                     }
-                    options={props.clientStore.ProjectTypesAsOptions.map((field, index) => ({
+                    options={props.clientStore.TypesAsOptions.PROJECTS.map((field, index) => ({
                         text: field.text,
                         value: field.text,
                         key: field.text,

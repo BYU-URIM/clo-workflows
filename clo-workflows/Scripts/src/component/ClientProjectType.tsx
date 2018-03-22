@@ -20,7 +20,7 @@ export class ClientProjectType extends React.Component<any, any> {
                     selectedKey={
                         this.clientStore.viewState.selectedProjectType ? this.clientStore.viewState.selectedProjectType : undefined
                     }
-                    options={this.clientStore.ProjectTypesAsOptions.map((field, index) => ({
+                    options={this.clientStore.TypesAsOptions.PROJECTS.map((field, index) => ({
                         text: field.text,
                         value: field.text,
                         key: field.text,
