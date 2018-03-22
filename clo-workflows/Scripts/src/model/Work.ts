@@ -1,3 +1,7 @@
+/**
+ * TODO: this should not be manually created, ideally this will be generated from the dbconfig.
+ */
+
 export interface IWork {
     Id: number
     Title?: string
