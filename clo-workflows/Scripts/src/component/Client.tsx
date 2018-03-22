@@ -5,6 +5,8 @@ import { ClientStore } from "../store/ClientStore"
 import { SessionStore } from "../store/SessionStore"
 import Header from "./Header"
 import { ProjectProcessList } from "./ProjectProcessList"
+import ProjectFormModal from "./ProjectFormModal"
+import ProcessFormModal from "./ProcessFormModal"
 
 @inject("rootStore")
 @observer
@@ -17,6 +19,30 @@ export class Client extends React.Component<any, any> {
     clientStore: ClientStore
 
     render() {
-        return <ProjectProcessList clientStore={this.clientStore} />
+        return (
+            <div>
+                <ProjectFormModal
+                    clientStore={this.clientStore}
+                    togglePanel={(m, v?) => {
+                        this.clientStore.updateViewState(m, v)
+                    }}
+                />
+                <ProcessFormModal
+                    clientStore={this.clientStore}
+                    togglePanel={(m, v?) => {
+                        this.clientStore.updateViewState(m, v)
+                    }}
+                />
+                <ProjectProcessList
+                    _processes={this.clientStore.clientProcesses}
+                    _projects={this.clientStore.clientProjects}
+                    message={this.clientStore.message}
+                    handleSubmit={(projectId: any) => this.clientStore.handleAddNewProcess(projectId)}
+                    updateViewState={(k: string, v: any) => {
+                        this.clientStore.updateViewState(k, v)
+                    }}
+                />
+            </div>
+        )
     }
 }
