@@ -59,7 +59,7 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                         <FormControlGroup
                             data={props.clientStore.newProject}
                             formControls={props.clientStore.viewState.projectTypeForm()}
-                            validation={props.clientStore.newProjectValidation}
+                            validation={props.clientStore.newValidation}
                             onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>

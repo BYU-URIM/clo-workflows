@@ -108,30 +108,22 @@ export class ClientStore {
             WORKS: WORK_TYPES.map(e => ({
                 key: e,
                 text: e,
-            }))
+            })),
         }
     }
 
     @computed
-    get newProjectValidation(): {} {
-        return this.ProjectTypeForm.reduce((accumulator: {}, formControl: IFormControl) => {
-            const fieldName: string = formControl.dataRef
-            const inputVal = this.newProject.get(fieldName)
-            const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
-            accumulator[fieldName] = error
-            return accumulator
-        }, {})
+    get CurrentFormValidation(): {} {
+        const typeToValidate = this.selectedWorkType ? this.WorkTypeForm : this.ProjectTypeForm
+        return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
+                const fieldName: string = formControl.dataRef
+                const inputVal = this.newProject.get(fieldName) || undefined
+                const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
+                accumulator[fieldName] = error
+                return accumulator
+            }, {})
     }
-    @computed
-    get newWorkValidation(): {} {
-        return this.WorkTypeForm.reduce((accumulator: {}, formControl: IFormControl) => {
-            const fieldName: string = formControl.dataRef
-            const inputVal = this.newProject.get(fieldName) || undefined
-            const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
-            accumulator[fieldName] = error
-            return accumulator
-        }, {})
-    }
+
     @computed
     get clientProcesses() {
         return this.client_processes

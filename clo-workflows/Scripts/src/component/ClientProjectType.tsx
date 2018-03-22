@@ -38,7 +38,7 @@ export class ClientProjectType extends React.Component<any, any> {
                         <FormControlGroup
                             data={this.clientStore.newProject}
                             formControls={this.clientStore.viewState.projectTypeForm()}
-                            validation={this.clientStore.newProjectValidation}
+                            validation={this.clientStore.newValidation}
                             onChange={(fieldName, value) => this.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>
