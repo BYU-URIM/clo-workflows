@@ -109,7 +109,7 @@ export class SpDataService implements IDataService {
         return activeProjects.filter(item => item.submitterId === client.name)
     }
 
-    async fetchNotes(source: NoteSource, scope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
+    async fetchNotes(source: NoteSource, maxScope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
         let filterString: string
         if(source === NoteSource.PROJECT) {
             filterString = `projectId eq ${sourceId}`
@@ -118,9 +118,9 @@ export class SpDataService implements IDataService {
             filterString = `workId eq ${sourceId}`
         }
 
-        if(scope === NoteScope.CLIENT) {
+        if(maxScope === NoteScope.CLIENT) {
             filterString += ` and attachedClientId eq '${attachedClientId}'`
-        } else if(scope === NoteScope.EMPLOYEE) {
+        } else if(maxScope === NoteScope.EMPLOYEE) {
             filterString += ` and (attachedClientId eq '${attachedClientId}' or scope eq '${NoteScope.EMPLOYEE}')`
         }
 

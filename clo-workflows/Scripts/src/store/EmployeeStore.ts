@@ -74,16 +74,6 @@ export class EmployeeStore {
         return !this.asyncPendingLockout
     }
 
-    // @action async submitNewWorkNote(noteText: string, noteScope: NoteScope): Promise<boolean> {
-    //     return await this.submitNewNote(noteText, noteScope, NoteSource.WORK)
-    // }
-    // @action async updateWorkNote(noteText: string, noteId: string) {
-    //     return await this.updateNote(noteText, noteId, NoteSource.WORK)
-    // }
-    // @action async deleteWorkNote(noteId: string) {
-    //     return await this.deleteNote(noteId, NoteSource.WORK)
-    // }
-
     @action toggleCanEditSelectedWork() {
         this.canEditSelectedWork = !this.canEditSelectedWork
     }
@@ -133,16 +123,6 @@ export class EmployeeStore {
     get canSubmitSelectedProject(): boolean {
         return !this.asyncPendingLockout
     }
-
-    // @action async submitNewProjectNote(noteText: string, noteScope: NoteScope): Promise<boolean> {
-    //     return await this.submitNewNote(noteText, noteScope, NoteSource.PROJECT)
-    // }
-    // @action async updateProjectNote(noteText: string, noteId: string) {
-    //     return await this.updateNote(noteText, noteId, NoteSource.PROJECT)
-    // }
-    // @action async deleteProjectNote(noteId: string) {
-    //     return await this.deleteNote(noteId, NoteSource.PROJECT)
-    // }
 
     @action toggleCanEditSelectedProject() {
         this.canEditSelectedProject = !this.canEditSelectedProject
