@@ -43,10 +43,9 @@ export class EmployeeDashboard extends React.Component<any, any> {
                     <div style={wrapperStyle}>
                         <div style={processListTitleStyles}>{`${employeeStore.selectedStep.name} Active Processes`}</div>
                         {employeeStore.selectedStepProcessBriefs && employeeStore.selectedStepProcessBriefs.length ? (
-                            <NonScrollableList
-                                selectable
+                            <NonScrollableList                                
                                 items={employeeStore.selectedStepProcessBriefs}
-                                onClickItem={employeeStore.selectProcess}
+                                onSelectItem={employeeStore.selectProcess}
                             />
                         ) : (
                             <div style={textStyle}>No Active Processes</div>
