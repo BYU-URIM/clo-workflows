@@ -3,20 +3,27 @@ import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
 import { List } from "office-ui-fabric-react/lib/List"
 import Header from "./Header"
+import { IconButton } from "office-ui-fabric-react"
 
-export interface IItemBrief {
+export interface IListItem {
     header: string
     subheader?: string
     body: string
     id: string | number
+    selectable?: boolean
+    editable?: boolean
+    deletable?: boolean
 }
 
 interface INonScrollableListProps {
-    items: Array<IItemBrief>
+    items: Array<IListItem>
     style?: {}
-    // NOTE selectable and onClick item will only if both are present
-    selectable?: boolean
-    onClickItem?: (itemBrief: IItemBrief) => void
+    // onSelectItem will only work if listItem.selectable = true (see IListItem interface)
+    onSelectItem?: (listItem: IListItem, itemIndex: number) => void
+    // onEditItem will only work if listItem.editable = true (see IListItem interface)
+    onEditItem?: (listItem: IListItem, itemIndex: number) => void
+    // onDeleteItem will only work if listItem.deletable = true (see IListItem interface)
+    onDeleteItem?: (listItem: IListItem, itemIndex: number) => void
 }
 
 interface IProcessListState {
@@ -31,10 +38,11 @@ const listItemStyles = {
 const listStyles = { maxWidth: 400, padding: 0 }
 const listItemBodyStyles = { font: "18px Segoe UI, sans-serif" }
 
-const listItemHeaderStyles = {
+const listItemTitleStyles = {
     font: "20px Segoe UI, sans-serif",
     color: "#202020",
     fontWeight: 200,
+    marginRight: 15
 } as React.CSSProperties
 
 const listItemSubheaderStyles = {
@@ -42,6 +50,8 @@ const listItemSubheaderStyles = {
     color: "#A9A9A9",
     marginBottom: 10,
 }
+
+const listItemHeaderStyles = { display: "flex" } as React.CSSProperties
 
 @autobind
 @observer
@@ -60,11 +70,26 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
                         <div
                             key={index}
                             style={this.getListItemStyle(index)}
-                            onMouseLeave={props.selectable ? this.onMouseLeaveListItem : null}
-                            onMouseEnter={props.selectable ? () => this.onMouseEnterListItem(index) : null}
-                            onClick={props.selectable && props.onClickItem ? () => this.props.onClickItem(item) : null}
+                            onMouseLeave={item.selectable ? this.onMouseLeaveListItem : null}
+                            onMouseEnter={item.selectable ? () => this.onMouseEnterListItem(index) : null}
+                            onClick={item.selectable && props.onSelectItem ? () => this.props.onSelectItem(item, index) : null}
                         >
-                            <div style={listItemHeaderStyles}>{item.header}</div>
+                            <div style={listItemHeaderStyles}>
+                                <div style={listItemTitleStyles}>{item.header}</div>
+                                {   item.editable &&
+                                    <IconButton
+                                        iconProps={ {iconName: "edit"} }
+                                        onClick={() => props.onEditItem(item, index)}
+                                    />
+                                }
+                                {
+                                    item.deletable &&
+                                    <IconButton
+                                        iconProps={ {iconName: "delete"} }
+                                        onClick={() => props.onDeleteItem(item, index)}
+                                    />
+                                }
+                            </div>
                             <div style={listItemSubheaderStyles}>{item.subheader}</div>
                             <div>{item.body}</div>
                         </div>

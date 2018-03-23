@@ -4,6 +4,8 @@ import { inject, observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
 import { NotesBox } from "./NotesBox"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
+import { SessionStore } from "../store/SessionStore"
+import { NoteSource } from "../model/Note"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -40,9 +42,11 @@ export class ProjectDetail extends React.Component<any, any> {
 
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
+        this.sessionStore = this.props.rootStore.sessionStore
     }
 
     private employeeStore: EmployeeStore
+    private sessionStore: SessionStore
 
     public render() {
         return (
@@ -78,10 +82,12 @@ export class ProjectDetail extends React.Component<any, any> {
                     <NotesBox
                         title="Project Notes"
                         notes={this.employeeStore.selectedProjectNotes}
-                        onSubmitNoteEntry={this.employeeStore.submitProjectNoteEntry}
-                        onUpdateNoteEntry={this.employeeStore.updateProjectNoteEntry}
-                        noteEntry={this.employeeStore.projectNoteEntry}
+                        onCreateNote={this.employeeStore.submitNewNote}
+                        onDeleteNote={this.employeeStore.deleteNote}
+                        onUpdateNote={this.employeeStore.updateNote}
                         disableButtons={this.employeeStore.asyncPendingLockout}
+                        currentUser={this.sessionStore.currentUser}
+                        noteSource={NoteSource.PROJECT}
                     />
                 </div>
             </div>
