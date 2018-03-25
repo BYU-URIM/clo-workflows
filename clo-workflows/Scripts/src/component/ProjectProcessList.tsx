@@ -28,7 +28,8 @@ export interface IColumns {
     isResizable: boolean
 }
 export interface IProjectGroup extends IGroup {
-    submitterId: string
+    submitterId: string,
+    Title?: string
 }
 export interface IProjectProcessListProps {
     _processes: Array<{}>

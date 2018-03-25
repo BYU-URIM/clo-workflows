@@ -126,17 +126,18 @@ export class SpDataService implements IDataService {
             .get(this.cloRequestElementParser)
     }
 
-    async fetchClientProjects(submittreId: string): Promise<Array<CloRequestElement>> {
+    async fetchClientProjects(submitterId: string): Promise<Array<CloRequestElement>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.filter(`submitterId eq '${submittreId}'`)
+            .items.filter(`submitterId eq '${submitterId}'`)
+            .orderBy("ID", true)
             .get(this.cloRequestElementParser)
     }
-    async fetchClientProcesses(submittreId: string): Promise<Array<CloRequestElement>> {
+    async fetchClientProcesses(submitterId: string): Promise<Array<CloRequestElement>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
-            .items.filter(`submitterId eq '${submittreId}'`)
-            .orderBy("projectId", true).orderBy("Id", true)
+            .items.filter(`submitterId eq '${submitterId}'`)
+            .orderBy("projectId", true)
             .get(this.cloRequestElementParser)
     }
     async fetchWorks(): Promise<Array<IWork>> {

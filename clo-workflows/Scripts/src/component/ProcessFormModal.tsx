@@ -46,7 +46,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     <Dropdown
                         label="Select the Work:"
                         selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
-                        options={props.clientStore.works.map((field, index) => {
+                        options={props.clientStore.spData.works.map((field, index) => {
                             return {
                                 text: field.Title,
                                 value: field.Title,

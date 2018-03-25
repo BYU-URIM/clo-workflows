@@ -1,4 +1,4 @@
-import { action, ObservableMap, observable, runInAction, computed } from "mobx"
+import { action, ObservableMap, observable, runInAction, computed, IObservableArray } from "mobx"
 import { autobind } from "core-decorators"
 import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../model/CloRequestElement"
 import { IFormControl } from "../model/FormControl"
@@ -10,12 +10,12 @@ import { User, IUser } from "../model/User"
 import { getNextStepName, StepName } from "../model/Step"
 import { IWork } from "../model/Work"
 import { IProjectGroup } from "../component/ProjectProcessList"
+import { ObservableArray } from "mobx/lib/types/observablearray"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
 @autobind
 export class ClientStore {
-
     /* current user object */
     @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* observable object to store data for new project as it is received, provides values for controlled create forms */
@@ -25,13 +25,12 @@ export class ClientStore {
     /* observable object to store data for new work as it is received, provides values for controlled create forms */
     @observable newWork: ClientObsMap
     /* all of the projects ever created by the currentUser */
-    @observable projects: Array<CloRequestElement>
-    /* all of the work requests that exist on the projects associated with the currentUser id */
-    @observable processes: Array<CloRequestElement>
-    /* the current works returned from the filtered works query */
-    @observable works: Array<IWork>
-    @observable client_processes: Array<{}>
-    @observable client_projects: Array<IProjectGroup>
+    @observable
+    spData: {
+        projects: IObservableArray<any>
+        processes: IObservableArray<any>
+        works: IObservableArray<any>
+    }
 
     /*********** observables for viewState *************/
 
@@ -76,13 +75,16 @@ export class ClientStore {
 
     @action
     async init(): Promise<void> {
+        this.spData = {
+            processes: observable.array(),
+            projects: observable.array(),
+            works: observable.array(),
+        }
         await this.fetchClientProcesses()
         await this.fetchClientProjects()
         await this.fetchWorks()
 
         this.currentUser = this.root.sessionStore.currentUser
-        this.client_processes = observable.array()
-        this.client_projects = observable.array()
 
         await this.initInputMaps()
         this.setAsyncPendingLockout(false)
@@ -98,7 +100,6 @@ export class ClientStore {
         this.clientSelections = this.getClientObsMap()
     }
 
-
     private getClientObsMap = (): ClientObsMap => observable.map([["submitterId", this.currentUser.Id]])
 
     @action
@@ -111,7 +112,7 @@ export class ClientStore {
         this.newProject.set("type", this.viewState.selectedProjectType)
         try {
             await this.dataService.createProject(this.newProject.toJS())
-            // runInAction(() => this.projects.push(projectDetails))
+            // runInAction(() => this.spData.projects.push(projectDetails))
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -147,7 +148,7 @@ export class ClientStore {
             this.newProcess.set("step", "Intake")
             this.workIsNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set("Title", this.works.find(work => work.Id === this.selectedWorkId).Title)
+                : this.newProcess.set("Title", this.spData.works.find(work => work.Id === this.selectedWorkId).Title)
             this.newProcess.set("workId", this.selectedWorkId.toString())
             console.log(this.newProcess)
             await this.dataService.createProcess(this.newProcess.toJS())
@@ -163,6 +164,9 @@ export class ClientStore {
             })
         } finally {
             this.setAsyncPendingLockout(false)
+            runInAction(() => this.spData.processes.push(this.newProcess.toJS()))
+            this.cleanProjects(Array.from(this.spData.projects))
+            this.getCounts()
             this.updateClientStoreMember("showProcessModal", false)
         }
     }
@@ -204,52 +208,71 @@ export class ClientStore {
     @action
     fetchClientProjects = async () => {
         const projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
-        this.projects = projects
-        runInAction(
-            () =>
-                (this.client_projects = projects
-                    .map((proj: CloRequestElement, i): IProjectGroup => ({
-                        key: i.toString(),
-                        data: {
-                            projectId: proj.Id,
-                        },
-                        name: proj.Title.toString(),
-                        count: this.clientProcesses.filter(proc => {
-                            // @ts-ignore
-                            return proj.Id === Number(proc.projectId)
-                        }).length,
-                        submitterId: proj.submitterId.toString(),
-                        startIndex: 0,
-                        isShowingAll: false,
-                    }))
-                    .map((e, i, a) => {
-                        i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                        return e
-                    }))
+        runInAction(() => this.cleanProjects(projects))
+    }
+
+    @action
+    cleanProjects = projects => {
+        this.spData.projects = projects
+            .map((proj: CloRequestElement, i): IProjectGroup => {
+                console.log(proj)
+                return {
+                    key: i.toString(),
+                    data: {
+                        projectId: proj.Id,
+                    },
+                    Title: proj.Title.toString(),
+                    name: proj.Title.toString(),
+                    count: this.getProcessCount(proj),
+                    submitterId: proj.submitterId.toString(),
+                    startIndex: 0,
+                    isShowingAll: false,
+                }
+            })
+            .map((e, i, a) => {
+                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
+                return e
+            })
+    }
+
+    @action
+    getCounts = () => {
+        this.spData.projects = observable.array(
+           this.spData.projects.map((e, i, a) => {
+                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
+                return e
+            })
         )
     }
 
     @action
+    getProcessCount(proj: CloRequestElement) {
+        console.log(proj)
+        // @ts-ignore
+        const id = proj.Id ? proj.Id : proj.data.projectId
+        return this.clientProcesses.filter(proc => {
+            // @ts-ignore
+            return id.toString() === proc.projectId
+        }).length
+    }
+    @action
     fetchClientProcesses = async () => {
         const processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
-        this.processes = processes
-
-        runInAction(
-            () =>
-                (this.client_processes = processes.map((proc, i) => {
-                    return {
-                        key: i.toString(),
-                        Id: proc.Id,
-                        projectId: proc.projectId,
-                        Title: proc.Title,
-                        step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
-                    }
-                }))
+        this.spData.processes = observable.array(
+            processes.map((proc, i) => {
+                return {
+                    key: i.toString(),
+                    Id: proc.Id,
+                    projectId: proc.projectId,
+                    Title: proc.Title,
+                    step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
+                }
+            })
         )
     }
     @action
     fetchWorks = async () => {
-        this.works = await this.dataService.fetchWorks()
+        this.spData.works = observable.array(await this.dataService.fetchWorks())
     }
     @action
     updateMember = (m: string, v?: any) => {
@@ -349,10 +372,10 @@ export class ClientStore {
     }
     @computed
     get clientProcesses() {
-        return this.client_processes
+        return this.spData.processes.sort((a, b) => Number(a.projectId) - Number(b.projectId))
     }
     @computed
     get clientProjects() {
-        return this.client_projects
+        return this.spData.projects
     }
 }
