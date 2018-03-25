@@ -46,8 +46,6 @@ export class SpDataService implements IDataService {
             userRoleNames = spGroupNames.length ? spGroupNames.filter(spGroupName => allRoleNames.includes(spGroupName)) : ["Anonymous"]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-        // build user object from userDto and role
-        const userId = await this.getAppWeb().currentUser.get()
 
         return new User(
             rawUser.Title,
