@@ -37,7 +37,6 @@ export class Client extends React.Component<any, any> {
                     messageVisible={clientStore.message}
                     processes={clientStore.clientProcesses}
                     projects={clientStore.clientProjects}
-                    message={clientStore.message}
                     handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
                     updateView={(k: string, v: any) => clientStore.updateView(k, v)}
                 />
