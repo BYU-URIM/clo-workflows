@@ -54,7 +54,8 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                             }
                         })}
                         style={{
-                            width: "200px",
+                            maxWidth: "350px",
+                            width: "auto",
                             margin: "20px 0px",
                         }}
                         placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work"}
