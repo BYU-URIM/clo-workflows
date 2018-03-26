@@ -14,7 +14,6 @@ export interface IFormPanelProps {
     updateView(m: string, v: string | boolean)
 }
 
-// TODO this is mixing works and processes together
 const ProcessFormModal = (props: IFormPanelProps) => {
     return (
         <Modal
