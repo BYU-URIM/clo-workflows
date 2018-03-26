@@ -170,11 +170,14 @@
         "notes": {
             "type": "list",
             "fields": [
+                "Id",
                 "workId",
                 "projectId",
                 "submitter",
                 "dateSubmitted",
-                "text"
+                "text",
+                "scope",
+                "attachedClientId"
             ]
         }
     }

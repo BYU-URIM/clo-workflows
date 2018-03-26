@@ -20,7 +20,7 @@ const personaStyles = {
 const titleStyles = {
     font: "65px Segoe UI, sans-serif",
     color: "#686868",
-    margin: "0 15% 0 30%",
+    margin: "0 10% 0 30%",
     alignSelf: "center",
 } as React.CSSProperties
 
@@ -28,7 +28,7 @@ const Header = (props: IHeaderProps) => {
     const { currentUser } = props
     return (
         <div style={wrapperStyles}>
-            <div style={titleStyles}>CLO Workflows</div>
+            <div style={titleStyles}>Licensing Task Tracker</div>
             <div style={personaStyles}>
                 <Persona
                     size={4}

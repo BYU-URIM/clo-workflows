@@ -6,6 +6,7 @@ import * as FORM_CONTROLS from "../res/json/form_templates/FORM_CONTROLS.json"
 import * as DB_CONFIG from "../res/json/DB_CONFIG.json"
 import { IFormControl } from "../src/model/FormControl"
 import { IStep } from "../src/model/Step"
+import { PROJECT_TYPES, WORK_TYPES } from "../src/model/CloRequestElement"
 
 /*
     ensure all JSON roles have the correct shape:
@@ -155,5 +156,20 @@ ava.test("ensure that each form control dataRef references a valid field from th
             const formControl = FORM_CONTROLS[formControlName]
             t.true(table.fields.includes(formControl.dataRef))
         }
+    }
+})
+
+/*
+    ensure that the work type and project type arrays in model/CloRequestElement line up with view names
+*/
+ava.test("ensure that the work type and project type arrays refer to valid view names", t => {
+    const jsonViewNames = Object.keys(VIEWS)
+
+    for(const workName of WORK_TYPES) {
+        t.true(jsonViewNames.includes(workName))
+    }
+
+    for(const projectName of PROJECT_TYPES) {
+        t.true(jsonViewNames.includes(projectName))
     }
 })

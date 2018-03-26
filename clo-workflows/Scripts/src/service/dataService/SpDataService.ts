@@ -8,7 +8,7 @@ import * as pnp from "sp-pnp-js"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
 import { IRole } from "../../model/Role"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
-import { INote } from "../../model/Note"
+import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
@@ -47,16 +47,14 @@ export class SpDataService implements IDataService {
             userRoleNames = spGroupNames.length ? spGroupNames.filter(spGroupName => allRoleNames.includes(spGroupName)) : ["Anonymous"]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-        // build user object from userDto and role
-        const userId = await this.getAppWeb().currentUser.get()
 
         return new User(
             rawUser.Title,
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            // userRoleNames.map(roleName => getRole(roleName))
-            [getRole("Anonymous")]
+            userRoleNames.map(roleName => getRole(roleName))
+            // [getRole("Anonymous")],
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
@@ -110,20 +108,45 @@ export class SpDataService implements IDataService {
         return activeProjects.filter(item => item.submitterId === client.name)
     }
 
-    async fetchProjectNotes(projectId: string): Promise<Array<INote>> {
+    async fetchNotes(source: NoteSource, maxScope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
+        let filterString: string
+        if(source === NoteSource.PROJECT) {
+            filterString = `projectId eq ${sourceId}`
+        }
+        else if(source === NoteSource.WORK) {
+            filterString = `workId eq ${sourceId}`
+        }
+
+        if(maxScope === NoteScope.CLIENT) {
+            filterString += ` and attachedClientId eq '${attachedClientId}'`
+        } else if(maxScope === NoteScope.EMPLOYEE) {
+            filterString += ` and (attachedClientId eq '${attachedClientId}' or scope eq '${NoteScope.EMPLOYEE}')`
+        }
+
         return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
-            .items.filter(`projectId eq '${projectId}'`)
+            .items.filter(filterString)
             .orderBy("Created", false /*ascending = false*/)
             .get(this.cloRequestElementParser)
     }
 
-    async fetchWorkNotes(workId: string): Promise<Array<INote>> {
+    async createNote(note: INote): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
-            .items.filter(`workId eq '${workId}'`)
-            .orderBy("Created", false /*ascending = false*/)
-            .get(this.cloRequestElementParser)
+            .items.add(note)
+    }
+
+    async updateNote(note: INote): Promise<void> {
+        await this.getHostWeb()
+            .lists.getByTitle(ListName.NOTES)
+            .items.getById(Number(note.Id))
+            .update(note)
+    }
+    async deleteNote(noteId: string): Promise<void> {
+        await this.getHostWeb()
+            .lists.getByTitle(ListName.NOTES)
+            .items.getById(Number(noteId))
+            .delete()
     }
 
     async fetchClientProjects(submitterId: string): Promise<Array<CloRequestElement>> {
@@ -144,11 +167,6 @@ export class SpDataService implements IDataService {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
-    }
-    async createNote(note: INote, listName: ListName): Promise<void> {
-        await this.getHostWeb()
-            .lists.getByTitle(listName)
-            .items.add(note)
     }
     async createProject(projectData: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()

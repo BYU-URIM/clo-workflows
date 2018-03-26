@@ -4,10 +4,10 @@ import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IFormControl } from "../model/FormControl"
 import { IStep, StepName, getNextStepName } from "../model/Step"
-import { IItemBrief } from "../component/NonScrollableList"
+import { IListItem } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
-import { INote } from "../model/Note"
+import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView, getStep, getViewAndMakeReadonly, getStepById } from "../model/loader/resourceLoaders"
 
@@ -74,40 +74,6 @@ export class EmployeeStore {
         return !this.asyncPendingLockout
     }
 
-    @observable workNoteEntry: string
-
-    @action updateWorkNoteEntry(newVal: string) {
-        this.workNoteEntry = newVal
-    }
-
-    @action async submitWorkNoteEntry(): Promise<boolean> {
-        this.setAsyncPendingLockout(true)
-
-        let submissionStatus = true
-        try {
-            const newNote = {
-                submitter: this.root.sessionStore.currentUser.name,
-                dateSubmitted: getFormattedDate(),
-                text: this.workNoteEntry,
-                workId: String(this.selectedWork.get("Id"))
-            }
-            await this.dataService.createNote(newNote, ListName.NOTES)
-            
-            // if submission is successful, clear the work note entry and add it to project notes
-            this.updateWorkNoteEntry("")
-            runInAction(() => this.selectedWorkNotes.unshift(newNote))
-            this.postMessage({messageText: "successfully submitted note", messageType: "success"})
-        } catch(error) {
-            console.error(error)
-            submissionStatus = false
-            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
-        } finally {
-            this.setAsyncPendingLockout(false)
-        }
-
-        return submissionStatus
-    }
-
     @action toggleCanEditSelectedWork() {
         this.canEditSelectedWork = !this.canEditSelectedWork
     }
@@ -158,40 +124,6 @@ export class EmployeeStore {
         return !this.asyncPendingLockout
     }
 
-    @observable projectNoteEntry: string
-
-    @action updateProjectNoteEntry(newVal: string) {
-        this.projectNoteEntry = newVal
-    }
-
-    @action async submitProjectNoteEntry(): Promise<boolean> {
-        this.setAsyncPendingLockout(true)
-
-        let submissionStatus = true
-        try {
-            const newNote = {
-                submitter: this.root.sessionStore.currentUser.name,
-                dateSubmitted: getFormattedDate(),
-                text: this.projectNoteEntry,
-                projectId: String(this.selectedProject.get("Id"))
-            }
-            await this.dataService.createNote(newNote, ListName.NOTES)
-            
-            // if submission is successful, clear the project note entry and add it to project notes
-            this.updateProjectNoteEntry("")
-            runInAction(() => this.selectedProjectNotes.unshift(newNote))
-            this.postMessage({messageText: "note successfully submitted", messageType: "success"})
-        } catch(error) {
-            console.error(error)
-            submissionStatus = false
-            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
-        } finally {
-            this.setAsyncPendingLockout(false)
-        }
-
-        return submissionStatus
-    }
-
     @action toggleCanEditSelectedProject() {
         this.canEditSelectedProject = !this.canEditSelectedProject
     }
@@ -214,7 +146,7 @@ export class EmployeeStore {
     @observable selectedProcess: ObservableMap<FormEntryType>
 
     // TODO project lookup should be more efficient, store as map ?
-    @action async selectProcess(itemBrief: IItemBrief): Promise<void> {
+    @action async selectProcess(itemBrief: IListItem): Promise<void> {
         const selectedProcess: CloRequestElement = this.processes.find(process => process.Id === itemBrief.id)
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
@@ -225,8 +157,18 @@ export class EmployeeStore {
         const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
         this.selectedProject = observable.map(selectedProject)
         
-        const workNotes = await this.dataService.fetchWorkNotes(this.selectedWork.get("Id") as string)
-        const projectNotes = await this.dataService.fetchProjectNotes(this.selectedProject.get("Id") as string)
+        const workNotes = await this.dataService.fetchNotes(
+            NoteSource.WORK,
+            NoteScope.EMPLOYEE,
+            this.selectedWork.get("Id") as string,
+            this.selectedProcess.get("submitterId") as string
+        )
+        const projectNotes = await this.dataService.fetchNotes(
+            NoteSource.PROJECT,
+            NoteScope.EMPLOYEE,
+            this.selectedProject.get("Id") as string,
+            this.selectedProcess.get("submitterId") as string
+        )
         runInAction(() => {
             this.selectedWorkNotes = workNotes
             this.selectedProjectNotes = projectNotes
@@ -340,7 +282,7 @@ export class EmployeeStore {
 
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
     @computed
-    get selectedStepProcessBriefs(): Array<IItemBrief> {
+    get selectedStepProcessBriefs(): Array<IListItem> {
         return this.selectedStepProcesses.map(process => {
             const processWork = this.works.find(work => work.Id === Number(process.workId))
             const processProject = this.projects.find(project => project.Id === Number(process.projectId))
@@ -353,9 +295,94 @@ export class EmployeeStore {
                 subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
                 body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
                 id: process.Id as number,
+                selectable: true
             }
         })
     }
+
+
+    /*******************************************************************************************************/
+    // NOTES - SHARED BY RPOJECTS AND WORKS
+    /*******************************************************************************************************/
+    @action async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
+        this.setAsyncPendingLockout(true)
+
+        let submissionStatus = true
+        try {
+            // fill in any info the new note needs before submission
+            noteToCreate.dateSubmitted = getFormattedDate()
+            noteToCreate.submitter = this.root.sessionStore.currentUser.name
+            if(noteToCreate.scope === NoteScope.CLIENT) {
+                noteToCreate.attachedClientId = this.selectedProcess.get("submitterId") as string
+            }
+
+            if(noteSource === NoteSource.PROJECT) {
+                noteToCreate.projectId = String(this.selectedProject.get("Id"))
+            } else if(noteSource === NoteSource.WORK) {
+                noteToCreate.workId = String(this.selectedWork.get("Id"))
+            }
+
+            const addResult = await this.dataService.createNote(noteToCreate)
+            noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
+            
+            // if submission is successful, add the new note to the corresponding list
+            if(noteSource === NoteSource.WORK) runInAction(() => this.selectedWorkNotes.unshift(noteToCreate))
+            if(noteSource === NoteSource.PROJECT) runInAction(() => this.selectedProjectNotes.unshift(noteToCreate))
+            this.postMessage({messageText: "note successfully submitted", messageType: "success"})
+        } catch(error) {
+            console.error(error)
+            submissionStatus = false
+            this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+
+        return submissionStatus
+    }
+
+    @action async updateNote(noteToUpdate: INote, noteSource: NoteSource): Promise<boolean> {
+        this.setAsyncPendingLockout(true)
+        let submissionStatus = true
+        try {
+            noteToUpdate.dateSubmitted = getFormattedDate()
+            await this.dataService.updateNote(noteToUpdate)
+            
+            // if submission is successful, add the new note to the corresponding list
+            if(noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.selectedWorkNotes)
+            if(noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.selectedProjectNotes)
+
+            this.postMessage({messageText: "note successfully updated", messageType: "success"})
+        } catch(error) {
+            console.error(error)
+            submissionStatus = false
+            this.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+
+        return submissionStatus
+    }
+
+    @action async deleteNote(noteToDelete: INote, noteSource: NoteSource): Promise<boolean> {
+        this.setAsyncPendingLockout(true)
+        let submissionStatus = true
+
+        try {
+            await this.dataService.deleteNote(noteToDelete.Id)
+
+            // if deletion is successful, remove the new note from the corresponding list
+            if(noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.selectedProjectNotes)
+            if(noteSource === NoteSource.WORK) this.removeELementInListById(noteToDelete, this.selectedWorkNotes)
+            this.postMessage({messageText: "note successfully deleted", messageType: "success"})
+        } catch(error) {
+            console.error(error)
+            submissionStatus = false
+            this.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
+        } finally {
+            this.setAsyncPendingLockout(false)
+        }
+        return submissionStatus
+    } 
 
 
     /*******************************************************************************************************/
@@ -426,14 +453,19 @@ export class EmployeeStore {
     // finds the item with the with the same ID as the new item and replaces the stale item with the new item
     // true if replacement was successfull, false if not (stale list item was not found) 
     @action
-    private replaceElementInListById(newItem: CloRequestElement, list: Array<any>): boolean {
-        const staleItemIndex = list.findIndex(listItem => listItem.Id === newItem.Id)
+    private replaceElementInListById(newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean {
+        const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
 
         if(staleItemIndex !== -1) {
             list[staleItemIndex] = newItem
             return true
         }
         return false
+    }
+
+    @action
+    private removeELementInListById(itemToDelete: CloRequestElement | INote, list: Array<CloRequestElement | INote>) {
+        list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
     }
 }
 

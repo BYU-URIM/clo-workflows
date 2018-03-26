@@ -6,13 +6,19 @@ import { deepCopy } from "../../utils"
 import { IDataService, ListName } from "./IDataService"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
-import { INote } from "../../model/Note"
+import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
 import { ItemAddResult } from "sp-pnp-js/lib/pnp"
 import { IKeyValueMap } from "mobx"
 import { IWork } from "../../model/Work"
 
 export class MockDataService implements IDataService {
+    updateNote(note: INote): Promise<void> {
+        throw new Error("Method not implemented.")
+    }
+    deleteNote(noteId: string): Promise<void> {
+        throw new Error("Method not implemented.")
+    }
     fetchWorks(): Promise<Array<IWork>> {
         throw new Error("Method not implemented.")
     }
@@ -67,20 +73,18 @@ export class MockDataService implements IDataService {
         return Promise.resolve(deepCopy(MockProcesses))
     }
 
-    fetchProjectNotes(projectId: string): Promise<Array<INote>> {
-        return Promise.resolve(deepCopy(MockNotes.filter(note => note.projectId === projectId)))
-    }
-
-    fetchWorkNotes(workId: string): Promise<Array<INote>> {
-        return Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === workId)))
+    fetchNotes(source: NoteSource, scope: NoteScope, sourceId: string, attachedClientId: string): Promise<Array<INote>> {
+        return source === NoteSource.PROJECT
+            ? Promise.resolve(deepCopy(MockNotes.filter(note => note.projectId === sourceId)))
+            : Promise.resolve(deepCopy(MockNotes.filter(note => note.workId === sourceId)))
     }
 
     fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
         return Promise.resolve([])
     }
 
-    createNote(note: INote, listName: ListName): Promise<void> {
-        return Promise.resolve()
+    createNote(note: INote): Promise<ItemAddResult> {
+        return Promise.resolve(null)
     }
     createProject(): Promise<ItemAddResult> {
         return
