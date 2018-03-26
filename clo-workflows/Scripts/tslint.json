@@ -2,7 +2,6 @@
     "defaultSeverity": "error",
     "extends": [
         "tslint:recommended",
-        "tslint-react"
     ],
     "jsRules": {},
     "rules": {
@@ -24,10 +23,6 @@
         "no-string-literal": false,
         "max-classes-per-file": false,
         "variable-name": false,
-        "one-variable-per-declaration": false,
-        "jsx-no-multiline-js":false,
-        "jsx-no-lambda": false,
-        "trailing-comma": false
     },
     "rulesDirectory": []
 }
