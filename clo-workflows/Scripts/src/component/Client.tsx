@@ -13,35 +13,35 @@ import { Message } from "./Message"
 @observer
 export class Client extends React.Component<any, any> {
     public componentWillMount() {
-        this.sessionStore = this.props.rootStore.sessionStore
         this.clientStore = this.props.rootStore.clientStore
     }
-    sessionStore: SessionStore
     clientStore: ClientStore
 
     render() {
+        const clientStore = this.clientStore
         return (
             <div>
                 <ProjectFormModal
-                    clientStore={this.clientStore}
+                    clientStore={clientStore}
                     updateView={(m, v?) => {
-                        this.clientStore.updateView(m, v)
+                        clientStore.updateView(m, v)
                     }}
                 />
                 <ProcessFormModal
-                    clientStore={this.clientStore}
+                    clientStore={clientStore}
                     updateView={(m, v?) => {
-                        this.clientStore.updateView(m, v)
+                        clientStore.updateView(m, v)
                     }}
                 />
                 <ProjectProcessList
-                    processes={this.clientStore.clientProcesses}
-                    projects={this.clientStore.clientProjects}
-                    message={this.clientStore.message}
-                    handleSubmit={(projectId: any) => this.clientStore.handleAddNewProcess(projectId)}
-                    updateView={(k: string, v: any) => this.clientStore.updateView(k, v)}
+                    messageVisible={clientStore.message}
+                    processes={clientStore.clientProcesses}
+                    projects={clientStore.clientProjects}
+                    message={clientStore.message}
+                    handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
+                    updateView={(k: string, v: any) => clientStore.updateView(k, v)}
                 />
-                {this.clientStore.message && <Message {...this.clientStore.message} />}
+                {clientStore.message && <Message {...clientStore.message} />}
             </div>
         )
     }
