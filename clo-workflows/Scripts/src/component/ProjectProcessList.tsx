@@ -36,17 +36,17 @@ export interface ICustomGroup extends IGroup {
     projectId: string
 }
 export interface IProjectProcessListProps {
+    messageVisible: boolean
     processes: Array<{}>
     projects: IProjectGroup[]
     handleSubmit(projectId: string): void
     updateView(k: string, v: any): void
-    message
 }
 export interface ICustomGroupDividerProps extends IGroupDividerProps {
     group: ICustomGroup
 }
 
-export const ProjectProcessList = (props: IProjectProcessListProps) => {
+export const ProjectProcessList = observer((props: IProjectProcessListProps) => {
     const fields = ["title", "step"]
     const _columns = fields.map((f, i): IColumns => ({
         key: i.toString(),
@@ -59,7 +59,7 @@ export const ProjectProcessList = (props: IProjectProcessListProps) => {
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {
         return (
             <div>
-                <span style={{ fontSize: "1.7em", marginRight: "10px" }}>
+                <span style={{ fontSize: "2em", marginRight: "10px" }}>
                     <strong>Project Name:</strong> {renderHeaderProps.group!.name}
                 </span>
 
@@ -72,12 +72,17 @@ export const ProjectProcessList = (props: IProjectProcessListProps) => {
                     onClick={e => {
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
                     }}
+                    disabled={props.messageVisible}
                 />
             </div>
         )
     }
     return (
-        <div>
+        <div
+            style={{
+                maxWidth: "750px",
+            }}
+        >
             <CommandBar
                 items={[
                     {
@@ -85,6 +90,10 @@ export const ProjectProcessList = (props: IProjectProcessListProps) => {
                         name: "Add New Project",
                         icon: "Add",
                         onClick: () => props.updateView("showProjectModal", true),
+                        disabled: props.messageVisible,
+                        style: {
+                            fontSize: "1.5em",
+                        },
                     },
                 ]}
             />
@@ -93,7 +102,15 @@ export const ProjectProcessList = (props: IProjectProcessListProps) => {
                 groups={props.projects}
                 columns={_columns}
                 checkboxVisibility={CheckboxVisibility.hidden}
-                onRenderRow={(_props, defaultRender) => <div>{defaultRender(_props)}</div>}
+                onRenderRow={(_props, defaultRender) => (
+                    <div
+                        style={{
+                            fontSize: "1.5em",
+                        }}
+                    >
+                        {defaultRender(_props)}
+                    </div>
+                )}
                 groupProps={{
                     showEmptyGroups: true,
                     onRenderHeader: _onRenderHeader,
@@ -101,4 +118,4 @@ export const ProjectProcessList = (props: IProjectProcessListProps) => {
             />
         </div>
     )
-}
+})
