@@ -11,15 +11,15 @@ import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
-    togglePanel(m: string, v: string | boolean)
+    updateView(m: string, v: string | boolean)
 }
 
 const ProjectFormModal = (props: IFormPanelProps) => {
     return (
         <Modal
-            isOpen={props.clientStore.showProjectModal}
+            isOpen={props.clientStore.view.showProjectModal}
             onDismiss={() => {
-                props.togglePanel("showProjectModal", false)
+                props.updateView("showProjectModal", false)
             }}
             isBlocking={true}
         >
@@ -33,9 +33,9 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                 <Dropdown
                     label="Select the Project Type:"
                     selectedKey={
-                        props.clientStore.viewState.selectedProjectType ? props.clientStore.viewState.selectedProjectType : undefined
+                        props.clientStore.view.projectType ? props.clientStore.view.projectType : undefined
                     }
-                    options={props.clientStore.TypesAsOptions.PROJECTS.map((field, index) => ({
+                    options={props.clientStore.typesAsOptions.PROJECTS.map((field, index) => ({
                         text: field.text,
                         value: field.text,
                         key: field.text,
@@ -45,21 +45,21 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                         margin: "20px 0px",
                     }}
                     placeHolder={
-                        props.clientStore.viewState.selectedProjectType
-                            ? props.clientStore.viewState.selectedProjectType
+                        props.clientStore.view.projectType
+                            ? props.clientStore.view.projectType
                             : "select a project type"
                     }
                     onChanged={e => {
-                        props.togglePanel("selectedProjectType", e.text)
+                        props.updateView("projectType", e.text)
                     }}
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
-                {props.clientStore.viewState.selectedProjectType && (
+                {props.clientStore.view.projectType && (
                     <div>
                         <FormControlGroup
                             data={props.clientStore.newProject}
-                            formControls={props.clientStore.viewState.projectTypeForm()}
-                            validation={props.clientStore.CurrentFormValidation}
+                            formControls={props.clientStore.currentForm}
+                            validation={props.clientStore.currentFormValidation}
                             onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>
@@ -69,25 +69,17 @@ const ProjectFormModal = (props: IFormPanelProps) => {
                     description="Create the new project"
                     onClick={() => props.clientStore.processClientRequest()}
                     text="Create Project"
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
                 <br />
                 <br />
-                <DefaultButton
-                    description="close without submitting"
-                    text="Clear and Cancel"
-                    onClick={() => {
-                        props.clientStore.closeProjectModal()
-                    }}
-                    disabled={props.clientStore.asyncPendingLockout}
-                />
                 <DefaultButton
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.togglePanel("showProjectModal", false)
+                        props.updateView("showProjectModal", false)
                     }}
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
             </div>
             <br />

@@ -11,16 +11,16 @@ import WorkFormModal from "./WorkFormModal"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
-    togglePanel(m: string, v: string | boolean)
+    updateView(m: string, v: string | boolean)
 }
 
 // TODO this is mixing works and processes together
 const ProcessFormModal = (props: IFormPanelProps) => {
     return (
         <Modal
-            isOpen={props.clientStore.showProcessModal}
+            isOpen={props.clientStore.view.showProcessModal}
             onDismiss={() => {
-                props.togglePanel("showProcessModal", false)
+                props.updateView("showProcessModal", false)
             }}
             isBlocking={true}
         >
@@ -34,19 +34,20 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                 <h2>New Process Form</h2>
                 <Checkbox
                     label={"add a new work"}
-                    checked={props.clientStore.workIsNew}
+                    checked={props.clientStore.view.workIsNew}
                     onChange={(m, v) => {
-                        if (!v) props.clientStore.closeWorkForm()
-                        props.clientStore.updateClientStoreMember("workIsNew", v)
+                        v
+                            ? props.clientStore.updateView("workIsNew", v)
+                            : (props.clientStore.updateView("workIsNew", v), props.clientStore.updateView("workType", ""))
                     }}
                 />
-                {props.clientStore.workIsNew ? (
-                    <WorkFormModal clientStore={props.clientStore} togglePanel={props.togglePanel} />
+                {props.clientStore.view.workIsNew ? (
+                    <WorkFormModal clientStore={props.clientStore} togglePanel={props.updateView} />
                 ) : (
                     <Dropdown
                         label="Select the Work:"
-                        selectedKey={props.clientStore.viewState.selectedWork ? props.clientStore.viewState.selectedWorkType : undefined}
-                        options={props.clientStore.spData.works.map((field, index) => {
+                        selectedKey={props.clientStore.view.workType ? props.clientStore.view.workType : undefined}
+                        options={props.clientStore.works.map((field, index) => {
                             return {
                                 text: field.Title,
                                 value: field.Title,
@@ -57,14 +58,11 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                             width: "200px",
                             margin: "20px 0px",
                         }}
-                        placeHolder={
-                            props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work"
-                        }
+                        placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work"}
                         onChanged={e => {
-                            console.log(e.key)
-                            props.clientStore.updateClientStoreMember("selectedWorkId", e.key)
+                            props.clientStore.updateView("workId", e.key.toString())
                         }}
-                        disabled={props.clientStore.asyncPendingLockout}
+                        disabled={props.clientStore.view.asyncPendingLockout}
                     />
                 )}
 
@@ -72,25 +70,18 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     description="Submit Process Request"
                     onClick={props.clientStore.processClientRequest}
                     text="Submit Work Request"
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
                 <br />
                 <br />
-                <DefaultButton
-                    description="close without submitting"
-                    text="Clear and Cancel"
-                    onClick={() => {
-                        props.clientStore.closeProcessModal()
-                    }}
-                    disabled={props.clientStore.asyncPendingLockout}
-                />
+
                 <DefaultButton
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.togglePanel("showProcessModal", false)
+                        props.updateView("showProcessModal", false)
                     }}
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
             </div>{" "}
         </Modal>

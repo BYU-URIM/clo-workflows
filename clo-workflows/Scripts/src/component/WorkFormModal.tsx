@@ -19,8 +19,8 @@ const WorkFormModal = (props: IFormPanelProps) => {
             <h2>New Work Form</h2>
             <Dropdown
                 label="Select the Work Type:"
-                selectedKey={props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined}
-                options={props.clientStore.TypesAsOptions.WORKS.map((field, index) => ({
+                selectedKey={props.clientStore.view.workType ? props.clientStore.view.workType : undefined}
+                options={props.clientStore.typesAsOptions.WORKS.map((field, index) => ({
                     text: field.text,
                     value: field.text,
                     key: field.text,
@@ -29,19 +29,17 @@ const WorkFormModal = (props: IFormPanelProps) => {
                     width: "200px",
                     margin: "20px 0px",
                 }}
-                placeHolder={
-                    props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work type"
-                }
+                placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work type"}
                 onChanged={e => {
-                    props.togglePanel("selectedWorkType", e.text)
+                    props.togglePanel("workType", e.text)
                 }}
             />
-            {props.clientStore.viewState.selectedWorkType && (
+            {props.clientStore.view.workType && (
                 <div>
                     <FormControlGroup
                         data={props.clientStore.newWork}
-                        formControls={props.clientStore.viewState.workTypeForm()}
-                        validation={props.clientStore.CurrentFormValidation}
+                        formControls={props.clientStore.currentForm}
+                        validation={props.clientStore.currentFormValidation}
                         onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newWork")}
                     />
                 </div>
