@@ -24,22 +24,22 @@ export class Client extends React.Component<any, any> {
             <div>
                 <ProjectFormModal
                     clientStore={this.clientStore}
-                    togglePanel={(m, v?) => {
-                        this.clientStore.updateViewState(m, v)
+                    updateView={(m, v?) => {
+                        this.clientStore.updateView(m, v)
                     }}
                 />
                 <ProcessFormModal
                     clientStore={this.clientStore}
-                    togglePanel={(m, v?) => {
-                        this.clientStore.updateViewState(m, v)
+                    updateView={(m, v?) => {
+                        this.clientStore.updateView(m, v)
                     }}
                 />
                 <ProjectProcessList
-                    _processes={this.clientStore.clientProcesses}
-                    _projects={this.clientStore.clientProjects}
+                    processes={this.clientStore.clientProcesses}
+                    projects={this.clientStore.clientProjects}
                     message={this.clientStore.message}
                     handleSubmit={(projectId: any) => this.clientStore.handleAddNewProcess(projectId)}
-                    updateViewState={(k: string, v: any) => this.clientStore.updateViewState(k, v)}
+                    updateView={(k: string, v: any) => this.clientStore.updateView(k, v)}
                 />
                 {this.clientStore.message && <Message {...this.clientStore.message} />}
             </div>
