@@ -36,8 +36,8 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     checked={props.clientStore.view.workIsNew}
                     onChange={(m, v) => {
                         v
-                            ? props.clientStore.updateView("workIsNew", v)
-                            : (props.clientStore.updateView("workIsNew", v), props.clientStore.updateView("workType", ""))
+                            ? props.clientStore.view.updateView("workIsNew", v)
+                            : (props.clientStore.view.updateView("workIsNew", v), props.clientStore.view.updateView("workType", ""))
                     }}
                 />
                 {props.clientStore.view.workIsNew ? (
@@ -60,7 +60,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                         }}
                         placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work"}
                         onChanged={e => {
-                            props.clientStore.updateView("workId", e.key.toString())
+                            props.updateView("workId", e.key.toString())
                         }}
                         disabled={props.clientStore.view.asyncPendingLockout}
                     />

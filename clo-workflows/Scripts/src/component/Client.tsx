@@ -24,13 +24,13 @@ export class Client extends React.Component<any, any> {
                 <ProjectFormModal
                     clientStore={clientStore}
                     updateView={(m, v?) => {
-                        clientStore.updateView(m, v)
+                        clientStore.view.updateView(m, v)
                     }}
                 />
                 <ProcessFormModal
                     clientStore={clientStore}
                     updateView={(m, v?) => {
-                        clientStore.updateView(m, v)
+                        clientStore.view.updateView(m, v)
                     }}
                 />
                 <ProjectProcessList
@@ -38,7 +38,7 @@ export class Client extends React.Component<any, any> {
                     processes={clientStore.clientProcesses}
                     projects={clientStore.clientProjects}
                     handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
-                    updateView={(k: string, v: any) => clientStore.updateView(k, v)}
+                    updateView={(k: string, v: any) => clientStore.view.updateView(k, v)}
                 />
                 {clientStore.message && <Message {...clientStore.message} />}
             </div>
