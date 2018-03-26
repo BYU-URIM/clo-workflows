@@ -1,34 +1,33 @@
 import { action, ObservableMap, observable, runInAction, computed, IObservableArray } from "mobx"
 import { autobind } from "core-decorators"
-import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../model/CloRequestElement"
-import { IFormControl } from "../model/FormControl"
-import { getView, getStep, getStepNames } from "../model/loader/resourceLoaders"
-import { IDataService } from "../service/dataService/IDataService"
-import { validateFormControl } from "../utils"
-import { RootStore } from "./RootStore"
-import { User, IUser } from "../model/User"
-import { getNextStepName, StepName } from "../model/Step"
-import { IWork } from "../model/Work"
-import { IProjectGroup } from "../component/ProjectProcessList"
+import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../../model/CloRequestElement"
+import { IFormControl } from "../../model/FormControl"
+import { getView, getStep, getStepNames } from "../../model/loader/resourceLoaders"
+import { IDataService } from "../../service/dataService/IDataService"
+import { validateFormControl } from "../../utils"
+import { RootStore } from "../RootStore"
+import { User, IUser } from "../../model/User"
+import { getNextStepName, StepName } from "../../model/Step"
+import { IWork } from "../../model/Work"
+import { IProjectGroup } from "../../component/ProjectProcessList"
 import { ObservableArray } from "mobx/lib/types/observablearray"
-import { View } from "./View"
+import { ClientViewState } from "./ClientViewState"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
 @autobind
 export class ClientStore {
-    @observable message: any
     @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* Observable maps to store the info entered that is not state */
     @observable newProject: ClientObsMap = this.getClientObsMap()
     @observable newProcess: ClientObsMap = this.getClientObsMap()
     @observable newWork: ClientObsMap = this.getClientObsMap()
     /* fetched data */
-    @observable projects: Array<any> = observable.array()
+    @observable projects: Array<any> = []
     @observable processes: Array<any> = []
-    @observable works: Array<any> = observable.array()
+    @observable works: Array<any> = []
     /* Object used to store all view related state */
-    view: View = new View()
+    view: ClientViewState = new ClientViewState()
 
     constructor(private root: RootStore, private dataService: IDataService) {}
 
@@ -51,19 +50,29 @@ export class ClientStore {
     /* function to update view state on this.view */
     @action updateView = (m: string, v: string | boolean) => (this.view[m] = v)
     /* this replaces the entire cirrent view with a new instance */
-    @action clearView = () => (this.view = new View())
-
     @action
-    private postMessage(message: any, displayTime: number = 5000) {
+    clearView = () => {
+        this.newProject = this.getClientObsMap()
+        this.newProcess = this.getClientObsMap()
+        this.newWork = this.getClientObsMap()
+        this.view = new ClientViewState()
+    }
+
+    @observable message: any
+    @action
+    postMessage(message: any, displayTime: number = 5000) {
+        console.log(`posting message: ${message}`)
         this.message = message
         setTimeout(
             action(() => {
+                console.log(`posting message: complete`)
                 this.message = null
             }),
             displayTime
         )
     }
     /************ Computed Values ****************/
+
     @computed
     get currentForm(): Array<IFormControl> {
         return getView(this.view.workType || this.view.projectType).formControls
@@ -84,12 +93,36 @@ export class ClientStore {
 
     @computed
     get clientProcesses() {
-        return this.processes.sort((a, b) => Number(a.projectId) - Number(b.projectId))
+        return this.processes
+            .map((proc, i) => {
+                return {
+                    key: i.toString(),
+                    Id: proc.Id,
+                    projectId: proc.projectId,
+                    title: proc.Title,
+                    step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
+                }
+            })
+            .sort((a, b) => Number(a.projectId) - Number(b.projectId))
     }
 
     @computed
     get clientProjects() {
         return this.projects
+            .map((proj: CloRequestElement, i): IProjectGroup => ({
+                key: i.toString(),
+                projectId: proj.Id.toString(),
+                Title: proj.Title.toString(),
+                name: proj.Title.toString(),
+                count: this.processes.filter(proc => proj.Id.toString() === proc.projectId).length,
+                submitterId: proj.submitterId.toString(),
+                startIndex: 0,
+                isShowingAll: false,
+            }))
+            .map((e, i, a) => {
+                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
+                return e
+            })
     }
 
     @computed
@@ -116,7 +149,7 @@ export class ClientStore {
         this.view.projectType
             ? await this.submitProject()
             : this.view.workIsNew ? (await this.submitWork(), await this.submitProcess()) : await this.submitProcess()
-        this.view = new View()
+        this.view = new ClientViewState()
     }
 
     @action
@@ -128,44 +161,19 @@ export class ClientStore {
     @action
     private cleanProjects = projects => {
         this.projects = projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: i.toString(),
-                projectId: proj.Id.toString(),
-                Title: proj.Title.toString(),
-                name: proj.Title.toString(),
-                count: this.getProcessCount(proj),
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
-            .map((e, i, a) => {
-                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                return e
-            })
     }
 
     @action
     private getProcessCount(proj: CloRequestElement) {
         const id = proj.Id ? proj.Id : proj.projectId
-        return this.clientProcesses.filter(proc => {
+        return this.processes.filter(proc => {
             return id.toString() === proc.projectId
         }).length
     }
 
     @action
     private fetchClientProcesses = async () => {
-        const processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
-        this.processes = observable.array(
-            processes.map((proc, i) => {
-                return {
-                    key: i.toString(),
-                    Id: proc.Id,
-                    projectId: proc.projectId,
-                    title: proc.Title,
-                    step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
-                }
-            })
-        )
+        this.processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
     }
 
     @action private fetchClientProjects = async () => this.cleanProjects(await this.dataService.fetchClientProjects(this.currentUser.Id))
@@ -180,8 +188,10 @@ export class ClientStore {
         this.updateView("asyncPendingLockout", true)
         this.newProject.set("type", this.view.projectType)
         try {
-            await this.dataService.createProject(this.newProject.toJS())
-            // runInAction(() => this.projects.push(projectDetails))
+            const res = await this.dataService.createProject(this.newProject.toJS())
+            this.newProject.set("Id", res.data.Id)
+            runInAction(() => this.projects.push(this.newProject.toJS()))
+            this.clearView()
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -196,8 +206,8 @@ export class ClientStore {
         this.updateView("asyncPendingLockout", true)
         try {
             this.newWork.set("type", this.view.workType)
-            const work = await this.dataService.createWork(this.newWork.toJS())
-            this.updateClientStoreMember("selectedWorkId", work.data.Id.toString())
+            const res = await this.dataService.createWork(this.newWork.toJS())
+            this.updateClientStoreMember("selectedWorkId", res.data.Id.toString())
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -219,7 +229,10 @@ export class ClientStore {
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
                 : this.newProcess.set("Title", this.works.find(work => work.Id.toString() === this.view.workId).Title)
             this.newProcess.set("workId", this.view.workId)
-            await this.dataService.createProcess(this.newProcess.toJS())
+            const res = await this.dataService.createProcess(this.newProcess.toJS())
+            this.newProcess.set("Id", res.data.Id)
+            runInAction(() => this.processes.push(this.newProcess.toJS()))
+            this.clearView()
             this.postMessage({
                 messageText: "the new Process request was submitted successfully",
                 messageType: "success",
@@ -232,8 +245,6 @@ export class ClientStore {
             })
         } finally {
             this.updateView("asyncPendingLockout", false)
-            runInAction(() => this.processes.push(this.newProcess.toJS()))
-            this.updateView("showProcessModal", false)
         }
     }
 

@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react"
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore/ClientStore"
 import { SessionStore } from "../store/SessionStore"
 import Header from "./Header"
 import { ProjectProcessList } from "./ProjectProcessList"

@@ -1,7 +1,7 @@
 import { Employee } from "./../component/Employee"
 import { IDataService } from "../service/dataService/IDataService"
 import { action, observable, runInAction } from "mobx"
-import { ClientStore } from "./ClientStore"
+import { ClientStore } from "./ClientStore/ClientStore"
 import { EmployeeStore } from "./EmployeeStore"
 import { SessionStore } from "./SessionStore"
 export class RootStore {

@@ -1,6 +1,6 @@
 import { observable } from "mobx"
 
-export class View {
+export class ClientViewState {
     @observable projectId: string = undefined
     @observable projectType: string = undefined
     @observable workId: string = undefined
@@ -8,5 +8,5 @@ export class View {
     @observable showProjectModal: boolean = undefined
     @observable showProcessModal: boolean = undefined
     @observable workIsNew: boolean = undefined
-    @observable asyncPendingLockout: boolean = undefined
+    @observable asyncPendingLockout: boolean = false
 }

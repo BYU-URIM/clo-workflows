@@ -6,7 +6,7 @@ import { Modal } from "office-ui-fabric-react/lib/Modal"
 
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore/ClientStore"
 import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
