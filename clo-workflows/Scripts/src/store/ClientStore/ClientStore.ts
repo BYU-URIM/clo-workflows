@@ -1,4 +1,4 @@
-import { action, ObservableMap, observable, runInAction, computed, IObservableArray } from "mobx"
+import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { autobind } from "core-decorators"
 import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../../model/CloRequestElement"
 import { IFormControl } from "../../model/FormControl"
@@ -8,9 +8,7 @@ import { validateFormControl } from "../../utils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
-import { IWork } from "../../model/Work"
 import { IProjectGroup } from "../../component/ProjectProcessList"
-import { ObservableArray } from "mobx/lib/types/observablearray"
 import { ClientViewState } from "./ClientViewState"
 
 type ClientObsMap = ObservableMap<FormEntryType>
@@ -26,6 +24,9 @@ export class ClientStore {
     @observable projects: Array<any> = []
     @observable processes: Array<any> = []
     @observable works: Array<any> = []
+    /* any message to be shown in the view */
+    @observable message: any
+
     /* Object used to store all view related state */
     view: ClientViewState = new ClientViewState()
 
@@ -38,27 +39,22 @@ export class ClientStore {
         await this.fetchClientProjects()
         await this.fetchWorks()
     }
-    /************************************************
-     * ##### Overview #####
-     * # View related
-     * # utility functions
-     * # dataService interactions
-     ************************************************/
 
-    /********** View updates and storage **********/
+    /*********************************************************
+     * Mutations to ClientViewState
+     *********************************************************/
 
     /* function to update view state on this.view */
     @action updateView = (m: string, v: string | boolean) => (this.view[m] = v)
     /* this replaces the entire cirrent view with a new instance */
     @action
-    clearView = () => {
+    clearState = () => {
         this.newProject = this.getClientObsMap()
         this.newProcess = this.getClientObsMap()
         this.newWork = this.getClientObsMap()
         this.view = new ClientViewState()
     }
 
-    @observable message: any
     @action
     postMessage(message: any, displayTime: number = 5000) {
         console.log(`posting message: ${message}`)
@@ -71,8 +67,10 @@ export class ClientStore {
             displayTime
         )
     }
-    /************ Computed Values ****************/
 
+    /*********************************************************
+     * Computed Values for view
+     *********************************************************/
     @computed
     get currentForm(): Array<IFormControl> {
         return getView(this.view.workType || this.view.projectType).formControls
@@ -138,12 +136,17 @@ export class ClientStore {
             })),
         }
     }
+
+    /*********************************************************
+     * Other Class Actions
+     *********************************************************/
+
     /* function to update class members of type ObservableMap */
     @action
     async updateClientStoreMember(fieldName: string, newVal: FormEntryType | boolean, objToUpdate?: string) {
         objToUpdate ? this[objToUpdate].set(fieldName, newVal) : (this[fieldName] = newVal)
     }
-
+    /* determines which request the user is making from the ViewState */
     @action
     async processClientRequest() {
         this.view.projectType
@@ -158,30 +161,32 @@ export class ClientStore {
         this.updateView("showProcessModal", true)
     }
 
-    @action
-    private cleanProjects = projects => {
-        this.projects = projects
+    private getClientObsMap(): ClientObsMap {
+        return observable.map([["submitterId", this.currentUser.Id]])
     }
 
-    @action
-    private getProcessCount(proj: CloRequestElement) {
-        const id = proj.Id ? proj.Id : proj.projectId
-        return this.processes.filter(proc => {
-            return id.toString() === proc.projectId
-        }).length
-    }
+    /*********************************************************
+     * DataService Requests
+     *********************************************************/
+
+    /* GET's */
 
     @action
     private fetchClientProcesses = async () => {
         this.processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
     }
 
-    @action private fetchClientProjects = async () => this.cleanProjects(await this.dataService.fetchClientProjects(this.currentUser.Id))
+    @action
+    private fetchClientProjects = async () => {
+        this.projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
+    }
 
     @action
     private fetchWorks = async () => {
         this.works = observable.array(await this.dataService.fetchWorks())
     }
+
+    /* POST's */
 
     @action
     private async submitProject(): Promise<void> {
@@ -191,7 +196,7 @@ export class ClientStore {
             const res = await this.dataService.createProject(this.newProject.toJS())
             this.newProject.set("Id", res.data.Id)
             runInAction(() => this.projects.push(this.newProject.toJS()))
-            this.clearView()
+            this.clearState()
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -232,7 +237,7 @@ export class ClientStore {
             const res = await this.dataService.createProcess(this.newProcess.toJS())
             this.newProcess.set("Id", res.data.Id)
             runInAction(() => this.processes.push(this.newProcess.toJS()))
-            this.clearView()
+            this.clearState()
             this.postMessage({
                 messageText: "the new Process request was submitted successfully",
                 messageType: "success",
@@ -246,22 +251,5 @@ export class ClientStore {
         } finally {
             this.updateView("asyncPendingLockout", false)
         }
-    }
-
-    // finds the item with the with the same ID as the new item and replaces the stale item with the new item
-    // true if replacement was successfull, false if not (stale list item was not found)
-    @action
-    private replaceElementInListById(newItem: CloRequestElement, list: Array<any>): boolean {
-        const staleItemIndex = list.findIndex(listItem => listItem.Id === newItem.Id)
-
-        if (staleItemIndex !== -1) {
-            list[staleItemIndex] = newItem
-            return true
-        }
-        return false
-    }
-
-    private getClientObsMap(): ClientObsMap {
-        return observable.map([["submitterId", this.currentUser.Id]])
     }
 }
