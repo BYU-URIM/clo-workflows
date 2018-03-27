@@ -35,7 +35,7 @@ export interface IStep {
 // this function holds all of the logic for advancing steps through the processing pipeline
 // the next step is a function of of the current step and the past process state
 // TODO possible to make this more typesafe??
-export function getNextStepName(process: CloRequestElement): StepName {
+export function getNextStepName(process: CloRequestElement, currentStep?: StepName): StepName {
     const curStepName: StepName = process.step as StepName
     switch(curStepName) {
         case "Intake":
@@ -83,7 +83,7 @@ export function getNextStepName(process: CloRequestElement): StepName {
                 return "Exemption Analysis"
             }
             return curStepName
-            
+
         case "Exemption Analysis":
             if(process.exemptionAnalysis === "Fair Use") {
                 return "Exemption Approval"

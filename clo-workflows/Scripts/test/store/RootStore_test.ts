@@ -1,5 +1,5 @@
 import { SessionStore } from "./../../src/store/SessionStore"
-import { ClientStore } from "./../../src/store/ClientStore"
+import { ClientStore } from "./../../src/store/ClientStore/ClientStore"
 import * as ava from "ava"
 import { RootStore } from "../../src/store/RootStore"
 import { useStrict } from "mobx"

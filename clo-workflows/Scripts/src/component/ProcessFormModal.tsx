@@ -1,25 +1,24 @@
 import { observer } from "mobx-react"
-import { Dropdown } from "office-ui-fabric-react"
+import { Dropdown, Checkbox } from "office-ui-fabric-react"
 import { DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
 
-import { ClientStore, OBJECT_TYPES } from "../store/ClientStore"
+import { ClientStore } from "../store/ClientStore/ClientStore"
 import FormControlGroup from "./FormControlGroup"
+import WorkFormModal from "./WorkFormModal"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
-    togglePanel(m: string, v: string | boolean)
 }
 
-// TODO this is mixing works and processes together
-const ProcessFormModal = (props: IFormPanelProps) => {
+const ProcessFormModal = observer((props: IFormPanelProps) => {
     return (
         <Modal
-            isOpen={props.clientStore.showProcessModal}
+            isOpen={props.clientStore.view.showProcessModal === true}
             onDismiss={() => {
-                props.togglePanel("showProcessModal", false)
+                props.clientStore.view.showProcessModal = false
             }}
             isBlocking={true}
         >
@@ -31,62 +30,60 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                 }}
             >
                 <h2>New Process Form</h2>
-                <Dropdown
-                    label="Select the Work Type:"
-                    selectedKey={props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : undefined}
-                    options={props.clientStore.WorkTypesAsOptions.map((field, index) => ({
-                        text: field.text,
-                        value: field.text,
-                        key: field.text,
-                    }))}
-                    style={{
-                        width: "200px",
-                        margin: "20px 0px",
+                <Checkbox
+                    label={"add a new work"}
+                    checked={props.clientStore.view.workIsNew}
+                    onChange={(m, v) => {
+                        v
+                            ? (props.clientStore.view.workIsNew = v)
+                            : ((props.clientStore.view.workIsNew = v), (props.clientStore.view.workType = ""))
                     }}
-                    placeHolder={
-                        props.clientStore.viewState.selectedWorkType ? props.clientStore.viewState.selectedWorkType : "select a Work type"
-                    }
-                    onChanged={e => {
-                        props.togglePanel("selectedWorkType", e.text)
-                    }}
-                    disabled={props.clientStore.asyncPendingLockout}
                 />
-                {props.clientStore.viewState.selectedWorkType && (
-                    <div>
-                        <FormControlGroup
-                            data={props.clientStore.newProcess}
-                            formControls={props.clientStore.viewState.workTypeForm()}
-                            validation={props.clientStore.newWorkValidation}
-                            onChange={(fieldName, value ) => props.clientStore.updateObject(fieldName, value, OBJECT_TYPES.NEW_WORK)}
-                        />
-                    </div>
+                {props.clientStore.view.workIsNew ? (
+                    <WorkFormModal clientStore={props.clientStore} />
+                ) : (
+                    <Dropdown
+                        label="Select the Work:"
+                        selectedKey={props.clientStore.view.workType ? props.clientStore.view.workType : undefined}
+                        options={props.clientStore.data.works.map((field, index) => {
+                            return {
+                                text: field.Title,
+                                value: field.Title,
+                                key: field.Id,
+                            }
+                        })}
+                        style={{
+                            maxWidth: "350px",
+                            width: "auto",
+                            margin: "20px 0px",
+                        }}
+                        placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work"}
+                        onChanged={e => {
+                            props.clientStore.view.workId = e.key.toString()
+                        }}
+                        disabled={props.clientStore.view.asyncPendingLockout}
+                    />
                 )}
+
                 <PrimaryButton
                     description="Submit Process Request"
-                    onClick={props.clientStore.submitNewWorkRequest}
+                    onClick={props.clientStore.processClientRequest}
                     text="Submit Work Request"
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
                 <br />
                 <br />
-                <DefaultButton
-                    description="close without submitting"
-                    text="Clear and Cancel"
-                    onClick={() => {
-                        props.clientStore.closeProcessModal()
-                    }}
-                    disabled={props.clientStore.asyncPendingLockout}
-                />
+
                 <DefaultButton
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.togglePanel("showProcessModal", false)
+                        props.clientStore.view.showProcessModal = false
                     }}
-                    disabled={props.clientStore.asyncPendingLockout}
+                    disabled={props.clientStore.view.asyncPendingLockout}
                 />
             </div>{" "}
         </Modal>
     )
-}
+})
 export default observer(ProcessFormModal)
