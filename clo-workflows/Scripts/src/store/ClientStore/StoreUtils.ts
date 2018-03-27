@@ -1,10 +1,10 @@
 import { IFormControl } from "../../model/FormControl"
 import { FormEntryType, CloRequestElement } from "../../model/CloRequestElement"
-import { ObservableMap } from "mobx/lib/types/observablemap";
-import { observable } from "mobx";
+import { ObservableMap } from "mobx/lib/types/observablemap"
+import { observable } from "mobx"
 
 export class StoreUtils {
-    deepCopy<T>(ob: T): T {
+    deepCopy = <T>(ob: T): T => {
         return JSON.parse(JSON.stringify(ob))
     }
 
@@ -15,7 +15,7 @@ export class StoreUtils {
     DATE_REGEX = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/
     DATE_INPUT_ERROR = "please enter a date: mm/dd/yyyy"
 
-    validateFormControl(formControl: IFormControl, value: FormEntryType): string {
+    validateFormControl = (formControl: IFormControl, value: FormEntryType): string => {
         if (formControl.type === "number" && !this.NUMBER_REGEX.test(value as string)) {
             return this.NUMBER_INPUT_ERROR
         }
@@ -25,7 +25,7 @@ export class StoreUtils {
         }
     }
 
-    getQueryStringParameter(paramToRetrieve: string) {
+    getQueryStringParameter = (paramToRetrieve: string) => {
         const urlContainsParams = document.URL.includes("?")
         if (urlContainsParams) {
             const params = document.URL.split("?")[1].split("&")
