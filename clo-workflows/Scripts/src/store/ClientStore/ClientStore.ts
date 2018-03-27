@@ -27,7 +27,7 @@ export class ClientStore {
 
     /* Object used to store all view related state */
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
-    view: ClientViewState = new ClientViewState(this.dataService, this.currentUser)
+    view: ClientViewState = new ClientViewState()
     utils: StoreUtils = new StoreUtils()
 
     constructor(private root: RootStore, private dataService: IDataService) {
