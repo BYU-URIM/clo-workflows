@@ -13,7 +13,7 @@ export interface IFormPanelProps {
     clientStore: ClientStore
 }
 
-const ProcessFormModal = (props: IFormPanelProps) => {
+const ProcessFormModal = observer((props: IFormPanelProps) => {
     return (
         <Modal
             isOpen={props.clientStore.view.showProcessModal === true}
@@ -45,7 +45,7 @@ const ProcessFormModal = (props: IFormPanelProps) => {
                     <Dropdown
                         label="Select the Work:"
                         selectedKey={props.clientStore.view.workType ? props.clientStore.view.workType : undefined}
-                        options={props.clientStore.works.map((field, index) => {
+                        options={props.clientStore.data.works.map((field, index) => {
                             return {
                                 text: field.Title,
                                 value: field.Title,
@@ -85,5 +85,5 @@ const ProcessFormModal = (props: IFormPanelProps) => {
             </div>{" "}
         </Modal>
     )
-}
+})
 export default observer(ProcessFormModal)

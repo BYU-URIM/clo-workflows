@@ -13,10 +13,10 @@ export interface IFormPanelProps {
     clientStore: ClientStore
 }
 
-const ProjectFormModal = (props: IFormPanelProps) => {
+const ProjectFormModal = observer((props: IFormPanelProps) => {
     return (
         <Modal
-            isOpen={props.clientStore.view.showProjectModal}
+            isOpen={props.clientStore.view.showProjectModal === true}
             onDismiss={() => {
                 props.clientStore.view.showProjectModal = false
             }}
@@ -79,5 +79,5 @@ const ProjectFormModal = (props: IFormPanelProps) => {
             <br />
         </Modal>
     )
-}
+})
 export default observer(ProjectFormModal)
