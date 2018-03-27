@@ -16,9 +16,9 @@ export interface IFormPanelProps {
 const ProjectFormModal = observer((props: IFormPanelProps) => {
     return (
         <Modal
-            isOpen={props.clientStore.view.showProjectModal === true}
+            isOpen={true}
             onDismiss={() => {
-                props.clientStore.view.showProjectModal = false
+                props.clientStore.view.modal = null
             }}
             isBlocking={true}
         >
@@ -70,7 +70,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.clientStore.view.showProjectModal = false
+                        props.clientStore.view.modal = null
                     }}
                     disabled={props.clientStore.view.asyncPendingLockout}
                 />

@@ -18,7 +18,7 @@ import { CloRequestElement } from "../model/CloRequestElement"
 import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
-import { ClientViewState } from "../store/ClientStore/index";
+import { ClientViewState } from "../store/ClientStore/index"
 
 export interface IColumns {
     key: string
@@ -70,7 +70,7 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                     }}
                     text="Add a Process"
                     key={renderHeaderProps.group.key}
-                    onClick={e => {
+                    onClick={() => {
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
                     }}
                     disabled={props.messageVisible}
@@ -90,7 +90,9 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                         key: "addNewProject",
                         name: "Add New Project",
                         icon: "Add",
-                        onClick: () => props.view.showProjectModal = true,
+                        onClick: () => {
+                            props.view.modal = "project"
+                        },
                         disabled: props.messageVisible,
                         style: {
                             fontSize: "1.5em",
