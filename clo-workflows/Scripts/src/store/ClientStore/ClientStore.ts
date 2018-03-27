@@ -89,40 +89,6 @@ export class ClientStore {
     }
 
     @computed
-    get clientProcesses() {
-        return this.data.processes
-            .map((proc, i) => {
-                return {
-                    key: proc.Id.toString(),
-                    Id: proc.Id,
-                    projectId: proc.projectId,
-                    title: proc.Title,
-                    step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
-                }
-            })
-            .sort((a, b) => Number(a.projectId) - Number(b.projectId))
-    }
-
-    @computed
-    get clientProjects() {
-        return this.data.projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: proj.Id.toString(),
-                projectId: proj.Id.toString(),
-                Title: proj.Title.toString(),
-                name: proj.Title.toString(),
-                count: this.data.processes.filter(proc => proj.Id.toString() === proc.projectId).length,
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
-            .map((e, i, a) => {
-                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                return e
-            })
-    }
-
-    @computed
     get typesAsOptions() {
         return {
             PROJECTS: PROJECT_TYPES.map(e => ({
@@ -157,7 +123,7 @@ export class ClientStore {
     @action
     handleAddNewProcess = (projectId: string) => {
         this.newProcess.set("projectId", projectId)
-        this.view.showProcessModal = true
+        this.view.modal = "process"
     }
 
     /*********************************************************
