@@ -4,12 +4,13 @@ import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../
 import { IFormControl } from "../../model/FormControl"
 import { getView, getStep, getStepNames } from "../../model/loader/resourceLoaders"
 import { IDataService } from "../../service/dataService/IDataService"
-import { validateFormControl } from "../../utils"
+import { validateFormControl, getFormattedDate } from "../../utils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
 import { IProjectGroup } from "../../component/ProjectProcessList"
-import { ClientViewState } from "./ClientViewState"
+import { ClientViewState, ClientStoreData } from "./"
+import { INote, NoteSource, NoteScope } from "../../model/Note"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
@@ -23,12 +24,14 @@ export class ClientStore {
     /* fetched data */
     @observable projects: Array<any> = []
     @observable processes: Array<any> = []
+    @observable notes: Array<any>
     @observable works: Array<any> = []
     /* any message to be shown in the view */
     @observable message: any
 
     /* Object used to store all view related state */
     view: ClientViewState = new ClientViewState()
+    data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
 
     constructor(private root: RootStore, private dataService: IDataService) {}
 
@@ -45,23 +48,20 @@ export class ClientStore {
      *********************************************************/
 
     /* function to update view state on this.view */
-    @action updateView = (m: string, v: string | boolean) => (this.view[m] = v)
     /* this replaces the entire cirrent view with a new instance */
     @action
     clearState = () => {
         this.newProject = this.getClientObsMap()
         this.newProcess = this.getClientObsMap()
         this.newWork = this.getClientObsMap()
-        this.view = new ClientViewState()
+        this.view.resetClientState()
     }
 
     @action
     postMessage(message: any, displayTime: number = 5000) {
-        console.log(`posting message: ${message}`)
         this.message = message
         setTimeout(
             action(() => {
-                console.log(`posting message: complete`)
                 this.message = null
             }),
             displayTime
@@ -158,7 +158,7 @@ export class ClientStore {
     @action
     handleAddNewProcess(projectId: string) {
         this.newProcess.set("projectId", projectId)
-        this.updateView("showProcessModal", true)
+        this.view.showProcessModal = true
     }
 
     private getClientObsMap(): ClientObsMap {
@@ -186,11 +186,16 @@ export class ClientStore {
         this.works = observable.array(await this.dataService.fetchWorks())
     }
 
+    @action
+    fetchNotesForSelected = async () => {
+        this.notes
+    }
+
     /* POST's */
 
     @action
     private async submitProject(): Promise<void> {
-        this.updateView("asyncPendingLockout", true)
+        this.view.asyncPendingLockout = true
         this.newProject.set("type", this.view.projectType)
         try {
             const res = await this.dataService.createProject(this.newProject.toJS())
@@ -202,13 +207,13 @@ export class ClientStore {
             console.error(error)
             this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: "error" })
         } finally {
-            this.updateView("asyncPendingLockout", false)
+            this.view.asyncPendingLockout = false
         }
     }
 
     @action
     private async submitWork(): Promise<void> {
-        this.updateView("asyncPendingLockout", true)
+        this.view.asyncPendingLockout = true
         try {
             this.newWork.set("type", this.view.workType)
             const res = await this.dataService.createWork(this.newWork.toJS())
@@ -220,13 +225,13 @@ export class ClientStore {
                 messageType: "error",
             })
         } finally {
-            this.updateView("asyncPendingLockout", false)
+            this.view.asyncPendingLockout = false
         }
     }
 
     @action
     private async submitProcess(): Promise<void> {
-        this.updateView("asyncPendingLockout", true)
+        this.view.asyncPendingLockout = true
         try {
             // processDetails.step = getNextStepName(processDetails, "Intake")
             this.newProcess.set("step", "Intake")
@@ -249,7 +254,75 @@ export class ClientStore {
                 messageType: "error",
             })
         } finally {
-            this.updateView("asyncPendingLockout", false)
+            this.view.asyncPendingLockout = false
         }
     }
+
+    /*******************************************************************************************************/
+    // NOTES - SHARED BY RPOJECTS AND WORKS
+    /*******************************************************************************************************/
+    // @action async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
+    //     this.view.updateView("asyncPendingLockout",true)
+
+    //     let submissionStatus = true
+    //     try {
+    //         // fill in any info the new note needs before submission
+    //         noteToCreate.dateSubmitted = getFormattedDate()
+    //         noteToCreate.submitter = this.root.sessionStore.currentUser.name
+    //         if(noteToCreate.scope === NoteScope.CLIENT) {
+    //             noteToCreate.attachedClientId = this.newProcess.get("submitterId") as string
+    //         }
+
+    //         if(noteSource === NoteSource.PROJECT) {
+    //             noteToCreate.projectId = String(this.view.projectId)
+    //         } else if(noteSource === NoteSource.WORK) {
+    //             noteToCreate.workId = String(this.view.workId)
+    //         }
+
+    //         const addResult = await this.dataService.createNote(noteToCreate)
+    //         noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
+
+    //         // if submission is successful, add the new note to the corresponding list
+    //         if(noteSource === NoteSource.WORK) runInAction(() => this.selectedWorkNotes.unshift(noteToCreate))
+    //         if(noteSource === NoteSource.PROJECT) runInAction(() => this.selectedProjectNotes.unshift(noteToCreate))
+    //         this.postMessage({messageText: "note successfully submitted", messageType: "success"})
+    //     } catch(error) {
+    //         console.error(error)
+    //         submissionStatus = false
+    //         this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
+    //     } finally {
+    //         this.view.updateView("asyncPendingLockout",false)
+    //     }
+
+    //     return submissionStatus
+    // }
+
+    // @action async updateNote(noteToUpdate: INote, noteSource: NoteSource): Promise<boolean> {
+    //     this.view.updateView("asyncPendingLockout",true)
+    //     let submissionStatus = true
+    //     try {
+    //         noteToUpdate.dateSubmitted = getFormattedDate()
+    //         await this.dataService.updateNote(noteToUpdate)
+
+    //         // if submission is successful, add the new note to the corresponding list
+    //         if(noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.selectedWorkNotes)
+    //         if(noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.selectedProjectNotes)
+
+    //         this.postMessage({messageText: "note successfully updated", messageType: "success"})
+    //     } catch(error) {
+    //         console.error(error)
+    //         submissionStatus = false
+    //         this.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
+    //     } finally {
+    //         this.view.updateView("asyncPendingLockout",false)
+    //     }
+
+    //     return submissionStatus
+    // }
+
+    // @action async deleteNote(noteToDelete: INote, noteSource: NoteSource): Promise<boolean> {
+    //     this.view.updateView("asyncPendingLockout",false)
+    //     }
+    //     return submissionStatus
+    // }
 }

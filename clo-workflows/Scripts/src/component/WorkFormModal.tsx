@@ -10,7 +10,6 @@ import FormControlGroup from "./FormControlGroup"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
-    togglePanel(m: string, v: string | boolean)
 }
 
 const WorkFormModal = (props: IFormPanelProps) => {
@@ -31,7 +30,7 @@ const WorkFormModal = (props: IFormPanelProps) => {
                 }}
                 placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work type"}
                 onChanged={e => {
-                    props.togglePanel("workType", e.text)
+                    props.clientStore.view.workType = e.text
                 }}
             />
             {props.clientStore.view.workType && (

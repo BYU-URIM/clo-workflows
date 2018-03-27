@@ -18,6 +18,7 @@ import { CloRequestElement } from "../model/CloRequestElement"
 import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
+import { ClientViewState } from "../store/ClientStore/index";
 
 export interface IColumns {
     key: string
@@ -40,7 +41,7 @@ export interface IProjectProcessListProps {
     processes: Array<{}>
     projects: IProjectGroup[]
     handleSubmit(projectId: string): void
-    updateView(k: string, v: any): void
+    view: ClientViewState
 }
 export interface ICustomGroupDividerProps extends IGroupDividerProps {
     group: ICustomGroup
@@ -89,7 +90,7 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                         key: "addNewProject",
                         name: "Add New Project",
                         icon: "Add",
-                        onClick: () => props.updateView("showProjectModal", true),
+                        onClick: () => props.view.showProjectModal = true,
                         disabled: props.messageVisible,
                         style: {
                             fontSize: "1.5em",
