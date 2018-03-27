@@ -21,18 +21,14 @@ export class Client extends React.Component<any, any> {
         const clientStore = this.clientStore
         return (
             <div>
-                <ProjectFormModal
-                    clientStore={clientStore}
-                />
-                <ProcessFormModal
-                    clientStore={clientStore}
-                />
+                {clientStore.view.showProjectModal && <ProjectFormModal clientStore={clientStore} />}
+                {clientStore.view.showProcessModal && <ProcessFormModal clientStore={clientStore} />}
                 <ProjectProcessList
                     messageVisible={clientStore.message}
                     processes={clientStore.clientProcesses}
                     projects={clientStore.clientProjects}
                     handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
-                    view = {clientStore.view}
+                    view={clientStore.view}
                 />
                 {clientStore.message && <Message {...clientStore.message} />}
             </div>
