@@ -94,7 +94,7 @@ export class ClientStore {
         return this.processes
             .map((proc, i) => {
                 return {
-                    key: i.toString(),
+                    key: proc.Id.toString(),
                     Id: proc.Id,
                     projectId: proc.projectId,
                     title: proc.Title,
@@ -108,7 +108,7 @@ export class ClientStore {
     get clientProjects() {
         return this.projects
             .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: i.toString(),
+                key: proj.Id.toString(),
                 projectId: proj.Id.toString(),
                 Title: proj.Title.toString(),
                 name: proj.Title.toString(),
