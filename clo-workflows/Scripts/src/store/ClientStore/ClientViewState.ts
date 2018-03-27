@@ -1,5 +1,4 @@
 import { observable, action, computed } from "mobx"
-import { resetGlobalState } from "mobx/lib/core/globalstate"
 
 export class ClientViewState {
     @observable private _projectId: string = undefined
