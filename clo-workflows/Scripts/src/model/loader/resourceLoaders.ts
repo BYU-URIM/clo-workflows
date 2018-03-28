@@ -4,14 +4,13 @@ import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import { Utils } from "../../utils"
+import { utils } from "../../utils"
 import { StepName, IStep } from "../Step"
 import { IFormControl } from "../FormControl"
 
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-const utils = new Utils()
 export function getView(viewName: string): IView {
     const normalizedView = VIEWS[viewName]
     if(!normalizedView) throw new Error(`no view for ${viewName} exists`)

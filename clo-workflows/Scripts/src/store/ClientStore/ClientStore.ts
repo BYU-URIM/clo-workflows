@@ -4,7 +4,7 @@ import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../
 import { IFormControl } from "../../model/FormControl"
 import { getView, getStep, getStepNames } from "../../model/loader/resourceLoaders"
 import { IDataService } from "../../service/dataService/IDataService"
-import { Utils } from "../../utils"
+import { utils } from "../../utils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
@@ -27,12 +27,10 @@ export class ClientStore {
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
     computable: ComputableState = new ComputableState(this.view, this.data)
-    utils: Utils = new Utils()
-
     constructor(private root: RootStore, private dataService: IDataService) {
-        this.newProject = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = this.utils.getClientObsMap(this.currentUser.Id)
+        this.newProject = utils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
+        this.newWork = utils.getClientObsMap(this.currentUser.Id)
     }
 
     @action
@@ -49,9 +47,9 @@ export class ClientStore {
     /* this replaces the entire cirrent view with a new instance */
     @action
     clearState = () => {
-        this.newProject = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = this.utils.getClientObsMap(this.currentUser.Id)
+        this.newProject = utils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
+        this.newWork = utils.getClientObsMap(this.currentUser.Id)
         this.view.resetClientState()
     }
 
@@ -81,7 +79,7 @@ export class ClientStore {
         return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = newInstanceOfType.get(fieldName) || undefined
-            const error: string = inputVal ? this.utils.validateFormControl(formControl, inputVal) : null
+            const error: string = inputVal ? utils.validateFormControl(formControl, inputVal) : null
             accumulator[fieldName] = error
             return accumulator
         }, {})
@@ -206,7 +204,7 @@ export class ClientStore {
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission
-            noteToCreate.dateSubmitted = this.utils.getFormattedDate()
+            noteToCreate.dateSubmitted = utils.getFormattedDate()
             noteToCreate.submitter = this.root.sessionStore.currentUser.name
             if (noteToCreate.scope === NoteScope.CLIENT) {
                 noteToCreate.attachedClientId = this.newProcess.get("submitterId") as string
@@ -241,7 +239,7 @@ export class ClientStore {
         this.view.asyncPendingLockout = true
         let submissionStatus = true
         try {
-            noteToUpdate.dateSubmitted = this.utils.getFormattedDate()
+            noteToUpdate.dateSubmitted = utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
 
             // if submission is successful, add the new note to the corresponding list

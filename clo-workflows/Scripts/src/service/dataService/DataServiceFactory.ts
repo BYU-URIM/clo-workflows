@@ -2,13 +2,12 @@ import { ENVIRONMENT, EnvType } from "../../env"
 import { MockDataService } from "./MockDataService"
 import { SpDataService } from "./SpDataService"
 import { IDataService } from "./IDataService"
-import { Utils } from "../../utils"
+import { utils } from "../../utils"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 
 // static utitlity class for creating data service objects
 // contains logic for creating a SPDataAccess or MockDataAccess depending on the environment
 
-const utils: Utils = new Utils()
 export class DataServiceFactory {
     // creates and returns a data access object
     static getDataService(): IDataService {

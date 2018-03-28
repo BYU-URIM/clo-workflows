@@ -7,8 +7,7 @@ import { autobind } from "core-decorators"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Dialog, DialogFooter, DialogType } from "office-ui-fabric-react"
 import { IUser } from "../model/User"
-import { Utils } from "../utils"
-const utils = new Utils()
+import { utils } from "../utils"
 export interface INotesBoxProps {
     title: string
     notes: ReadonlyArray<INote>

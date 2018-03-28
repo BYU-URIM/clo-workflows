@@ -3,7 +3,7 @@ import { FormEntryType, CloRequestElement } from "./model/CloRequestElement"
 import { ObservableMap } from "mobx/lib/types/observablemap"
 import { observable } from "mobx"
 
-export class Utils {
+class Utils {
     deepCopy = <T>(ob: T): T => {
         return JSON.parse(JSON.stringify(ob))
     }
@@ -59,3 +59,5 @@ export class Utils {
         return observable.map([["submitterId", userId]])
     }
 }
+
+export const utils = new Utils()
