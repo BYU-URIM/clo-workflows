@@ -62,7 +62,12 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                     description="Create the new project"
                     onClick={() => props.clientStore.processClientRequest()}
                     text="Create Project"
-                    disabled={props.clientStore.view.asyncPendingLockout}
+                    disabled={
+                        props.clientStore.view.asyncPendingLockout ||
+                        props.clientStore.newProject.get("Title") === undefined ||
+                        props.clientStore.newProject.get("Title") === ""
+
+                    }
                 />
                 <br />
                 <br />

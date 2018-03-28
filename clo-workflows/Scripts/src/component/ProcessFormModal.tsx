@@ -69,7 +69,12 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     description="Submit Process Request"
                     onClick={props.clientStore.processClientRequest}
                     text="Submit Work Request"
-                    disabled={props.clientStore.view.asyncPendingLockout}
+                    disabled={
+                        props.clientStore.view.asyncPendingLockout ||
+                        !props.clientStore.view.work.id ||
+                        ((props.clientStore.view.work.isNew && props.clientStore.newWork.get("Title") === undefined) ||
+                            props.clientStore.newWork.get("Title") === "")
+                    }
                 />
                 <br />
                 <br />
