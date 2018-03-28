@@ -2,10 +2,10 @@ import { IDataService } from "../../service/dataService/IDataService"
 import { action, observable, computed } from "mobx"
 import { IUser } from "../../model/User"
 import { NoteSource, NoteScope } from "../../model/Note"
-import { IProjectGroup } from "../../component/ProjectProcessList";
-import { StepName } from "../../model/Step";
-import { getStep, getStepNames } from "../../model/loader/resourceLoaders";
-import { CloRequestElement } from "../../model/CloRequestElement";
+import { IProjectGroup } from "../../component/ProjectProcessList"
+import { StepName } from "../../model/Step"
+import { getStep, getStepNames } from "../../model/loader/resourceLoaders"
+import { CloRequestElement } from "../../model/CloRequestElement"
 export class ClientStoreData {
     dataService: IDataService
     currentUser: IUser
@@ -22,6 +22,7 @@ export class ClientStoreData {
         await this.fetchClientProcesses()
         await this.fetchClientProjects()
         await this.fetchWorks()
+        await this.fetchSelectedProcessNotes()
     }
     @action
     fetchClientProcesses = async () => {
@@ -34,6 +35,13 @@ export class ClientStoreData {
     @action
     fetchWorks = async () => {
         this.works = await this.dataService.fetchWorks()
+    }
+    @action
+    fetchSelectedProcessNotes = async () => {
+        const workIdArray = this.processes.map(p => p.workId)
+        for (const id in workIdArray) {
+            this.notes.push( await this.dataService.fetchNotes(NoteSource.WORK, NoteScope.CLIENT, id, this.currentUser.Id))
+        }
     }
     @action private fetchNotes = async () => {}
 
