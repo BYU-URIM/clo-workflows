@@ -1,5 +1,4 @@
 import { observable, action, computed } from "mobx"
-export interface IClientRequestProps {}
 export class ClientRequest {
     @observable private _id: string = undefined
     @observable private _type: string = undefined

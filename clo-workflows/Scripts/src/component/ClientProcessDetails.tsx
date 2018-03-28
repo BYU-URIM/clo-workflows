@@ -1,16 +1,16 @@
 import * as React from "react"
 import { NotesBox, INotesBoxProps } from "./NotesBox"
 import { NoteScope, NoteSource } from "../model/Note"
-import { ComputableState, ClientStoreData, ClientViewState } from "../store/ClientStore/index"
+import { ClientStoreData, ClientViewState } from "../store/ClientStore/index"
 export interface IClientProcessDetailsProps {
     data: ClientStoreData
     view: ClientViewState
-    computable: ComputableState
+    selectedNotes
 }
 export const ClientProcessDetails = (props: IClientProcessDetailsProps) => {
     const notesBoxProps: INotesBoxProps = {
         title: "Notes",
-        notes: props.computable.selectedNotes,
+        notes: props.selectedNotes,
         onCreateNote: async e => {
             console.log(e)
             return true

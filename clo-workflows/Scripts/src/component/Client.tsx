@@ -11,23 +11,23 @@ import { Message } from "./Message"
 import { ClientProcessDetails } from "./ClientProcessDetails"
 
 const rightContainer = {
-        margin: "0",
-        padding: "30px",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-        width: "50%",
+    margin: "0",
+    padding: "30px",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    width: "50%",
 } as React.CSSProperties
 const leftContainer = {
-        margin: "0",
-        padding: "10px",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-        width: "50%",
-        boxShadow: "0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.18)",
+    margin: "0",
+    padding: "10px",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    width: "50%",
+    boxShadow: "0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.18)",
 } as React.CSSProperties
 
 @inject("rootStore")
@@ -62,7 +62,7 @@ export class Client extends React.Component<any, any> {
                         <ClientProcessDetails
                             view={this.clientStore.view}
                             data={this.clientStore.data}
-                            computable={this.clientStore.computable}
+                            selectedNotes={this.clientStore.selectedNotes}
                         />
                     )}
                 </div>

@@ -9,7 +9,7 @@ import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
 import { IProjectGroup } from "../../component/ProjectProcessList"
-import { ClientViewState, ClientStoreData, ComputableState } from "./"
+import { ClientViewState, ClientStoreData } from "./"
 import { INote, NoteSource, NoteScope } from "../../model/Note"
 
 type ClientObsMap = ObservableMap<FormEntryType>
@@ -26,7 +26,6 @@ export class ClientStore {
     /* Object used to store all view related state */
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
-    computable: ComputableState = new ComputableState(this.view, this.data)
     constructor(private root: RootStore, private dataService: IDataService) {
         this.newProject = utils.getClientObsMap(this.currentUser.Id)
         this.newProcess = utils.getClientObsMap(this.currentUser.Id)
@@ -97,6 +96,19 @@ export class ClientStore {
                 text: e,
             })),
         }
+    }
+
+    @computed
+    get selectedNotes() {
+        const actualNotes = this.data.notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr))
+
+        return actualNotes.filter(
+            a =>
+                a.workId ===
+                this.data.processes.filter(p => {
+                    return p.Id.toString() === this.view.process.id
+                })[0].workId
+        )
     }
 
     /*********************************************************
