@@ -9,8 +9,14 @@ import ProjectFormModal from "./ProjectFormModal"
 import ProcessFormModal from "./ProcessFormModal"
 import { Message } from "./Message"
 import { ClientProcessDetails } from "./ClientProcessDetails"
+import { ClientProjectDetails } from "./ClientProjectDetails"
 
-const rightContainer = {
+const wrapper = {
+    display: "inline-flex",
+    width: "100%",
+    height: "auto",
+} as React.CSSProperties
+const rightSection = {
     margin: "0",
     padding: "30px",
     display: "flex",
@@ -19,7 +25,7 @@ const rightContainer = {
     justifyContent: "flex-start",
     width: "50%",
 } as React.CSSProperties
-const leftContainer = {
+const leftSection = {
     margin: "0",
     padding: "10px",
     display: "flex",
@@ -41,14 +47,8 @@ export class Client extends React.Component<any, any> {
     render() {
         const clientStore = this.clientStore
         return (
-            <div
-                style={{
-                    display: "inline-flex",
-                    width: "100%",
-                    height: "auto",
-                }}
-            >
-                <div style={leftContainer}>
+            <div style={wrapper}>
+                <div style={leftSection}>
                     <ProjectProcessList
                         messageVisible={clientStore.message}
                         processes={clientStore.data.clientProcesses}
@@ -57,12 +57,21 @@ export class Client extends React.Component<any, any> {
                         view={clientStore.view}
                     />
                 </div>
-                <div style={rightContainer}>
+                <div style={rightSection}>
                     {this.clientStore.view.process.id && (
                         <ClientProcessDetails
                             view={this.clientStore.view}
                             data={this.clientStore.data}
                             selectedNotes={this.clientStore.selectedNotes}
+                            clientStore={this.clientStore}
+                        />
+                    )}
+                    {this.clientStore.view.project.id && (
+                        <ClientProjectDetails
+                            view={this.clientStore.view}
+                            data={this.clientStore.data}
+                            selectedNotes={this.clientStore.selectedNotes}
+                            clientStore={this.clientStore}
                         />
                     )}
                 </div>
