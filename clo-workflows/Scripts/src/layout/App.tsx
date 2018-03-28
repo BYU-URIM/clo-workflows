@@ -14,7 +14,7 @@ const backgroundStyles = {} as React.CSSProperties
 
 // app content refers to everything in the app below the header
 const appContentStyles = {
-    width: "80%",
+    width: "85%",
     margin: "0 auto",
     background: "white",
     paddingTop: 20,
@@ -34,7 +34,7 @@ export class App extends React.Component<any, any> {
     render() {
         return (
             <Fabric>
-                { this.rootStore.initialized ? (
+                {this.rootStore.initialized ? (
                     /* data is initialized - render out app content (client / employee dashbpard) */
                     <div>
                         <Header currentUser={this.rootStore.sessionStore.currentUser} />
@@ -43,11 +43,11 @@ export class App extends React.Component<any, any> {
                                 {this.rootStore.sessionStore.isEmployee ? (
                                     <Employee currentUser={this.rootStore.sessionStore.currentUser} />
                                 ) : (
-                                    <Client currentUser={this.rootStore.sessionStore.currentUser} />
+                                        <Client currentUser={this.rootStore.sessionStore.currentUser} />
                                 )}
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 ) : (
                     /* data is unitialized - render out loading page */
                     <LoadingPage />
