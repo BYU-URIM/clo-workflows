@@ -4,7 +4,7 @@ import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../
 import { IFormControl } from "../../model/FormControl"
 import { getView, getStep, getStepNames } from "../../model/loader/resourceLoaders"
 import { IDataService } from "../../service/dataService/IDataService"
-import { StoreUtils } from "./StoreUtils"
+import { utils } from "../../utils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
@@ -20,20 +20,16 @@ export class ClientStore {
     @observable newProject: ClientObsMap
     @observable newProcess: ClientObsMap
     @observable newWork: ClientObsMap
-    /* fetched data */
-    @observable notes: Array<any>
     /* any message to be shown in the view */
     @observable message: any
 
     /* Object used to store all view related state */
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
-    utils: StoreUtils = new StoreUtils()
-
     constructor(private root: RootStore, private dataService: IDataService) {
-        this.newProject = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = this.utils.getClientObsMap(this.currentUser.Id)
+        this.newProject = utils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
+        this.newWork = utils.getClientObsMap(this.currentUser.Id)
     }
 
     @action
@@ -50,9 +46,9 @@ export class ClientStore {
     /* this replaces the entire cirrent view with a new instance */
     @action
     clearState = () => {
-        this.newProject = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = this.utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = this.utils.getClientObsMap(this.currentUser.Id)
+        this.newProject = utils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
+        this.newWork = utils.getClientObsMap(this.currentUser.Id)
         this.view.resetClientState()
     }
 
@@ -72,7 +68,7 @@ export class ClientStore {
      *********************************************************/
     @computed
     get currentForm(): Array<IFormControl> {
-        return getView(this.view.workType || this.view.projectType).formControls
+        return getView(this.view.work.type || this.view.project.type).formControls
     }
 
     @computed
@@ -82,44 +78,10 @@ export class ClientStore {
         return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = newInstanceOfType.get(fieldName) || undefined
-            const error: string = inputVal ? this.utils.validateFormControl(formControl, inputVal) : null
+            const error: string = inputVal ? utils.validateFormControl(formControl, inputVal) : null
             accumulator[fieldName] = error
             return accumulator
         }, {})
-    }
-
-    @computed
-    get clientProcesses() {
-        return this.data.processes
-            .map((proc, i) => {
-                return {
-                    key: proc.Id.toString(),
-                    Id: proc.Id,
-                    projectId: proc.projectId,
-                    title: proc.Title,
-                    step: `${proc.step} - ${getStep(proc.step as StepName).orderId} out of ${getStepNames().length}`,
-                }
-            })
-            .sort((a, b) => Number(a.projectId) - Number(b.projectId))
-    }
-
-    @computed
-    get clientProjects() {
-        return this.data.projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: proj.Id.toString(),
-                projectId: proj.Id.toString(),
-                Title: proj.Title.toString(),
-                name: proj.Title.toString(),
-                count: this.data.processes.filter(proc => proj.Id.toString() === proc.projectId).length,
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
-            .map((e, i, a) => {
-                i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
-                return e
-            })
     }
 
     @computed
@@ -136,6 +98,19 @@ export class ClientStore {
         }
     }
 
+    @computed
+    get selectedNotes() {
+        const actualNotes = this.data.notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr))
+
+        return actualNotes.filter(
+            a =>
+                a.workId ===
+                this.data.processes.filter(p => {
+                    return p.Id.toString() === this.view.process.id
+                })[0].workId
+        )
+    }
+
     /*********************************************************
      * Other Class Actions
      *********************************************************/
@@ -148,16 +123,16 @@ export class ClientStore {
     /* determines which request the user is making from the ViewState */
     @action
     processClientRequest = async () => {
-        this.view.projectType
+        this.view.project.type
             ? await this.submitProject()
-            : this.view.workIsNew ? (await this.submitWork(), await this.submitProcess()) : await this.submitProcess()
+            : this.view.work.isNew ? (await this.submitWork(), await this.submitProcess()) : await this.submitProcess()
         this.view.resetClientState()
     }
 
     @action
     handleAddNewProcess = (projectId: string) => {
         this.newProcess.set("projectId", projectId)
-        this.view.showProcessModal = true
+        this.view.modal = "process"
     }
 
     /*********************************************************
@@ -169,7 +144,7 @@ export class ClientStore {
     @action
     private submitProject = async (): Promise<void> => {
         this.view.asyncPendingLockout = true
-        this.newProject.set("type", this.view.projectType)
+        this.newProject.set("type", this.view.project.type)
         try {
             const res = await this.dataService.createProject(this.newProject.toJS())
             this.newProject.set("Id", res.data.Id)
@@ -188,7 +163,7 @@ export class ClientStore {
     private submitWork = async (): Promise<void> => {
         this.view.asyncPendingLockout = true
         try {
-            this.newWork.set("type", this.view.workType)
+            this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
             this.updateClientStoreMember("selectedWorkId", res.data.Id.toString())
         } catch (error) {
@@ -208,10 +183,10 @@ export class ClientStore {
         try {
             // processDetails.step = getNextStepName(processDetails, "Intake")
             this.newProcess.set("step", "Intake")
-            this.view.workIsNew
+            this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.workId).Title)
-            this.newProcess.set("workId", this.view.workId)
+                : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
+            this.newProcess.set("workId", this.view.work.id)
             const res = await this.dataService.createProcess(this.newProcess.toJS())
             this.newProcess.set("Id", res.data.Id)
             runInAction(() => this.data.processes.push(this.newProcess.toJS()))
@@ -241,24 +216,24 @@ export class ClientStore {
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission
-            noteToCreate.dateSubmitted = this.utils.getFormattedDate()
+            noteToCreate.dateSubmitted = utils.getFormattedDate()
             noteToCreate.submitter = this.root.sessionStore.currentUser.name
             if (noteToCreate.scope === NoteScope.CLIENT) {
                 noteToCreate.attachedClientId = this.newProcess.get("submitterId") as string
             }
 
             if (noteSource === NoteSource.PROJECT) {
-                noteToCreate.projectId = String(this.view.projectId)
+                noteToCreate.projectId = String(this.view.project.id)
             } else if (noteSource === NoteSource.WORK) {
-                noteToCreate.workId = String(this.view.workId)
+                noteToCreate.workId = String(this.view.work.id)
             }
 
             const addResult = await this.dataService.createNote(noteToCreate)
             noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
 
             // if submission is successful, add the new note to the corresponding list
-            if (noteSource === NoteSource.WORK) runInAction(() => this.notes.unshift(noteToCreate))
-            if (noteSource === NoteSource.PROJECT) runInAction(() => this.notes.unshift(noteToCreate))
+            if (noteSource === NoteSource.WORK) runInAction(() => this.data.notes.unshift(noteToCreate))
+            if (noteSource === NoteSource.PROJECT) runInAction(() => this.data.notes.unshift(noteToCreate))
             this.postMessage({ messageText: "note successfully submitted", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -276,12 +251,12 @@ export class ClientStore {
         this.view.asyncPendingLockout = true
         let submissionStatus = true
         try {
-            noteToUpdate.dateSubmitted = this.utils.getFormattedDate()
+            noteToUpdate.dateSubmitted = utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
 
             // if submission is successful, add the new note to the corresponding list
-            if (noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.notes)
-            if (noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.notes)
+            if (noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.data.notes)
+            if (noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.data.notes)
 
             this.postMessage({ messageText: "note successfully updated", messageType: "success" })
         } catch (error) {
@@ -302,8 +277,8 @@ export class ClientStore {
         try {
             await this.dataService.deleteNote(noteToDelete.Id)
             // if deletion is successful, remove the new note from the corresponding list
-            if (noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.notes)
-            if (noteSource === NoteSource.WORK) this.removeELementInListById(noteToDelete, this.notes)
+            if (noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.data.notes)
+            if (noteSource === NoteSource.WORK) this.removeELementInListById(noteToDelete, this.data.notes)
             this.postMessage({ messageText: "note successfully deleted", messageType: "success" })
         } catch (error) {
             console.error(error)

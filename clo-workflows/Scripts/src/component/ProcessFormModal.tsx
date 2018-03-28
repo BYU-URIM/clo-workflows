@@ -16,9 +16,9 @@ export interface IFormPanelProps {
 const ProcessFormModal = observer((props: IFormPanelProps) => {
     return (
         <Modal
-            isOpen={props.clientStore.view.showProcessModal === true}
+            isOpen={true}
             onDismiss={() => {
-                props.clientStore.view.showProcessModal = false
+                props.clientStore.view.modal = null
             }}
             isBlocking={true}
         >
@@ -32,19 +32,19 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                 <h2>New Process Form</h2>
                 <Checkbox
                     label={"add a new work"}
-                    checked={props.clientStore.view.workIsNew}
+                    checked={props.clientStore.view.work.isNew}
                     onChange={(m, v) => {
                         v
-                            ? (props.clientStore.view.workIsNew = v)
-                            : ((props.clientStore.view.workIsNew = v), (props.clientStore.view.workType = ""))
+                            ? (props.clientStore.view.work.isNew = v)
+                            : ((props.clientStore.view.work.isNew = v), (props.clientStore.view.work.type = ""))
                     }}
                 />
-                {props.clientStore.view.workIsNew ? (
+                {props.clientStore.view.work.isNew ? (
                     <WorkFormModal clientStore={props.clientStore} />
                 ) : (
                     <Dropdown
                         label="Select the Work:"
-                        selectedKey={props.clientStore.view.workType ? props.clientStore.view.workType : undefined}
+                        selectedKey={props.clientStore.view.work.type ? props.clientStore.view.work.type : undefined}
                         options={props.clientStore.data.works.map((field, index) => {
                             return {
                                 text: field.Title,
@@ -57,9 +57,9 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                             width: "auto",
                             margin: "20px 0px",
                         }}
-                        placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work"}
+                        placeHolder={props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work"}
                         onChanged={e => {
-                            props.clientStore.view.workId = e.key.toString()
+                            props.clientStore.view.work.id = e.key.toString()
                         }}
                         disabled={props.clientStore.view.asyncPendingLockout}
                     />
@@ -78,7 +78,7 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.clientStore.view.showProcessModal = false
+                        props.clientStore.view.modal = null
                     }}
                     disabled={props.clientStore.view.asyncPendingLockout}
                 />

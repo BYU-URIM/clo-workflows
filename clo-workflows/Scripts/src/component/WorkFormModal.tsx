@@ -18,7 +18,7 @@ const WorkFormModal = (props: IFormPanelProps) => {
             <h2>New Work Form</h2>
             <Dropdown
                 label="Select the Work Type:"
-                selectedKey={props.clientStore.view.workType ? props.clientStore.view.workType : undefined}
+                selectedKey={props.clientStore.view.work.type ? props.clientStore.view.work.type : undefined}
                 options={props.clientStore.typesAsOptions.WORKS.map((field, index) => ({
                     text: field.text,
                     value: field.text,
@@ -28,12 +28,12 @@ const WorkFormModal = (props: IFormPanelProps) => {
                     width: "200px",
                     margin: "20px 0px",
                 }}
-                placeHolder={props.clientStore.view.workType ? props.clientStore.view.workType : "select a Work type"}
+                placeHolder={props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work type"}
                 onChanged={e => {
-                    props.clientStore.view.workType = e.text
+                    props.clientStore.view.work.type = e.text
                 }}
             />
-            {props.clientStore.view.workType && (
+            {props.clientStore.view.work.type && (
                 <div>
                     <FormControlGroup
                         data={props.clientStore.newWork}

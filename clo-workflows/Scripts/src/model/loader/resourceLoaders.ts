@@ -4,7 +4,7 @@ import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import { deepCopy } from "../../utils"
+import { utils } from "../../utils"
 import { StepName, IStep } from "../Step"
 import { IFormControl } from "../FormControl"
 
@@ -22,7 +22,7 @@ export function getView(viewName: string): IView {
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = deepCopy(FORM_CONTROLS[formControlName])
+            const formControl: IFormControl = utils.deepCopy(FORM_CONTROLS[formControlName])
             formControl.readonly = true
             return formControl
         }))
@@ -30,7 +30,7 @@ export function getView(viewName: string): IView {
 
     // next add in the standard form controls (if present)
     if(normalizedView.formControls) {
-        formControls = formControls.concat(normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])))
+        formControls = formControls.concat(normalizedView.formControls.map(formControlName => utils.deepCopy(FORM_CONTROLS[formControlName])))
     }
 
     return {
@@ -53,26 +53,26 @@ export function getRole(roleName: string): IRole {
     const normalizedRole = ROLES[roleName]
     return {
         name: normalizedRole.name,
-        permittedSteps: normalizedRole.permittedSteps.map(stepName => deepCopy(STEPS[stepName])),
+        permittedSteps: normalizedRole.permittedSteps.map(stepName => utils.deepCopy(STEPS[stepName])),
         rank: normalizedRole.rank
     }
 }
 
 export function getStep(stepName: StepName): IStep {
-    return deepCopy(STEPS[stepName])
+    return utils.deepCopy(STEPS[stepName])
 }
 
 export function getStepById(id: number): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.orderId === id) return deepCopy(step)
+        if(step.orderId === id) return utils.deepCopy(step)
     }
 }
 
 export function getStepForProcessFieldName(processFieldName: string): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.processFieldNames.includes(processFieldName)) return deepCopy(step)
+        if(step.processFieldNames.includes(processFieldName)) return utils.deepCopy(step)
     }
     return null
 }

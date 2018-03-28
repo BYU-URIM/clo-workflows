@@ -1,6 +1,5 @@
 import { IUser, User, IUserDto } from "../../model/User"
 import { CloRequestElement } from "../../model/CloRequestElement"
-import { deepCopy, getQueryStringParameter } from "../../utils"
 import { IFormControl } from "../../model/FormControl"
 import { IView } from "../../model/View"
 import { IDataService, ListName } from "./IDataService"
@@ -16,7 +15,6 @@ import { IWork } from "../../model/Work"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
-
 export class SpDataService implements IDataService {
     constructor(appWebUrl: string, hostWebUrl: string) {
         this.APP_WEB_URL = appWebUrl
