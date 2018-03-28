@@ -22,7 +22,7 @@ export function getView(viewName: string): IView {
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = deepCopy(FORM_CONTROLS[formControlName])  
+            const formControl: IFormControl = deepCopy(FORM_CONTROLS[formControlName])
             formControl.readonly = true
             return formControl
         }))
@@ -80,7 +80,7 @@ export function getStepForProcessFieldName(processFieldName: string): IStep {
 export function getStepNames(): string[] {
     return Object.keys(STEPS)
 }
- 
+
 export function getRoleNames(): string[] {
     return Object.keys(ROLES)
 }

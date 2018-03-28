@@ -25,7 +25,7 @@ ava.test("test that getView() correctly builds a View Object", t => {
         jsonViewDefinition.readonlyFormControls.forEach(formControlName => {
             const jsonFormControlDefinition = FORM_CONTROLS[formControlName]
             const formControl = view.formControls.find(curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName)
-    
+
             t.true(typeof formControl.displayName === "string")
             t.true(typeof formControl.dataRef === "string")
             t.true(typeof formControl.type === "string")
@@ -38,7 +38,7 @@ ava.test("test that getView() correctly builds a View Object", t => {
         jsonViewDefinition.formControls.forEach(formControlName => {
             const jsonFormControlDefinition = FORM_CONTROLS[formControlName]
             const formControl = view.formControls.find(curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName)
-    
+
             t.true(typeof formControl.displayName === "string")
             t.true(typeof formControl.dataRef === "string")
             t.true(typeof formControl.type === "string")

@@ -97,7 +97,7 @@ export class ClientStore {
                     Id: proc.Id,
                     projectId: proc.projectId,
                     title: proc.Title,
-                    step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
+                    step: `${proc.step} - ${getStep(proc.step as StepName).orderId} out of ${getStepNames().length}`,
                 }
             })
             .sort((a, b) => Number(a.projectId) - Number(b.projectId))
@@ -232,7 +232,7 @@ export class ClientStore {
     }
 
     /*******************************************************************************************************/
-    // NOTES - SHARED BY RPOJECTS AND WORKS
+    // NOTES - SHARED BY PROJECTS AND WORKS
     /*******************************************************************************************************/
     @action
     submitNewNote = async (noteToCreate: INote, noteSource: NoteSource): Promise<boolean> => {

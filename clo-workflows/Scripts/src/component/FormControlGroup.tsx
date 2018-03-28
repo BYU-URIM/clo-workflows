@@ -22,7 +22,7 @@ const styles = {
     margin: "0 0",
 }
 
-const checkboxStyles = { margin: "20 0", }
+const checkboxStyles = { margin: "20 0" }
 
 const disabledInputBackground = { backgroundColor: "#F0F0F0" }
 

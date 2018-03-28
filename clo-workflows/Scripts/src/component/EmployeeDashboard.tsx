@@ -43,7 +43,7 @@ export class EmployeeDashboard extends React.Component<any, any> {
                     <div style={wrapperStyle}>
                         <div style={processListTitleStyles}>{`${employeeStore.selectedStep.name} Active Processes`}</div>
                         {employeeStore.selectedStepProcessBriefs && employeeStore.selectedStepProcessBriefs.length ? (
-                            <NonScrollableList                                
+                            <NonScrollableList
                                 items={employeeStore.selectedStepProcessBriefs}
                                 onSelectItem={employeeStore.selectProcess}
                             />

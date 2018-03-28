@@ -56,7 +56,7 @@ ava.test("test json steps for correct shape", t => {
         if (step.view) {
             const jsonView = VIEWS[step.view]
             t.truthy(jsonView) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
-            
+
             // ensure that the view accurately displays the given step according to the rules above
             // first check the viewFormControls against the step processFormControls (they should contain the same field names)
             t.deepEqual(step.processFieldNames.length, jsonView.formControls.length)
@@ -78,7 +78,7 @@ ava.test("test json steps for correct shape", t => {
                 t.true(previousStepsProcessFieldNames.includes(formControl.dataRef))
             }
         }
-        
+
         t.true(processFieldNames.includes(step.submitterIdFieldName))
         t.true(processFieldNames.includes(step.submissionDateFieldName))
     }
@@ -154,7 +154,7 @@ ava.test("test that all views contain only valid formControl names and have corr
             }
         }
     }
-    
+
     // NOTE field names must be less than characters long and contain only capital and lowercase letters / numbers
 */
 ava.test("test that DB_CONFIG.json has the correct structure", t => {
@@ -165,7 +165,7 @@ ava.test("test that DB_CONFIG.json has the correct structure", t => {
         const table = DB_CONFIG["tables"][tableName]
         t.true(table.type === "list" || table.type === "library")
         t.true(Array.isArray(table.fields))
-    
+
         // make sure each field conforms to rules
         table.fields.forEach(fieldName => {
             t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)

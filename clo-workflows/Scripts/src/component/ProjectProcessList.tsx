@@ -18,7 +18,7 @@ import { CloRequestElement } from "../model/CloRequestElement"
 import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
-import { ClientViewState } from "../store/ClientStore/index";
+import { ClientViewState } from "../store/ClientStore/index"
 
 export interface IColumns {
     key: string

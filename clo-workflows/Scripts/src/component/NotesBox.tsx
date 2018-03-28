@@ -129,7 +129,7 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                     />
                 </div>
                 { props.notes.length ? (
-                    <div> 
+                    <div>
                         <NonScrollableList
                             items={props.notes.slice(0, this.state.displayCount).map(note => ({
                                 header: `${note.submitter} - ${note.dateSubmitted}`,
@@ -151,7 +151,7 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                             />
                         </div>
                     </div>
-                ) : (    
+                ) : (
                     <div style={noNotesMessageStyles}>
                         {`no ${props.title.toLowerCase()} have been submitted yet`}
                     </div>
@@ -179,7 +179,6 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                         />
                     </DialogFooter>
                 </Dialog>
-    
             </div>
         )
     }

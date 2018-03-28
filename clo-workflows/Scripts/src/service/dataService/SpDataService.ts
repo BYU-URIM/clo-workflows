@@ -112,8 +112,7 @@ export class SpDataService implements IDataService {
         let filterString: string
         if(source === NoteSource.PROJECT) {
             filterString = `projectId eq ${sourceId}`
-        }
-        else if(source === NoteSource.WORK) {
+        } else if(source === NoteSource.WORK) {
             filterString = `workId eq ${sourceId}`
         }
 
