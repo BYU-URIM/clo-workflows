@@ -10,6 +10,7 @@ import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
 import { ItemAddResult } from "sp-pnp-js/lib/pnp"
 import { IKeyValueMap } from "mobx"
+import { IWork } from "../../model/Work"
 
 export class MockDataService implements IDataService {
     updateNote(note: INote): Promise<void> {
@@ -18,7 +19,7 @@ export class MockDataService implements IDataService {
     deleteNote(noteId: string): Promise<void> {
         throw new Error("Method not implemented.")
     }
-    fetchWorks(): Promise<IKeyValueMap<string | number>[]> {
+    fetchWorks(): Promise<Array<IWork>> {
         throw new Error("Method not implemented.")
     }
     fetchCurrentUserId() {
@@ -35,7 +36,7 @@ export class MockDataService implements IDataService {
             userDto.username,
             userDto.email,
             userDto.Id,
-            userDto.roleNames.map(roleName => getRole(roleName)),
+            userDto.roleNames.map(roleName => getRole(roleName))
         )
         return Promise.resolve(user)
     }

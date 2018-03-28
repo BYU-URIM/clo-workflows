@@ -12,6 +12,7 @@ import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
+import { IWork } from "../../model/Work"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -52,8 +53,8 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            userRoleNames.map(roleName => getRole(roleName))
-            // [getRole("Anonymous")],
+            // userRoleNames.map(roleName => getRole(roleName))
+            [getRole("Anonymous")],
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
@@ -148,40 +149,38 @@ export class SpDataService implements IDataService {
             .delete()
     }
 
-    // TODO implement
-    async fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
-        return Promise.resolve(null)
-    }
-
-    async fetchClientProjects(): Promise<Array<CloRequestElement>> {
-        const clientProjects: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchClientProjects(submitterId: string): Promise<Array<CloRequestElement>> {
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.get(this.cloRequestElementParser)
-        return clientProjects
+            .items.filter(`submitterId eq '${submitterId}'`)
+            .orderBy("ID", true)
+            .get(this.cloRequestElementParser)
     }
-    async fetchClientProcesses(): Promise<Array<CloRequestElement>> {
-        const clientProcesses: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchClientProcesses(submitterId: string): Promise<Array<CloRequestElement>> {
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
-            .items.get(this.cloRequestElementParser)
-        return clientProcesses
+            .items.filter(`submitterId eq '${submitterId}'`)
+            .orderBy("projectId", true)
+            .get(this.cloRequestElementParser)
     }
-    async fetchWorks(): Promise<Array<CloRequestElement>> {
-        const works: Array<CloRequestElement> = await this.getHostWeb()
+    async fetchWorks(): Promise<Array<IWork>> {
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
-        return works
     }
     async createProject(projectData: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
-    async createProcess(process:{}): Promise<ItemAddResult> {
+
+    /* this sorting keps the process order lined up with project order this probably needs to be changed to something more stable longterm */
+    async createProcess(process: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.add(process)
     }
-    async createWork(work:{}): Promise<ItemAddResult> {
+    async createWork(work: {}): Promise<ItemAddResult> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.add(work)
@@ -201,7 +200,7 @@ export class SpDataService implements IDataService {
                 headers: { Accept: "application/json; odata=verbose" },
                 credentials: "same-origin",
             },
-            "../",
+            "../"
         ).web
     }
 
@@ -212,7 +211,7 @@ export class SpDataService implements IDataService {
                     headers: { Accept: "application/json; odata=verbose" },
                     credentials: "same-origin",
                 },
-                "../",
+                "../"
             )
             .crossDomainWeb(this.APP_WEB_URL, this.HOST_WEB_URL)
     }

@@ -12,7 +12,7 @@ ava.test("clo data parser - ensure that the fieldSet contains every field from e
         const table = DB_CONFIG["tables"][tableName]
         table.fields.forEach(fieldName => t.true(fieldSet.has(fieldName)))
     })
-    
+
     // test the default fields list to make sure each default field is present in the field set
     DB_CONFIG["defaultFields"].forEach(fieldName => t.true(fieldSet.has(fieldName)))
 })
