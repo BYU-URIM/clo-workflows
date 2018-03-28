@@ -197,7 +197,7 @@ export class ClientStore {
     }
 
     /*******************************************************************************************************/
-    // NOTES - SHARED BY RPOJECTS AND WORKS
+    // NOTES - SHARED BY PROJECTS AND WORKS
     /*******************************************************************************************************/
     @action
     submitNewNote = async (noteToCreate: INote, noteSource: NoteSource): Promise<boolean> => {

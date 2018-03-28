@@ -30,11 +30,6 @@ interface INotesBoxState {
     displayCountChangeInterval: number
     selectedNote: INote
     selectedNoteOperation: NoteOperation // state of selected note (is it being created of updated ?)
-    // the current note being edited, will be null if no note is being edited
-    // noteEntry: string // currently selected note text
-    // noteScope: NoteScope // currently selected note scope
-    // noteEntryType: NoteEntryType // state of selected note (is it being created of updated ?)
-    // updateNoteIndex?: number // if a note is being updated, its index in the notes[] is stored here
 }
 
 enum NoteOperation {
@@ -134,7 +129,7 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                     />
                 </div>
                 { props.notes.length ? (
-                    <div> 
+                    <div>
                         <NonScrollableList
                             items={props.notes.slice(0, this.state.displayCount).map(note => ({
                                 header: `${note.submitter} - ${note.dateSubmitted}`,
@@ -156,7 +151,7 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                             />
                         </div>
                     </div>
-                ) : (    
+                ) : (
                     <div style={noNotesMessageStyles}>
                         {`no ${props.title.toLowerCase()} have been submitted yet`}
                     </div>
@@ -184,7 +179,6 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                         />
                     </DialogFooter>
                 </Dialog>
-    
             </div>
         )
     }

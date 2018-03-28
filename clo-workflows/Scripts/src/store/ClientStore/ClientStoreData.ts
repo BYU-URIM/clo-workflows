@@ -40,11 +40,13 @@ export class ClientStoreData {
     fetchSelectedProcessNotes = async () => {
         const workIdArray = this.processes.map(p => p.workId)
         for (const id in workIdArray) {
-            this.notes.push( await this.dataService.fetchNotes(NoteSource.WORK, NoteScope.CLIENT, id, this.currentUser.Id))
+            this.notes.push(await this.dataService.fetchNotes(NoteSource.WORK, NoteScope.CLIENT, id, this.currentUser.Id))
         }
     }
-    @action private fetchNotes = async () => {}
-
+    @action
+    fetchSelectedProjectNotes = async () => {
+        // TODO: implement with projects
+    }
     @computed
     get clientProcesses() {
         return this.processes
@@ -54,7 +56,7 @@ export class ClientStoreData {
                     Id: proc.Id,
                     projectId: proc.projectId,
                     title: proc.Title,
-                    step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length}`,
+                    step: `${proc.step} - ${getStep(proc.step as StepName).orderId} out of ${getStepNames().length}`,
                 }
             })
             .sort((a, b) => Number(a.projectId) - Number(b.projectId))

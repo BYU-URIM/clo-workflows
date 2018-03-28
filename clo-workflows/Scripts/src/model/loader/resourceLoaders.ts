@@ -23,7 +23,7 @@ export function getView(viewName: string): IView {
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = this.utils.deepCopy(FORM_CONTROLS[formControlName])  
+            const formControl: IFormControl = this.utils.deepCopy(FORM_CONTROLS[formControlName])
             formControl.readonly = true
             return formControl
         }))
@@ -66,14 +66,22 @@ export function getStep(stepName: StepName): IStep {
 export function getStepById(id: number): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.stepId === id) return this.utils.deepCopy(step)
+        if(step.orderId === id) return this.utils.deepCopy(step)
     }
+}
+
+export function getStepForProcessFieldName(processFieldName: string): IStep {
+    for(const stepName in STEPS) {
+        const step: IStep = STEPS[stepName]
+        if(step.processFieldNames.includes(processFieldName)) return this.utils.deepCopy(step)
+    }
+    return null
 }
 
 export function getStepNames(): string[] {
     return Object.keys(STEPS)
 }
- 
+
 export function getRoleNames(): string[] {
     return Object.keys(ROLES)
 }

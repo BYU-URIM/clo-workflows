@@ -9,7 +9,7 @@ import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { Utils } from "../utils"
 import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView, getStep, getViewAndMakeReadonly, getStepById } from "../model/loader/resourceLoaders"
+import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProcessFieldName } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -156,23 +156,34 @@ export class EmployeeStore {
 
         const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
         this.selectedProject = observable.map(selectedProject)
-        
+
         const workNotes = await this.dataService.fetchNotes(
             NoteSource.WORK,
             NoteScope.EMPLOYEE,
             this.selectedWork.get("Id") as string,
-            this.selectedProcess.get("submitterId") as string
+            this.selectedProcess.get("submitterId") as string,
         )
         const projectNotes = await this.dataService.fetchNotes(
             NoteSource.PROJECT,
             NoteScope.EMPLOYEE,
             this.selectedProject.get("Id") as string,
-            this.selectedProcess.get("submitterId") as string
+            this.selectedProcess.get("submitterId") as string,
         )
         runInAction(() => {
             this.selectedWorkNotes = workNotes
             this.selectedProjectNotes = projectNotes
         })
+    }
+
+    getSelectedProcessSubmissionMetadata(formControl: IFormControl): string {
+        const parentStep = getStepForProcessFieldName(formControl.dataRef)
+        const submitter = this.selectedProcess.get(parentStep.submitterIdFieldName)
+        const submissionDate = this.selectedProcess.get(parentStep.submissionDateFieldName)
+        if(submitter && submissionDate) {
+            return `submitted by ${submitter} on ${submissionDate}`
+        } else {
+            return null
+        }
     }
 
     @action
@@ -189,8 +200,8 @@ export class EmployeeStore {
             let updatedProcess = this.selectedProcess.toJS()
             updatedProcess = {...updatedProcess, ...{
                 step: getNextStepName(updatedProcess),
-                [currentStep.submissionDateDataRef]: this.utils.getFormattedDate(),
-                [currentStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
+                [currentStep.submissionDateFieldName]: this.utils.getFormattedDate(),
+                [currentStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess
@@ -216,8 +227,8 @@ export class EmployeeStore {
         const nextStep: IStep = getStep(nextStepName)
         const nextStepProcess = {...curProcess, ...{
             step: nextStepName,
-            [nextStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
-            [nextStep.submissionDateDataRef]: this.utils.getFormattedDate()
+            [nextStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
+            [nextStep.submissionDateFieldName]: this.utils.getFormattedDate()
         }}
 
         try {
@@ -228,7 +239,7 @@ export class EmployeeStore {
 
             // clear out selectedProcess, selectedWork, and selected project
             this.clearSelectedRequestElements()
-            
+
             // return user back to dashboard by "popping off" the current view from the view heirarchy stack
             this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
 
@@ -288,21 +299,21 @@ export class EmployeeStore {
             const processProject = this.projects.find(project => project.Id === Number(process.projectId))
             // to get the date when the process arrived at the current step for processing, look at the previous step submission date
             const currentStep = getStep(process.step as StepName)
-            const previousStep = getStepById(currentStep.stepId-1)
-            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateDataRef]
+            const previousStep = getStepById(currentStep.orderId-1)
+            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateFieldName]
             return {
                 header: `${processProject.department || ""} ${processWork.type || ""} Process`,
                 subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
                 body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
                 id: process.Id as number,
-                selectable: true
+                selectable: true,
             }
         })
     }
 
 
     /*******************************************************************************************************/
-    // NOTES - SHARED BY RPOJECTS AND WORKS
+    // NOTES - SHARED BY PROJECTS AND WORKS
     /*******************************************************************************************************/
     @action async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
         this.setAsyncPendingLockout(true)
@@ -324,7 +335,7 @@ export class EmployeeStore {
 
             const addResult = await this.dataService.createNote(noteToCreate)
             noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
-            
+
             // if submission is successful, add the new note to the corresponding list
             if(noteSource === NoteSource.WORK) runInAction(() => this.selectedWorkNotes.unshift(noteToCreate))
             if(noteSource === NoteSource.PROJECT) runInAction(() => this.selectedProjectNotes.unshift(noteToCreate))
@@ -346,7 +357,7 @@ export class EmployeeStore {
         try {
             noteToUpdate.dateSubmitted = this.utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
-            
+
             // if submission is successful, add the new note to the corresponding list
             if(noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.selectedWorkNotes)
             if(noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.selectedProjectNotes)
@@ -382,7 +393,7 @@ export class EmployeeStore {
             this.setAsyncPendingLockout(false)
         }
         return submissionStatus
-    } 
+    }
 
 
     /*******************************************************************************************************/
@@ -453,7 +464,7 @@ export class EmployeeStore {
     }
 
     // finds the item with the with the same ID as the new item and replaces the stale item with the new item
-    // true if replacement was successfull, false if not (stale list item was not found) 
+    // true if replacement was successfull, false if not (stale list item was not found)
     @action
     private replaceElementInListById(newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean {
         const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
@@ -473,5 +484,5 @@ export class EmployeeStore {
 
 export enum EmployeeViewKey {
     Dashboard = "DASHBOARD",
-    ProcessDetail = "PROCESS_DETAIL"
+    ProcessDetail = "PROCESS_DETAIL",
 }
