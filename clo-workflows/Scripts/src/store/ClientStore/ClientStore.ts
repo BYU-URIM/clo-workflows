@@ -106,11 +106,12 @@ export class ClientStore {
 
     @computed
     get selectedNotes() {
-        const actualNotes = this.data.notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr))
+        const filtered = this.data.notes.filter(n => n.length > 0)
+        const actualNotes = filtered.length > 0 ? filtered.reduce((prev, curr) => prev.concat(curr)) : []
 
         return actualNotes.filter(
             a =>
-                a.workId ===
+                a.projectId ===
                 this.data.processes.filter(p => {
                     return p.Id.toString() === this.view.process.id
                 })[0].workId
@@ -218,6 +219,7 @@ export class ClientStore {
     @action
     submitNewNote = async (noteToCreate: INote, noteSource: NoteSource): Promise<boolean> => {
         this.view.asyncPendingLockout = true
+        console.log("submitted")
 
         let submissionStatus = true
         try {

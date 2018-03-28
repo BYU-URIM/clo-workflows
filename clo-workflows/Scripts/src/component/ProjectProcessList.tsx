@@ -60,19 +60,28 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {
         return (
             <div>
-                <span style={{ fontSize: "2em", marginRight: "10px" }}>
+                <div style={{ fontSize: "2em", marginRight: "10px" }}>
                     <strong>Project Name:</strong> {renderHeaderProps.group!.name}
-                </span>
+                </div>
 
                 <CommandButton
                     iconProps={{
-                        iconName: "Add",
+                        iconName: "CircleAdditionSolid",
                     }}
                     text="Add a Process"
                     key={renderHeaderProps.group.key}
                     onClick={() => {
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
                     }}
+                    disabled={props.messageVisible}
+                />
+                <CommandButton
+                    iconProps={{
+                        iconName: "ChevronRight",
+                    }}
+                    text="Project Notes"
+                    key={`${renderHeaderProps.group.key}-select`}
+                    onClick={() => props.view.project.id = renderHeaderProps.group.projectId.toString()}
                     disabled={props.messageVisible}
                 />
             </div>
