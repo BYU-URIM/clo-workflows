@@ -22,7 +22,7 @@ export function getView(viewName: string): IView {
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = this.utils.deepCopy(FORM_CONTROLS[formControlName])
+            const formControl: IFormControl = utils.deepCopy(FORM_CONTROLS[formControlName])
             formControl.readonly = true
             return formControl
         }))
@@ -30,7 +30,7 @@ export function getView(viewName: string): IView {
 
     // next add in the standard form controls (if present)
     if(normalizedView.formControls) {
-        formControls = formControls.concat(normalizedView.formControls.map(formControlName => this.utils.deepCopy(FORM_CONTROLS[formControlName])))
+        formControls = formControls.concat(normalizedView.formControls.map(formControlName => utils.deepCopy(FORM_CONTROLS[formControlName])))
     }
 
     return {
@@ -53,26 +53,26 @@ export function getRole(roleName: string): IRole {
     const normalizedRole = ROLES[roleName]
     return {
         name: normalizedRole.name,
-        permittedSteps: normalizedRole.permittedSteps.map(stepName => this.utils.deepCopy(STEPS[stepName])),
+        permittedSteps: normalizedRole.permittedSteps.map(stepName => utils.deepCopy(STEPS[stepName])),
         rank: normalizedRole.rank
     }
 }
 
 export function getStep(stepName: StepName): IStep {
-    return this.utils.deepCopy(STEPS[stepName])
+    return utils.deepCopy(STEPS[stepName])
 }
 
 export function getStepById(id: number): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.orderId === id) return this.utils.deepCopy(step)
+        if(step.orderId === id) return utils.deepCopy(step)
     }
 }
 
 export function getStepForProcessFieldName(processFieldName: string): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.processFieldNames.includes(processFieldName)) return this.utils.deepCopy(step)
+        if(step.processFieldNames.includes(processFieldName)) return utils.deepCopy(step)
     }
     return null
 }
