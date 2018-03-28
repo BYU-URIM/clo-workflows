@@ -30,11 +30,6 @@ interface INotesBoxState {
     displayCountChangeInterval: number
     selectedNote: INote
     selectedNoteOperation: NoteOperation // state of selected note (is it being created of updated ?)
-    // the current note being edited, will be null if no note is being edited
-    // noteEntry: string // currently selected note text
-    // noteScope: NoteScope // currently selected note scope
-    // noteEntryType: NoteEntryType // state of selected note (is it being created of updated ?)
-    // updateNoteIndex?: number // if a note is being updated, its index in the notes[] is stored here
 }
 
 enum NoteOperation {

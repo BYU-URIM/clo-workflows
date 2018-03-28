@@ -96,7 +96,6 @@
     "Grand": {
         "dataSource": "projects",
         "formControls": [
-            
             "Title",
             "Department",
             "Dance Title",
@@ -130,7 +129,6 @@
     "Theatrical": {
         "dataSource": "projects",
         "formControls": [
-            
             "Title",
             "Department",
             "Description of Work",
@@ -153,7 +151,6 @@
     "Movies": {
         "dataSource": "projects",
         "formControls": [
-            
             "Title",
             "Department",
             "Copyright Owner",
@@ -184,7 +181,6 @@
     "Images": {
         "dataSource": "projects",
         "formControls": [
-            
             "Title",
             "Department",
             "Description of Work",
@@ -202,7 +198,6 @@
     "Music": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Format",
             "Title",
@@ -240,7 +235,6 @@
     "Article": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Format",
             "Title",
@@ -263,7 +257,6 @@
     "Book Chapter": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Format",
             "Title",
@@ -284,7 +277,6 @@
     "Image": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Format",
             "Title",
@@ -302,7 +294,6 @@
     "Video": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Format",
             "Title",
@@ -318,7 +309,6 @@
     "Website": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Title",
             "Author",
@@ -331,7 +321,6 @@
     "Other": {
         "dataSource": "works",
         "formControls": [
-            
             "Course",
             "Format",
             "Title",
@@ -348,6 +337,7 @@
     },
     "Public Domain Research": {
         "dataSource": "processes",
+        "readonlyFormControls": [],
         "formControls": [
             "Public Domain Research"
         ]
@@ -409,7 +399,7 @@
     },
     "Ownership Research Licensing Exchange": {
         "dataSource": "processes",
-        "readnolyFormControls": [
+        "readonlyFormControls": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",

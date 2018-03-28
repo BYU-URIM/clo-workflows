@@ -97,7 +97,7 @@ export class ProjectProcessList extends React.Component<IProjectProcessListProps
                 Id: proc.Id,
                 projectId: proc.projectId,
                 Title: proc.Title,
-                step: `${proc.step} - ${getStep(proc.step as StepName).stepId} out of ${getStepNames().length} `
+                step: `${proc.step} - ${getStep(proc.step as StepName).orderId} out of ${getStepNames().length} `
             })
         })
 

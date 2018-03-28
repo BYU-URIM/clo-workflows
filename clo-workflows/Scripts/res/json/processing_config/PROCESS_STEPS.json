@@ -1,135 +1,189 @@
 {
     "Intake": {
         "name": "Intake",
-        "stepId": 0,
+        "orderId": 0,
         "view": null,
-        "submitterIdDataRef": "intakeSubId",
-        "submissionDateDataRef": "intakeSubDate"
+        "submitterIdFieldName": "intakeSubName",
+        "submissionDateFieldName": "intakeSubDate",
+        "processFieldNames": []
     },
     "Public Domain Research": {
         "name": "Public Domain Research",
-        "stepId": 1,
+        "orderId": 1,
         "view": "Public Domain Research",
-        "submitterIdDataRef": "publicDomainResearchSubId",
-        "submissionDateDataRef": "publicDomainResearchSubDate"
+        "submitterIdFieldName": "publicDomainResearchSubName",
+        "submissionDateFieldName": "publicDomainResearchSubDate",
+        "processFieldNames": [
+            "publicDomainResearch"
+        ]
     },
     "Public Domain Approval": {
         "name": "Public Domain Approval",
-        "stepId": 2,
+        "orderId": 2,
         "view": "Public Domain Approval",
-        "submitterIdDataRef": "publicDomainApprovalSubId",
-        "submissionDateDataRef": "publicDomainApprovalSubDate"
+        "submitterIdFieldName": "publicDomainApprovalSubName",
+        "submissionDateFieldName": "publicDomainApprovalSubDate",
+        "processFieldNames": [
+            "publicDomainApproval"
+        ]
     },
     "Existing License": {
         "name": "Existing License",
-        "stepId": 3,
+        "orderId": 3,
         "view": "Existing License",
-        "submitterIdDataRef": "existingLicenseSubId",
-        "submissionDateDataRef": "existingLicenseSubDate"
+        "submitterIdFieldName": "existingLicenseSubName",
+        "submissionDateFieldName": "existingLicenseSubDate",
+        "processFieldNames": [
+            "existingLicense"
+        ]
     },
     "Existing License Approval": {
         "name": "Existing License Approval",
-        "stepId": 4,
+        "orderId": 4,
         "view": "Existing License Approval",
-        "submitterIdDataRef": "existingLicenseApprovalSubId",
-        "submissionDateDataRef": "existingLicenseApprovalSubDate"
+        "submitterIdFieldName": "existingLicenseApprovalSubName",
+        "submissionDateFieldName": "existingLicenseApprovalSubDate",
+        "processFieldNames": [
+            "existingLicenseApproval"
+        ]
     },
     "Exemption Analysis": {
         "name": "Exemption Analysis",
-        "stepId": 5,
+        "orderId": 5,
         "view": "Exemption Analysis",
-        "submitterIdDataRef": "exemptionAnalysisSubId",
-        "submissionDateDataRef": "exemptionAnalysisSubDate"
+        "submitterIdFieldName": "exemptionAnalysisSubName",
+        "submissionDateFieldName": "exemptionAnalysisSubDate",
+        "processFieldNames": [
+            "exemptionAnalysis"
+        ]
     },
     "Exemption Approval": {
         "name": "Exemption Approval",
-        "stepId": 6,
+        "orderId": 6,
         "view": "Exemption Approval",
-        "submitterIdDataRef": "exemptionApprovalSubId",
-        "submissionDateDataRef": "exemptionApprovalSubDate"
+        "submitterIdFieldName": "exemptionApprovalSubName",
+        "submissionDateFieldName": "exemptionApprovalSubDate",
+        "processFieldNames": [
+            "exemptionApproval"
+        ]
     },
     "Ownership Research Licensing Exchange": {
         "name": "Ownership Research Licensing Exchange",
-        "stepId": 7,
+        "orderId": 7,
         "view": "Ownership Research Licensing Exchange",
-        "submitterIdDataRef": "ownershipLicenseExchangeSubId",
-        "submissionDateDataRef": "ownershipLicenseExchangeSubDate"
+        "submitterIdFieldName": "ownershipLicenseExchangeSubName",
+        "submissionDateFieldName": "ownershipLicenseExchangeSubDate",
+        "processFieldNames": [
+            "licensingExchange"
+        ]
     },
     "Ownership Research Direct to Rights Holder": {
         "name": "Ownership Research Direct to Rights Holder",
-        "stepId": 8,
+        "orderId": 8,
         "view": "Ownership Research Direct to Rights Holder",
-        "submitterIdDataRef": "ownershipRightsHolderSubId",
-        "submissionDateDataRef": "ownershipRightsHolderSubDate"
+        "submitterIdFieldName": "ownershipRightsHolderSubName",
+        "submissionDateFieldName": "ownershipRightsHolderSubDate",
+        "processFieldNames": [
+            "directToRightsHolders"
+        ]
     },
     "Request Submitted": {
         "name": "Request Submitted",
-        "stepId": 9,
+        "orderId": 9,
         "view": "Request Submitted",
-        "submitterIdDataRef": "researchSubmittedSubId",
-        "submissionDateDataRef": "researchSubmittedSubId"
+        "submitterIdFieldName": "requestSubmittedSubName",
+        "submissionDateFieldName": "requestSubmittedSubDate",
+        "processFieldNames": [
+            "requestSubmitted"
+        ]
     },
     "Response from Rights Holder Received": {
         "name": "Response from Rights Holder Received",
-        "stepId": 10,
+        "orderId": 10,
         "view": "Response from Rights Holder Received",
-        "submitterIdDataRef": "responseFromRightsHolderSubId",
-        "submissionDateDataRef": "responseFromRightsHolderSubDate"
+        "submitterIdFieldName": "responseFromRightsHolderSubName",
+        "submissionDateFieldName": "responseFromRightsHolderSubDate",
+        "processFieldNames": [
+            "rightsHolderResponse"
+        ]
     },
     "CLO Response to Rights Holder": {
         "name": "CLO Response to Rights Holder",
-        "stepId": 11,
+        "orderId": 11,
         "view": "CLO Response to Rights Holder",
-        "submitterIdDataRef": "CLOResponseToRightsHolderSubId",
-        "submissionDateDataRef": "CLOResponseToRightsHolderSubDate"
+        "submitterIdFieldName": "CLOResponseToRightsHolderSubName",
+        "submissionDateFieldName": "CLOResponseToRightsHolderSubDate",
+        "processFieldNames": [
+            "cloResponseToRightsHolder"
+        ]
     },
     "Receipt of License": {
         "name": "Receipt of License",
-        "stepId": 12,
+        "orderId": 12,
         "view": "Receipt of License",
-        "submitterIdDataRef": "receiptOfLicenseSubId",
-        "submissionDateDataRef": "receiptOfLicenseSubId"
+        "submitterIdFieldName": "receiptOfLicenseSubName",
+        "submissionDateFieldName": "receiptOfLicenseSubDate",
+        "processFieldNames": [
+            "receiptOfLicense"
+        ]
     },
     "Supervisor Signature": {
         "name": "Supervisor Signature",
-        "stepId": 13,
+        "orderId": 13,
         "view": "Supervisor Signature",
-        "submitterIdDataRef": "supervisorSignatureSubId",
-        "submissionDateDataRef": "supervisorSignatureSubDate"
+        "submitterIdFieldName": "supervisorSignatureSubName",
+        "submissionDateFieldName": "supervisorSignatureSubDate",
+        "processFieldNames": [
+            "supervisorSignature"
+        ]
     },
     "Payment": {
         "name": "Payment",
-        "stepId": 14,
+        "orderId": 14,
         "view": "Payment",
-        "submitterIdDataRef": "paymentSubId",
-        "submissionDateDataRef": "paymentSubDate"
+        "submitterIdFieldName": "paymentSubName",
+        "submissionDateFieldName": "paymentSubDate",
+        "processFieldNames": [
+            "payment"
+        ]
     },
     "Process Payment": {
         "name": "Process Payment",
-        "stepId": 15,
+        "orderId": 15,
         "view": "Process Payment",
-        "submitterIdDataRef": "processPaymentSubId",
-        "submissionDateDataRef": "processPaymentSubDate"
+        "submitterIdFieldName": "processPaymentSubName",
+        "submissionDateFieldName": "processPaymentSubDate",
+        "processFieldNames": [
+            "processPayment",
+            "fastTrackNumber"
+        ]
     },
     "Initial Request Completion": {
         "name": "Initial Request Completion",
-        "stepId": 16,
+        "orderId": 16,
         "view": "Initial Request Completion",
-        "submitterIdDataRef": "initialRequestCompletionSubId",
-        "submissionDateDataRef": "initialRequestCompletionSubDate"
+        "submitterIdFieldName": "initialRequestCompletionSubName",
+        "submissionDateFieldName": "initialRequestCompletionSubDate",
+        "processFieldNames": [
+            "initialRequestCompletion"
+        ]
     },
     "Final Request Completion": {
         "name": "Final Request Completion",
-        "stepId": 17,
+        "orderId": 17,
         "view": "Final Request Completion",
-        "submitterIdDataRef": "finalRequestCompletionSubId",
-        "submissionDateDataRef": "finalRequestCompletionSubDate"
+        "submitterIdFieldName": "finalRequestCompletionSubName",
+        "submissionDateFieldName": "finalRequestCompletionSubDate",
+        "processFieldNames": [
+            "finalRequestCompletion"
+        ]
     },
     "Complete": {
         "name": "Complete",
-        "stepId": 18,
+        "orderId": 18,
         "view": null,
-        "submitterIdDataRef": "completeSubId",
-        "submissionDateDataRef": "completeSubDate"
+        "submitterIdFieldName": "completeSubName",
+        "submissionDateFieldName": "completeSubDate",
+        "processFieldNames": []
     }
 }

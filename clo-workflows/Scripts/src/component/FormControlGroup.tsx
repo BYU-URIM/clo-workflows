@@ -1,17 +1,19 @@
 import * as React from "react"
 import { observer } from "mobx-react"
 import { IFormControl } from "../model/FormControl"
-import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
+import DescriptiveDropdown from "./DescriptiveDropdown"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
 import { FormEntryType } from "../model/CloRequestElement"
 import { ObservableMap } from "mobx"
+import DescriptiveCheckbox from "./DescriptiveCheckbox"
 
 interface IFormControlGroupProps {
-    data: ObservableMap<FormEntryType>
+    data: ObservableMap<FormEntryType> // map of fieldName to fieldValue
     formControls: Array<IFormControl>
     validation: {}
     onChange: (fieldName: string, newVal: FormEntryType) => void
+    getFormControlDescription?: (formControl: IFormControl) => string // custom logic to compute a description given a form control
     width?: number | string
 }
 
@@ -40,18 +42,19 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 key={index}
                                 disabled={formControl.readonly}
                                 style={formControl.readonly && disabledInputBackground }
+                                description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                             />
                         )
                     } else if (formControl.type === "choice") {
                         return (
-                            <Dropdown
+                            <DescriptiveDropdown
                                 options={formControl.choices.map(choice => ({ key: choice, text: choice }))}
                                 selectedKey={props.data.get(formControl.dataRef) as string}
                                 onChanged={(option: IDropdownOption) => props.onChange(formControl.dataRef, option.text)}
                                 label={formControl.displayName}
                                 key={index}
                                 disabled={formControl.readonly}
-                                style={formControl.readonly && disabledInputBackground }
+                                description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                             />
                         )
                     } else if (formControl.type === "textarea") {
@@ -65,18 +68,20 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 label={formControl.displayName}
                                 disabled={formControl.readonly}
                                 style={formControl.readonly && disabledInputBackground }
+                                description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                             />
                         )
                     } else if (formControl.type === "checkbox") {
                         return (
                             <div style={checkboxStyles} key={index}>
-                                <Checkbox
+                                <DescriptiveCheckbox
                                     checked={props.data.get(formControl.dataRef) === "true" ? true : false}
                                     label={formControl.displayName}
                                     onChange={(e: React.FormEvent<HTMLElement>, isChecked: boolean) =>
                                         props.onChange(formControl.dataRef, String(isChecked))
                                     }
                                     disabled={formControl.readonly}
+                                    description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                 />
                             </div>
                         )

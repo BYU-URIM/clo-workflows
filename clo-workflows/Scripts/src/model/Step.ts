@@ -26,10 +26,11 @@ export type StepName =
 
 export interface IStep {
     name: StepName // string identifier used mostly for display purposes
-    stepId: number
+    orderId: number
     view: string // contains the name of a view, which is a list of form controls displayed at this step
-    submitterIdDataRef: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
-    submissionDateDataRef: string // name of the process field name corresponding to the date this item was submitted at this step
+    submitterIdFieldName: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
+    submissionDateFieldName: string // name of the process field name corresponding to the date this item was submitted at this step
+    processFieldNames: string[] // name of the process fields that are editable by a processor at this step
 }
 
 // this function holds all of the logic for advancing steps through the processing pipeline

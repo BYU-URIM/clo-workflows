@@ -9,7 +9,7 @@ import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
 import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView, getStep, getViewAndMakeReadonly, getStepById } from "../model/loader/resourceLoaders"
+import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProcessFieldName } from "../model/loader/resourceLoaders"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -175,6 +175,17 @@ export class EmployeeStore {
         })
     }
 
+    getSelectedProcessSubmissionMetadata(formControl: IFormControl): string {
+        const parentStep = getStepForProcessFieldName(formControl.dataRef)
+        const submitter = this.selectedProcess.get(parentStep.submitterIdFieldName)
+        const submissionDate = this.selectedProcess.get(parentStep.submissionDateFieldName)
+        if(submitter && submissionDate) {
+            return `submitted by ${submitter} on ${submissionDate}`
+        } else {
+            return null
+        }
+    }
+
     @action
     updateSelectedProcess(fieldName: string, newVal: FormEntryType): void {
         this.selectedProcess.set(fieldName, String(newVal))
@@ -189,8 +200,8 @@ export class EmployeeStore {
             let updatedProcess = this.selectedProcess.toJS()
             updatedProcess = {...updatedProcess, ...{
                 step: getNextStepName(updatedProcess),
-                [currentStep.submissionDateDataRef]: getFormattedDate(),
-                [currentStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
+                [currentStep.submissionDateFieldName]: getFormattedDate(),
+                [currentStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess
@@ -216,8 +227,8 @@ export class EmployeeStore {
         const nextStep: IStep = getStep(nextStepName)
         const nextStepProcess = {...curProcess, ...{
             step: nextStepName,
-            [nextStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
-            [nextStep.submissionDateDataRef]: getFormattedDate()
+            [nextStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
+            [nextStep.submissionDateFieldName]: getFormattedDate()
         }}
 
         try {
@@ -288,8 +299,8 @@ export class EmployeeStore {
             const processProject = this.projects.find(project => project.Id === Number(process.projectId))
             // to get the date when the process arrived at the current step for processing, look at the previous step submission date
             const currentStep = getStep(process.step as StepName)
-            const previousStep = getStepById(currentStep.stepId-1)
-            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateDataRef]
+            const previousStep = getStepById(currentStep.orderId-1)
+            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateFieldName]
             return {
                 header: `${processProject.department || ""} ${processWork.type || ""} Process`,
                 subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,

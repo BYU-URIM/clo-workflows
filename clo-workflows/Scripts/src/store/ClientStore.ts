@@ -220,8 +220,8 @@ export class ClientStore {
                 workId: String(workCreateInfo.data.Id),
                 submitterId: this.currentUser.Id,
                 step: currentStep.name,
-                [currentStep.submitterIdDataRef]: this.currentUser.Id,
-                [currentStep.submissionDateDataRef]: getFormattedDate(),
+                [currentStep.submitterIdFieldName]: this.currentUser.Id,
+                [currentStep.submissionDateFieldName]: getFormattedDate(),
             }
 
             const nextStepName: StepName = getNextStepName(process)

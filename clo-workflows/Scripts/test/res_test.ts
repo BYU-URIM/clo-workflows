@@ -32,13 +32,18 @@ ava.test("test json roles for correct shape", t => {
     ensure all JSON steps have the correct shape:
     {
         name: string
-        stepId: number
+        orderId: number
         view: string // string referring to a view defined in VIEWS.json
-        submitterIdDataRef: string
-        submitterDateDataRef: string
+        submitterFieldName: string
+        submitterDateFieldName: string
+        processFieldNames: string[]
     }
-    also ensure that the submitterIdDataRef and submitterDateDataRef refer to valid field names in the databse schema for the process table
+    - ensure that the submitterIdFieldName and submitterDateFieldName refer to valid field names in the databse schema for the process table
     as defined in res/DB_CONFIG
+    - ensure that view accurately displays the step according to the following rules:
+        - the view for a given step must display editable (normal) form controls for the processFieldNames for that step
+        - the view for a step must display readonly form controls for all of the processFieldNames corresponding to previous steps
+        - the view should display any form controls for processFieldNames corresponding to future steps
 */
 ava.test("test json steps for correct shape", t => {
     const processFieldNames: string[] = DB_CONFIG["tables"].processes.fields
@@ -46,14 +51,36 @@ ava.test("test json steps for correct shape", t => {
     for (const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
         t.true(typeof step.name === "string")
-        t.regex(String(step.stepId), /[0-9]+/)
+        t.regex(String(step.orderId), /[0-9]+/)
         t.not(step.view, undefined)
         if (step.view) {
-            t.truthy(VIEWS[step.view]) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
+            const jsonView = VIEWS[step.view]
+            t.truthy(jsonView) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
+            
+            // ensure that the view accurately displays the given step according to the rules above
+            // first check the viewFormControls against the step processFormControls (they should contain the same field names)
+            t.deepEqual(step.processFieldNames.length, jsonView.formControls.length)
+            for(const formControlName of jsonView.formControls) {
+                const formControl: IFormControl = FORM_CONTROLS[formControlName]
+                t.true(step.processFieldNames.includes(formControl.dataRef))
+            }
+
+            // then check readonlyFormControls against all previous step processFormControls
+            const previousStepsProcessFieldNames: string[] = Object.keys(STEPS)
+                .map(curStepName => STEPS[curStepName])
+                .filter(stepJson => stepJson.orderId < step.orderId) // only keep steps with a lower orderID
+                .reduce((accumulator, prevStepJson) => {
+                    return accumulator.concat(prevStepJson.processFieldNames)
+                }, [])
+            t.deepEqual(previousStepsProcessFieldNames.length, jsonView.readonlyFormControls.length)
+            for(const formControlName of jsonView.readonlyFormControls) {
+                const formControl: IFormControl = FORM_CONTROLS[formControlName]
+                t.true(previousStepsProcessFieldNames.includes(formControl.dataRef))
+            }
         }
         
-        t.true(processFieldNames.includes(step.submitterIdDataRef))
-        t.true(processFieldNames.includes(step.submissionDateDataRef))
+        t.true(processFieldNames.includes(step.submitterIdFieldName))
+        t.true(processFieldNames.includes(step.submissionDateFieldName))
     }
 })
 
@@ -107,6 +134,11 @@ ava.test("test that all views contain only valid formControl names and have corr
             formControlNames.forEach(formControlName => {
                 t.truthy(FORM_CONTROLS[formControlName])
             })
+        }
+
+        // if the view is a process view, it must have form controls and readonlyFormControls
+        if(view.dataSource === "processes") {
+            t.truthy(view.formControls && view.readonlyFormControls)
         }
     }
 })
