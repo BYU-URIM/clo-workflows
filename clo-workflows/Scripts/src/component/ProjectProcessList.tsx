@@ -53,9 +53,9 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
         key: i.toString(),
         name: f.split(/(?=[A-Z])/).join(" "),
         fieldName: f,
-        minWidth: 75,
+        minWidth: 40,
         maxWidth: 300,
-        isResizable: false,
+        isResizable: true,
     }))
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {
         return (
@@ -82,6 +82,7 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
         <div
             style={{
                 maxWidth: "750px",
+                width: "100%",
             }}
         >
             <CommandBar
@@ -105,11 +106,16 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                 groups={props.projects}
                 columns={_columns}
                 checkboxVisibility={CheckboxVisibility.hidden}
+                listProps={{
+                    onClick: e => console.log(e.currentTarget),
+                }}
                 onRenderRow={(_props, defaultRender) => (
                     <div
                         style={{
                             fontSize: "1.5em",
                         }}
+                        key={_props.item.key}
+                        onClick={() => (props.view.process.id = _props.item.key.toString())}
                     >
                         {defaultRender(_props)}
                     </div>
