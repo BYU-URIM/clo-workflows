@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
+import { Dropdown } from "office-ui-fabric-react"
 import { IDropdownProps } from "office-ui-fabric-react"
 
 interface IDescriptiveDropdownProps extends IDropdownProps {
