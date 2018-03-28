@@ -4,14 +4,14 @@ import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import { deepCopy } from "../../utils"
+import { Utils } from "../../utils"
 import { StepName, IStep } from "../Step"
 import { IFormControl } from "../FormControl"
 
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-
+const utils = new Utils()
 export function getView(viewName: string): IView {
     const normalizedView = VIEWS[viewName]
     if(!normalizedView) throw new Error(`no view for ${viewName} exists`)
@@ -23,7 +23,7 @@ export function getView(viewName: string): IView {
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = deepCopy(FORM_CONTROLS[formControlName])  
+            const formControl: IFormControl = this.utils.deepCopy(FORM_CONTROLS[formControlName])  
             formControl.readonly = true
             return formControl
         }))
@@ -31,7 +31,7 @@ export function getView(viewName: string): IView {
 
     // next add in the standard form controls (if present)
     if(normalizedView.formControls) {
-        formControls = formControls.concat(normalizedView.formControls.map(formControlName => deepCopy(FORM_CONTROLS[formControlName])))
+        formControls = formControls.concat(normalizedView.formControls.map(formControlName => this.utils.deepCopy(FORM_CONTROLS[formControlName])))
     }
 
     return {
@@ -54,19 +54,19 @@ export function getRole(roleName: string): IRole {
     const normalizedRole = ROLES[roleName]
     return {
         name: normalizedRole.name,
-        permittedSteps: normalizedRole.permittedSteps.map(stepName => deepCopy(STEPS[stepName])),
+        permittedSteps: normalizedRole.permittedSteps.map(stepName => this.utils.deepCopy(STEPS[stepName])),
         rank: normalizedRole.rank
     }
 }
 
 export function getStep(stepName: StepName): IStep {
-    return deepCopy(STEPS[stepName])
+    return this.utils.deepCopy(STEPS[stepName])
 }
 
 export function getStepById(id: number): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.stepId === id) return deepCopy(step)
+        if(step.stepId === id) return this.utils.deepCopy(step)
     }
 }
 

@@ -6,7 +6,7 @@ import { IFormControl } from "../model/FormControl"
 import { IStep, StepName, getNextStepName } from "../model/Step"
 import { IListItem } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
-import { validateFormControl, isObjectEmpty, getFormattedDate } from "../utils"
+import { Utils } from "../utils"
 import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView, getStep, getViewAndMakeReadonly, getStepById } from "../model/loader/resourceLoaders"
@@ -189,7 +189,7 @@ export class EmployeeStore {
             let updatedProcess = this.selectedProcess.toJS()
             updatedProcess = {...updatedProcess, ...{
                 step: getNextStepName(updatedProcess),
-                [currentStep.submissionDateDataRef]: getFormattedDate(),
+                [currentStep.submissionDateDataRef]: this.utils.getFormattedDate(),
                 [currentStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
@@ -217,7 +217,7 @@ export class EmployeeStore {
         const nextStepProcess = {...curProcess, ...{
             step: nextStepName,
             [nextStep.submitterIdDataRef]: this.root.sessionStore.currentUser.Id,
-            [nextStep.submissionDateDataRef]: getFormattedDate()
+            [nextStep.submissionDateDataRef]: this.utils.getFormattedDate()
         }}
 
         try {
@@ -244,7 +244,7 @@ export class EmployeeStore {
     }
 
     @computed get canSubmitSelectedProcess(): boolean {
-        return !this.asyncPendingLockout && isObjectEmpty(this.selectedProcessValidation)
+        return !this.asyncPendingLockout && this.utils.isObjectEmpty(this.selectedProcessValidation)
     }
 
     // TODO, this validation recomputes all fields each time, very inefficient
@@ -254,7 +254,7 @@ export class EmployeeStore {
         return this.selectedProcessFormControls.reduce((accumulator: {}, formControl: IFormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = this.selectedProcess.get(fieldName)
-            const error: string = inputVal ? validateFormControl(formControl, inputVal) : null
+            const error: string = inputVal ? this.utils.validateFormControl(formControl, inputVal) : null
             accumulator[fieldName] = error
             return accumulator
         }, {})
@@ -310,7 +310,7 @@ export class EmployeeStore {
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission
-            noteToCreate.dateSubmitted = getFormattedDate()
+            noteToCreate.dateSubmitted = this.utils.getFormattedDate()
             noteToCreate.submitter = this.root.sessionStore.currentUser.name
             if(noteToCreate.scope === NoteScope.CLIENT) {
                 noteToCreate.attachedClientId = this.selectedProcess.get("submitterId") as string
@@ -344,7 +344,7 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
         let submissionStatus = true
         try {
-            noteToUpdate.dateSubmitted = getFormattedDate()
+            noteToUpdate.dateSubmitted = this.utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
             
             // if submission is successful, add the new note to the corresponding list
@@ -434,6 +434,8 @@ export class EmployeeStore {
     @action setAsyncPendingLockout(val: boolean) {
         this.asyncPendingLockout = val
     }
+
+    @observable utils = new Utils()
 
     @observable message: any
     @action postMessage(message: any, displayTime: number = 5000) {
