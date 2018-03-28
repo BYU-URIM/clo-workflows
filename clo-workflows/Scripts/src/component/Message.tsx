@@ -29,7 +29,7 @@ export const Message = (props: IMessageProps) => (
             </MessageBar>
         </div>
     </div>
-) 
+)
 
 
 // the custom message type that maps to MessageBarTypes is repetitive, it mirrors office-ui-fabric/MessageBarType

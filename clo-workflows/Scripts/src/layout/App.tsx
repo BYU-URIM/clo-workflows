@@ -47,7 +47,7 @@ export class App extends React.Component<any, any> {
                                 )}
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 ) : (
                     /* data is unitialized - render out loading page */
                     <LoadingPage />

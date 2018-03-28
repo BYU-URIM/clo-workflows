@@ -15,7 +15,7 @@ export interface INote {
     This means that these notes will appear on any process that reuses that work or project
 
    CLIENT SCOPE
-    client scope notes are submitted by employees and clients. They are visible to both employees and clients   
+    client scope notes are submitted by employees and clients. They are visible to both employees and clients
     They are attached to EITHER a work and a clent / department OR a project and a client / department
     They will appear each time a client / department reuses the work / project
     They will not appear when other clients / departments reuse the work / project

@@ -31,5 +31,5 @@ export class ClientStoreData {
     fetchWorks = async () => {
         this.works = await this.dataService.fetchWorks()
     }
-    @action private fetchNotes = async () => {}
+    @action private fetchNotes = async () => null
 }

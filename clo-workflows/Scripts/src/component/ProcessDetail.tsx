@@ -64,6 +64,7 @@ export class ProcessDetail extends React.Component<any, any> {
                         validation={employeeStore.selectedProcessValidation}
                         onChange={employeeStore.updateSelectedProcess}
                         width={350}
+                        getFormControlDescription={employeeStore.getSelectedProcessSubmissionMetadata}
                     />
                     <div style={submitButtonStlyes}>
                         <PrimaryButton text="Submit Changes"

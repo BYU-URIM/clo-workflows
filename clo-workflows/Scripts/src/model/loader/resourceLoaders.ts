@@ -11,7 +11,6 @@ import { IFormControl } from "../FormControl"
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-
 export function getView(viewName: string): IView {
     const normalizedView = VIEWS[viewName]
     if(!normalizedView) throw new Error(`no view for ${viewName} exists`)
@@ -23,7 +22,7 @@ export function getView(viewName: string): IView {
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = deepCopy(FORM_CONTROLS[formControlName])  
+            const formControl: IFormControl = deepCopy(FORM_CONTROLS[formControlName])
             formControl.readonly = true
             return formControl
         }))
@@ -66,14 +65,22 @@ export function getStep(stepName: StepName): IStep {
 export function getStepById(id: number): IStep {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.stepId === id) return deepCopy(step)
+        if(step.orderId === id) return deepCopy(step)
     }
+}
+
+export function getStepForProcessFieldName(processFieldName: string): IStep {
+    for(const stepName in STEPS) {
+        const step: IStep = STEPS[stepName]
+        if(step.processFieldNames.includes(processFieldName)) return deepCopy(step)
+    }
+    return null
 }
 
 export function getStepNames(): string[] {
     return Object.keys(STEPS)
 }
- 
+
 export function getRoleNames(): string[] {
     return Object.keys(ROLES)
 }
