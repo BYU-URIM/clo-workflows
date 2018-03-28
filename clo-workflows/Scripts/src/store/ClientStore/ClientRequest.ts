@@ -2,7 +2,7 @@ import { observable, action, computed } from "mobx"
 export class ClientRequest {
     @observable private _id: string = undefined
     @observable private _type: string = undefined
-    @observable private _isNew: boolean = undefined
+    @observable private _isNew: boolean = false
 
     @computed
     get id(): string {

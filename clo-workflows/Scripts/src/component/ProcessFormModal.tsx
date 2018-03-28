@@ -34,9 +34,10 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     label={"add a new work"}
                     checked={props.clientStore.view.work.isNew}
                     onChange={(m, v) => {
-                        v
-                            ? (props.clientStore.view.work.isNew = v)
-                            : ((props.clientStore.view.work.isNew = v), (props.clientStore.view.work.type = ""))
+                        props.clientStore.clearState()
+                        props.clientStore.view.modal = "process"
+                        props.clientStore.view.work.isNew = v
+                        props.clientStore.view.work.type = ""
                     }}
                 />
                 {props.clientStore.view.work.isNew ? (
@@ -71,9 +72,9 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     text="Submit Work Request"
                     disabled={
                         props.clientStore.view.asyncPendingLockout ||
-                        !props.clientStore.view.work.id ||
-                        ((props.clientStore.view.work.isNew && props.clientStore.newWork.get("Title") === undefined) ||
-                            props.clientStore.newWork.get("Title") === "")
+                        (!props.clientStore.view.work.id &&
+                        !(props.clientStore.newWork.get("Title") !== undefined) ||
+                        !(props.clientStore.newWork.get("Title") !== ""))
                     }
                 />
                 <br />

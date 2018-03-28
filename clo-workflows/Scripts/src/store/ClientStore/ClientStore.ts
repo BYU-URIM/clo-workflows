@@ -51,6 +51,12 @@ export class ClientStore {
         this.newWork = utils.getClientObsMap(this.currentUser.Id)
         this.view.resetClientState()
     }
+    @action
+    clearnNewRequests = () => {
+        this.newProject = utils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
+        this.newWork = utils.getClientObsMap(this.currentUser.Id)
+    }
 
     @action
     postMessage(message: any, displayTime: number = 5000) {
