@@ -108,7 +108,7 @@ export class ClientStore {
     @computed
     get selectedNotes() {
         const filtered = this.data.notes.filter(n => n.length > 0)
-        const actualNotes = filtered.length > 0 ? filtered.reduce((prev, curr) => prev.concat(curr)) : []
+        const actualNotes = this.data.notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr), [])
 
         return actualNotes.filter(
             a =>
