@@ -10,6 +10,7 @@ import ProcessFormModal from "./ProcessFormModal"
 import { Message } from "./Message"
 import { ClientProcessDetails } from "./ClientProcessDetails"
 import { ClientProjectDetails } from "./ClientProjectDetails"
+import { NoteSource } from "../model/Note"
 
 const wrapper = {
     display: "inline-flex",
@@ -49,31 +50,35 @@ export class Client extends React.Component<any, any> {
         return (
             <div style={wrapper}>
                 <div style={leftSection}>
-                    <ProjectProcessList
-                        messageVisible={clientStore.message}
-                        processes={clientStore.data.clientProcesses}
-                        projects={clientStore.data.clientProjects}
-                        handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
-                        view={clientStore.view}
-                    />
+                    <div style={wrapper}>
+                        <ProjectProcessList
+                            messageVisible={clientStore.message}
+                            processes={clientStore.data.clientProcesses}
+                            projects={clientStore.data.clientProjects}
+                            handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
+                            view={clientStore.view}
+                        />
+                    </div>
                 </div>
                 <div style={rightSection}>
-                    {this.clientStore.view.process.id && (
-                        <ClientProcessDetails
-                            view={this.clientStore.view}
-                            data={this.clientStore.data}
-                            selectedNotes={this.clientStore.selectedNotes}
-                            clientStore={this.clientStore}
-                        />
-                    )}
-                    {this.clientStore.view.project.id && (
-                        <ClientProjectDetails
-                            view={this.clientStore.view}
-                            data={this.clientStore.data}
-                            selectedNotes={this.clientStore.selectedNotes}
-                            clientStore={this.clientStore}
-                        />
-                    )}
+                    {this.clientStore.view.process.id &&
+                        this.clientStore.view.notesType === NoteSource.WORK && (
+                            <ClientProcessDetails
+                                view={this.clientStore.view}
+                                data={this.clientStore.data}
+                                selectedNotes={this.clientStore.selectedNotes}
+                                clientStore={this.clientStore}
+                            />
+                        )}
+                    {this.clientStore.view.project.id &&
+                        this.clientStore.view.notesType === NoteSource.PROJECT && (
+                            <ClientProjectDetails
+                                view={this.clientStore.view}
+                                data={this.clientStore.data}
+                                selectedNotes={this.clientStore.selectedNotes}
+                                clientStore={this.clientStore}
+                            />
+                        )}
                 </div>
                 {clientStore.view.modal === "project" && <ProjectFormModal clientStore={clientStore} />}
                 {clientStore.view.modal === "process" && <ProcessFormModal clientStore={clientStore} />}

@@ -19,6 +19,9 @@ import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
 import { ClientViewState } from "../store/ClientStore/index"
+import { NoteSource } from "../model/Note"
+import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
+import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
 
 export interface IColumns {
     key: string
@@ -81,7 +84,10 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                     }}
                     text="Project Notes"
                     key={`${renderHeaderProps.group.key}-select`}
-                    onClick={() => props.view.project.id = renderHeaderProps.group.projectId.toString()}
+                    onClick={() => {
+                        props.view.project.id = renderHeaderProps.group.projectId.toString()
+                        props.view.notesType = NoteSource.PROJECT
+                    }}
                     disabled={props.messageVisible}
                 />
             </div>
@@ -124,7 +130,10 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                             fontSize: "1.5em",
                         }}
                         key={_props.item.key}
-                        onClick={() => (props.view.process.id = _props.item.key.toString())}
+                        onClick={() => {
+                            props.view.process.id = _props.item.key.toString()
+                            props.view.notesType = NoteSource.WORK
+                        }}
                     >
                         {defaultRender(_props)}
                     </div>

@@ -14,6 +14,7 @@ import { INote, NoteSource, NoteScope } from "../../model/Note"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
+@autobind
 export class ClientStore {
     @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* Observable maps to store the info entered that is not state */
@@ -69,9 +70,9 @@ export class ClientStore {
         )
     }
 
-    /*********************************************************
-     * Computed Values for view
-     *********************************************************/
+    /* ------------------------------------------------------------ *
+     *                  Computed Values for view
+     * ------------------------------------------------------------ */
     @computed
     get currentForm(): Array<IFormControl> {
         return getView(this.view.work.type || this.view.project.type).formControls
@@ -118,9 +119,9 @@ export class ClientStore {
         )
     }
 
-    /*********************************************************
-     * Other Class Actions
-     *********************************************************/
+    /* ------------------------------------------------------------ *
+     *                  Other Class Actions
+     * ------------------------------------------------------------ */
 
     /* function to update class members of type ObservableMap */
     @action
@@ -217,7 +218,7 @@ export class ClientStore {
     // NOTES - SHARED BY PROJECTS AND WORKS
     /*******************************************************************************************************/
     @action
-    submitNewNote = async (noteToCreate: INote, noteSource: NoteSource): Promise<boolean> => {
+    async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
         this.view.asyncPendingLockout = true
         console.log("submitted")
 
