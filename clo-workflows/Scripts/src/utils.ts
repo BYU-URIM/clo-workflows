@@ -17,7 +17,8 @@ class Utils {
     private static DATE_INPUT_ERROR = "please enter a date: mm/dd/yyyy"
 
     validateFormControl = (formControl: IFormControl, value: FormEntryType): string => {
-        if(formControl.required && value === undefined) {
+        if(formControl.required && (value === "" || value === null)) {
+            // if the form control is required and note present, return a required input error string
             return Utils.REQUIRED_INPUT_ERROR
         }
 
