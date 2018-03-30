@@ -18,7 +18,7 @@ import { CloRequestElement } from "../model/CloRequestElement"
 import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
-import { ClientViewState } from "../store/ClientStore/index"
+import { ClientViewState, ClientStoreData } from "../store/ClientStore/index"
 import { NoteSource } from "../model/Note"
 import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
 import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
@@ -41,10 +41,9 @@ export interface ICustomGroup extends IGroup {
 }
 export interface IProjectProcessListProps {
     messageVisible: boolean
-    processes: Array<{}>
-    projects: IProjectGroup[]
     handleSubmit(projectId: string): void
     view: ClientViewState
+    data: ClientStoreData
 }
 export interface ICustomGroupDividerProps extends IGroupDividerProps {
     group: ICustomGroup
@@ -117,13 +116,10 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                 ]}
             />
             <DetailsList
-                items={props.processes}
-                groups={props.projects}
+                items={props.data.processes}
+                groups={props.data.projects}
                 columns={_columns}
                 checkboxVisibility={CheckboxVisibility.hidden}
-                listProps={{
-                    onClick: e => console.log(e.currentTarget),
-                }}
                 onRenderRow={(_props, defaultRender) => (
                     <div
                         style={{
@@ -132,6 +128,7 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                         key={_props.item.key}
                         onClick={() => {
                             props.view.process.id = _props.item.key.toString()
+                            props.view.work.id = _props.item.workId
                             props.view.notesType = NoteSource.WORK
                         }}
                     >
