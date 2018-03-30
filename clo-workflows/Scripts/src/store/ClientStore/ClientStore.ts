@@ -23,8 +23,10 @@ export class ClientStore {
     @observable newWork: ClientObsMap
     /* any message to be shown in the view */
     @observable message: any
-
-    /* Object used to store all view related state */
+    /* ------------------------------------------------------------ *
+     * - data stores fetched data and GET api calls
+     * - view stores user interactions that ui is derived from
+     * ------------------------------------------------------------ */
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
     constructor(private root: RootStore, private dataService: IDataService) {
@@ -39,21 +41,19 @@ export class ClientStore {
         await this.data.init()
     }
 
-    /*********************************************************
+    /* ------------------------------------------------------------
      * Mutations to ClientViewState
-     *********************************************************/
+     * ------------------------------------------------------------ *\
 
     /* function to update view state on this.view */
     /* this replaces the entire cirrent view with a new instance */
     @action
     clearState = () => {
-        this.newProject = utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = utils.getClientObsMap(this.currentUser.Id)
+        this.clearNewRequests()
         this.view.resetClientState()
     }
     @action
-    clearnNewRequests = () => {
+    clearNewRequests = () => {
         this.newProject = utils.getClientObsMap(this.currentUser.Id)
         this.newProcess = utils.getClientObsMap(this.currentUser.Id)
         this.newWork = utils.getClientObsMap(this.currentUser.Id)
@@ -104,19 +104,17 @@ export class ClientStore {
             })),
         }
     }
+    @computed
+    get clientNotes(): Array<INote> {
+        const filtered = this.data.process_notes.filter(n => n.length > 0)
+        return this.data.process_notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr), [])[0]
+    }
 
     @computed
     get selectedNotes() {
-        const filtered = this.data.notes.filter(n => n.length > 0)
-        const actualNotes = this.data.notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr), [])
-
-        return actualNotes.filter(
-            a =>
-                a.projectId ===
-                this.data.processes.filter(p => {
-                    return p.Id.toString() === this.view.process.id
-                })[0].workId
-        )
+        return this.view.notesType === NoteSource.PROJECT
+            ? this.data.process_notes.filter(n => n.projectId === this.view.project.id)
+            : this.data.process_notes.filter(n => n.workId === this.view.work.id)
     }
 
     /* ------------------------------------------------------------ *
@@ -220,8 +218,6 @@ export class ClientStore {
     @action
     async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
         this.view.asyncPendingLockout = true
-        console.log("submitted")
-
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission
@@ -241,8 +237,8 @@ export class ClientStore {
             noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
 
             // if submission is successful, add the new note to the corresponding list
-            if (noteSource === NoteSource.WORK) runInAction(() => this.data.notes.unshift(noteToCreate))
-            if (noteSource === NoteSource.PROJECT) runInAction(() => this.data.notes.unshift(noteToCreate))
+            if (noteSource === NoteSource.WORK) runInAction(() => this.data.process_notes.unshift(noteToCreate))
+            if (noteSource === NoteSource.PROJECT) runInAction(() => this.data.process_notes.unshift(noteToCreate))
             this.postMessage({ messageText: "note successfully submitted", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -264,8 +260,8 @@ export class ClientStore {
             await this.dataService.updateNote(noteToUpdate)
 
             // if submission is successful, add the new note to the corresponding list
-            if (noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.data.notes)
-            if (noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.data.notes)
+            if (noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.data.process_notes)
+            if (noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.data.process_notes)
 
             this.postMessage({ messageText: "note successfully updated", messageType: "success" })
         } catch (error) {
@@ -286,8 +282,8 @@ export class ClientStore {
         try {
             await this.dataService.deleteNote(noteToDelete.Id)
             // if deletion is successful, remove the new note from the corresponding list
-            if (noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.data.notes)
-            if (noteSource === NoteSource.WORK) this.removeELementInListById(noteToDelete, this.data.notes)
+            if (noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.data.process_notes)
+            if (noteSource === NoteSource.WORK) this.removeELementInListById(noteToDelete, this.data.process_notes)
             this.postMessage({ messageText: "note successfully deleted", messageType: "success" })
         } catch (error) {
             console.error(error)

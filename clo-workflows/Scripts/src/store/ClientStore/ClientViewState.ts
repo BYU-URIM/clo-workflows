@@ -36,8 +36,8 @@ export class ClientViewState {
     }
     @action
     resetClientState() {
-        this._asyncPendingLockout = false
-        this._modal = null
+        this.asyncPendingLockout = false
+        this.modal = null
         this.project = new ClientRequest()
         this.process = new ClientRequest()
         this.work = new ClientRequest()

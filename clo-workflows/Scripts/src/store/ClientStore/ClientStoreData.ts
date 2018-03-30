@@ -11,7 +11,9 @@ export class ClientStoreData {
     currentUser: IUser
     @observable projects: Array<any> = []
     @observable processes: Array<any> = []
-    @observable notes: Array<any> = []
+    @observable process_notes: Array<any> = []
+    @observable project_notes: Array<any> = []
+
     @observable works: Array<any> = []
     constructor(dataService: IDataService, currentUser: IUser) {
         this.dataService = dataService
@@ -22,7 +24,7 @@ export class ClientStoreData {
         await this.fetchClientProcesses()
         await this.fetchClientProjects()
         await this.fetchWorks()
-        await this.fetchSelectedProcessNotes()
+        await this.fetchNotes()
     }
     @action
     fetchClientProcesses = async () => {
@@ -36,17 +38,12 @@ export class ClientStoreData {
     fetchWorks = async () => {
         this.works = await this.dataService.fetchWorks()
     }
+
     @action
-    fetchSelectedProcessNotes = async () => {
-        const workIdArray = this.processes && this.processes.map(p => p.workId)
-        for (const id in workIdArray) {
-            this.notes.push(await this.dataService.fetchNotes(NoteSource.WORK, NoteScope.CLIENT, id, this.currentUser.Id))
-        }
+    fetchNotes = async () => {
+        this.process_notes = await this.dataService.fetchClientNotes(this.currentUser.Id)
     }
-    @action
-    fetchSelectedProjectNotes = async () => {
-        // TODO: implement with projects
-    }
+
     @computed
     get clientProcesses() {
         return this.processes
@@ -57,6 +54,7 @@ export class ClientStoreData {
                     projectId: proc.projectId,
                     title: proc.Title,
                     step: `${proc.step} - ${getStep(proc.step as StepName).orderId} out of ${getStepNames().length}`,
+                    workId: proc.workId
                 }
             })
             .sort((a, b) => Number(a.projectId) - Number(b.projectId))
