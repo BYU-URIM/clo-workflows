@@ -1,5 +1,6 @@
 import { IFormControl } from "./FormControl"
 import { CloRequestElement } from "./CloRequestElement"
+import { observable } from "mobx"
 
 export type StepName =
     | "Intake"
@@ -31,6 +32,20 @@ export interface IStep {
     submitterIdFieldName: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
     submissionDateFieldName: string // name of the process field name corresponding to the date this item was submitted at this step
     processFieldNames: string[] // name of the process fields that are editable by a processor at this step
+}
+
+export class Step implements IStep {
+    // copy constructor for copying JSON definition objects into observable model objects
+    constructor(stepDefinition: IStep) {
+        Object.assign(this, stepDefinition)
+    }
+
+    @observable name: StepName
+    @observable orderId: number
+    @observable view: string
+    @observable submitterIdFieldName: string
+    @observable submissionDateFieldName: string
+    @observable processFieldNames: string[]
 }
 
 // this function holds all of the logic for advancing steps through the processing pipeline

@@ -1,10 +1,11 @@
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { autobind } from "core-decorators"
 import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../../model/CloRequestElement"
-import { IFormControl } from "../../model/FormControl"
+import { IFormControl, FormControl } from "../../model/FormControl"
 import { getView, getStep, getStepNames } from "../../model/loader/resourceLoaders"
 import { IDataService } from "../../service/dataService/IDataService"
-import { utils } from "../../utils"
+import Utils from "../../utils"
+import StoreUtils from "../StoreUtils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
@@ -27,9 +28,9 @@ export class ClientStore {
     data: ClientStoreData
     view: ClientViewState
     constructor(private root: RootStore, private dataService: IDataService) {
-        this.newProject = utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = utils.getClientObsMap(this.currentUser.Id)
+        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
+        this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.data = new ClientStoreData(this.dataService, this.currentUser)
         this.view = new ClientViewState()
     }
@@ -48,9 +49,9 @@ export class ClientStore {
     /* this replaces the entire cirrent view with a new instance */
     @action
     clearState = () => {
-        this.newProject = utils.getClientObsMap(this.currentUser.Id)
-        this.newProcess = utils.getClientObsMap(this.currentUser.Id)
-        this.newWork = utils.getClientObsMap(this.currentUser.Id)
+        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id)
+        this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
+        this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.view.resetClientState()
     }
 
@@ -69,7 +70,7 @@ export class ClientStore {
      * Computed Values for view
      *********************************************************/
     @computed
-    get currentForm(): Array<IFormControl> {
+    get currentForm(): Array<FormControl> {
         return getView(this.view.work.type || this.view.project.type).formControls
     }
 
@@ -77,10 +78,10 @@ export class ClientStore {
     get currentFormValidation(): {} {
         const typeToValidate = this.currentForm
         const newInstanceOfType = this.newWork || this.newProject
-        return typeToValidate.reduce((accumulator: {}, formControl: IFormControl) => {
+        return typeToValidate.reduce((accumulator: {}, formControl: FormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = newInstanceOfType.get(fieldName) || undefined
-            const error: string = inputVal ? utils.validateFormControl(formControl, inputVal) : null
+            const error: string = inputVal ? StoreUtils.validateFormControl(formControl, inputVal) : null
             accumulator[fieldName] = error
             return accumulator
         }, {})
@@ -218,7 +219,7 @@ export class ClientStore {
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission
-            noteToCreate.dateSubmitted = utils.getFormattedDate()
+            noteToCreate.dateSubmitted = Utils.getFormattedDate()
             noteToCreate.submitter = this.root.sessionStore.currentUser.name
             if (noteToCreate.scope === NoteScope.CLIENT) {
                 noteToCreate.attachedClientId = this.newProcess.get("submitterId") as string
@@ -253,7 +254,7 @@ export class ClientStore {
         this.view.asyncPendingLockout = true
         let submissionStatus = true
         try {
-            noteToUpdate.dateSubmitted = utils.getFormattedDate()
+            noteToUpdate.dateSubmitted = Utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
 
             // if submission is successful, add the new note to the corresponding list

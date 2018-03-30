@@ -2,14 +2,15 @@ import { RootStore } from "./RootStore"
 import { action, ObservableMap, observable, runInAction, computed, toJS, IKeyValueMap } from "mobx"
 import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
 import { autobind } from "core-decorators"
-import { IFormControl } from "../model/FormControl"
+import { FormControl, IFormControl } from "../model/FormControl"
 import { IStep, StepName, getNextStepName } from "../model/Step"
 import { IListItem } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
-import { utils } from "../utils"
+import Utils from "../utils"
 import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProcessFieldName } from "../model/loader/resourceLoaders"
+import StoreUtils from "./StoreUtils"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -38,7 +39,7 @@ export class EmployeeStore {
     @observable selectedWork: ObservableMap<FormEntryType>
     @observable canEditSelectedWork: boolean = false
 
-    @computed get selectedWorkFormControls(): Array<IFormControl> {
+    @computed get selectedWorkFormControls(): Array<FormControl> {
         if(this.selectedWork.size !== 0) {
             return this.canEditSelectedWork
             ? getView(this.selectedWork.get("type") as string).formControls
@@ -78,6 +79,11 @@ export class EmployeeStore {
         this.canEditSelectedWork = !this.canEditSelectedWork
     }
 
+    @computed
+    get selectedWorkValidation(): {} {
+        return StoreUtils.validateFormControlGroup(this.selectedWorkFormControls, this.selectedWork)
+    }
+
 
     /*******************************************************************************************************/
     // PROJECTS
@@ -87,7 +93,7 @@ export class EmployeeStore {
     @observable canEditSelectedProject: boolean = false
 
     @computed
-    get selectedProjectFormControls(): Array<IFormControl> {
+    get selectedProjectFormControls(): Array<FormControl> {
         if(this.selectedProject.size !== 0) {
             return this.canEditSelectedProject
                 ? getView(this.selectedProject.get("type") as string).formControls
@@ -126,6 +132,11 @@ export class EmployeeStore {
 
     @action toggleCanEditSelectedProject() {
         this.canEditSelectedProject = !this.canEditSelectedProject
+    }
+
+    @computed
+    get selectedProjectValidation(): {} {
+        return StoreUtils.validateFormControlGroup(this.selectedProjectFormControls, this.selectedProject)
     }
 
 
@@ -200,7 +211,7 @@ export class EmployeeStore {
             let updatedProcess = this.selectedProcess.toJS()
             updatedProcess = {...updatedProcess, ...{
                 step: getNextStepName(updatedProcess),
-                [currentStep.submissionDateFieldName]: utils.getFormattedDate(),
+                [currentStep.submissionDateFieldName]: Utils.getFormattedDate(),
                 [currentStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
@@ -228,7 +239,7 @@ export class EmployeeStore {
         const nextStepProcess = {...curProcess, ...{
             step: nextStepName,
             [nextStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
-            [nextStep.submissionDateFieldName]: utils.getFormattedDate()
+            [nextStep.submissionDateFieldName]: Utils.getFormattedDate()
         }}
 
         try {
@@ -255,20 +266,12 @@ export class EmployeeStore {
     }
 
     @computed get canSubmitSelectedProcess(): boolean {
-        return !this.asyncPendingLockout && utils.isObjectEmpty(this.selectedProcessValidation)
+        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProcessValidation)
     }
 
-    // TODO, this validation recomputes all fields each time, very inefficient
-    // returns plain javascript object mapping field names to error strings
     @computed
     get selectedProcessValidation(): {} {
-        return this.selectedProcessFormControls.reduce((accumulator: {}, formControl: IFormControl) => {
-            const fieldName: string = formControl.dataRef
-            const inputVal = this.selectedProcess.get(fieldName)
-            const error: string = inputVal ? utils.validateFormControl(formControl, inputVal) : null
-            accumulator[fieldName] = error
-            return accumulator
-        }, {})
+        return StoreUtils.validateFormControlGroup(this.selectedProcessFormControls, this.selectedProcess)
     }
 
     // computes a plain JavaScript object mapping step names process counts
@@ -287,7 +290,7 @@ export class EmployeeStore {
     }
 
     @computed
-    get selectedProcessFormControls(): Array<IFormControl> {
+    get selectedProcessFormControls(): Array<FormControl> {
         return getView(this.selectedStep.view).formControls
     }
 
@@ -321,7 +324,7 @@ export class EmployeeStore {
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission
-            noteToCreate.dateSubmitted = utils.getFormattedDate()
+            noteToCreate.dateSubmitted = Utils.getFormattedDate()
             noteToCreate.submitter = this.root.sessionStore.currentUser.name
             if(noteToCreate.scope === NoteScope.CLIENT) {
                 noteToCreate.attachedClientId = this.selectedProcess.get("submitterId") as string
@@ -355,7 +358,7 @@ export class EmployeeStore {
         this.setAsyncPendingLockout(true)
         let submissionStatus = true
         try {
-            noteToUpdate.dateSubmitted = utils.getFormattedDate()
+            noteToUpdate.dateSubmitted = Utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
 
             // if submission is successful, add the new note to the corresponding list

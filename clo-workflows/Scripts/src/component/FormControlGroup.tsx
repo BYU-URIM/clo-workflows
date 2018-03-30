@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { IFormControl } from "../model/FormControl"
+import { FormControl } from "../model/FormControl"
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
 import DescriptiveDropdown from "./DescriptiveDropdown"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
@@ -10,10 +10,10 @@ import DescriptiveCheckbox from "./DescriptiveCheckbox"
 
 interface IFormControlGroupProps {
     data: ObservableMap<FormEntryType> // map of fieldName to fieldValue
-    formControls: Array<IFormControl>
+    formControls: Array<FormControl>
     validation: {}
     onChange: (fieldName: string, newVal: FormEntryType) => void
-    getFormControlDescription?: (formControl: IFormControl) => string // custom logic to compute a description given a form control
+    getFormControlDescription?: (formControl: FormControl) => string // custom logic to compute a description given a form control
     width?: number | string
 }
 
@@ -41,8 +41,9 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 label={formControl.displayName}
                                 key={index}
                                 disabled={formControl.readonly}
-                                style={formControl.readonly && disabledInputBackground }
+                                style={formControl.readonly ? disabledInputBackground : null}
                                 description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                onBlur={() => formControl.touch()}
                             />
                         )
                     } else if (formControl.type === "choice") {
@@ -55,6 +56,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 key={index}
                                 disabled={formControl.readonly}
                                 description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                onBlur={() => formControl.touch()}
                             />
                         )
                     } else if (formControl.type === "textarea") {
@@ -67,8 +69,9 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
                                 disabled={formControl.readonly}
-                                style={formControl.readonly && disabledInputBackground }
+                                style={formControl.readonly ? disabledInputBackground : null}
                                 description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                onBlur={() => formControl.touch()}
                             />
                         )
                     } else if (formControl.type === "checkbox") {
@@ -82,6 +85,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                     }
                                     disabled={formControl.readonly}
                                     description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                    onBlur={() => formControl.touch()}
                                 />
                             </div>
                         )
