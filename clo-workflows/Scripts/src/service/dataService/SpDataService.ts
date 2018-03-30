@@ -52,7 +52,7 @@ export class SpDataService implements IDataService {
             rawUser.Email,
             rawUser.UserId.NameId,
             // userRoleNames.map(roleName => getRole(roleName))
-            [getRole("Anonymous")],
+            [getRole("Anonymous")]
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
@@ -108,15 +108,15 @@ export class SpDataService implements IDataService {
 
     async fetchNotes(source: NoteSource, maxScope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
         let filterString: string
-        if(source === NoteSource.PROJECT) {
+        if (source === NoteSource.PROJECT) {
             filterString = `projectId eq ${sourceId}`
-        } else if(source === NoteSource.WORK) {
+        } else if (source === NoteSource.WORK) {
             filterString = `workId eq ${sourceId}`
         }
 
-        if(maxScope === NoteScope.CLIENT) {
+        if (maxScope === NoteScope.CLIENT) {
             filterString += ` and attachedClientId eq '${attachedClientId}'`
-        } else if(maxScope === NoteScope.EMPLOYEE) {
+        } else if (maxScope === NoteScope.EMPLOYEE) {
             filterString += ` and (attachedClientId eq '${attachedClientId}' or scope eq '${NoteScope.EMPLOYEE}')`
         }
 
@@ -181,6 +181,14 @@ export class SpDataService implements IDataService {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.add(work)
+    }
+    async fetchClientNotes(userId: string): Promise<Array<INote>> {
+        const res = await this.getHostWeb()
+            .lists.getByTitle(ListName.NOTES)
+            .items.filter(`attachedClientId eq '${userId}'`)
+            .get(this.cloRequestElementParser)
+        console.log(res)
+        return res
     }
 
     /******************************************************************************************************/
