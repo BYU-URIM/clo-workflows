@@ -108,9 +108,9 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                     <PrimaryButton
                         text="Add Note"
                         iconProps={{iconName: "Add"}}
-                        onClick={this.toggleDisplayNoteEntry}
+                        onClick={this.props.maxScope === NoteScope.CLIENT ? () => this.onClickAddNote(NoteScope.CLIENT) : () => null}
                         disabled={props.disableButtons}
-                        onMenuClick={this.props.maxScope === NoteScope.CLIENT ? () => this.onClickAddNote(NoteScope.CLIENT) : () => null}
+                        // onMenuClick={this.props.maxScope === NoteScope.CLIENT ? () => this.onClickAddNote(NoteScope.CLIENT) : () => null}
                         menuProps={ this.props.maxScope === NoteScope.EMPLOYEE && {
                             items: [
                                 {
@@ -168,7 +168,7 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                     <TextField
                         multiline
                         onChanged={this.onEditNoteEntry}
-                        value={this.state.selectedNote && this.state.selectedNote.text}
+                        value={(this.state.selectedNote && this.state.selectedNote.text) || ""}
                     />
                     <DialogFooter>
                         <PrimaryButton
@@ -210,9 +210,9 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
         })
     }
 
-    private toggleDisplayNoteEntry(): void {
-        this.setState({ showNoteDialog: !this.state.showNoteDialog })
-    }
+    // private toggleDisplayNoteEntry(): void {
+    //     this.setState({ showNoteDialog: !this.state.showNoteDialog })
+    // }
 
     private async onClickSubmitNote(): Promise<void> {
         let wasNoteSubmitted: boolean
