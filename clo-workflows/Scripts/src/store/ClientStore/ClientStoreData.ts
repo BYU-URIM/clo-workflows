@@ -38,7 +38,7 @@ export class ClientStoreData {
     }
     @action
     fetchSelectedProcessNotes = async () => {
-        const workIdArray = this.processes.map(p => p.workId)
+        const workIdArray = this.processes && this.processes.map(p => p.workId)
         for (const id in workIdArray) {
             this.notes.push(await this.dataService.fetchNotes(NoteSource.WORK, NoteScope.CLIENT, id, this.currentUser.Id))
         }

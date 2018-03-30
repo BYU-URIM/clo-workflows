@@ -104,6 +104,9 @@ ava.test("test form controls for correct shape", t => {
         if (formControl.type === "choice") {
             t.true(Array.isArray(formControl.choices))
         }
+        if (formControl.required) {
+            t.true(typeof formControl.required === "boolean")
+        }
     }
 })
 

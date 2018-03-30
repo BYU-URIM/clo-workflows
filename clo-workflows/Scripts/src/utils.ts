@@ -8,20 +8,25 @@ class Utils {
         return JSON.parse(JSON.stringify(ob))
     }
 
+    private static REQUIRED_INPUT_ERROR = "this value is required"
     /* regex specifying integer values */
-    NUMBER_REGEX = /[1-9]+[0-9]*/
-    NUMBER_INPUT_ERROR = "please enter a number"
+    private static NUMBER_REGEX = /[1-9]+[0-9]*/
+    private static NUMBER_INPUT_ERROR = "please enter a number"
     /* regex specifying mm/dd/yyyy date format */
-    DATE_REGEX = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/
-    DATE_INPUT_ERROR = "please enter a date: mm/dd/yyyy"
+    private static DATE_REGEX = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/
+    private static DATE_INPUT_ERROR = "please enter a date: mm/dd/yyyy"
 
     validateFormControl = (formControl: IFormControl, value: FormEntryType): string => {
-        if (formControl.type === "number" && !this.NUMBER_REGEX.test(value as string)) {
-            return this.NUMBER_INPUT_ERROR
+        if(formControl.required && value === undefined) {
+            return Utils.REQUIRED_INPUT_ERROR
         }
 
-        if (formControl.type === "datetime" && !this.DATE_REGEX.test(value as string)) {
-            return this.DATE_INPUT_ERROR
+        if (formControl.type === "number" && !Utils.NUMBER_REGEX.test(value as string)) {
+            return Utils.NUMBER_INPUT_ERROR
+        }
+
+        if (formControl.type === "datetime" && !Utils.DATE_REGEX.test(value as string)) {
+            return Utils.DATE_INPUT_ERROR
         }
     }
 

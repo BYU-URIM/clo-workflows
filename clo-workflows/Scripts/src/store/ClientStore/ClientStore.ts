@@ -24,12 +24,14 @@ export class ClientStore {
     @observable message: any
 
     /* Object used to store all view related state */
-    data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
-    view: ClientViewState = new ClientViewState()
+    data: ClientStoreData
+    view: ClientViewState
     constructor(private root: RootStore, private dataService: IDataService) {
         this.newProject = utils.getClientObsMap(this.currentUser.Id)
         this.newProcess = utils.getClientObsMap(this.currentUser.Id)
         this.newWork = utils.getClientObsMap(this.currentUser.Id)
+        this.data = new ClientStoreData(this.dataService, this.currentUser)
+        this.view = new ClientViewState()
     }
 
     @action
