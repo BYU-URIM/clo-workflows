@@ -116,8 +116,8 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                 ]}
             />
             <DetailsList
-                items={props.data.processes}
-                groups={props.data.projects}
+                items={props.data.clientProcesses}
+                groups={props.data.clientProjects}
                 columns={_columns}
                 checkboxVisibility={CheckboxVisibility.hidden}
                 onRenderRow={(_props, defaultRender) => (

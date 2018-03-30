@@ -183,12 +183,10 @@ export class SpDataService implements IDataService {
             .items.add(work)
     }
     async fetchClientNotes(userId: string): Promise<Array<INote>> {
-        const res = await this.getHostWeb()
+        return await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`attachedClientId eq '${userId}'`)
             .get(this.cloRequestElementParser)
-        console.log(res)
-        return res
     }
 
     /******************************************************************************************************/
