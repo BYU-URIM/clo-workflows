@@ -78,13 +78,7 @@ export class ClientStore {
     get currentFormValidation(): {} {
         const typeToValidate = this.currentForm
         const newInstanceOfType = this.newWork || this.newProject
-        return typeToValidate.reduce((accumulator: {}, formControl: FormControl) => {
-            const fieldName: string = formControl.dataRef
-            const inputVal = newInstanceOfType.get(fieldName) || undefined
-            const error: string = inputVal ? StoreUtils.validateFormControl(formControl, inputVal) : null
-            accumulator[fieldName] = error
-            return accumulator
-        }, {})
+        return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
     }
 
     @computed
