@@ -6,7 +6,7 @@ import { ObservableMap } from "mobx/lib/types/observablemap"
 class StoreUtils {
     private static REQUIRED_INPUT_ERROR = "this value is required"
     /* regex specifying integer values */
-    private static NUMBER_REGEX = /[1-9]+[0-9]*/
+    private static NUMBER_REGEX = /^[1-9]+[0-9]*$/
     private static NUMBER_INPUT_ERROR = "please enter a number"
     /* regex specifying mm/dd/yyyy date format */
     private static DATE_REGEX = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/
