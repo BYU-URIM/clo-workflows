@@ -52,7 +52,7 @@ export class Step implements IStep {
 // the next step is a function of of the current step and the past process state
 // TODO possible to make this more typesafe??
 export function getNextStepName(process: CloRequestElement, currentStep?: StepName): StepName {
-    const curStepName: StepName = process.step as StepName
+    const curStepName: StepName = (process.step as StepName) || currentStep
     switch(curStepName) {
         case "Intake":
             return "Public Domain Research"

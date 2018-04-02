@@ -15,6 +15,9 @@ export class FormControl implements IFormControl {
         Object.assign(this, formControlDefinition)
         this.readonly = false
         this.touched = false
+        if(this.type === "checkbox") {
+            this.defaultValue = false
+        }
     }
 
     @observable displayName: string

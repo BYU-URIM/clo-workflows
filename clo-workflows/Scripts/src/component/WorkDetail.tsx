@@ -68,7 +68,7 @@ export class WorkDetail extends React.Component<any, any> {
                     <FormControlGroup
                         data={this.employeeStore.selectedWork}
                         formControls={this.employeeStore.selectedWorkView.formControls}
-                        onChange={this.employeeStore.updateSelectedWork}
+                        updateFormField={this.employeeStore.updateSelectedWork}
                         validation={this.employeeStore.selectedWorkValidation}
                         width={350}
                     />

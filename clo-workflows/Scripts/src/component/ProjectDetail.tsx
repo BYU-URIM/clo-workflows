@@ -67,7 +67,7 @@ export class ProjectDetail extends React.Component<any, any> {
                     <FormControlGroup
                         data={this.employeeStore.selectedProject}
                         formControls={this.employeeStore.selectedProjectView.formControls}
-                        onChange={this.employeeStore.updateSelectedProject}
+                        updateFormField={this.employeeStore.updateSelectedProject}
                         validation={this.employeeStore.selectedProjectValidation}
                         width={350}
                     />

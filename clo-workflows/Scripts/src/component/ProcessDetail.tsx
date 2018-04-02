@@ -61,7 +61,7 @@ export class ProcessDetail extends React.Component<any, any> {
                         data={employeeStore.selectedProcess}
                         formControls={employeeStore.selectedProcessView.formControls}
                         validation={employeeStore.selectedProcessValidation}
-                        onChange={employeeStore.updateSelectedProcess}
+                        updateFormField={employeeStore.updateSelectedProcess}
                         width={350}
                         getFormControlDescription={employeeStore.getSelectedProcessSubmissionMetadata}
                     />
