@@ -56,17 +56,6 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
     switch(curStepName) {
         case "Intake":
             return "Public Domain Research"
-            // TODO implement work approval field / step
-            // if(process.workApproved === "true") {
-            //     return "Public Domain Research"
-            // } else if(process.workApproved === "false") {
-            //     return "Work Approval"
-            // }
-            // return curStepName
-
-        case "Work Approval":
-            return "Public Domain Research"
-
         case "Public Domain Research":
             if(process.publicDomainResearch === "Public Domain") {
                 return "Public Domain Approval"
