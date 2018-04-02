@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as ReactDom from "react-dom"
-import { useStrict } from "mobx"
+import { useStrict, spy } from "mobx"
 import { BrowserRouter, Router } from "react-router-dom"
 import { App } from "./layout/App"
 import { Provider } from "mobx-react"

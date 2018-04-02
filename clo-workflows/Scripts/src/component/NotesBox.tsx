@@ -7,7 +7,7 @@ import { autobind } from "core-decorators"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Dialog, DialogFooter, DialogType } from "office-ui-fabric-react"
 import { IUser } from "../model/User"
-import { utils } from "../utils"
+import Utils from "../utils"
 export interface INotesBoxProps {
     title: string
     notes: ReadonlyArray<INote>
@@ -193,7 +193,7 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
     private onClickEditNote(noteListItem: IListItem, index: number) {
         this.setState({
             showNoteDialog: true,
-            selectedNote: utils.deepCopy(this.props.notes[index]),
+            selectedNote: Utils.deepCopy(this.props.notes[index]),
             selectedNoteOperation: NoteOperation.UPDATE_NOTE
         })
     }

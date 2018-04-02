@@ -8,7 +8,6 @@ import { ProjectDetail } from "./ProjectDetail"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot"
 
-
 const wrapperStyles = {
     margin: "30 0",
     display: "flex",
@@ -60,14 +59,14 @@ export class ProcessDetail extends React.Component<any, any> {
                     <div style={processTitleStyles}>Edit Process</div>
                     <FormControlGroup
                         data={employeeStore.selectedProcess}
-                        formControls={employeeStore.selectedProcessFormControls}
+                        formControls={employeeStore.selectedProcessView.formControls}
                         validation={employeeStore.selectedProcessValidation}
-                        onChange={employeeStore.updateSelectedProcess}
+                        updateFormField={employeeStore.updateSelectedProcess}
                         width={350}
                         getFormControlDescription={employeeStore.getSelectedProcessSubmissionMetadata}
                     />
                     <div style={submitButtonStlyes}>
-                        <PrimaryButton text="Submit Changes"
+                        <PrimaryButton text="Submit to Next Step"
                             onClick={this.employeeStore.submitSelectedProcess}
                             disabled={!this.employeeStore.canSubmitSelectedProcess}
                         />
@@ -75,11 +74,22 @@ export class ProcessDetail extends React.Component<any, any> {
                 </div>
                 <div style={projectWorkSwitcherStyle}>
                     {/* Project / Work switcher */}
-                    <Pivot linkFormat={PivotLinkFormat.tabs} linkSize={PivotLinkSize.large}>
-                        <PivotItem linkText="Work">
+                    <Pivot
+                        linkFormat={PivotLinkFormat.tabs}
+                        linkSize={PivotLinkSize.large}
+                        selectedKey={this.employeeStore.projectWorkPivotSelection}
+                        onLinkClick={(item) => this.employeeStore.setProjectWorkPivotSelection(item.props.itemKey)}
+                    >
+                        <PivotItem
+                            linkText="Work"
+                            itemKey="work"
+                        >
                             <WorkDetail />
                         </PivotItem>
-                        <PivotItem linkText="Project">
+                        <PivotItem
+                            linkText="Project"
+                            itemKey="project"
+                        >
                             <ProjectDetail />
                         </PivotItem>
                     </Pivot>

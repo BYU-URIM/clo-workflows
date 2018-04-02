@@ -1,5 +1,6 @@
 import { IFormControl } from "./FormControl"
 import { CloRequestElement } from "./CloRequestElement"
+import { observable } from "mobx"
 
 export type StepName =
     | "Intake"
@@ -33,25 +34,28 @@ export interface IStep {
     processFieldNames: string[] // name of the process fields that are editable by a processor at this step
 }
 
+export class Step implements IStep {
+    // copy constructor for copying JSON definition objects into observable model objects
+    constructor(stepDefinition: IStep) {
+        Object.assign(this, stepDefinition)
+    }
+
+    @observable name: StepName
+    @observable orderId: number
+    @observable view: string
+    @observable submitterIdFieldName: string
+    @observable submissionDateFieldName: string
+    @observable processFieldNames: string[]
+}
+
 // this function holds all of the logic for advancing steps through the processing pipeline
 // the next step is a function of of the current step and the past process state
 // TODO possible to make this more typesafe??
 export function getNextStepName(process: CloRequestElement, currentStep?: StepName): StepName {
-    const curStepName: StepName = process.step as StepName
+    const curStepName: StepName = (process.step as StepName) || currentStep
     switch(curStepName) {
         case "Intake":
             return "Public Domain Research"
-            // TODO implement work approval field / step
-            // if(process.workApproved === "true") {
-            //     return "Public Domain Research"
-            // } else if(process.workApproved === "false") {
-            //     return "Work Approval"
-            // }
-            // return curStepName
-
-        case "Work Approval":
-            return "Public Domain Research"
-
         case "Public Domain Research":
             if(process.publicDomainResearch === "Public Domain") {
                 return "Public Domain Approval"
