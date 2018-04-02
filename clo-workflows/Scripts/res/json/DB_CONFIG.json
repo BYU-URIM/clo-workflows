@@ -1,8 +1,22 @@
 {
     "hostUrl": "https://urimdev2.byu.edu/clo_workflows_dev",
-    "defaultTables": ["Composed Looks", "Master Page Gallery", "MicroFeed"],
-    "defaultFields": ["Title", "Id"],
-    "tables":{
+    "defaultTables": [
+        "Composed Looks",
+        "Master Page Gallery",
+        "MicroFeed"
+    ],
+    "defaultFields": [
+        "Title",
+        "Id"
+    ],
+    "groups": [
+        "Junior License Processor",
+        "Senior License Processor",
+        "Supervisor",
+        "Admin Assistant",
+        "Administrator"
+    ],
+    "tables": {
         "processes": {
             "type": "list",
             "fields": [
