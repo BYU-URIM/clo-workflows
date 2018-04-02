@@ -18,7 +18,10 @@ import { CloRequestElement } from "../model/CloRequestElement"
 import { Message } from "./Message"
 import { getStep, getStepNames } from "../model/loader/resourceLoaders"
 import { StepName } from "../model/Step"
-import { ClientViewState } from "../store/ClientStore/index"
+import { ClientViewState, ClientStoreData } from "../store/ClientStore/index"
+import { NoteSource } from "../model/Note"
+import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
+import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
 
 export interface IColumns {
     key: string
@@ -38,10 +41,9 @@ export interface ICustomGroup extends IGroup {
 }
 export interface IProjectProcessListProps {
     messageVisible: boolean
-    processes: Array<{}>
-    projects: IProjectGroup[]
     handleSubmit(projectId: string): void
     view: ClientViewState
+    data: ClientStoreData
 }
 export interface ICustomGroupDividerProps extends IGroupDividerProps {
     group: ICustomGroup
@@ -60,18 +62,30 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {
         return (
             <div>
-                <span style={{ fontSize: "2em", marginRight: "10px" }}>
+                <div style={{ fontSize: "2em", marginRight: "10px" }}>
                     <strong>Project Name:</strong> {renderHeaderProps.group!.name}
-                </span>
+                </div>
 
                 <CommandButton
                     iconProps={{
-                        iconName: "Add",
+                        iconName: "CircleAdditionSolid",
                     }}
                     text="Add a Process"
                     key={renderHeaderProps.group.key}
                     onClick={() => {
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
+                    }}
+                    disabled={props.messageVisible}
+                />
+                <CommandButton
+                    iconProps={{
+                        iconName: "ChevronRight",
+                    }}
+                    text="Project Notes"
+                    key={`${renderHeaderProps.group.key}-select`}
+                    onClick={() => {
+                        props.view.project.id = renderHeaderProps.group.projectId.toString()
+                        props.view.notesType = NoteSource.PROJECT
                     }}
                     disabled={props.messageVisible}
                 />
@@ -102,20 +116,21 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                 ]}
             />
             <DetailsList
-                items={props.processes}
-                groups={props.projects}
+                items={props.data.clientProcesses}
+                groups={props.data.clientProjects}
                 columns={_columns}
                 checkboxVisibility={CheckboxVisibility.hidden}
-                listProps={{
-                    onClick: e => console.log(e.currentTarget),
-                }}
                 onRenderRow={(_props, defaultRender) => (
                     <div
                         style={{
                             fontSize: "1.5em",
                         }}
                         key={_props.item.key}
-                        onClick={() => (props.view.process.id = _props.item.key.toString())}
+                        onClick={() => {
+                            props.view.process.id = _props.item.key.toString()
+                            props.view.work.id = _props.item.workId
+                            props.view.notesType = NoteSource.WORK
+                        }}
                     >
                         {defaultRender(_props)}
                     </div>

@@ -1,5 +1,5 @@
 .ms-Dialog-main {
-    min-width: 450px;
+    min-width: 450px !important
 }
 
 .ms-Dialog-title.title_352a7c92 {
@@ -9,5 +9,4 @@
 .ms-Dropdown.root_dde8ead6.is-disabled.rootIsDisabled_dde8ead6 span {
     background-color: #F0F0F0
 }
-
 

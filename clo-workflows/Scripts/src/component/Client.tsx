@@ -9,8 +9,15 @@ import ProjectFormModal from "./ProjectFormModal"
 import ProcessFormModal from "./ProcessFormModal"
 import { Message } from "./Message"
 import { ClientProcessDetails } from "./ClientProcessDetails"
+import { ClientProjectDetails } from "./ClientProjectDetails"
+import { NoteSource } from "../model/Note"
 
-const rightContainer = {
+const wrapper = {
+    display: "inline-flex",
+    width: "100%",
+    height: "auto",
+} as React.CSSProperties
+const rightSection = {
     margin: "0",
     padding: "30px",
     display: "flex",
@@ -19,7 +26,7 @@ const rightContainer = {
     justifyContent: "flex-start",
     width: "50%",
 } as React.CSSProperties
-const leftContainer = {
+const leftSection = {
     margin: "0",
     padding: "10px",
     display: "flex",
@@ -41,30 +48,36 @@ export class Client extends React.Component<any, any> {
     render() {
         const clientStore = this.clientStore
         return (
-            <div
-                style={{
-                    display: "inline-flex",
-                    width: "100%",
-                    height: "auto",
-                }}
-            >
-                <div style={leftContainer}>
-                    <ProjectProcessList
-                        messageVisible={clientStore.message}
-                        processes={clientStore.data.clientProcesses}
-                        projects={clientStore.data.clientProjects}
-                        handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
-                        view={clientStore.view}
-                    />
-                </div>
-                <div style={rightContainer}>
-                    {this.clientStore.view.process.id && (
-                        <ClientProcessDetails
-                            view={this.clientStore.view}
+            <div style={wrapper}>
+                <div style={leftSection}>
+                    <div style={wrapper}>
+                        <ProjectProcessList
+                            messageVisible={clientStore.message}
                             data={this.clientStore.data}
-                            selectedNotes={this.clientStore.selectedNotes}
+                            handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
+                            view={clientStore.view}
                         />
-                    )}
+                    </div>
+                </div>
+                <div style={rightSection}>
+                    {this.clientStore.view.process.id &&
+                        this.clientStore.view.notesType === NoteSource.WORK && (
+                            <ClientProcessDetails
+                                view={this.clientStore.view}
+                                data={this.clientStore.data}
+                                selectedNotes={this.clientStore.selectedNotes}
+                                clientStore={this.clientStore}
+                            />
+                        )}
+                    {this.clientStore.view.project.id &&
+                        this.clientStore.view.notesType === NoteSource.PROJECT && (
+                            <ClientProjectDetails
+                                view={this.clientStore.view}
+                                data={this.clientStore.data}
+                                selectedNotes={this.clientStore.selectedNotes}
+                                clientStore={this.clientStore}
+                            />
+                        )}
                 </div>
                 {clientStore.view.modal === "project" && <ProjectFormModal clientStore={clientStore} />}
                 {clientStore.view.modal === "process" && <ProcessFormModal clientStore={clientStore} />}

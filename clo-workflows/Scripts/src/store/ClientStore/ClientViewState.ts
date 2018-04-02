@@ -1,5 +1,6 @@
 import { observable, action, computed } from "mobx"
 import { ClientRequest } from "./index"
+import { NoteSource } from "../../model/Note"
 
 type Modal = "project" | "process" | null
 
@@ -10,7 +11,15 @@ export class ClientViewState {
     @observable process: ClientRequest = new ClientRequest()
     @observable work: ClientRequest = new ClientRequest()
     @observable note: ClientRequest = new ClientRequest()
+    @observable private _notesType: NoteSource = undefined
 
+    @computed
+    get notesType(): NoteSource {
+        return this._notesType
+    }
+    set notesType(val: NoteSource) {
+        this._notesType = val
+    }
     @computed
     get modal(): Modal {
         return this._modal
@@ -27,8 +36,8 @@ export class ClientViewState {
     }
     @action
     resetClientState() {
-        this._asyncPendingLockout = false
-        this._modal = null
+        this.asyncPendingLockout = false
+        this.modal = null
         this.project = new ClientRequest()
         this.process = new ClientRequest()
         this.work = new ClientRequest()

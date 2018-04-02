@@ -108,15 +108,15 @@ export class SpDataService implements IDataService {
 
     async fetchNotes(source: NoteSource, maxScope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
         let filterString: string
-        if(source === NoteSource.PROJECT) {
+        if (source === NoteSource.PROJECT) {
             filterString = `projectId eq ${sourceId}`
-        } else if(source === NoteSource.WORK) {
+        } else if (source === NoteSource.WORK) {
             filterString = `workId eq ${sourceId}`
         }
 
-        if(maxScope === NoteScope.CLIENT) {
+        if (maxScope === NoteScope.CLIENT) {
             filterString += ` and attachedClientId eq '${attachedClientId}'`
-        } else if(maxScope === NoteScope.EMPLOYEE) {
+        } else if (maxScope === NoteScope.EMPLOYEE) {
             filterString += ` and (attachedClientId eq '${attachedClientId}' or scope eq '${NoteScope.EMPLOYEE}')`
         }
 
@@ -181,6 +181,12 @@ export class SpDataService implements IDataService {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.add(work)
+    }
+    async fetchClientNotes(userId: string): Promise<Array<INote>> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.NOTES)
+            .items.filter(`attachedClientId eq '${userId}'`)
+            .get(this.cloRequestElementParser)
     }
 
     /******************************************************************************************************/

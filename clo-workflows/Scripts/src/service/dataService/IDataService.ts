@@ -6,6 +6,7 @@ import { IWork } from "../../model/Work"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
+    fetchClientNotes(userId: string): Promise<Array<INote>>
     fetchClientProcesses(userId: string): Promise<Array<CloRequestElement>>
     fetchClientProjects(userId: string): Promise<Array<CloRequestElement>>
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>>
