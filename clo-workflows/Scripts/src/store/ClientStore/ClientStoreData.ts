@@ -47,6 +47,7 @@ export class ClientStoreData {
     @computed
     get clientProcesses() {
         return this.processes
+            .filter(proc => this.clientProjectIds.includes(proc.projectId))
             .map((proc, i) => {
                 return {
                     key: proc.Id.toString(),
@@ -54,7 +55,7 @@ export class ClientStoreData {
                     projectId: proc.projectId,
                     title: proc.Title,
                     step: `${proc.step} - ${getStep(proc.step as StepName).orderId} out of ${getStepNames().length}`,
-                    workId: proc.workId
+                    workId: proc.workId,
                 }
             })
             .sort((a, b) => Number(a.projectId) - Number(b.projectId))
@@ -77,5 +78,10 @@ export class ClientStoreData {
                 i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
                 return e
             })
+    }
+
+    @computed
+    get clientProjectIds() {
+        return this.projects.map((proj: CloRequestElement, i): string => proj.Id.toString())
     }
 }
