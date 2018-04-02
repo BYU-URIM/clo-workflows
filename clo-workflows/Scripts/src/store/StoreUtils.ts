@@ -14,17 +14,17 @@ class StoreUtils {
 
     validateFormControl = (formControl: FormControl, value: FormEntryType): string => {
         if(formControl.touched) {
-            if(formControl.required) {
-                return StoreUtils.REQUIRED_INPUT_ERROR
-            }
+        if(formControl.touched && formControl.required && !value) {
+            return StoreUtils.REQUIRED_INPUT_ERROR
+        }
 
-            if (formControl.type === "number" && !StoreUtils.NUMBER_REGEX.test(value as string)) {
-                return StoreUtils.NUMBER_INPUT_ERROR
-            }
+        if (value && formControl.type === "number" && !StoreUtils.NUMBER_REGEX.test(value as string)) {
+            return StoreUtils.NUMBER_INPUT_ERROR
+        }
 
-            if (formControl.type === "datetime" && !StoreUtils.DATE_REGEX.test(value as string)) {
-                return StoreUtils.DATE_INPUT_ERROR
-            }
+        if (value && formControl.type === "datetime" && !StoreUtils.DATE_REGEX.test(value as string)) {
+            return StoreUtils.DATE_INPUT_ERROR
+        }
         }
     }
 
@@ -33,11 +33,9 @@ class StoreUtils {
         return formControls.reduce((accumulator: {}, formControl: FormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = formValues.get(fieldName)
-            if(inputVal) {
-                const error = this.validateFormControl(formControl, inputVal)
-                if(error) {
-                    accumulator[fieldName] = error
-                }
+            const error = this.validateFormControl(formControl, inputVal)
+            if(error) {
+                accumulator[fieldName] = error
             }
             return accumulator
         }, {})

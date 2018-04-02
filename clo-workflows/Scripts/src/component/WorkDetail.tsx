@@ -57,14 +57,17 @@ export class WorkDetail extends React.Component<any, any> {
                         <div style={titleStlyes}>{this.employeeStore.canEditSelectedWork ? "Edit Work" : "View Work"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
-                                iconProps={ {iconName: "edit"} }
-                                onClick={this.employeeStore.toggleCanEditSelectedWork}
+                                iconProps={ this.employeeStore.canEditSelectedWork ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
+                                onClick={this.employeeStore.canEditSelectedWork
+                                    ? this.employeeStore.stopEditingSelectedWork
+                                    : this.employeeStore.startEditingSelectedWork
+                                }
                             />
                         </div>
                     </div>
                     <FormControlGroup
                         data={this.employeeStore.selectedWork}
-                        formControls={this.employeeStore.selectedWorkFormControls}
+                        formControls={this.employeeStore.selectedWorkView.formControls}
                         onChange={this.employeeStore.updateSelectedWork}
                         validation={this.employeeStore.selectedWorkValidation}
                         width={350}

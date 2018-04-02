@@ -36,7 +36,6 @@ function FormControlGroup(props: IFormControlGroupProps) {
                         return (
                             <TextField
                                 value={props.data.get(formControl.dataRef) as string || ""}
-                                errorMessage={props.validation[formControl.dataRef]}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
                                 key={index}
@@ -44,6 +43,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 style={formControl.readonly ? disabledInputBackground : null}
                                 description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                 onBlur={() => formControl.touch()}
+                                errorMessage={props.validation[formControl.dataRef]}
                             />
                         )
                     } else if (formControl.type === "choice") {
@@ -64,7 +64,6 @@ function FormControlGroup(props: IFormControlGroupProps) {
                             <TextField
                                 multiline
                                 value={props.data.get(formControl.dataRef) as string || ""}
-                                errorMessage={props.validation[formControl.dataRef]}
                                 key={index}
                                 onChanged={(newVal: string) => props.onChange(formControl.dataRef, newVal)}
                                 label={formControl.displayName}
@@ -72,6 +71,7 @@ function FormControlGroup(props: IFormControlGroupProps) {
                                 style={formControl.readonly ? disabledInputBackground : null}
                                 description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                 onBlur={() => formControl.touch()}
+                                errorMessage={props.validation[formControl.dataRef]}
                             />
                         )
                     } else if (formControl.type === "checkbox") {

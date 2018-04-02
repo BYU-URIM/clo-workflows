@@ -56,14 +56,17 @@ export class ProjectDetail extends React.Component<any, any> {
                         <div style={titleStlyes}>{this.employeeStore.canEditSelectedProject ? "Edit Project" : "View Project"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
-                                iconProps={ {iconName: "edit"} }
-                                onClick={this.employeeStore.toggleCanEditSelectedProject}
+                                iconProps={ this.employeeStore.canEditSelectedProject ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
+                                onClick={this.employeeStore.canEditSelectedProject
+                                    ? this.employeeStore.stopEditingSelectedProject
+                                    : this.employeeStore.startEditingSelectedProject
+                                }
                             />
                         </div>
                     </div>
                     <FormControlGroup
                         data={this.employeeStore.selectedProject}
-                        formControls={this.employeeStore.selectedProjectFormControls}
+                        formControls={this.employeeStore.selectedProjectView.formControls}
                         onChange={this.employeeStore.updateSelectedProject}
                         validation={this.employeeStore.selectedProjectValidation}
                         width={350}

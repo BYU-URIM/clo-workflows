@@ -11,6 +11,7 @@ import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
 import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProcessFieldName } from "../model/loader/resourceLoaders"
 import StoreUtils from "./StoreUtils"
+import { View } from "../model/View"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
@@ -39,11 +40,11 @@ export class EmployeeStore {
     @observable selectedWork: ObservableMap<FormEntryType>
     @observable canEditSelectedWork: boolean = false
 
-    @computed get selectedWorkFormControls(): Array<FormControl> {
-        if(this.selectedWork.size !== 0) {
+    @computed get selectedWorkView(): View {
+        if(this.selectedWork) {
             return this.canEditSelectedWork
-            ? getView(this.selectedWork.get("type") as string).formControls
-            : getViewAndMakeReadonly(this.selectedWork.get("type") as string).formControls
+            ? getView(this.selectedWork.get("type") as string)
+            : getViewAndMakeReadonly(this.selectedWork.get("type") as string)
         }
     }
 
@@ -55,13 +56,19 @@ export class EmployeeStore {
 
     @action
     async submitSelectedWork(): Promise<void> {
-        this.setAsyncPendingLockout(true)
+        this.selectedWorkView.touchAllRequiredFormControls()
+        if(!this.canSubmitSelectedWork) {
+            this.postMessage({messageText: "please fix all form errors", messageType: "error" })
+            return
+        }
 
         try {
+            this.setAsyncPendingLockout(true)
             const updatedWork = this.selectedWork.toJS()
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
             this.replaceElementInListById(updatedWork, this.works)
             this.postMessage({messageText: "work successfully submitted", messageType: "success"})
+            runInAction(() => this.canEditSelectedWork = false)
         } catch(error) {
             console.log(error)
             this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: "error"})
@@ -72,16 +79,25 @@ export class EmployeeStore {
 
     @computed
     get canSubmitSelectedWork(): boolean {
-        return !this.asyncPendingLockout
+        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedWorkValidation)
     }
 
-    @action toggleCanEditSelectedWork() {
-        this.canEditSelectedWork = !this.canEditSelectedWork
+    @action startEditingSelectedWork() {
+        this.canEditSelectedWork = true
+    }
+    @action stopEditingSelectedWork() {
+        this.canEditSelectedWork = false
+        this.resetSelectedWork()
     }
 
     @computed
     get selectedWorkValidation(): {} {
-        return StoreUtils.validateFormControlGroup(this.selectedWorkFormControls, this.selectedWork)
+        return StoreUtils.validateFormControlGroup(this.selectedWorkView.formControls, this.selectedWork)
+    }
+
+    @action resetSelectedWork() {
+        const selectedWork = this.works.find(work => work.Id === Number(this.selectedProcess.get("workId")))
+        this.selectedWork = observable.map(selectedWork)
     }
 
 
@@ -93,11 +109,11 @@ export class EmployeeStore {
     @observable canEditSelectedProject: boolean = false
 
     @computed
-    get selectedProjectFormControls(): Array<FormControl> {
-        if(this.selectedProject.size !== 0) {
+    get selectedProjectView(): View {
+        if(this.selectedProject) {
             return this.canEditSelectedProject
-                ? getView(this.selectedProject.get("type") as string).formControls
-                : getViewAndMakeReadonly(this.selectedProject.get("type") as string).formControls
+                ? getView(this.selectedProject.get("type") as string)
+                : getViewAndMakeReadonly(this.selectedProject.get("type") as string)
         }
     }
 
@@ -110,13 +126,19 @@ export class EmployeeStore {
 
     @action
     async submitSelectedProject(): Promise<void> {
-        this.setAsyncPendingLockout(true)
+        this.selectedProjectView.touchAllRequiredFormControls()
+        if(!this.canSubmitSelectedProject) {
+            this.postMessage({messageText: "please fix all form errors", messageType: "error" })
+            return
+        }
 
         try {
+            this.setAsyncPendingLockout(true)
             const updatedProject = this.selectedProject.toJS()
             await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
             this.replaceElementInListById(updatedProject, this.projects)
             this.postMessage({messageText: "project successfully submitted", messageType: "success"})
+            runInAction(() => this.canEditSelectedProject = false)
         } catch(error) {
             console.log(error)
             this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: "error"})
@@ -127,7 +149,7 @@ export class EmployeeStore {
 
     @computed
     get canSubmitSelectedProject(): boolean {
-        return !this.asyncPendingLockout
+        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProjectValidation)
     }
 
     @action toggleCanEditSelectedProject() {
@@ -136,7 +158,20 @@ export class EmployeeStore {
 
     @computed
     get selectedProjectValidation(): {} {
-        return StoreUtils.validateFormControlGroup(this.selectedProjectFormControls, this.selectedProject)
+        return StoreUtils.validateFormControlGroup(this.selectedProjectView.formControls, this.selectedProject)
+    }
+
+    @action resetSelectedProject() {
+        const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
+        this.selectedProject = observable.map(selectedProject)
+    }
+
+    @action startEditingSelectedProject() {
+        this.canEditSelectedProject = true
+    }
+    @action stopEditingSelectedProject() {
+        this.canEditSelectedProject = false
+        this.resetSelectedProject()
     }
 
 
@@ -162,11 +197,8 @@ export class EmployeeStore {
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
 
-        const selectedWork = this.works.find(work => work.Id === Number(this.selectedProcess.get("workId")))
-        this.selectedWork = observable.map(selectedWork)
-
-        const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
-        this.selectedProject = observable.map(selectedProject)
+        this.resetSelectedWork()
+        this.resetSelectedProject()
 
         const workNotes = await this.dataService.fetchNotes(
             NoteSource.WORK,
@@ -204,22 +236,27 @@ export class EmployeeStore {
 
     @action
     async submitSelectedProcess(): Promise<void> {
-        this.setAsyncPendingLockout(true)
+        this.selectedProcessView.touchAllRequiredFormControls()
+        if(!this.canSubmitSelectedProcess) {
+            this.postMessage({messageText: "please fix all form errors", messageType: "error" })
+            return
+        }
 
         try {
+            this.setAsyncPendingLockout(true)
             const currentStep = getStep(this.selectedProcess.get("step") as StepName)
             let updatedProcess = this.selectedProcess.toJS()
             updatedProcess = {...updatedProcess, ...{
                 step: getNextStepName(updatedProcess),
                 [currentStep.submissionDateFieldName]: Utils.getFormattedDate(),
-                [currentStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
+                [currentStep.submitterIdFieldName]: this.root.sessionStore.currentUser.name,
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess
             this.replaceElementInListById(updatedProcess, this.processes)
-            // clear out selectedProcess, selected project, and selected work
-            this.clearSelectedRequestElements()
+
             this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
+            this.clearSelectedRequestElements()
             this.postMessage({messageText: "process successfully submitted", messageType: "success"})
 
         } catch(error) {
@@ -228,41 +265,6 @@ export class EmployeeStore {
         } finally {
             this.setAsyncPendingLockout(false)
         }
-    }
-
-    @action async submitSelectedProcessToNextStep() {
-        this.setAsyncPendingLockout(true)
-
-        const curProcess: CloRequestElement = this.selectedProcess.toJS()
-        const nextStepName: StepName = getNextStepName(curProcess)
-        const nextStep: IStep = getStep(nextStepName)
-        const nextStepProcess = {...curProcess, ...{
-            step: nextStepName,
-            [nextStep.submitterIdFieldName]: this.root.sessionStore.currentUser.Id,
-            [nextStep.submissionDateFieldName]: Utils.getFormattedDate()
-        }}
-
-        try {
-            await this.dataService.updateRequestElement(nextStepProcess, ListName.PROCESSES)
-
-            // replace cached process with successfully submitted nextProcess
-            this.replaceElementInListById(nextStepProcess, this.processes)
-
-            // clear out selectedProcess, selectedWork, and selected project
-            this.clearSelectedRequestElements()
-
-            // return user back to dashboard by "popping off" the current view from the view heirarchy stack
-            this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
-
-            this.postMessage({messageText: "process successfully submitted", messageType: "success"})
-
-        } catch(error) {
-            console.log(error)
-            this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: "error"})
-        } finally {
-            this.setAsyncPendingLockout(false)
-        }
-
     }
 
     @computed get canSubmitSelectedProcess(): boolean {
@@ -271,7 +273,7 @@ export class EmployeeStore {
 
     @computed
     get selectedProcessValidation(): {} {
-        return StoreUtils.validateFormControlGroup(this.selectedProcessFormControls, this.selectedProcess)
+        return StoreUtils.validateFormControlGroup(this.selectedProcessView.formControls, this.selectedProcess)
     }
 
     // computes a plain JavaScript object mapping step names process counts
@@ -290,8 +292,8 @@ export class EmployeeStore {
     }
 
     @computed
-    get selectedProcessFormControls(): Array<FormControl> {
-        return getView(this.selectedStep.view).formControls
+    get selectedProcessView(): View {
+        return getView(this.selectedStep.view)
     }
 
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
@@ -307,7 +309,7 @@ export class EmployeeStore {
             return {
                 header: `${processProject.department || ""} ${processWork.type || ""} Process`,
                 subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
-                body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer}`,
+                body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer || "unknown artist"}`,
                 id: process.Id as number,
                 selectable: true,
             }
@@ -440,6 +442,20 @@ export class EmployeeStore {
         })
     }
 
+    // current state of the projectWork pivot => is either "project" (show project detail) or "work" (show work detail)
+    @observable projectWorkPivotSelection = "work"
+    @action setProjectWorkPivotSelection(selection) {
+        this.projectWorkPivotSelection = selection
+        // if switching away from a pivot selection, reinitialize it from the original copy
+        if(selection === "project") {
+            this.resetSelectedWork()
+            this.canEditSelectedWork = false
+        } else if(selection === "work") {
+            this.resetSelectedProject()
+            this.canEditSelectedProject = false
+        }
+    }
+
 
     /*******************************************************************************************************/
     // MISCELLANEOUS MEMBERS AND HELPER METHODS
@@ -450,7 +466,7 @@ export class EmployeeStore {
     }
 
     @observable message: any
-    @action postMessage(message: any, displayTime: number = 5000) {
+    @action postMessage(message: IMessage, displayTime: number = 5000) {
         this.message = message
         setTimeout(action(() => {
             this.message = null
@@ -459,9 +475,9 @@ export class EmployeeStore {
 
     @action
     private clearSelectedRequestElements(): void {
-        this.selectedProcess.clear()
-        this.selectedProject.clear()
-        this.selectedWork.clear()
+        this.selectedProcess = null
+        this.selectedProject = null
+        this.selectedWork = null
     }
 
     // finds the item with the with the same ID as the new item and replaces the stale item with the new item
@@ -486,4 +502,9 @@ export class EmployeeStore {
 export enum EmployeeViewKey {
     Dashboard = "DASHBOARD",
     ProcessDetail = "PROCESS_DETAIL",
+}
+
+interface IMessage {
+    messageText: string,
+    messageType: "error" | "success"
 }

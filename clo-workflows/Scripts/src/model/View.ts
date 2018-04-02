@@ -20,7 +20,9 @@ export class View implements IView {
     @observable formControls: Array<FormControl>
 
     @action
-    touchAllFormControls() {
-        this.formControls.forEach(formControl => formControl.touch())
+    touchAllRequiredFormControls() {
+        this.formControls.forEach(formControl => {
+            if(formControl.required) formControl.touch()
+        })
     }
 }
