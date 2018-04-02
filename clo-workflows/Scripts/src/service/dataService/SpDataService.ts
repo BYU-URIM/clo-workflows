@@ -51,8 +51,8 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            // userRoleNames.map(roleName => getRole(roleName))
-            [getRole("Anonymous")]
+            userRoleNames.map(roleName => getRole(roleName))
+            // [getRole("Anonymous")],
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend

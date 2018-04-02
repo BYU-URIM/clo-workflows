@@ -53,7 +53,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                             data={props.clientStore.newProject}
                             formControls={props.clientStore.currentForm}
                             validation={props.clientStore.currentFormValidation}
-                            onChange={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
+                            updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>
                 )}
