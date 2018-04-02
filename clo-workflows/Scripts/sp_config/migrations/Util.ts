@@ -36,9 +36,9 @@ export class Utils implements IUtil {
     DB_CONFIG: IDBConfig
     data: IData
     sp: SPRest
-    /*****************************************************
-     * LISTS
-     *****************************************************/
+    /* -------------------------------------------------- *
+     * ----------             LISTS            ---------- *
+     * -------------------------------------------------- */
     async getAllCurrentListTitles() {
         const res = await pnp.sp.web.lists.select("Title").get()
         return await res.map(listinfo => listinfo.Title)
@@ -83,7 +83,7 @@ export class Utils implements IUtil {
         const y = x.then(async () => {
             const allfields = this.DB_CONFIG.tables[title].fields
             for (const field of allfields) {
-                if(!this.DB_CONFIG.defaultFields.includes(field)) {
+                if (!this.DB_CONFIG.defaultFields.includes(field)) {
                     await pnp.sp.web.lists.getByTitle(title).fields.addText(field)
                     console.log(chalk`{green created field}: {blue ${field}} `)
                 } else {
@@ -109,13 +109,13 @@ export class Utils implements IUtil {
         const hasTooManyChars = field.length > 32
         if (hasBadChars || hasTooManyChars) {
             console.log(chalk`{red
-____________________________________________________________________________________________                
+____________________________________________________________________________________________
 ERROR: INVALID  FIELD
 }{yellow info: please make sure your table fields are:
-    - less or equal to than 32 characters 
+    - less or equal to than 32 characters
     - contain alphanumeric characters only}
-    
-{cyan failed on field with value ' {white.underline.bgRed  ${field} } '} 
+
+{cyan failed on field with value ' {white.underline.bgRed  ${field} } '}
 {red ____________________________________________________________________________________________}`)
             process.exit()
         }
