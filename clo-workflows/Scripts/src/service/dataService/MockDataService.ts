@@ -80,7 +80,7 @@ export class MockDataService implements IDataService {
     }
 
     fetchClientNotes(userId: string): Promise<Array<INote>> {
-        return Promise.resolve(utils.deepCopy(MockNotes.filter(note => note.attachedClientId === userId)))
+        return Promise.resolve(Utils.deepCopy(MockNotes.filter(note => note.attachedClientId === userId)))
     }
 
     fetchClientCompletedProjects(): Promise<Array<CloRequestElement>> {
