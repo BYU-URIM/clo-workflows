@@ -1,78 +1,79 @@
-import { IView } from "../View"
-import { IRole } from "../Role"
+import { View } from "../View"
+import { IRole, Role } from "../Role"
 import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import { utils } from "../../utils"
-import { StepName, IStep } from "../Step"
-import { IFormControl } from "../FormControl"
+import Utils from "../../utils"
+import { StepName, Step, IStep } from "../Step"
+import { FormControl } from "../FormControl"
 
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-export function getView(viewName: string): IView {
+export function getView(viewName: string): View {
     const normalizedView = VIEWS[viewName]
     if(!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formControls array and the readonlyFormControls array
     // the readonlyFormControls appear first followed by the standard formControls
-    let formControls: IFormControl[] = []
+    let formControls: FormControl[] = []
 
     // first add in the readonly form controls (if present)
     if(normalizedView.readonlyFormControls) {
         formControls = formControls.concat(normalizedView.readonlyFormControls.map(formControlName => {
-            const formControl: IFormControl = utils.deepCopy(FORM_CONTROLS[formControlName])
-            formControl.readonly = true
+            const formControl = new FormControl(FORM_CONTROLS[formControlName])
+            formControl.makeReadOnly()
             return formControl
         }))
     }
 
     // next add in the standard form controls (if present)
     if(normalizedView.formControls) {
-        formControls = formControls.concat(normalizedView.formControls.map(formControlName => utils.deepCopy(FORM_CONTROLS[formControlName])))
+        formControls = formControls.concat(normalizedView.formControls.map(formControlName => {
+            return new FormControl(FORM_CONTROLS[formControlName])
+        }))
     }
 
-    return {
+    return new View({
         formControls,
         dataSource: normalizedView.dataSource,
-    }
+    })
 }
 
 // although the view JSON definitions are capable of defining a view with readonly and non-readonly form controls,
 // this function programatically adds the readonly proprterty to all form controls of a view
 // this functionality is for instances when a view needs to be made readonly at runtime or when it is not practical
 // to make multiple JSON view definitions differing only by readonly form controls
-export function getViewAndMakeReadonly(viewName: string): IView {
+export function getViewAndMakeReadonly(viewName: string): View {
     const view = getView(viewName)
-    view.formControls.forEach(formControl => formControl.readonly = true)
+    view.formControls.forEach(formControl => formControl.makeReadOnly())
     return view
 }
 
-export function getRole(roleName: string): IRole {
+export function getRole(roleName: string): Role {
     const normalizedRole = ROLES[roleName]
-    return {
+    return new Role({
         name: normalizedRole.name,
-        permittedSteps: normalizedRole.permittedSteps.map(stepName => utils.deepCopy(STEPS[stepName])),
+        permittedSteps: normalizedRole.permittedSteps.map(stepName => Utils.deepCopy(STEPS[stepName])),
         rank: normalizedRole.rank
+    })
+}
+
+export function getStep(stepName: StepName): Step {
+    return new Step(STEPS[stepName])
+}
+
+export function getStepById(id: number): Step {
+    for(const stepName in STEPS) {
+        if(STEPS[stepName].orderId === id) return new Step(STEPS[stepName])
     }
 }
 
-export function getStep(stepName: StepName): IStep {
-    return utils.deepCopy(STEPS[stepName])
-}
-
-export function getStepById(id: number): IStep {
+export function getStepForProcessFieldName(processFieldName: string): Step {
     for(const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        if(step.orderId === id) return utils.deepCopy(step)
-    }
-}
-
-export function getStepForProcessFieldName(processFieldName: string): IStep {
-    for(const stepName in STEPS) {
-        const step: IStep = STEPS[stepName]
-        if(step.processFieldNames.includes(processFieldName)) return utils.deepCopy(step)
+        if(step.processFieldNames.includes(processFieldName)) return new Step(step)
     }
     return null
 }
