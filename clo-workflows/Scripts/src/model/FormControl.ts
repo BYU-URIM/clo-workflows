@@ -16,7 +16,7 @@ export class FormControl implements IFormControl {
         this.readonly = false
         this.touched = false
         if(this.type === "checkbox") {
-            this.defaultValue = false
+            this.defaultValue = "false"
         }
     }
 

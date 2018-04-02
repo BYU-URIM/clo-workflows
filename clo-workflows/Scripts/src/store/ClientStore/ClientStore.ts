@@ -180,8 +180,8 @@ export class ClientStore {
     private submitProcess = async (): Promise<void> => {
         this.view.asyncPendingLockout = true
         try {
-            // processDetails.step = getNextStepName(processDetails, "Intake")
-            this.newProcess.set("step", "Intake")
+            const nextStepName: string = getNextStepName(this.newProcess.toJS(), "Intake")
+            this.newProcess.set("step", nextStepName)
             this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
                 : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
