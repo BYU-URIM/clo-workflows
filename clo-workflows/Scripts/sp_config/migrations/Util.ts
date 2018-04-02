@@ -155,7 +155,17 @@ ERROR: INVALID  FIELD
         const allGroupTitles = await this.getAllGroupTitles()
         return this.DB_CONFIG.groups.filter(groupName => !allGroupTitles.includes(groupName))
     }
-
+    async createGroup(groupName: string) {
+        await pnp.sp.web.siteGroups.add({
+            Title: groupName,
+        })
+    }
+    async createGroups(groupTitles: Array<string>): Promise<void> {
+        groupTitles.forEach(groupTitle => this.createGroup(groupTitle))
+    }
+    async createMissingGroups(): Promise<void> {
+        return await this.createGroups(await this.getMissingGroups())
+    }
 }
 
 export const utils = new Utils(db)
