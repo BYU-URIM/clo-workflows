@@ -5,6 +5,7 @@ import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig } from "./IUtil"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Util } from "sp-pnp-js"
+import { CloRequestElement } from "../../src/model/CloRequestElement"
 
 const DB_CONFIG = db as any
 
@@ -139,6 +140,22 @@ ERROR: INVALID  FIELD
         const result = testWords.filter(word => !this.validateField(word)).join("\n\t")
         return result
     }
+
+    /* -------------------------------------------------- *
+     * ----------            Groups            ---------- *
+     * -------------------------------------------------- */
+    async getAllGroups(): Promise<Array<CloRequestElement>> {
+        return await pnp.sp.web.siteGroups.get()
+    }
+    async getAllGroupTitles(): Promise<Array<string>> {
+        const groups = await pnp.sp.web.siteGroups.get()
+        return groups.map(group => group.Title)
+    }
+    async getMissingGroups(): Promise<Array<string>> {
+        const allGroupTitles = await this.getAllGroupTitles()
+        return this.DB_CONFIG.groups.filter(groupName => !allGroupTitles.includes(groupName))
+    }
+
 }
 
 export const utils = new Utils(db)
