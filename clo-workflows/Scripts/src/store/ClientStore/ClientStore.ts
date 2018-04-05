@@ -89,10 +89,12 @@ export class ClientStore {
         return {
             PROJECTS: PROJECT_TYPES.map(e => ({
                 key: e,
+                value: e,
                 text: e,
             })),
             WORKS: WORK_TYPES.map(e => ({
                 key: e,
+                value: e,
                 text: e,
             })),
         }
@@ -164,7 +166,6 @@ export class ClientStore {
         try {
             this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
-            this.updateClientStoreMember("selectedWorkId", res.data.Id.toString())
         } catch (error) {
             console.error(error)
             this.postMessage({
