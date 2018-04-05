@@ -12,29 +12,31 @@ import { ClientProcessDetails } from "./ClientProcessDetails"
 import { ClientProjectDetails } from "./ClientProjectDetails"
 import { NoteSource } from "../model/Note"
 
-const wrapper = {
-    display: "inline-flex",
-    width: "100%",
-    height: "auto",
-} as React.CSSProperties
-const rightSection = {
-    margin: "0",
-    padding: "30px",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    width: "50%",
-} as React.CSSProperties
-const leftSection = {
-    margin: "0",
-    padding: "10px",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    width: "50%",
-    boxShadow: "0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.18)",
+const styles = {
+    wrapper: {
+        display: "inline-flex",
+        width: "100%",
+        height: "auto",
+    },
+    rightSection: {
+        margin: "0",
+        padding: "30px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        width: "30%",
+    },
+    leftSection: {
+        margin: "0",
+        padding: "10px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        width: "70%",
+        boxShadow: "0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.18)",
+    },
 } as React.CSSProperties
 
 @inject("rootStore")
@@ -48,9 +50,9 @@ export class Client extends React.Component<any, any> {
     render() {
         const clientStore = this.clientStore
         return (
-            <div style={wrapper}>
-                <div style={leftSection}>
-                    <div style={wrapper}>
+            <div style={styles.wrapper}>
+                <div style={styles.leftSection}>
+                    <div style={styles.wrapper}>
                         <ProjectProcessList
                             messageVisible={clientStore.message}
                             data={this.clientStore.data}
@@ -59,7 +61,7 @@ export class Client extends React.Component<any, any> {
                         />
                     </div>
                 </div>
-                <div style={rightSection}>
+                <div style={styles.rightSection}>
                     {this.clientStore.view.process.id &&
                         this.clientStore.view.notesType === NoteSource.WORK && (
                             <ClientProcessDetails
