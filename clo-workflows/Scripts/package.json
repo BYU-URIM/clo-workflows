@@ -12,9 +12,10 @@
     "build:production": "webpack --env.Node_ENV=sharepoint --optimize-minimize",
     "test": "rimraf test_build/** && tsc --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
     "lint": "tslint -c tslint.json 'src/**/*.ts*' && tslint -c tslint.json 'test/**/*.ts*'",
-    "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks//DeleteAll",
-    "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateAll",
+    "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll",
+    "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateAll &&  ts-node ./sp_config/migrations/tasks/CreateGroups",
     "sp:deleteAllAndCreateAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll && ts-node ./sp_config/migrations/tasks/CreateAll",
+    "sp:createMissingGroups": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateGroups",
     "sp:proxyServer": "node ./sp_config/proxy-server/server.js"
   },
   "author": "",
