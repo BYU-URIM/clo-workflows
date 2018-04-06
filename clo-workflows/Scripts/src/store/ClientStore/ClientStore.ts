@@ -1,15 +1,14 @@
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { autobind } from "core-decorators"
 import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../../model/CloRequestElement"
-import { IFormControl, FormControl } from "../../model/FormControl"
-import { getView, getStep, getStepNames } from "../../model/loader/resourceLoaders"
+import { FormControl } from "../../model/FormControl"
+import { getView } from "../../model/loader/resourceLoaders"
 import { IDataService } from "../../service/dataService/IDataService"
 import Utils from "../../utils"
 import StoreUtils from "../StoreUtils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
 import { getNextStepName, StepName } from "../../model/Step"
-import { IProjectGroup } from "../../component/ProjectProcessList"
 import { ClientViewState, ClientStoreData } from "./"
 import { INote, NoteSource, NoteScope } from "../../model/Note"
 
@@ -89,10 +88,12 @@ export class ClientStore {
         return {
             PROJECTS: PROJECT_TYPES.map(e => ({
                 key: e,
+                value: e,
                 text: e,
             })),
             WORKS: WORK_TYPES.map(e => ({
                 key: e,
+                value: e,
                 text: e,
             })),
         }
@@ -164,7 +165,6 @@ export class ClientStore {
         try {
             this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
-            this.updateClientStoreMember("selectedWorkId", res.data.Id.toString())
         } catch (error) {
             console.error(error)
             this.postMessage({
