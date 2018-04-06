@@ -18,10 +18,10 @@ export class DataServiceFactory {
         } else if (ENVIRONMENT === EnvType.SHAREPOINT) {
             // for a remote sharepoint deployment, construct the data service with
             // appWebUrl and hostWebUrl taken from the query parameters of URL
-            return new SpDataService(Utils.getQueryStringParameter("appWebUrl"), Utils.getQueryStringParameter("hostUrl"))
+            return new SpDataService(Utils.getQueryStringParameter("SPAppWebUrl"), Utils.getQueryStringParameter("SPHostUrl"))
         } else if(ENVIRONMENT === EnvType.SHAREPOINT_PROXY) {
             // for a local sharepoint deployement against the api of a remote sharepoint instance, the app web url
-            // is the local url (e.g. https://localhost:8080) and the host url needs to be the host of the remote SP instance
+            // is the local url (e.g. https://localhost:8080) and the host url needs to be the host of the remote SP instanc
             return new SpDataService(document.URL, DB_CONFIG["hostUrl"])
         } else {
             return null
