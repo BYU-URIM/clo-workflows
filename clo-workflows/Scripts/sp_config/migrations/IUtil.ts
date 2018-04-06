@@ -17,7 +17,22 @@ export interface IData {
     missingLists: Array<string>
 }
 export interface IDBConfig {
-    defaultTables: Array<string>
-    defaultFields: Array<string>
-    tables: ITable
+    hostUrl: string
+    defaultTables: string[]
+    defaultFields: string[]
+    groups: string[]
+
+    tables: ITables
+}
+
+interface ITables {
+    processes: IProcesses
+    projects: IProcesses
+    works: IProcesses
+    notes: IProcesses
+}
+
+interface IProcesses {
+    type: string
+    fields: string[]
 }
