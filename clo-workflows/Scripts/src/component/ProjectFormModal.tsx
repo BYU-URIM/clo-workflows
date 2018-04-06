@@ -18,7 +18,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
         <Modal
             isOpen={true}
             onDismiss={() => {
-                props.clientStore.view.modal = null
+                props.clientStore.view.modal = undefined
             }}
             isBlocking={true}
         >
@@ -53,7 +53,9 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                             data={props.clientStore.newProject}
                             formControls={props.clientStore.currentForm}
                             validation={props.clientStore.currentFormValidation}
-                            updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
+                            updateFormField={(fieldName, value) =>
+                                props.clientStore.updateClientStoreMember(fieldName, value, "newProject")
+                            }
                         />
                     </div>
                 )}
@@ -66,7 +68,6 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                         props.clientStore.view.asyncPendingLockout ||
                         props.clientStore.newProject.get("Title") === undefined ||
                         props.clientStore.newProject.get("Title") === ""
-
                     }
                 />
                 <br />

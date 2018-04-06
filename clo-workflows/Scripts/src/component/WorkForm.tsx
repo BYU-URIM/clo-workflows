@@ -12,23 +12,25 @@ export interface IFormPanelProps {
     clientStore: ClientStore
 }
 
+const styles = {
+    wrapper: {
+        marginBottom: "20px",
+    },
+    dropDown: {
+        width: "200px",
+        margin: "20px 0px",
+    },
+} as React.CSSProperties
+
 const WorkFormModal = (props: IFormPanelProps) => {
     return (
-        <div style={{ marginBottom: "20px" }}>
-            <h2>New Work Form</h2>
+        <div style={styles.warpper}>
             <Dropdown
                 label="Select the Work Type:"
-                selectedKey={props.clientStore.view.work.type ? props.clientStore.view.work.type : undefined}
-                options={props.clientStore.typesAsOptions.WORKS.map((field, index) => ({
-                    text: field.text,
-                    value: field.text,
-                    key: field.text,
-                }))}
-                style={{
-                    width: "200px",
-                    margin: "20px 0px",
-                }}
-                placeHolder={props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work type"}
+                selectedKey={props.clientStore.view.work.type || undefined}
+                options={props.clientStore.typesAsOptions.WORKS}
+                style={styles.dropDown}
+                placeHolder={props.clientStore.view.work.type || "select a Work type"}
                 onChanged={e => {
                     props.clientStore.view.work.type = e.text
                 }}
