@@ -220,7 +220,7 @@ export class EmployeeStore {
 
     getSelectedProcessSubmissionMetadata(formControl: IFormControl): string {
         const parentStep = getStepForProcessFieldName(formControl.dataRef)
-        const submitter = this.selectedProcess.get(parentStep.submitterIdFieldName)
+        const submitter = this.selectedProcess.get(parentStep.submitterFieldName)
         const submissionDate = this.selectedProcess.get(parentStep.submissionDateFieldName)
         if(submitter && submissionDate) {
             return `submitted by ${submitter} on ${submissionDate}`
@@ -249,7 +249,7 @@ export class EmployeeStore {
             updatedProcess = {...updatedProcess, ...{
                 step: getNextStepName(updatedProcess),
                 [currentStep.submissionDateFieldName]: Utils.getFormattedDate(),
-                [currentStep.submitterIdFieldName]: this.root.sessionStore.currentUser.name,
+                [currentStep.submitterFieldName]: this.root.sessionStore.currentUser.name,
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess

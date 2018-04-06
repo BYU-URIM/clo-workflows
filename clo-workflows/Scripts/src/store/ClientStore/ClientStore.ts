@@ -8,7 +8,7 @@ import Utils from "../../utils"
 import StoreUtils from "../StoreUtils"
 import { RootStore } from "../RootStore"
 import { User, IUser } from "../../model/User"
-import { getNextStepName, StepName } from "../../model/Step"
+import { getNextStepName, StepName, IStep } from "../../model/Step"
 import { IProjectGroup } from "../../component/ProjectProcessList"
 import { ClientViewState, ClientStoreData } from "./"
 import { INote, NoteSource, NoteScope } from "../../model/Note"
@@ -180,12 +180,15 @@ export class ClientStore {
     private submitProcess = async (): Promise<void> => {
         this.view.asyncPendingLockout = true
         try {
-            const nextStepName: string = getNextStepName(this.newProcess.toJS(), "Intake")
+            const previousStep: IStep = getStep("Intake")
+            const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
             this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
                 : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
             this.newProcess.set("workId", this.view.work.id)
+            this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
+            this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
             const res = await this.dataService.createProcess(this.newProcess.toJS())
             this.newProcess.set("Id", res.data.Id)
             runInAction(() => this.data.processes.push(this.newProcess.toJS()))

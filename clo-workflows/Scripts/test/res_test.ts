@@ -79,7 +79,7 @@ ava.test("test json steps for correct shape", t => {
             }
         }
 
-        t.true(processFieldNames.includes(step.submitterIdFieldName))
+        t.true(processFieldNames.includes(step.submitterFieldName))
         t.true(processFieldNames.includes(step.submissionDateFieldName))
     }
 })
