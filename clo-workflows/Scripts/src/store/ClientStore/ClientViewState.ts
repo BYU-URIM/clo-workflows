@@ -34,6 +34,11 @@ export class ClientViewState {
     set asyncPendingLockout(p) {
         this._asyncPendingLockout = p
     }
+
+    @computed
+    get notesTitle() {
+        return this.notesType === NoteSource.WORK ? "Process Notes" : "Projects Notes"
+    }
     @action
     resetClientState() {
         this.asyncPendingLockout = false
