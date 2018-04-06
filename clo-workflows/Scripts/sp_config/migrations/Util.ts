@@ -5,6 +5,7 @@ import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig } from "./IUtil"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Util } from "sp-pnp-js"
+import { CloRequestElement } from "../../src/model/CloRequestElement"
 
 const DB_CONFIG = db as any
 
@@ -36,9 +37,9 @@ export class Utils implements IUtil {
     DB_CONFIG: IDBConfig
     data: IData
     sp: SPRest
-    /*****************************************************
-     * LISTS
-     *****************************************************/
+    /* -------------------------------------------------- *
+     * ----------             LISTS            ---------- *
+     * -------------------------------------------------- */
     async getAllCurrentListTitles() {
         const res = await pnp.sp.web.lists.select("Title").get()
         return await res.map(listinfo => listinfo.Title)
@@ -83,7 +84,7 @@ export class Utils implements IUtil {
         const y = x.then(async () => {
             const allfields = this.DB_CONFIG.tables[title].fields
             for (const field of allfields) {
-                if(!this.DB_CONFIG.defaultFields.includes(field)) {
+                if (!this.DB_CONFIG.defaultFields.includes(field)) {
                     await pnp.sp.web.lists.getByTitle(title).fields.addText(field)
                     console.log(chalk`{green created field}: {blue ${field}} `)
                 } else {
@@ -109,13 +110,13 @@ export class Utils implements IUtil {
         const hasTooManyChars = field.length > 32
         if (hasBadChars || hasTooManyChars) {
             console.log(chalk`{red
-____________________________________________________________________________________________                
+____________________________________________________________________________________________
 ERROR: INVALID  FIELD
 }{yellow info: please make sure your table fields are:
-    - less or equal to than 32 characters 
+    - less or equal to than 32 characters
     - contain alphanumeric characters only}
-    
-{cyan failed on field with value ' {white.underline.bgRed  ${field} } '} 
+
+{cyan failed on field with value ' {white.underline.bgRed  ${field} } '}
 {red ____________________________________________________________________________________________}`)
             process.exit()
         }
@@ -138,6 +139,32 @@ ERROR: INVALID  FIELD
     validateStringArray(testWords: Array<string>) {
         const result = testWords.filter(word => !this.validateField(word)).join("\n\t")
         return result
+    }
+
+    /* -------------------------------------------------- *
+     * ----------            Groups            ---------- *
+     * -------------------------------------------------- */
+    async getAllGroups(): Promise<Array<CloRequestElement>> {
+        return await pnp.sp.web.siteGroups.get()
+    }
+    async getAllGroupTitles(): Promise<Array<string>> {
+        const groups = await pnp.sp.web.siteGroups.get()
+        return groups.map(group => group.Title)
+    }
+    async getMissingGroups(): Promise<Array<string>> {
+        const allGroupTitles = await this.getAllGroupTitles()
+        return this.DB_CONFIG.groups.filter(groupName => !allGroupTitles.includes(groupName))
+    }
+    async createGroup(groupName: string) {
+        await pnp.sp.web.siteGroups.add({
+            Title: groupName,
+        })
+    }
+    async createGroups(groupTitles: Array<string>): Promise<void> {
+        groupTitles.forEach(groupTitle => this.createGroup(groupTitle))
+    }
+    async createMissingGroups(): Promise<void> {
+        return await this.createGroups(await this.getMissingGroups())
     }
 }
 
