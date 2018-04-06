@@ -49,7 +49,7 @@ export class ClientStore {
      * ------------------------------------------------------------ *\
 
     /* function to update view state on this.view */
-    /* this replaces the entire cirrent view with a new instance */
+    /* this replaces the entire current view with a new instance */
     @action
     clearState = () => {
         this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id)
