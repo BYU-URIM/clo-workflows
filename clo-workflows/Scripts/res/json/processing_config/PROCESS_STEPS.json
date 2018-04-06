@@ -3,7 +3,7 @@
         "name": "Intake",
         "orderId": 0,
         "view": null,
-        "submitterIdFieldName": "intakeSubName",
+        "submitterFieldName": "intakeSubName",
         "submissionDateFieldName": "intakeSubDate",
         "processFieldNames": []
     },
@@ -11,7 +11,7 @@
         "name": "Public Domain Research",
         "orderId": 1,
         "view": "Public Domain Research",
-        "submitterIdFieldName": "publicDomainResearchSubName",
+        "submitterFieldName": "publicDomainResearchSubName",
         "submissionDateFieldName": "publicDomainResearchSubDate",
         "processFieldNames": [
             "publicDomainResearch"
@@ -21,7 +21,7 @@
         "name": "Public Domain Approval",
         "orderId": 2,
         "view": "Public Domain Approval",
-        "submitterIdFieldName": "publicDomainApprovalSubName",
+        "submitterFieldName": "publicDomainApprovalSubName",
         "submissionDateFieldName": "publicDomainApprovalSubDate",
         "processFieldNames": [
             "publicDomainApproval"
@@ -31,7 +31,7 @@
         "name": "Existing License",
         "orderId": 3,
         "view": "Existing License",
-        "submitterIdFieldName": "existingLicenseSubName",
+        "submitterFieldName": "existingLicenseSubName",
         "submissionDateFieldName": "existingLicenseSubDate",
         "processFieldNames": [
             "existingLicense"
@@ -41,7 +41,7 @@
         "name": "Existing License Approval",
         "orderId": 4,
         "view": "Existing License Approval",
-        "submitterIdFieldName": "existingLicenseApprovalSubName",
+        "submitterFieldName": "existingLicenseApprovalSubName",
         "submissionDateFieldName": "existingLicenseApprovalSubDate",
         "processFieldNames": [
             "existingLicenseApproval"
@@ -51,7 +51,7 @@
         "name": "Exemption Analysis",
         "orderId": 5,
         "view": "Exemption Analysis",
-        "submitterIdFieldName": "exemptionAnalysisSubName",
+        "submitterFieldName": "exemptionAnalysisSubName",
         "submissionDateFieldName": "exemptionAnalysisSubDate",
         "processFieldNames": [
             "exemptionAnalysis"
@@ -61,7 +61,7 @@
         "name": "Exemption Approval",
         "orderId": 6,
         "view": "Exemption Approval",
-        "submitterIdFieldName": "exemptionApprovalSubName",
+        "submitterFieldName": "exemptionApprovalSubName",
         "submissionDateFieldName": "exemptionApprovalSubDate",
         "processFieldNames": [
             "exemptionApproval"
@@ -71,7 +71,7 @@
         "name": "Ownership Research Licensing Exchange",
         "orderId": 7,
         "view": "Ownership Research Licensing Exchange",
-        "submitterIdFieldName": "ownershipLicenseExchangeSubName",
+        "submitterFieldName": "ownershipLicenseExchangeSubName",
         "submissionDateFieldName": "ownershipLicenseExchangeSubDate",
         "processFieldNames": [
             "licensingExchange"
@@ -81,7 +81,7 @@
         "name": "Ownership Research Direct to Rights Holder",
         "orderId": 8,
         "view": "Ownership Research Direct to Rights Holder",
-        "submitterIdFieldName": "ownershipRightsHolderSubName",
+        "submitterFieldName": "ownershipRightsHolderSubName",
         "submissionDateFieldName": "ownershipRightsHolderSubDate",
         "processFieldNames": [
             "directToRightsHolders"
@@ -91,7 +91,7 @@
         "name": "Request Submitted",
         "orderId": 9,
         "view": "Request Submitted",
-        "submitterIdFieldName": "requestSubmittedSubName",
+        "submitterFieldName": "requestSubmittedSubName",
         "submissionDateFieldName": "requestSubmittedSubDate",
         "processFieldNames": [
             "requestSubmitted"
@@ -101,7 +101,7 @@
         "name": "Response from Rights Holder Received",
         "orderId": 10,
         "view": "Response from Rights Holder Received",
-        "submitterIdFieldName": "responseFromRightsHolderSubName",
+        "submitterFieldName": "responseFromRightsHolderSubName",
         "submissionDateFieldName": "responseFromRightsHolderSubDate",
         "processFieldNames": [
             "rightsHolderResponse"
@@ -111,7 +111,7 @@
         "name": "CLO Response to Rights Holder",
         "orderId": 11,
         "view": "CLO Response to Rights Holder",
-        "submitterIdFieldName": "CLOResponseToRightsHolderSubName",
+        "submitterFieldName": "CLOResponseToRightsHolderSubName",
         "submissionDateFieldName": "CLOResponseToRightsHolderSubDate",
         "processFieldNames": [
             "cloResponseToRightsHolder"
@@ -121,7 +121,7 @@
         "name": "Receipt of License",
         "orderId": 12,
         "view": "Receipt of License",
-        "submitterIdFieldName": "receiptOfLicenseSubName",
+        "submitterFieldName": "receiptOfLicenseSubName",
         "submissionDateFieldName": "receiptOfLicenseSubDate",
         "processFieldNames": [
             "receiptOfLicense"
@@ -131,7 +131,7 @@
         "name": "Supervisor Signature",
         "orderId": 13,
         "view": "Supervisor Signature",
-        "submitterIdFieldName": "supervisorSignatureSubName",
+        "submitterFieldName": "supervisorSignatureSubName",
         "submissionDateFieldName": "supervisorSignatureSubDate",
         "processFieldNames": [
             "supervisorSignature"
@@ -141,7 +141,7 @@
         "name": "Payment",
         "orderId": 14,
         "view": "Payment",
-        "submitterIdFieldName": "paymentSubName",
+        "submitterFieldName": "paymentSubName",
         "submissionDateFieldName": "paymentSubDate",
         "processFieldNames": [
             "payment"
@@ -151,7 +151,7 @@
         "name": "Process Payment",
         "orderId": 15,
         "view": "Process Payment",
-        "submitterIdFieldName": "processPaymentSubName",
+        "submitterFieldName": "processPaymentSubName",
         "submissionDateFieldName": "processPaymentSubDate",
         "processFieldNames": [
             "processPayment",
@@ -162,7 +162,7 @@
         "name": "Initial Request Completion",
         "orderId": 16,
         "view": "Initial Request Completion",
-        "submitterIdFieldName": "initialRequestCompletionSubName",
+        "submitterFieldName": "initialRequestCompletionSubName",
         "submissionDateFieldName": "initialRequestCompletionSubDate",
         "processFieldNames": [
             "initialRequestCompletion"
@@ -172,7 +172,7 @@
         "name": "Final Request Completion",
         "orderId": 17,
         "view": "Final Request Completion",
-        "submitterIdFieldName": "finalRequestCompletionSubName",
+        "submitterFieldName": "finalRequestCompletionSubName",
         "submissionDateFieldName": "finalRequestCompletionSubDate",
         "processFieldNames": [
             "finalRequestCompletion"
@@ -182,7 +182,7 @@
         "name": "Complete",
         "orderId": 18,
         "view": null,
-        "submitterIdFieldName": "completeSubName",
+        "submitterFieldName": "completeSubName",
         "submissionDateFieldName": "completeSubDate",
         "processFieldNames": []
     }

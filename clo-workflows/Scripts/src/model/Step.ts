@@ -29,7 +29,7 @@ export interface IStep {
     name: StepName // string identifier used mostly for display purposes
     orderId: number
     view: string // contains the name of a view, which is a list of form controls displayed at this step
-    submitterIdFieldName: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
+    submitterFieldName: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
     submissionDateFieldName: string // name of the process field name corresponding to the date this item was submitted at this step
     processFieldNames: string[] // name of the process fields that are editable by a processor at this step
 }
@@ -43,7 +43,7 @@ export class Step implements IStep {
     @observable name: StepName
     @observable orderId: number
     @observable view: string
-    @observable submitterIdFieldName: string
+    @observable submitterFieldName: string
     @observable submissionDateFieldName: string
     @observable processFieldNames: string[]
 }

@@ -80,7 +80,7 @@ ava.test("test that getRole() correctly builds role object", t => {
         t.regex(String(step.orderId), /[0-9]+/)
         t.true(typeof step.view === "string" || step.view == null)
         t.true(typeof step.submissionDateFieldName === "string")
-        t.true(typeof step.submitterIdFieldName === "string")
+        t.true(typeof step.submitterFieldName === "string")
     })
 })
 
@@ -99,6 +99,6 @@ ava.test("test that getStep() correctly builds step object", t => {
     t.regex(String(step.orderId), /[0-9]+/)
     t.true(typeof step.view === "string" || step.view == null)
     t.true(typeof step.submissionDateFieldName === "string")
-    t.true(typeof step.submitterIdFieldName === "string")
+    t.true(typeof step.submitterFieldName === "string")
     t.true(Array.isArray(toJS(step.processFieldNames)))
 })
