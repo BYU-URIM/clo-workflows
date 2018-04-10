@@ -316,6 +316,11 @@ export class EmployeeStore {
         })
     }
 
+    @action async searchProcesses(searchTerm: string) {
+        await this.dataService.searchProcessesByWork(searchTerm)
+    }
+    @observable processSearchResults: Array<CloRequestElement>
+
 
     /*******************************************************************************************************/
     // NOTES - SHARED BY PROJECTS AND WORKS
@@ -465,7 +470,7 @@ export class EmployeeStore {
         this.asyncPendingLockout = val
     }
 
-    @observable message: any
+    @observable message: IMessage
     @action postMessage(message: IMessage, displayTime: number = 5000) {
         this.message = message
         setTimeout(action(() => {

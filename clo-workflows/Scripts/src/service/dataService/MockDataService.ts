@@ -13,6 +13,9 @@ import { IKeyValueMap } from "mobx"
 import { IWork } from "../../model/Work"
 
 export class MockDataService implements IDataService {
+    searchProcessesByWork(workSearchTerm: string): Promise<IKeyValueMap<string | number>[]> {
+        throw new Error("Method not implemented.")
+    }
     updateNote(note: INote): Promise<void> {
         throw new Error("Method not implemented.")
     }
