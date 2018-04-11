@@ -13,6 +13,8 @@ export interface IDataService {
     fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>>
     fetchWorks(): Promise<Array<IWork>>
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
+    // fetchProcessesByWorkIds(workIds: number[]): Promise<Array<CloRequestElement>>
+    searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>>
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>
     createProject(projectData: {}): Promise<ItemAddResult>
     createProcess(processData: {}): Promise<ItemAddResult>
@@ -22,7 +24,6 @@ export interface IDataService {
     fetchNotes(source: NoteSource, scope: NoteScope, sourceId: string, attachedClientId: string): Promise<Array<INote>>
     updateNote(note: INote): Promise<void>
     deleteNote(noteId: string): Promise<void>
-    searchProcessesByWork(workSearchTerm: string): Promise<Array<CloRequestElement>>
 }
 
 export enum ListName {

@@ -21,9 +21,15 @@ export class EmployeeStore {
     @action
     async init(): Promise<void> {
         const currentUser = this.root.sessionStore.currentUser
-        this.processes = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
-        this.projects = await this.dataService.fetchRequestElementsById(this.processes.map(process => process.projectId as number), ListName.PROJECTS)
-        this.works = await this.dataService.fetchRequestElementsById(this.processes.map(process => process.workId as number), ListName.WORKS)
+        this.activeProcesses = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
+
+        this.activeProjects = await this.dataService.fetchRequestElementsById(
+            this.activeProcesses.map(process => process.projectId as number
+        ), ListName.PROJECTS)
+
+        this.activeWorks = await this.dataService.fetchRequestElementsById(
+            this.activeProcesses.map(process => process.workId as number
+        ), ListName.WORKS)
 
         this.selectedProject = observable.map()
         this.selectedWork = observable.map()
@@ -36,7 +42,8 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     // WORKS
     /*******************************************************************************************************/
-    @observable works: Array<CloRequestElement>
+    @observable activeWorks: Array<CloRequestElement>
+    @observable searchedWorks: Array<CloRequestElement>
     @observable selectedWork: ObservableMap<FormEntryType>
     @observable canEditSelectedWork: boolean = false
 
@@ -66,7 +73,7 @@ export class EmployeeStore {
             this.setAsyncPendingLockout(true)
             const updatedWork = this.selectedWork.toJS()
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
-            this.replaceElementInListById(updatedWork, this.works)
+            this.replaceElementInListById(updatedWork, this.activeWorks)
             this.postMessage({messageText: "work successfully submitted", messageType: "success"})
             runInAction(() => this.canEditSelectedWork = false)
         } catch(error) {
@@ -96,7 +103,7 @@ export class EmployeeStore {
     }
 
     @action resetSelectedWork() {
-        const selectedWork = this.works.find(work => work.Id === Number(this.selectedProcess.get("workId")))
+        const selectedWork = this.activeWorks.find(work => work.Id === Number(this.selectedProcess.get("workId")))
         this.selectedWork = observable.map(selectedWork)
     }
 
@@ -104,7 +111,8 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     // PROJECTS
     /*******************************************************************************************************/
-    @observable projects: Array<CloRequestElement>
+    @observable activeProjects: Array<CloRequestElement>
+    @observable searchedProjects: Array<CloRequestElement>
     @observable selectedProject: ObservableMap<FormEntryType>
     @observable canEditSelectedProject: boolean = false
 
@@ -136,7 +144,7 @@ export class EmployeeStore {
             this.setAsyncPendingLockout(true)
             const updatedProject = this.selectedProject.toJS()
             await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
-            this.replaceElementInListById(updatedProject, this.projects)
+            this.replaceElementInListById(updatedProject, this.activeProjects)
             this.postMessage({messageText: "project successfully submitted", messageType: "success"})
             runInAction(() => this.canEditSelectedProject = false)
         } catch(error) {
@@ -162,7 +170,7 @@ export class EmployeeStore {
     }
 
     @action resetSelectedProject() {
-        const selectedProject = this.projects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
+        const selectedProject = this.activeProjects.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
         this.selectedProject = observable.map(selectedProject)
     }
 
@@ -188,12 +196,13 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     // PROCESSES
     /*******************************************************************************************************/
-    @observable processes: Array<CloRequestElement>
+    @observable activeProcesses: Array<CloRequestElement>
+    @observable searchedProcesses: Array<CloRequestElement>
     @observable selectedProcess: ObservableMap<FormEntryType>
 
     // TODO project lookup should be more efficient, store as map ?
     @action async selectProcess(itemBrief: IListItem): Promise<void> {
-        const selectedProcess: CloRequestElement = this.processes.find(process => process.Id === itemBrief.id)
+        const selectedProcess: CloRequestElement = this.activeProcesses.find(process => process.Id === itemBrief.id)
         this.selectedProcess = observable.map(selectedProcess)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
 
@@ -253,7 +262,7 @@ export class EmployeeStore {
             }}
             await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
             // replace cached process with successfully submitted selectedProcess
-            this.replaceElementInListById(updatedProcess, this.processes)
+            this.replaceElementInListById(updatedProcess, this.activeProcesses)
 
             this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
             this.clearSelectedRequestElements()
@@ -279,7 +288,7 @@ export class EmployeeStore {
     // computes a plain JavaScript object mapping step names process counts
     @computed
     get processCountsByStep(): { [stepName: string]: number } {
-        return this.processes.reduce((accumulator: any, process) => {
+        return this.activeProcesses.reduce((accumulator: any, process) => {
             const stepName: string = process.step as string
             accumulator[stepName] !== undefined ? accumulator[stepName]++ : (accumulator[stepName] = 1)
             return accumulator
@@ -288,7 +297,7 @@ export class EmployeeStore {
 
     @computed
     private get selectedStepProcesses(): Array<CloRequestElement> {
-        return this.processes.filter(process => process.step === this.selectedStep.name)
+        return this.activeProcesses.filter(process => process.step === this.selectedStep.name)
     }
 
     @computed
@@ -300,8 +309,8 @@ export class EmployeeStore {
     @computed
     get selectedStepProcessBriefs(): Array<IListItem> {
         return this.selectedStepProcesses.map(process => {
-            const processWork = this.works.find(work => work.Id === Number(process.workId))
-            const processProject = this.projects.find(project => project.Id === Number(process.projectId))
+            const processWork = this.activeWorks.find(work => work.Id === Number(process.workId))
+            const processProject = this.activeProjects.find(project => project.Id === Number(process.projectId))
             // to get the date when the process arrived at the current step for processing, look at the previous step submission date
             const currentStep = getStep(process.step as StepName)
             const previousStep = getStepById(currentStep.orderId-1)
@@ -316,8 +325,17 @@ export class EmployeeStore {
         })
     }
 
+    // searches past processes by title - populates searchedWorks, searchedProcesses, and searchedProject arrays
     @action async searchProcesses(searchTerm: string) {
-        await this.dataService.searchProcessesByWork(searchTerm)
+        this.searchedProcesses = await this.dataService.searchProcessesByTitle(searchTerm)
+        this.searchedWorks = await this.dataService.fetchRequestElementsById(
+            this.searchedProcesses.map(proc => proc.workId as number),
+            ListName.WORKS
+        )
+        this.searchedProjects = await this.dataService.fetchRequestElementsById(
+            this.searchedProcesses.map(proc => proc.projectId as number),
+            ListName.PROJECTS
+        )
     }
     @observable processSearchResults: Array<CloRequestElement>
 

@@ -170,15 +170,23 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
-    async searchProcessesByWork(workSearchTerm: string): Promise<Array<CloRequestElement>> {
-        const searchResultWorkIds = await this.getHostWeb()
-            .lists.getByTitle(ListName.WORKS)
-            .items.filter(`substringof('${workSearchTerm}',Title)`)
-            .select("Id")
+    // async fetchProcessesByWorkIds(workIds: number[]): Promise<CloRequestElement[]> {
+    //     let allProcesses = []
+    //     for(const workId of workIds) {
+    //         const processes = await this.getHostWeb()
+    //             .lists.getByTitle(ListName.PROCESSES)
+    //             .items.filter(`workId eq '${workId}'`)
+    //             .get(this.cloRequestElementParser)
+    //         allProcesses = allProcesses.concat(processes)
+    //     }
+    //     return allProcesses
+    // }
+    async searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.PROCESSES)
+            .items.filter(`substringof('${searchTerm}',Title)`)
             .top(10)
-            .get()
-        // TODO get corresponding processes / projects
-        return null
+            .get(this.cloRequestElementParser)
     }
 
     /* this sorting keps the process order lined up with project order this probably needs to be changed to something more stable longterm */
