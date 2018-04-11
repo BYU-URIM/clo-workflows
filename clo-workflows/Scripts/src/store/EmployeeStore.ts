@@ -189,7 +189,16 @@ export class EmployeeStore {
     @observable selectedStep: IStep
     @action
     selectStep(step: IStep): void {
+        this.unfocusSearch()
         this.selectedStep = step
+    }
+    @computed
+    get isFocusSelectedStep(): boolean {
+        return !!this.selectedStep
+    }
+    @action
+    private unfocusSelectedStep(): void {
+        this.selectedStep = null
     }
 
 
@@ -297,7 +306,7 @@ export class EmployeeStore {
 
     @computed
     private get selectedStepProcesses(): Array<CloRequestElement> {
-        return this.activeProcesses.filter(process => process.step === this.selectedStep.name)
+        return this.selectedStep && this.activeProcesses.filter(process => process.step === this.selectedStep.name)
     }
 
     @computed
@@ -308,36 +317,66 @@ export class EmployeeStore {
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
     @computed
     get selectedStepProcessBriefs(): Array<IListItem> {
-        return this.selectedStepProcesses.map(process => {
-            const processWork = this.activeWorks.find(work => work.Id === Number(process.workId))
-            const processProject = this.activeProjects.find(project => project.Id === Number(process.projectId))
-            // to get the date when the process arrived at the current step for processing, look at the previous step submission date
-            const currentStep = getStep(process.step as StepName)
-            const previousStep = getStepById(currentStep.orderId-1)
-            const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateFieldName]
-            return {
-                header: `${processProject.department || ""} ${processWork.type || ""} Process`,
-                subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
-                body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer || "unknown artist"}`,
-                id: process.Id as number,
-                selectable: true,
-            }
-        })
+        return EmployeeStore.getProcessBriefsFromRequestElements(
+            this.selectedStepProcesses,
+            this.activeWorks,
+            this.activeProjects
+        )
     }
 
     // searches past processes by title - populates searchedWorks, searchedProcesses, and searchedProject arrays
     @action async searchProcesses(searchTerm: string) {
-        this.searchedProcesses = await this.dataService.searchProcessesByTitle(searchTerm)
-        this.searchedWorks = await this.dataService.fetchRequestElementsById(
-            this.searchedProcesses.map(proc => proc.workId as number),
+        this.unfocusSelectedStep()
+        const processes = await this.dataService.searchProcessesByTitle(searchTerm)
+        const works = await this.dataService.fetchRequestElementsById(
+            processes.map(proc => proc.workId as number),
             ListName.WORKS
         )
-        this.searchedProjects = await this.dataService.fetchRequestElementsById(
-            this.searchedProcesses.map(proc => proc.projectId as number),
+        const projects = await this.dataService.fetchRequestElementsById(
+            processes.map(proc => proc.projectId as number),
             ListName.PROJECTS
         )
+        runInAction(() => {
+            this.searchedProcesses = processes
+            this.searchedWorks = works
+            this.searchedProjects = projects
+        })
     }
-    @observable processSearchResults: Array<CloRequestElement>
+    @action private unfocusSearch(): void {
+        this.searchedProcesses = null
+        this.searchedProjects = null
+        this.searchedWorks = null
+    }
+    @computed get isFocusSearch(): boolean {
+        return !!(this.searchedProcesses && this.searchedProjects && this.searchedWorks)
+    }
+    @computed get searchedProcessBriefs(): Array<IListItem> {
+        return EmployeeStore.getProcessBriefsFromRequestElements(
+            this.searchedProcesses,
+            this.searchedWorks,
+            this.searchedProjects
+        )
+    }
+
+    private static getProcessBriefsFromRequestElements(processesList: any[], worksList: any[], projectsList: any[]): Array<IListItem> {
+        if(processesList && worksList && projectsList) {
+            return processesList.map(process => {
+                const processWork = worksList.find(work => work.Id === Number(process.workId))
+                const processProject = projectsList.find(project => project.Id === Number(process.projectId))
+                // to get the date when the process arrived at the current step for processing, look at the previous step submission date
+                const currentStep = getStep(process.step as StepName)
+                const previousStep = getStepById(currentStep.orderId-1)
+                const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateFieldName]
+                return {
+                    header: `${processProject.department || ""} ${processWork.type || ""} Process`,
+                    subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
+                    body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer || "unknown artist"}`,
+                    id: process.Id as number,
+                    selectable: true,
+                }
+            })
+        }
+    }
 
 
     /*******************************************************************************************************/

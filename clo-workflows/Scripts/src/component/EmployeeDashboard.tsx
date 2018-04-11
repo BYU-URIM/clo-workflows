@@ -59,7 +59,7 @@ export class EmployeeDashboard extends React.Component<any, any> {
                         />
                     </div>
                 </div>
-                {employeeStore.selectedStep && (
+                {employeeStore.isFocusSelectedStep && (
                     <div style={wrapperStyle}>
                         <div style={processListTitleStyles}>{`${employeeStore.selectedStep.name} Active Processes`}</div>
                         {employeeStore.selectedStepProcessBriefs && employeeStore.selectedStepProcessBriefs.length ? (
@@ -69,6 +69,19 @@ export class EmployeeDashboard extends React.Component<any, any> {
                             />
                         ) : (
                             <div style={textStyle}>No Active Processes</div>
+                        )}
+                    </div>
+                )}
+                {employeeStore.isFocusSearch && (
+                    <div style={wrapperStyle}>
+                        <div style={processListTitleStyles}>{`Process Search Results`}</div>
+                        {employeeStore.searchedProcessBriefs && employeeStore.searchedProcessBriefs.length ? (
+                            <NonScrollableList
+                                items={employeeStore.searchedProcessBriefs}
+                                onSelectItem={employeeStore.selectProcess}
+                            />
+                        ) : (
+                            <div style={textStyle}>no processes found</div>
                         )}
                     </div>
                 )}
