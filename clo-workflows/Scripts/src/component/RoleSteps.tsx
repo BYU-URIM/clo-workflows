@@ -34,7 +34,7 @@ export class RoleSteps extends React.Component<any, any> {
     private employeeStore: EmployeeStore
 
     private onStepButtonClick(step: IStep): void {
-        this.employeeStore.selectStep(step)
+        this.employeeStore.selectFocusStep(step)
     }
 
     public render() {
@@ -61,7 +61,7 @@ export class RoleSteps extends React.Component<any, any> {
                                                 description={`${pendingItemCount} Pending Item${pendingItemCount !== 1 ? "s" : ""}`}
                                                 primary={!!pendingItemCount}
                                                 text={step.name}
-                                                checked={employeeStore.selectedStep && step.name === employeeStore.selectedStep.name}
+                                                checked={employeeStore.focusStep && step.name === employeeStore.focusStep.name}
                                             />
                                         )
                                     })

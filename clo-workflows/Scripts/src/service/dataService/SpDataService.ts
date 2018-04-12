@@ -170,6 +170,13 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
+    async searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>> {
+        return await this.getHostWeb()
+            .lists.getByTitle(ListName.PROCESSES)
+            .items.filter(`substringof('${searchTerm}',Title)`)
+            .top(10)
+            .get(this.cloRequestElementParser)
+    }
 
     /* this sorting keps the process order lined up with project order this probably needs to be changed to something more stable longterm */
     async createProcess(process: {}): Promise<ItemAddResult> {
