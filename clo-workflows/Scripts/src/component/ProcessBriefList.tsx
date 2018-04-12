@@ -33,7 +33,7 @@ interface IProcessBriefListProps {
 function ProcessBriefList(props: IProcessBriefListProps): JSX.Element {
     return (
         <div style={wrapperStyle}>
-            <div style={processListTitleStyles}>{`Process Search Results`}</div>
+            <div style={processListTitleStyles}>{props.title}</div>
             {props.processBriefs.length ? (
                 <NonScrollableList
                     items={props.processBriefs}

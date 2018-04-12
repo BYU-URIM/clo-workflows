@@ -312,7 +312,6 @@ export class EmployeeStore {
 
     // searches past processes by title - populates searchedWorks, searchedProcesses, and searchedProject arrays
     @action async searchProcesses(searchTerm: string) {
-        this.unfocusStep()
         const processes = await this.dataService.searchProcessesByTitle(searchTerm)
         const works = await this.dataService.fetchRequestElementsById(
             processes.map(proc => proc.workId as number),
@@ -322,6 +321,7 @@ export class EmployeeStore {
             processes.map(proc => proc.projectId as number),
             ListName.PROJECTS
         )
+        this.unfocusStep()
         runInAction(() => {
             this.searchedProcesses = processes
             this.searchedWorks = works
