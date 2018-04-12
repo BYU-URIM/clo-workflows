@@ -86,7 +86,7 @@ export class EmployeeStore {
 
     @computed
     get canSubmitSelectedWork(): boolean {
-        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedWorkValidation)
+        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedWorkValidation) && this.isSelectedRequestActive
     }
 
     @action startEditingSelectedWork() {
@@ -157,7 +157,7 @@ export class EmployeeStore {
 
     @computed
     get canSubmitSelectedProject(): boolean {
-        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProjectValidation)
+        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProjectValidation) && this.isSelectedRequestActive
     }
 
     @action toggleCanEditSelectedProject() {
@@ -186,19 +186,19 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     // STEPS
     /*******************************************************************************************************/
-    @observable selectedStep: IStep
+    @observable focusStep: IStep
     @action
-    selectStep(step: IStep): void {
+    selectFocusStep(step: IStep): void {
         this.unfocusSearch()
-        this.selectedStep = step
+        this.focusStep = step
     }
     @computed
-    get isFocusSelectedStep(): boolean {
-        return !!this.selectedStep
+    get isFocusStep(): boolean {
+        return !!this.focusStep
     }
     @action
-    private unfocusSelectedStep(): void {
-        this.selectedStep = null
+    private unfocusStep(): void {
+        this.focusStep = null
     }
 
 
@@ -210,30 +210,13 @@ export class EmployeeStore {
     @observable selectedProcess: ObservableMap<FormEntryType>
 
     // TODO project lookup should be more efficient, store as map ?
-    @action async selectProcess(itemBrief: IListItem): Promise<void> {
-        const selectedProcess: CloRequestElement = this.activeProcesses.find(process => process.Id === itemBrief.id)
-        this.selectedProcess = observable.map(selectedProcess)
-        this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
-
-        this.resetSelectedWork()
-        this.resetSelectedProject()
-
-        const workNotes = await this.dataService.fetchNotes(
-            NoteSource.WORK,
-            NoteScope.EMPLOYEE,
-            this.selectedWork.get("Id") as string,
-            this.selectedProcess.get("submitterId") as string,
-        )
-        const projectNotes = await this.dataService.fetchNotes(
-            NoteSource.PROJECT,
-            NoteScope.EMPLOYEE,
-            this.selectedProject.get("Id") as string,
-            this.selectedProcess.get("submitterId") as string,
-        )
-        runInAction(() => {
-            this.selectedWorkNotes = workNotes
-            this.selectedProjectNotes = projectNotes
-        })
+    @action async selectActiveProcess(itemBrief: IListItem): Promise<void> {
+        return await this.selectProcess(itemBrief, this.activeProcesses, this.activeWorks, this.activeProjects)
+    }
+    @computed
+    get isSelectedRequestActive(): boolean {
+        // note: only if the request originated from the focus step can it be active (as opposed to a past searchedProcess)
+        return this.selectedProcess && this.isFocusStep
     }
 
     getSelectedProcessSubmissionMetadata(formControl: IFormControl): string {
@@ -286,7 +269,7 @@ export class EmployeeStore {
     }
 
     @computed get canSubmitSelectedProcess(): boolean {
-        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProcessValidation)
+        return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProcessValidation) && this.isSelectedRequestActive
     }
 
     @computed
@@ -306,12 +289,15 @@ export class EmployeeStore {
 
     @computed
     private get selectedStepProcesses(): Array<CloRequestElement> {
-        return this.selectedStep && this.activeProcesses.filter(process => process.step === this.selectedStep.name)
+        return this.focusStep && this.activeProcesses.filter(process => process.step === this.focusStep.name)
     }
 
     @computed
     get selectedProcessView(): View {
-        return getView(this.selectedStep.view)
+        if(this.isFocusStep)
+            return getView(this.focusStep.view)
+        else if(this.isFocusSearch)
+            return getView("Complete")
     }
 
     // TODO make more efficient - cache requestElements by ID for quicker lookup?
@@ -326,7 +312,7 @@ export class EmployeeStore {
 
     // searches past processes by title - populates searchedWorks, searchedProcesses, and searchedProject arrays
     @action async searchProcesses(searchTerm: string) {
-        this.unfocusSelectedStep()
+        this.unfocusStep()
         const processes = await this.dataService.searchProcessesByTitle(searchTerm)
         const works = await this.dataService.fetchRequestElementsById(
             processes.map(proc => proc.workId as number),
@@ -356,6 +342,39 @@ export class EmployeeStore {
             this.searchedWorks,
             this.searchedProjects
         )
+    }
+    @action async selectSearchedProcess(itemBrief: IListItem): Promise<void> {
+        return await this.selectProcess(itemBrief, this.searchedProcesses, this.searchedWorks, this.searchedProjects)
+    }
+
+    @action
+    private async selectProcess(selectedProcessBrief: IListItem, processesList: any[], worksList: any[], projectsList: any[]): Promise<void> {
+        const selectedProcess: CloRequestElement = processesList.find(process => process.Id === selectedProcessBrief.id)
+        this.selectedProcess = observable.map(selectedProcess)
+        this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
+
+        const selectedWork = worksList.find(work => work.Id === Number(this.selectedProcess.get("workId")))
+        this.selectedWork = observable.map(selectedWork)
+
+        const selectedProject = projectsList.find(project => project.Id === Number(this.selectedProcess.get("projectId")))
+        this.selectedProject = observable.map(selectedProject)
+
+        const workNotes = await this.dataService.fetchNotes(
+            NoteSource.WORK,
+            NoteScope.EMPLOYEE,
+            this.selectedWork.get("Id") as string,
+            this.selectedProcess.get("submitterId") as string,
+        )
+        const projectNotes = await this.dataService.fetchNotes(
+            NoteSource.PROJECT,
+            NoteScope.EMPLOYEE,
+            this.selectedProject.get("Id") as string,
+            this.selectedProcess.get("submitterId") as string,
+        )
+        runInAction(() => {
+            this.selectedWorkNotes = workNotes
+            this.selectedProjectNotes = projectNotes
+        })
     }
 
     private static getProcessBriefsFromRequestElements(processesList: any[], worksList: any[], projectsList: any[]): Array<IListItem> {

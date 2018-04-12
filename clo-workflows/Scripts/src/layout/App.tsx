@@ -18,6 +18,7 @@ const appContentStyles = {
     margin: "0 auto",
     background: "white",
     paddingTop: 20,
+    paddingBottom: 60
 } as React.CSSProperties
 
 // Register icons and pull the fonts from the default SharePoint cdn.

@@ -56,6 +56,7 @@ export class ProjectDetail extends React.Component<any, any> {
                         <div style={titleStlyes}>{this.employeeStore.canEditSelectedProject ? "Edit Project" : "View Project"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
+                                disabled={!this.employeeStore.isSelectedRequestActive}
                                 iconProps={ this.employeeStore.canEditSelectedProject ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
                                 onClick={this.employeeStore.canEditSelectedProject
                                     ? this.employeeStore.stopEditingSelectedProject
@@ -88,7 +89,7 @@ export class ProjectDetail extends React.Component<any, any> {
                         onCreateNote={this.employeeStore.submitNewNote}
                         onDeleteNote={this.employeeStore.deleteNote}
                         onUpdateNote={this.employeeStore.updateNote}
-                        disableButtons={this.employeeStore.asyncPendingLockout}
+                        disableButtons={this.employeeStore.asyncPendingLockout || !this.employeeStore.isSelectedRequestActive}
                         currentUser={this.sessionStore.currentUser}
                         noteSource={NoteSource.PROJECT}
                     />

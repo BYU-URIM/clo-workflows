@@ -608,5 +608,29 @@
         "formControls": [
             "Final Request Completion"
         ]
+    },
+    "Complete": {
+        "dataSource": "processes",
+        "readonlyFormControls": [
+            "Public Domain Research",
+            "Public Domain Approval",
+            "Existing License",
+            "Existing License Approval",
+            "Exemption Analysis",
+            "Exemption Approval",
+            "Licensing Exchange",
+            "Direct to Rights Holders",
+            "Request Submitted",
+            "Rights Holder Response",
+            "CLO Response to Rights Holder",
+            "Receipt of License",
+            "Supervisor Signature",
+            "Payment",
+            "Process Payment",
+            "Fast Track Number",
+            "Initial Request Completion",
+            "Final Request Completion"
+        ],
+        "formControls": []
     }
 }

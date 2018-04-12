@@ -39,20 +39,20 @@ export class EmployeeDashboard extends React.Component<any, any> {
                         />
                     </div>
                 </div>
-                {employeeStore.isFocusSelectedStep &&
+                {employeeStore.isFocusStep &&
                     <ProcessBriefList
                         processBriefs={employeeStore.selectedStepProcessBriefs}
-                        title={`${employeeStore.selectedStep.name} Active Processes`}
+                        title={`${employeeStore.focusStep.name} Active Processes`}
                         emptyMessage="no active processes"
-                        onSelectProcessBrief={employeeStore.selectProcess}
+                        onSelectProcessBrief={employeeStore.selectActiveProcess}
                     />
                 }
                 {employeeStore.isFocusSearch &&
                     <ProcessBriefList
                         processBriefs={employeeStore.searchedProcessBriefs}
                         title="Search Results"
-                        emptyMessage="no results"
-                        onSelectProcessBrief={employeeStore.selectProcess}
+                        emptyMessage="no processes found"
+                        onSelectProcessBrief={employeeStore.selectSearchedProcess}
                     />
                 }
             </div>

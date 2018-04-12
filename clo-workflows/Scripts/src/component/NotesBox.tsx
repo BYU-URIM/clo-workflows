@@ -110,7 +110,6 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                         iconProps={{iconName: "Add"}}
                         onClick={this.props.maxScope === NoteScope.CLIENT ? () => this.onClickAddNote(NoteScope.CLIENT) : () => null}
                         disabled={props.disableButtons}
-                        // onMenuClick={this.props.maxScope === NoteScope.CLIENT ? () => this.onClickAddNote(NoteScope.CLIENT) : () => null}
                         menuProps={ this.props.maxScope === NoteScope.EMPLOYEE && {
                             items: [
                                 {
@@ -135,8 +134,8 @@ export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
                                 subheader: props.maxScope === NoteScope.EMPLOYEE ? `${note.scope} level note` : null,
                                 body: note.text,
                                 id: note.Id,
-                                deletable: note.submitter === props.currentUser.name,
-                                editable: note.submitter === props.currentUser.name
+                                deletable: (note.submitter === props.currentUser.name) && !props.disableButtons,
+                                editable: (note.submitter === props.currentUser.name) && !props.disableButtons
                             }))}
                             onEditItem={this.onClickEditNote}
                             onDeleteItem={this.onClickDeleteNote}

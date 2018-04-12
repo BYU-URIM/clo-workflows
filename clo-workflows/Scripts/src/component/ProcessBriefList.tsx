@@ -40,7 +40,7 @@ function ProcessBriefList(props: IProcessBriefListProps): JSX.Element {
                     onSelectItem={props.onSelectProcessBrief}
                 />
             ) : (
-                <div style={textStyle}>no processes found</div>
+                <div style={textStyle}>{props.emptyMessage}</div>
             )}
         </div>
     )
