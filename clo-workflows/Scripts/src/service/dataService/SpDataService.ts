@@ -170,17 +170,6 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
-    // async fetchProcessesByWorkIds(workIds: number[]): Promise<CloRequestElement[]> {
-    //     let allProcesses = []
-    //     for(const workId of workIds) {
-    //         const processes = await this.getHostWeb()
-    //             .lists.getByTitle(ListName.PROCESSES)
-    //             .items.filter(`workId eq '${workId}'`)
-    //             .get(this.cloRequestElementParser)
-    //         allProcesses = allProcesses.concat(processes)
-    //     }
-    //     return allProcesses
-    // }
     async searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
