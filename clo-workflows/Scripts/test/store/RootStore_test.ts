@@ -5,7 +5,7 @@ import { RootStore } from "../../src/store/RootStore"
 import { useStrict } from "mobx"
 import { when, mock, verify, instance, spy, anything } from "ts-mockito"
 import { IUser } from "../../src/model/User"
-import { MockProjects, MockUsers, MockProcesses } from "../../src/service/dataService/MockData"
+import { MockProjects, MockUsers, MockProcesses, MockWorks } from "../../src/service/dataService/MockData"
 import { MockDataService } from "../../src/service/dataService/MockDataService"
 import { ListName } from "../../src/service/dataService/IDataService"
 import { getRole } from "../../src/model/loader/resourceLoaders"
@@ -24,6 +24,7 @@ ava.test("root store creates session store, employee store when an employee logs
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
     when(mockDataService.fetchEmployeeActiveProcesses(anything())).thenReturn(Promise.resolve(MockProcesses))
     when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchRequestElementsById(anything(), ListName.WORKS)).thenReturn(Promise.resolve(MockWorks))
     when(mockDataService.fetchClientActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
 
     const rootStore: RootStore = new RootStore(instance(mockDataService))
