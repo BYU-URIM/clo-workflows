@@ -106,7 +106,7 @@ export class EmployeeStore {
     }
 
     @action resetSelectedWork() {
-        this.selectedWork = observable.map(this.activeWorks.get(this.selectedProject.get("workId") as string))
+        this.selectedWork = observable.map(this.activeWorks.get(this.selectedProcess.get("workId") as string))
     }
 
 
