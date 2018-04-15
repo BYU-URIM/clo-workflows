@@ -571,19 +571,6 @@ export class EmployeeStore {
         this.selectedWork = null
     }
 
-    // finds the item with the with the same ID as the new item and replaces the stale item with the new item
-    // true if replacement was successfull, false if not (stale list item was not found)
-    // @action
-    // private replaceElementInListById(newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean {
-    //     const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
-
-    //     if(staleItemIndex !== -1) {
-    //         list[staleItemIndex] = newItem
-    //         return true
-    //     }
-    //     return false
-    // }
-
     @action
     private removeELementInListById(itemToDelete: CloRequestElement | INote, list: Array<CloRequestElement | INote>) {
         list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
