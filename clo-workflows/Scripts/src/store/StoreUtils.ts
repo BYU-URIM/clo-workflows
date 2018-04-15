@@ -1,7 +1,6 @@
 import { FormControl } from "../model/FormControl"
-import { FormEntryType } from "../model/CloRequestElement"
-import { observable } from "mobx"
-import { ObservableMap } from "mobx/lib/types/observablemap"
+import { FormEntryType, CloRequestElement, IdentifiableObject } from "../model/CloRequestElement"
+import { observable, action, ObservableMap } from "mobx"
 
 class StoreUtils {
     private static REQUIRED_INPUT_ERROR = "this value is required"
@@ -43,6 +42,24 @@ class StoreUtils {
 
     getClientObsMap = (userId: string): ObservableMap<string> => {
         return observable.map([["submitterId", userId]])
+    }
+
+    mapRequestElementArrayById(requestElementArray: CloRequestElement[]): ObservableMap<CloRequestElement> {
+        return requestElementArray.reduce((requestElementMap, requestElement) => {
+            requestElementMap.set(String(requestElement.Id), requestElement)
+            return requestElementMap
+        }, new ObservableMap<CloRequestElement>())
+    }
+
+    @action
+    replaceElementInListById(newItem: IdentifiableObject, list: IdentifiableObject[]): boolean {
+        const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
+
+        if(staleItemIndex !== -1) {
+            list[staleItemIndex] = newItem
+            return true
+        }
+        return false
     }
 }
 

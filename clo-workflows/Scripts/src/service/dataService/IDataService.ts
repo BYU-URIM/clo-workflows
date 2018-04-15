@@ -22,7 +22,7 @@ export interface IDataService {
     createNote(note: INote): Promise<ItemAddResult>
     fetchNotes(source: NoteSource, scope: NoteScope, sourceId: string, attachedClientId: string): Promise<Array<INote>>
     updateNote(note: INote): Promise<void>
-    deleteNote(noteId: string): Promise<void>
+    deleteNote(noteId: number): Promise<void>
 }
 
 export enum ListName {

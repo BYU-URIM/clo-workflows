@@ -19,7 +19,7 @@ export class MockDataService implements IDataService {
     updateNote(note: INote): Promise<void> {
         throw new Error("Method not implemented.")
     }
-    deleteNote(noteId: string): Promise<void> {
+    deleteNote(noteId: number): Promise<void> {
         throw new Error("Method not implemented.")
     }
     fetchWorks(): Promise<Array<IWork>> {

@@ -139,10 +139,10 @@ export class SpDataService implements IDataService {
             .items.getById(Number(note.Id))
             .update(note)
     }
-    async deleteNote(noteId: string): Promise<void> {
+    async deleteNote(noteId: number): Promise<void> {
         await this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
-            .items.getById(Number(noteId))
+            .items.getById(noteId)
             .delete()
     }
 

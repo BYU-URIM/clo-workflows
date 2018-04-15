@@ -3,7 +3,7 @@ export interface INote {
     dateSubmitted: string
     text: string
     scope: NoteScope
-    Id?: string // will be asigned to notes that have been submitted to the server
+    Id?: number // will be asigned to notes that have been submitted to the server
     workId?: string // present if source is a work
     projectId?: string // present if source is a project
     attachedClientId?: string // present if scope is client, will be changed to attachedDepartment when departments are implemented
