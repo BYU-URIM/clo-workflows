@@ -44,7 +44,7 @@ export class App extends React.Component<any, any> {
                                 {this.rootStore.sessionStore.isEmployee ? (
                                     <Employee currentUser={this.rootStore.sessionStore.currentUser} />
                                 ) : (
-                                        <Client currentUser={this.rootStore.sessionStore.currentUser} />
+                                    <Client currentUser={this.rootStore.sessionStore.currentUser} />
                                 )}
                             </div>
                         </div>

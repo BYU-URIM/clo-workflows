@@ -70,13 +70,17 @@ export class RequestDetailStore {
     }
 
     getProcessSubmissionMetadata(formControl: IFormControl): string {
-        const parentStep = getStepForProcessFieldName(formControl.dataRef)
-        const submitter = this.process.get(parentStep.submitterFieldName)
-        const submissionDate = this.process.get(parentStep.submissionDateFieldName)
-        if(submitter && submissionDate) {
-            return `submitted by ${submitter} on ${submissionDate}`
-        } else {
-            return null
+        // if the form control is readonly - look up the submission metadata to display under the form control
+        // if the form control is not readonly, it is active and the present submission will overwrite the metadata
+        if(formControl.readonly) {
+            const parentStep = getStepForProcessFieldName(formControl.dataRef)
+            const submitter = this.process.get(parentStep.submitterFieldName)
+            const submissionDate = this.process.get(parentStep.submissionDateFieldName)
+            if(submitter && submissionDate) {
+                return `submitted by ${submitter} on ${submissionDate}`
+            } else {
+                return null
+            }
         }
     }
 

@@ -41,20 +41,38 @@ export class EmployeeStore {
 
         this.setAsyncPendingLockout(false)
 
-        // wire up mobx reactions
+
+        // MOBX REACTIONS
         // first param returns data to react to, second param is reactive function to run
+
+        // if the view heirarchy does not contain request detail, the requestDetailStore can be disposed
+        // by reactively disposing of the request detail store, the store creation / disposal logic is decoupled from view logic
         reaction(
-            () => this.viewHierarchy,
-            () => this.viewHierarchy.slice(-1)[0] === EmployeeViewKey.Dashboard && this.disposeRequestDetailStore()
+            () => this.canDisposeRequestDetailStore,
+            () => this.canDisposeRequestDetailStore && this.disposeRequestDetailStore()
+        )
+
+        // if the user has focused on a step, automatically clear out searched requests so that step-specific requests can be displayed
+        reaction(
+            () => this.isFocusStep,
+            () => this.isFocusStep && this.unfocusSearch()
+        )
+
+        // if the user has executed a search for past processes, automatically clear out step requests so that searched requests can be displayed
+        reaction(
+            () => this.isFocusSearch,
+            () => this.isFocusSearch && this.unfocusStep()
         )
     }
 
     @observable requestDetailStore: RequestDetailStore
     // runs automatically when current view is set to dashboard - see reactions in init()
-    @action disposeRequestDetailStore() {
+    @action private disposeRequestDetailStore() {
         this.requestDetailStore = null
     }
-
+    @computed get canDisposeRequestDetailStore(): boolean {
+        return !this.viewHierarchy.includes(EmployeeViewKey.ProcessDetail)
+    }
 
     /*******************************************************************************************************/
     // WORKS
@@ -72,7 +90,6 @@ export class EmployeeStore {
     @observable focusStep: IStep
     @action
     selectFocusStep(step: IStep): void {
-        this.unfocusSearch()
         this.focusStep = step
     }
     @computed
@@ -87,7 +104,6 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // PROCESSES
-    /*******************************************************************************************************/
     @observable activeProcesses: ObservableMap<CloRequestElement>
     @observable searchedProcesses: ObservableMap<CloRequestElement>
 
@@ -134,7 +150,6 @@ export class EmployeeStore {
             processes.map(proc => Number(proc.projectId)),
             ListName.PROJECTS
         )
-        this.unfocusStep()
         runInAction(() => {
             this.searchedProcesses = StoreUtils.mapRequestElementArrayById(processes)
             this.searchedWorks = StoreUtils.mapRequestElementArrayById(works)
@@ -150,7 +165,6 @@ export class EmployeeStore {
         return !!(this.searchedProcesses && this.searchedProjects && this.searchedWorks)
     }
     @computed get searchedProcessBriefs(): Array<IListItem> {
-        // extract request element objects from each request element map and transform objects into request briefs
         // request briefs are small summaries of a request that contain information about the work, process, and project
         return EmployeeStore.getProcessBriefsFromRequestElements(this.searchedProcesses, this.searchedWorks, this.searchedProjects)
     }
@@ -205,7 +219,6 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // VIEW STATE
-    /*******************************************************************************************************/
 
     // the view heirarchy refers to nested pages an employee has visited within the page heirarchy
     // the first view in the array is the "home" page, the last view in the array is the currently viewed page
