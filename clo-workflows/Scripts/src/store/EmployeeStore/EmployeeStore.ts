@@ -1,5 +1,5 @@
 import { RootStore } from "../RootStore"
-import { action, ObservableMap, observable, runInAction, computed, toJS, IKeyValueMap, when } from "mobx"
+import { action, ObservableMap, observable, runInAction, computed, toJS, IKeyValueMap, reaction } from "mobx"
 import { FormEntryType, CloRequestElement } from "../../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { FormControl, IFormControl } from "../../model/FormControl"
@@ -24,6 +24,7 @@ export class EmployeeStore {
 
     @action
     async init(): Promise<void> {
+        // fetch request elements
         const currentUser = this.root.sessionStore.currentUser
         const activeProcessList = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
         this.activeProcesses = StoreUtils.mapRequestElementArrayById(activeProcessList)
@@ -40,14 +41,16 @@ export class EmployeeStore {
 
         this.setAsyncPendingLockout(false)
 
-        when(
-            () => this.viewHierarchy.length === 1 && this.viewHierarchy[0] === EmployeeViewKey.Dashboard,
-            this.disposeRequestDetailStore
+        // wire up mobx reactions
+        // first param returns data to react to, second param is reactive function to run
+        reaction(
+            () => this.viewHierarchy,
+            () => this.viewHierarchy.slice(-1)[0] === EmployeeViewKey.Dashboard && this.disposeRequestDetailStore()
         )
     }
 
     @observable requestDetailStore: RequestDetailStore
-    // runs automatically when current view is set to dashboard
+    // runs automatically when current view is set to dashboard - see reactions in init()
     @action disposeRequestDetailStore() {
         this.requestDetailStore = null
     }
