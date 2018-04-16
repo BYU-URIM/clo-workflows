@@ -55,149 +55,17 @@ export class EmployeeStore {
 
     /*******************************************************************************************************/
     // WORKS
-    /*******************************************************************************************************/
     @observable activeWorks: ObservableMap<CloRequestElement>
     @observable searchedWorks: ObservableMap<CloRequestElement>
-    // @observable selectedWork: ObservableMap<FormEntryType>
-    // @observable canEditWork: boolean = false
-
-    // @computed get selectedWorkView(): View {
-    //     if(this.selectedWork) {
-    //         return this.canEditWork
-    //         ? getView(this.selectedWork.get("type") as string)
-    //         : getViewAndMakeReadonly(this.selectedWork.get("type") as string)
-    //     }
-    // }
-
-    // @action updateSelectedWork(fieldName: string, newVal: FormEntryType): void {
-    //     this.selectedWork.set(fieldName, String(newVal))
-    // }
-
-    // @observable selectedWorkNotes: Array<INote> = []
-
-    // @action
-    // async submitSelectedWork(): Promise<void> {
-    //     this.selectedWorkView.touchAllRequiredFormControls()
-    //     if(!this.canSubmitSelectedWork) {
-    //         this.postMessage({messageText: "please fix all form errors", messageType: "error" })
-    //         return
-    //     }
-
-    //     try {
-    //         this.setAsyncPendingLockout(true)
-    //         const updatedWork = this.selectedWork.toJS() as CloRequestElement
-    //         await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
-    //         this.activeWorks.set(String(updatedWork.Id), updatedWork)
-    //         this.postMessage({messageText: "work successfully submitted", messageType: "success"})
-    //         runInAction(() => this.canEditWork = false)
-    //     } catch(error) {
-    //         console.log(error)
-    //         this.postMessage({messageText: "there was a problem submitting your work, try again", messageType: "error"})
-    //     } finally {
-    //         this.setAsyncPendingLockout(false)
-    //     }
-    // }
-
-    // @computed
-    // get canSubmitSelectedWork(): boolean {
-    //     return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedWorkValidation) && this.isSelectedRequestActive
-    // }
-
-    // @action startEditingSelectedWork() {
-    //     this.canEditWork = true
-    // }
-    // @action stopEditingSelectedWork() {
-    //     this.canEditWork = false
-    //     this.resetSelectedWork()
-    // }
-
-    // @computed
-    // get selectedWorkValidation(): {} {
-    //     return StoreUtils.validateFormControlGroup(this.selectedWorkView.formControls, this.selectedWork)
-    // }
-
-    // @action resetSelectedWork() {
-    //     this.selectedWork = observable.map(this.activeWorks.get(this.selectedProcess.get("workId") as string))
-    // }
 
 
     /*******************************************************************************************************/
     // PROJECTS
-    /*******************************************************************************************************/
     @observable activeProjects: ObservableMap<CloRequestElement>
     @observable searchedProjects: ObservableMap<CloRequestElement>
-    // @observable selectedProject: ObservableMap<FormEntryType>
-    // @observable canEditSelectedProject: boolean = false
-
-    // @computed
-    // get selectedProjectView(): View {
-    //     if(this.selectedProject) {
-    //         return this.canEditSelectedProject
-    //             ? getView(this.selectedProject.get("type") as string)
-    //             : getViewAndMakeReadonly(this.selectedProject.get("type") as string)
-    //     }
-    // }
-
-    // @action
-    // updateSelectedProject(fieldName: string, newVal: FormEntryType): void {
-    //     this.selectedProject.set(fieldName, String(newVal))
-    // }
-
-    // @observable selectedProjectNotes: Array<INote> = []
-
-    // @action
-    // async submitSelectedProject(): Promise<void> {
-    //     this.selectedProjectView.touchAllRequiredFormControls()
-    //     if(!this.canSubmitSelectedProject) {
-    //         this.postMessage({messageText: "please fix all form errors", messageType: "error" })
-    //         return
-    //     }
-
-    //     try {
-    //         this.setAsyncPendingLockout(true)
-    //         const updatedProject = this.selectedProject.toJS() as CloRequestElement
-    //         await this.dataService.updateRequestElement(updatedProject, ListName.PROJECTS)
-    //         this.activeProjects.set(String(updatedProject.Id), updatedProject)
-    //         this.postMessage({messageText: "project successfully submitted", messageType: "success"})
-    //         runInAction(() => this.canEditSelectedProject = false)
-    //     } catch(error) {
-    //         console.log(error)
-    //         this.postMessage({messageText: "there was a problem submitting your project, try again", messageType: "error"})
-    //     } finally {
-    //         this.setAsyncPendingLockout(false)
-    //     }
-    // }
-
-    // @computed
-    // get canSubmitSelectedProject(): boolean {
-    //     return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProjectValidation) && this.isSelectedRequestActive
-    // }
-
-    // @action toggleCanEditSelectedProject() {
-    //     this.canEditSelectedProject = !this.canEditSelectedProject
-    // }
-
-    // @computed
-    // get selectedProjectValidation(): {} {
-    //     return StoreUtils.validateFormControlGroup(this.selectedProjectView.formControls, this.selectedProject)
-    // }
-
-    // @action resetSelectedProject() {
-    //     this.selectedProject = observable.map(this.activeProjects.get(this.selectedProcess.get("projectId") as string))
-    // }
-
-    // @action startEditingSelectedProject() {
-    //     this.canEditSelectedProject = true
-    // }
-    // @action stopEditingSelectedProject() {
-    //     this.canEditSelectedProject = false
-    //     this.resetSelectedProject()
-    // }
-
 
     /*******************************************************************************************************/
     // STEPS
-    /*******************************************************************************************************/
     @observable focusStep: IStep
     @action
     selectFocusStep(step: IStep): void {
@@ -219,75 +87,11 @@ export class EmployeeStore {
     /*******************************************************************************************************/
     @observable activeProcesses: ObservableMap<CloRequestElement>
     @observable searchedProcesses: ObservableMap<CloRequestElement>
-    // @observable selectedProcess: ObservableMap<FormEntryType>
 
     // TODO project lookup should be more efficient, store as map ?
     @action async selectActiveDetailProcess(itemBrief: IListItem): Promise<void> {
         return await this.selectDetailProcess(itemBrief, this.activeProcesses, this.activeWorks, this.activeProjects)
     }
-    // @computed
-    // get isSelectedRequestActive(): boolean {
-    //     // note: only if the request originated from the focus step can it be active (as opposed to a past searchedProcess)
-    //     return this.selectedProcess && this.isFocusStep
-    // }
-
-    // getSelectedProcessSubmissionMetadata(formControl: IFormControl): string {
-    //     const parentStep = getStepForProcessFieldName(formControl.dataRef)
-    //     const submitter = this.selectedProcess.get(parentStep.submitterFieldName)
-    //     const submissionDate = this.selectedProcess.get(parentStep.submissionDateFieldName)
-    //     if(submitter && submissionDate) {
-    //         return `submitted by ${submitter} on ${submissionDate}`
-    //     } else {
-    //         return null
-    //     }
-    // }
-
-    // @action
-    // updateSelectedProcess(fieldName: string, newVal: FormEntryType): void {
-    //     this.selectedProcess.set(fieldName, String(newVal))
-    // }
-
-    // @action
-    // async submitSelectedProcess(): Promise<void> {
-    //     this.selectedProcessView.touchAllRequiredFormControls()
-    //     if(!this.canSubmitSelectedProcess) {
-    //         this.postMessage({messageText: "please fix all form errors", messageType: "error" })
-    //         return
-    //     }
-
-    //     try {
-    //         this.setAsyncPendingLockout(true)
-    //         const currentStep = getStep(this.selectedProcess.get("step") as StepName)
-    //         let updatedProcess = this.selectedProcess.toJS() as CloRequestElement
-    //         updatedProcess = {...updatedProcess, ...{
-    //             step: getNextStepName(updatedProcess),
-    //             [currentStep.submissionDateFieldName]: Utils.getFormattedDate(),
-    //             [currentStep.submitterFieldName]: this.root.sessionStore.currentUser.name,
-    //         }}
-    //         await this.dataService.updateRequestElement(updatedProcess, ListName.PROCESSES)
-    //         // replace cached process with successfully submitted selectedProcess
-    //         this.activeProcesses.set(String(updatedProcess.Id), updatedProcess)
-
-    //         this.reduceViewHierarchy(EmployeeViewKey.Dashboard)
-    //         this.clearSelectedRequestElements()
-    //         this.postMessage({messageText: "process successfully submitted", messageType: "success"})
-
-    //     } catch(error) {
-    //         console.log(error)
-    //         this.postMessage({messageText: "there was a problem submitting your process, try again", messageType: "error"})
-    //     } finally {
-    //         this.setAsyncPendingLockout(false)
-    //     }
-    // }
-
-    // @computed get canSubmitSelectedProcess(): boolean {
-    //     return !this.asyncPendingLockout && Utils.isObjectEmpty(this.selectedProcessValidation) && this.isSelectedRequestActive
-    // }
-
-    // @computed
-    // get selectedProcessValidation(): {} {
-    //     return StoreUtils.validateFormControlGroup(this.selectedProcessView.formControls, this.selectedProcess)
-    // }
 
     // computes a plain JavaScript object mapping step names process counts
     @computed
@@ -306,14 +110,6 @@ export class EmployeeStore {
             return StoreUtils.mapRequestElementArrayById(filteredProcesses)
         }
     }
-
-    // @computed
-    // get selectedProcessView(): View {
-    //     if(this.isFocusStep)
-    //         return getView(this.focusStep.view)
-    //     else if(this.isFocusSearch)
-    //         return getView("Complete")
-    // }
 
     @computed
     get selectedStepProcessBriefs(): Array<IListItem> {
@@ -404,91 +200,6 @@ export class EmployeeStore {
         }
     }
 
-
-    /*******************************************************************************************************/
-    // NOTES - SHARED BY PROJECTS AND WORKS
-    /*******************************************************************************************************/
-    // @action async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
-    //     this.setAsyncPendingLockout(true)
-
-    //     let submissionStatus = true
-    //     try {
-    //         // fill in any info the new note needs before submission
-    //         noteToCreate.dateSubmitted = Utils.getFormattedDate()
-    //         noteToCreate.submitter = this.root.sessionStore.currentUser.name
-    //         if(noteToCreate.scope === NoteScope.CLIENT) {
-    //             noteToCreate.attachedClientId = this.selectedProcess.get("submitterId") as string
-    //         }
-
-    //         if(noteSource === NoteSource.PROJECT) {
-    //             noteToCreate.projectId = String(this.selectedProject.get("Id"))
-    //         } else if(noteSource === NoteSource.WORK) {
-    //             noteToCreate.workId = String(this.selectedWork.get("Id"))
-    //         }
-
-    //         const addResult = await this.dataService.createNote(noteToCreate)
-    //         noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
-
-    //         // if submission is successful, add the new note to the corresponding list
-    //         if(noteSource === NoteSource.WORK) runInAction(() => this.selectedWorkNotes.unshift(noteToCreate))
-    //         if(noteSource === NoteSource.PROJECT) runInAction(() => this.selectedProjectNotes.unshift(noteToCreate))
-    //         this.postMessage({messageText: "note successfully submitted", messageType: "success"})
-    //     } catch(error) {
-    //         console.error(error)
-    //         submissionStatus = false
-    //         this.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
-    //     } finally {
-    //         this.setAsyncPendingLockout(false)
-    //     }
-
-    //     return submissionStatus
-    // }
-
-    // @action async updateNote(noteToUpdate: INote, noteSource: NoteSource): Promise<boolean> {
-    //     this.setAsyncPendingLockout(true)
-    //     let submissionStatus = true
-    //     try {
-    //         noteToUpdate.dateSubmitted = Utils.getFormattedDate()
-    //         await this.dataService.updateNote(noteToUpdate)
-
-    //         // if submission is successful, add the new note to the corresponding list
-    //         if(noteSource === NoteSource.WORK) StoreUtils.replaceElementInListById(noteToUpdate, this.selectedWorkNotes)
-    //         if(noteSource === NoteSource.PROJECT) StoreUtils.replaceElementInListById(noteToUpdate, this.selectedProjectNotes)
-
-    //         this.postMessage({messageText: "note successfully updated", messageType: "success"})
-    //     } catch(error) {
-    //         console.error(error)
-    //         submissionStatus = false
-    //         this.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
-    //     } finally {
-    //         this.setAsyncPendingLockout(false)
-    //     }
-
-    //     return submissionStatus
-    // }
-
-    // @action async deleteNote(noteToDelete: INote, noteSource: NoteSource): Promise<boolean> {
-    //     this.setAsyncPendingLockout(true)
-    //     let submissionStatus = true
-
-    //     try {
-    //         await this.dataService.deleteNote(noteToDelete.Id)
-
-    //         // if deletion is successful, remove the new note from the corresponding list
-    //         if(noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.selectedProjectNotes)
-    //         if(noteSource === NoteSource.WORK) this.removeELementInListById(noteToDelete, this.selectedWorkNotes)
-    //         this.postMessage({messageText: "note successfully deleted", messageType: "success"})
-    //     } catch(error) {
-    //         console.error(error)
-    //         submissionStatus = false
-    //         this.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
-    //     } finally {
-    //         this.setAsyncPendingLockout(false)
-    //     }
-    //     return submissionStatus
-    // }
-
-
     /*******************************************************************************************************/
     // VIEW STATE
     /*******************************************************************************************************/
@@ -544,30 +255,6 @@ export class EmployeeStore {
             this.message = null
         }), displayTime)
     }
-
-
-    /*******************************************************************************************************/
-    // MISCELLANEOUS MEMBERS AND HELPER METHODS
-    /*******************************************************************************************************/
-    // @observable asyncPendingLockout: boolean
-    // @action setAsyncPendingLockout(val: boolean) {
-    //     this.asyncPendingLockout = val
-    // }
-
-    // @observable message: IMessage
-    // @action postMessage(message: IMessage, displayTime: number = 5000) {
-    //     this.message = message
-    //     setTimeout(action(() => {
-    //         this.message = null
-    //     }), displayTime)
-    // }
-
-    // @action
-    // private clearSelectedRequestElements(): void {
-    //     this.selectedProcess = null
-    //     this.selectedProject = null
-    //     this.selectedWork = null
-    // }
 }
 
 export enum EmployeeViewKey {
