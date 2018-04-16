@@ -15,16 +15,16 @@ export interface IFormPanelProps {
 const styles = {
     wrapper: {
         marginBottom: "20px",
-    },
+    } as React.CSSProperties,
     dropDown: {
         width: "200px",
         margin: "20px 0px",
-    },
-} as React.CSSProperties
+    } as React.CSSProperties,
+}
 
 const WorkFormModal = (props: IFormPanelProps) => {
     return (
-        <div style={styles.warpper}>
+        <div style={styles.wrapper}>
             <Dropdown
                 label="Select the Work Type:"
                 selectedKey={props.clientStore.view.work.type || undefined}
