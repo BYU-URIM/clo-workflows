@@ -1,6 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { EmployeeStore, EmployeeViewKey } from "../store/EmployeeStore"
+import { EmployeeStore, EmployeeViewKey } from "../store/EmployeeStore/EmployeeStore"
 import { observable } from "mobx"
 import { IStep } from "../model/Step"
 import { autobind } from "core-decorators"

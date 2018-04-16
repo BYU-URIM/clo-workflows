@@ -1,11 +1,12 @@
 import * as React from "react"
-import { EmployeeStore } from "../store/EmployeeStore"
+import { EmployeeStore } from "../store/EmployeeStore/EmployeeStore"
 import { inject, observer } from "mobx-react"
 import FormControlGroup from "./FormControlGroup"
 import { NotesBox } from "./NotesBox"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
 import { SessionStore } from "../store/SessionStore"
 import { NoteScope, NoteSource } from "../model/Note"
+import { RequestDetailStore } from "../store/EmployeeStore/RequestDetailStore"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -50,51 +51,55 @@ export class WorkDetail extends React.Component<any, any> {
     private sessionStore: SessionStore
 
     public render() {
+        const requestDetailStore = this.employeeStore.requestDetailStore
         return (
             <div style={wrapperStyle}>
                 <div style={formColumnStyles}>
                     <div style={workHeaderStyles}>
-                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedWork ? "Edit Work" : "View Work"}</div>
+                        <div style={titleStlyes}>{requestDetailStore.canEditWork ? "Edit Work" : "View Work"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
-                                disabled={!this.employeeStore.isSelectedRequestActive}
-                                iconProps={ this.employeeStore.canEditSelectedWork ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
-                                onClick={this.employeeStore.canEditSelectedWork
-                                    ? this.employeeStore.stopEditingSelectedWork
-                                    : this.employeeStore.startEditingSelectedWork
+                                disabled={!requestDetailStore.isRequestActive}
+                                iconProps={ requestDetailStore.canEditWork ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
+                                onClick={requestDetailStore.canEditWork
+                                    ? requestDetailStore.stopEditingWork
+                                    : requestDetailStore.startEditingWork
                                 }
                             />
                         </div>
                     </div>
                     <FormControlGroup
-                        data={this.employeeStore.selectedWork}
-                        formControls={this.employeeStore.selectedWorkView.formControls}
-                        updateFormField={this.employeeStore.updateSelectedWork}
-                        validation={this.employeeStore.selectedWorkValidation}
+                        data={requestDetailStore.work}
+                        formControls={requestDetailStore.workView.formControls}
+                        updateFormField={requestDetailStore.updateWork}
+                        validation={requestDetailStore.workValidation}
                         width={350}
                     />
                     {
-                        this.employeeStore.canEditSelectedWork &&
+                        requestDetailStore.canEditWork &&
                         <div style={submitButtonStlyes}>
                             <PrimaryButton text="Submit Changes"
-                                onClick={this.employeeStore.submitSelectedWork}
-                                disabled={!this.employeeStore.canSubmitSelectedWork}
+                                onClick={requestDetailStore.submitWork}
+                                disabled={!requestDetailStore.canSubmitWork}
                             />
                         </div>
                     }
                 </div>
                 <div style={notesColumnStyles}>
+                {
+                    requestDetailStore.workNotesStore &&
                     <NotesBox
                         title="Work Notes"
-                        notes={this.employeeStore.selectedWorkNotes}
-                        onCreateNote={this.employeeStore.submitNewNote}
-                        onUpdateNote={this.employeeStore.updateNote}
-                        onDeleteNote={this.employeeStore.deleteNote}
+                        notes={requestDetailStore.workNotesStore.notes}
+                        onCreateNote={requestDetailStore.workNotesStore.submitNewNote}
+                        onUpdateNote={requestDetailStore.workNotesStore.updateNote}
+                        onDeleteNote={requestDetailStore.workNotesStore.deleteNote}
                         currentUser={this.sessionStore.currentUser}
-                        disableButtons={this.employeeStore.asyncPendingLockout || !this.employeeStore.isSelectedRequestActive}
+                        disableButtons={this.employeeStore.asyncPendingLockout || !requestDetailStore.isRequestActive}
                         maxScope={NoteScope.EMPLOYEE}
                         noteSource={NoteSource.WORK}
                     />
+                }
                 </div>
             </div>
         )

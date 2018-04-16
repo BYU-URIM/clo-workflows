@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
-import { EmployeeStore } from "../store/EmployeeStore"
+import { EmployeeStore } from "../store/EmployeeStore/EmployeeStore"
 import { NonScrollableList } from "./NonScrollableList"
 import { RoleSteps } from "./RoleSteps"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
@@ -44,7 +44,7 @@ export class EmployeeDashboard extends React.Component<any, any> {
                         processBriefs={employeeStore.selectedStepProcessBriefs}
                         title={`${employeeStore.focusStep.name} Active Processes`}
                         emptyMessage="no active processes"
-                        onSelectProcessBrief={employeeStore.selectActiveProcess}
+                        onSelectProcessBrief={employeeStore.selectActiveDetailProcess}
                     />
                 }
                 {employeeStore.isFocusSearch &&
@@ -52,7 +52,7 @@ export class EmployeeDashboard extends React.Component<any, any> {
                         processBriefs={employeeStore.searchedProcessBriefs}
                         title="Search Results"
                         emptyMessage="no processes found"
-                        onSelectProcessBrief={employeeStore.selectSearchedProcess}
+                        onSelectProcessBrief={employeeStore.selectSearchedDetailProcess}
                     />
                 }
             </div>
