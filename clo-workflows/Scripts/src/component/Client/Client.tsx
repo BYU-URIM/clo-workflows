@@ -1,15 +1,11 @@
 import { inject, observer } from "mobx-react"
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore/ClientStore"
-import { SessionStore } from "../store/SessionStore"
-import Header from "./Header"
-import { ProjectProcessList } from "./ProjectProcessList"
-import ProjectFormModal from "./ProjectFormModal"
-import ProcessFormModal from "./ProcessFormModal"
-import { Message } from "./Message"
-import { NoteSource, NoteScope } from "../model/Note"
-import { NotesBox } from "./NotesBox"
+import { ClientStore } from "../../store/ClientStore/ClientStore"
+import { SessionStore } from "../../store/SessionStore"
+import { Header } from "../"
+import { NoteSource, NoteScope } from "../../model/Note"
+import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList } from "../"
 
 const styles = {
     wrapper: {

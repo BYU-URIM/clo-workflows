@@ -1,2 +1,3 @@
-import NonScrollableList from "./NonScrollableList"
+import NonScrollableList, { IListItem } from "./NonScrollableList"
 export default NonScrollableList
+export { IListItem }

@@ -1,11 +1,11 @@
 import * as React from "react"
-import { EmployeeStore } from "../store/EmployeeStore"
+import { EmployeeStore } from "../../store/EmployeeStore"
 import { inject, observer } from "mobx-react"
-import FormControlGroup from "./FormControlGroup"
-import { NotesBox } from "./NotesBox"
+import { FormControlGroup } from "../"
+import { NotesBox } from "../"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import { SessionStore } from "../store/SessionStore"
-import { NoteScope, NoteSource } from "../model/Note"
+import { SessionStore } from "../../store/SessionStore"
+import { NoteScope, NoteSource } from "../../model/Note"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -22,14 +22,14 @@ const titleStlyes = {
     textAlign: "center",
     marginBottom: "10",
     font: "30px Segoe UI, sans-serif",
-    width: 350
+    width: 350,
 } as React.CSSProperties
 
 const submitButtonStlyes = {
     display: "flex",
     justifyContent: "center",
     marginTop: 30,
-    marginRight: 25
+    marginRight: 25,
 } as React.CSSProperties
 
 const editButtonStyles = { transform: "translateX(-25px)" }
@@ -40,7 +40,6 @@ const notesColumnStyles = { padding: "0 30 0 8" }
 @inject("rootStore")
 @observer
 export default class WorkDetail extends React.Component<any, any> {
-
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
         this.sessionStore = this.props.rootStore.sessionStore
@@ -58,10 +57,11 @@ export default class WorkDetail extends React.Component<any, any> {
                         <div style={editButtonStyles}>
                             <IconButton
                                 disabled={!this.employeeStore.isSelectedRequestActive}
-                                iconProps={ this.employeeStore.canEditSelectedWork ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
-                                onClick={this.employeeStore.canEditSelectedWork
-                                    ? this.employeeStore.stopEditingSelectedWork
-                                    : this.employeeStore.startEditingSelectedWork
+                                iconProps={this.employeeStore.canEditSelectedWork ? { iconName: "BoxMultiplySolid" } : { iconName: "edit" }}
+                                onClick={
+                                    this.employeeStore.canEditSelectedWork
+                                        ? this.employeeStore.stopEditingSelectedWork
+                                        : this.employeeStore.startEditingSelectedWork
                                 }
                             />
                         </div>
@@ -73,15 +73,15 @@ export default class WorkDetail extends React.Component<any, any> {
                         validation={this.employeeStore.selectedWorkValidation}
                         width={350}
                     />
-                    {
-                        this.employeeStore.canEditSelectedWork &&
+                    {this.employeeStore.canEditSelectedWork && (
                         <div style={submitButtonStlyes}>
-                            <PrimaryButton text="Submit Changes"
+                            <PrimaryButton
+                                text="Submit Changes"
                                 onClick={this.employeeStore.submitSelectedWork}
                                 disabled={!this.employeeStore.canSubmitSelectedWork}
                             />
                         </div>
-                    }
+                    )}
                 </div>
                 <div style={notesColumnStyles}>
                     <NotesBox

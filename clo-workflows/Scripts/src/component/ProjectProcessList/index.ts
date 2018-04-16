@@ -1,2 +1,3 @@
-import ProjectProcessList from "./ProjectProcessList"
+import ProjectProcessList, {IProjectGroup} from "./ProjectProcessList"
 export default ProjectProcessList
+export {IProjectGroup}

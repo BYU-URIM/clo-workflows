@@ -3,7 +3,7 @@ import { observer } from "mobx-react"
 import { ICheckboxProps } from "office-ui-fabric-react"
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
 
-interface IDescriptiveCheckboxProps extends ICheckboxProps {
+export interface IDescriptiveCheckboxProps extends ICheckboxProps {
     description: string
 }
 

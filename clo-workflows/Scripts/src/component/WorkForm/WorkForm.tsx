@@ -5,8 +5,8 @@ import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
 import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
 
-import { ClientStore } from "../store/ClientStore/ClientStore"
-import FormControlGroup from "./FormControlGroup"
+import { ClientStore } from "../../store/ClientStore/ClientStore"
+import { FormControlGroup } from "../"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
@@ -22,7 +22,7 @@ const styles = {
     } as React.CSSProperties,
 }
 
-const WorkFormModal = (props: IFormPanelProps) => {
+const WorkForm = (props: IFormPanelProps) => {
     return (
         <div style={styles.wrapper}>
             <Dropdown
@@ -48,4 +48,4 @@ const WorkFormModal = (props: IFormPanelProps) => {
         </div>
     )
 }
-export default observer(WorkFormModal)
+export default observer(WorkForm)

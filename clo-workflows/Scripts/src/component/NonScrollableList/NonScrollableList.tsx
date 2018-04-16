@@ -2,7 +2,7 @@ import * as React from "react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
 import { List } from "office-ui-fabric-react/lib/List"
-import Header from "../Header"
+import { Header } from "../"
 import { IconButton } from "office-ui-fabric-react"
 
 export interface IListItem {
@@ -42,7 +42,7 @@ const listItemTitleStyles = {
     font: "20px Segoe UI, sans-serif",
     color: "#202020",
     fontWeight: 200,
-    marginRight: 15
+    marginRight: 15,
 } as React.CSSProperties
 
 const listItemSubheaderStyles = {
@@ -76,19 +76,12 @@ export default class NonScrollableList extends React.Component<INonScrollableLis
                         >
                             <div style={listItemHeaderStyles}>
                                 <div style={listItemTitleStyles}>{item.header}</div>
-                                {   item.editable &&
-                                    <IconButton
-                                        iconProps={ {iconName: "edit"} }
-                                        onClick={() => props.onEditItem(item, index)}
-                                    />
-                                }
-                                {
-                                    item.deletable &&
-                                    <IconButton
-                                        iconProps={ {iconName: "delete"} }
-                                        onClick={() => props.onDeleteItem(item, index)}
-                                    />
-                                }
+                                {item.editable && (
+                                    <IconButton iconProps={{ iconName: "edit" }} onClick={() => props.onEditItem(item, index)} />
+                                )}
+                                {item.deletable && (
+                                    <IconButton iconProps={{ iconName: "delete" }} onClick={() => props.onDeleteItem(item, index)} />
+                                )}
                             </div>
                             <div style={listItemSubheaderStyles}>{item.subheader}</div>
                             <div>{item.body}</div>
@@ -101,8 +94,8 @@ export default class NonScrollableList extends React.Component<INonScrollableLis
 
     private getListItemStyle(index: number) {
         return this.state.hoverItemIndex === index
-        ? { ...listItemStyles, ...{ backgroundColor: "#F0F0F0", cursor: "pointer" } } // highlighted color
-        : listItemStyles // resting color
+            ? { ...listItemStyles, ...{ backgroundColor: "#F0F0F0", cursor: "pointer" } } // highlighted color
+            : listItemStyles // resting color
     }
 
     private onMouseLeaveListItem() {

@@ -1,11 +1,9 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
-import { EmployeeStore } from "../store/EmployeeStore"
-import { NonScrollableList } from "./NonScrollableList"
-import { RoleSteps } from "./RoleSteps"
+import { EmployeeStore } from "../../store/EmployeeStore"
+import { NonScrollableList, RoleSteps, ProcessBriefList } from "../"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { SearchBox } from "office-ui-fabric-react"
-import ProcessBriefList from "./ProcessBriefList"
 
 const searchProcessStyles = {
     maxWidth: "95%",

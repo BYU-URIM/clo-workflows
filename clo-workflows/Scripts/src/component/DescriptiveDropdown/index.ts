@@ -1,2 +1,2 @@
-import DescriptiveDropdown from "./DescriptiveDropdown"
+import DescriptiveDropdown, {IDescriptiveDropdownProps} from "./DescriptiveDropdown"
 export default DescriptiveDropdown

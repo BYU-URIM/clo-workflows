@@ -1,11 +1,11 @@
 import * as React from "react"
-import { SessionStore } from "../store/SessionStore"
+import { SessionStore } from "../../store/SessionStore"
 import { inject } from "mobx-react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
 import { CompoundButton, IButtonProps } from "office-ui-fabric-react/lib/Button"
-import { EmployeeStore } from "../store/EmployeeStore"
-import { IStep } from "../model/Step"
+import { EmployeeStore } from "../../store/EmployeeStore"
+import { IStep } from "../../model/Step"
 
 const wrapperStyles = { marginBottom: 40 }
 const stepButtonStyles = {

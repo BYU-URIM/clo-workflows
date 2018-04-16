@@ -1,10 +1,8 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
-import { EmployeeStore } from "../store/EmployeeStore"
-import FormControlGroup from "./FormControlGroup"
+import { EmployeeStore } from "../../store/EmployeeStore"
+import { FormControlGroup, WorkDetail, ProjectDetail } from "../"
 import { autobind } from "core-decorators"
-import { WorkDetail } from "./WorkDetail"
-import { ProjectDetail } from "./ProjectDetail"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot"
 
@@ -19,7 +17,7 @@ const wrapperStyles = {
 const submitButtonStlyes = {
     display: "flex",
     justifyContent: "center",
-    marginTop: 30
+    marginTop: 30,
 } as React.CSSProperties
 
 const processTitleStyles = {
@@ -33,17 +31,15 @@ const processFormStyle = {
     padding: "20 25",
     marginTop: 40,
     marginRight: 35,
-    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)"
+    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)",
 }
 
 const projectWorkSwitcherStyle = { marginLeft: 35 }
-
 
 @inject("rootStore")
 @autobind
 @observer
 export default class ProcessDetail extends React.Component<any, any> {
-
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }
@@ -66,7 +62,8 @@ export default class ProcessDetail extends React.Component<any, any> {
                         getFormControlDescription={employeeStore.getSelectedProcessSubmissionMetadata}
                     />
                     <div style={submitButtonStlyes}>
-                        <PrimaryButton text="Submit to Next Step"
+                        <PrimaryButton
+                            text="Submit to Next Step"
                             onClick={this.employeeStore.submitSelectedProcess}
                             disabled={!this.employeeStore.canSubmitSelectedProcess}
                         />
@@ -78,23 +75,16 @@ export default class ProcessDetail extends React.Component<any, any> {
                         linkFormat={PivotLinkFormat.tabs}
                         linkSize={PivotLinkSize.large}
                         selectedKey={this.employeeStore.projectWorkPivotSelection}
-                        onLinkClick={(item) => this.employeeStore.setProjectWorkPivotSelection(item.props.itemKey)}
+                        onLinkClick={item => this.employeeStore.setProjectWorkPivotSelection(item.props.itemKey)}
                     >
-                        <PivotItem
-                            linkText="Work"
-                            itemKey="work"
-                        >
+                        <PivotItem linkText="Work" itemKey="work">
                             <WorkDetail />
                         </PivotItem>
-                        <PivotItem
-                            linkText="Project"
-                            itemKey="project"
-                        >
+                        <PivotItem linkText="Project" itemKey="project">
                             <ProjectDetail />
                         </PivotItem>
                     </Pivot>
                 </div>
-
             </div>
         )
     }

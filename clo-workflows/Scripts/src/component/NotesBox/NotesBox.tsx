@@ -1,13 +1,13 @@
 import * as React from "react"
-import { INote, NoteScope, NoteSource, getEmptyNote } from "../model/Note"
+import { INote, NoteScope, NoteSource, getEmptyNote } from "../../model/Note"
 import { observer } from "mobx-react"
-import { NonScrollableList, IListItem } from "./NonScrollableList"
+import { NonScrollableList, IListItem } from "../"
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button"
 import { autobind } from "core-decorators"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Dialog, DialogFooter, DialogType } from "office-ui-fabric-react"
-import { IUser } from "../model/User"
-import Utils from "../utils"
+import { IUser } from "../../model/User"
+import Utils from "../../utils"
 export interface INotesBoxProps {
     title: string
     notes: ReadonlyArray<INote>

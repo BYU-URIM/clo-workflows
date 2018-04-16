@@ -1,14 +1,14 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { SessionStore } from "../store/SessionStore"
+import { SessionStore } from "../../store/SessionStore"
 import { Fabric } from "office-ui-fabric-react/lib/Fabric"
-import { Client } from "../component/Client"
+import { Client } from "../"
 import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
-import Header, { IHeaderProps } from "../component/Header"
-import { Employee } from "../component/Employee"
-import { RootStore } from "../store/RootStore"
-import { LoadingPage } from "../component/LoadingPage"
+import { Header, IHeaderProps } from "../"
+import { Employee } from "../"
+import { RootStore } from "../../store/RootStore"
+import { LoadingPage } from "../"
 
 const backgroundStyles = {} as React.CSSProperties
 
@@ -18,7 +18,7 @@ const appContentStyles = {
     margin: "0 auto",
     background: "white",
     paddingTop: 20,
-    paddingBottom: 60
+    paddingBottom: 60,
 } as React.CSSProperties
 
 // Register icons and pull the fonts from the default SharePoint cdn.
@@ -44,7 +44,7 @@ export default class App extends React.Component<any, any> {
                                 {this.rootStore.sessionStore.isEmployee ? (
                                     <Employee currentUser={this.rootStore.sessionStore.currentUser} />
                                 ) : (
-                                        <Client currentUser={this.rootStore.sessionStore.currentUser} />
+                                    <Client currentUser={this.rootStore.sessionStore.currentUser} />
                                 )}
                             </div>
                         </div>

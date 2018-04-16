@@ -3,7 +3,7 @@ import { observer } from "mobx-react"
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown"
 import { IDropdownProps } from "office-ui-fabric-react/lib/Dropdown"
 
-interface IDescriptiveDropdownProps extends IDropdownProps {
+export interface IDescriptiveDropdownProps extends IDropdownProps {
     description: string
 }
 

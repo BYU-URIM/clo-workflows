@@ -13,13 +13,13 @@ import {
     CommandButton,
 } from "office-ui-fabric-react"
 import * as React from "react"
-import { CloRequestElement } from "../model/CloRequestElement"
+import { CloRequestElement } from "../../model/CloRequestElement"
 
-import { Message } from "./Message"
-import { getStep, getStepNames } from "../model/loader/resourceLoaders"
-import { StepName } from "../model/Step"
-import { ClientViewState, ClientStoreData } from "../store/ClientStore/index"
-import { NoteSource } from "../model/Note"
+import { Message } from "../"
+import { getStep, getStepNames } from "../../model/loader/resourceLoaders"
+import { StepName } from "../../model/Step"
+import { ClientViewState, ClientStoreData } from "../../store/ClientStore/index"
+import { NoteSource } from "../../model/Note"
 import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
 import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
 

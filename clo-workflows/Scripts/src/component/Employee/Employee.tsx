@@ -1,13 +1,10 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { EmployeeStore, EmployeeViewKey } from "../store/EmployeeStore"
+import { EmployeeStore, EmployeeViewKey } from "../../store/EmployeeStore"
 import { observable } from "mobx"
-import { IStep } from "../model/Step"
+import { IStep } from "../../model/Step"
 import { autobind } from "core-decorators"
-import { EmployeeDashboard } from "./EmployeeDashboard"
-import { HeaderBreadcrumb } from "./HeaderBreadcrumb"
-import { ProcessDetail } from "./ProcessDetail"
-import { Message } from "./Message"
+import { EmployeeDashboard, HeaderBreadcrumb, ProcessDetail, Message } from "../"
 
 const wrapperStyles = {
     marginLeft: 25,
@@ -27,10 +24,7 @@ export default class Employee extends React.Component<any, any> {
         const { employeeStore } = this
         return (
             <div style={wrapperStyles}>
-                <HeaderBreadcrumb
-                    items={employeeStore.breadcrumbItems}
-                    onClickItem={employeeStore.reduceViewHierarchy}
-                    />
+                <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
                 {employeeStore.currentView === EmployeeViewKey.Dashboard && <EmployeeDashboard />}
                 {employeeStore.currentView === EmployeeViewKey.ProcessDetail && <ProcessDetail />}
                 {employeeStore.message && <Message {...employeeStore.message} />}

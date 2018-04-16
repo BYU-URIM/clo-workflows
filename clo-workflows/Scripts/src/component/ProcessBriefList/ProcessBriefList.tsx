@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { IListItem, NonScrollableList } from "./NonScrollableList"
+import { IListItem, NonScrollableList } from "../"
 
 const wrapperStyle = {
     margin: "80px 32px 80px 32px",
@@ -21,7 +21,7 @@ const processListTitleStyles = {
     textAlign: "center",
     font: "26px Segoe UI, sans-serif",
     marginBottom: "8px",
-}
+} as React.CSSProperties
 
 interface IProcessBriefListProps {
     processBriefs: IListItem[]

@@ -1,2 +1,2 @@
-import DescriptiveCheckbox from "./DescriptiveCheckbox"
+import DescriptiveCheckbox, { IDescriptiveCheckboxProps } from "./DescriptiveCheckbox"
 export default DescriptiveCheckbox

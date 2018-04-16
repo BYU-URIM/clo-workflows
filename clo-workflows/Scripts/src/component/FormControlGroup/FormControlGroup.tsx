@@ -1,12 +1,11 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { FormControl } from "../model/FormControl"
+import { FormControl } from "../../model/FormControl"
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
-import DescriptiveDropdown from "./DescriptiveDropdown"
+import { DescriptiveDropdown, DescriptiveCheckbox } from "../"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
-import { FormEntryType } from "../model/CloRequestElement"
+import { FormEntryType } from "../../model/CloRequestElement"
 import { ObservableMap } from "mobx"
-import DescriptiveCheckbox from "./DescriptiveCheckbox"
 
 interface IFormControlGroupProps {
     data: ObservableMap<FormEntryType> // map of fieldName to fieldValue
@@ -39,7 +38,7 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
         this.props.formControls.forEach(formControl => {
             const formValue = this.props.data[formControl.dataRef]
             const defaultValue = formControl.defaultValue
-            if((formValue === null || formValue === undefined) && (defaultValue !== null && defaultValue !== undefined)) {
+            if ((formValue === null || formValue === undefined) && (defaultValue !== null && defaultValue !== undefined)) {
                 this.props.updateFormField(formControl.dataRef, formControl.defaultValue)
             }
         })
@@ -48,13 +47,13 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
     public render() {
         const { props } = this
         return (
-            <div style={props.width ? Object.assign({}, styles, {width: props.width}) : styles }>
+            <div style={props.width ? Object.assign({}, styles, { width: props.width }) : styles}>
                 {props.formControls &&
                     props.formControls.map((formControl, index) => {
                         if (formControl.type === "text" || formControl.type === "datetime" || formControl.type === "number") {
                             return (
                                 <TextField
-                                    value={props.data.get(formControl.dataRef) as string || ""}
+                                    value={(props.data.get(formControl.dataRef) as string) || ""}
                                     onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
                                     label={formControl.displayName}
                                     key={index}
@@ -83,7 +82,7 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                             return (
                                 <TextField
                                     multiline
-                                    value={props.data.get(formControl.dataRef) as string || ""}
+                                    value={(props.data.get(formControl.dataRef) as string) || ""}
                                     key={index}
                                     onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
                                     label={formControl.displayName}
