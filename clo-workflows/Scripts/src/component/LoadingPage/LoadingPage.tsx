@@ -9,7 +9,7 @@ const styles = {
     transform: "scale(2.5, 2.5)"
 } as React.CSSProperties
 
-export function LoadingPage() {
+export default function LoadingPage() {
     return (
         <div style={styles}>
             <Spinner size={ SpinnerSize.large } label="loading your projects..." />

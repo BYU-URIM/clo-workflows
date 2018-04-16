@@ -16,7 +16,7 @@ const wrapperStyles = {
 @inject("rootStore")
 @autobind
 @observer
-export class Employee extends React.Component<any, any> {
+export default class Employee extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }

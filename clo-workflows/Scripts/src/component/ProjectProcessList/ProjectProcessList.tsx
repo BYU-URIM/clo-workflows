@@ -49,7 +49,7 @@ export interface ICustomGroupDividerProps extends IGroupDividerProps {
     group: ICustomGroup
 }
 
-export const ProjectProcessList = observer((props: IProjectProcessListProps) => {
+const ProjectProcessList = observer((props: IProjectProcessListProps) => {
     const fields = ["title", "step"]
     const _columns = fields.map((f, i): IColumns => ({
         key: i.toString(),
@@ -143,3 +143,5 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
         </div>
     )
 })
+
+export default ProjectProcessList

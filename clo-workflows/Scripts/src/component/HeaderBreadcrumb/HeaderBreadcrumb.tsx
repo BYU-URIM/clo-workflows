@@ -28,7 +28,7 @@ const wrapperStyles = {
 
 @autobind
 @observer
-export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IHeaderBreadcrumbState> {
+export default class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IHeaderBreadcrumbState> {
     constructor(props: IHeaderBreadcrumbProps) {
         super(props)
         this.state = { hoverBreadcrumbKey: NONE_SELECTED }

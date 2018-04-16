@@ -78,7 +78,7 @@ const rightAlignedButtonStyles = {
 
 @autobind
 @observer
-export class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
+export default class NotesBox extends React.Component<INotesBoxProps, INotesBoxState> {
     constructor(props: INotesBoxProps) {
         super(props)
         this.state = {

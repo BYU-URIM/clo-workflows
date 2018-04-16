@@ -24,7 +24,7 @@ const roleTitleStyles = {
 @inject("rootStore")
 @autobind
 @observer
-export class RoleSteps extends React.Component<any, any> {
+export default class RoleSteps extends React.Component<any, any> {
     public componentWillMount() {
         this.sessionStore = this.props.rootStore.sessionStore
         this.employeeStore = this.props.rootStore.employeeStore

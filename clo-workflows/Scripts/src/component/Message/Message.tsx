@@ -20,7 +20,7 @@ const messageStyles = {
     bottom: "0px"
 } as React.CSSProperties
 
-export const Message = (props: IMessageProps) => (
+const Message = (props: IMessageProps) => (
     <div style={wrapperStyles}>
         <div style={messageStyles}>
             <MessageBar
@@ -31,6 +31,7 @@ export const Message = (props: IMessageProps) => (
     </div>
 )
 
+export default Message
 
 // the custom message type that maps to MessageBarTypes is repetitive, it mirrors office-ui-fabric/MessageBarType
 // however, if any fabric moduels are imported into stores, it breaks tests. This means I have to make my own mapping logic and use that instead

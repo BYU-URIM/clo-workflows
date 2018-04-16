@@ -5,7 +5,7 @@ import FormControlGroup from "./FormControlGroup"
 import { NotesBox } from "./NotesBox"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
 import { SessionStore } from "../store/SessionStore"
-import { NoteScope, NoteSource } from "../model/Note"
+import { NoteSource } from "../model/Note"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -28,18 +28,17 @@ const titleStlyes = {
 const submitButtonStlyes = {
     display: "flex",
     justifyContent: "center",
-    marginTop: 30,
-    marginRight: 25
+    marginTop: 30
 } as React.CSSProperties
 
+const projectHeaderStyles = { display: "flex" }
 const editButtonStyles = { transform: "translateX(-25px)" }
-const workHeaderStyles = { display: "flex" } as React.CSSProperties
 const formColumnStyles = { padding: "0 8 0 30" }
 const notesColumnStyles = { padding: "0 30 0 8" }
 
 @inject("rootStore")
 @observer
-export class WorkDetail extends React.Component<any, any> {
+export default class ProjectDetail extends React.Component<any, any> {
 
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
@@ -53,47 +52,46 @@ export class WorkDetail extends React.Component<any, any> {
         return (
             <div style={wrapperStyle}>
                 <div style={formColumnStyles}>
-                    <div style={workHeaderStyles}>
-                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedWork ? "Edit Work" : "View Work"}</div>
+                    <div style={projectHeaderStyles}>
+                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedProject ? "Edit Project" : "View Project"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
                                 disabled={!this.employeeStore.isSelectedRequestActive}
-                                iconProps={ this.employeeStore.canEditSelectedWork ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
-                                onClick={this.employeeStore.canEditSelectedWork
-                                    ? this.employeeStore.stopEditingSelectedWork
-                                    : this.employeeStore.startEditingSelectedWork
+                                iconProps={ this.employeeStore.canEditSelectedProject ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
+                                onClick={this.employeeStore.canEditSelectedProject
+                                    ? this.employeeStore.stopEditingSelectedProject
+                                    : this.employeeStore.startEditingSelectedProject
                                 }
                             />
                         </div>
                     </div>
                     <FormControlGroup
-                        data={this.employeeStore.selectedWork}
-                        formControls={this.employeeStore.selectedWorkView.formControls}
-                        updateFormField={this.employeeStore.updateSelectedWork}
-                        validation={this.employeeStore.selectedWorkValidation}
+                        data={this.employeeStore.selectedProject}
+                        formControls={this.employeeStore.selectedProjectView.formControls}
+                        updateFormField={this.employeeStore.updateSelectedProject}
+                        validation={this.employeeStore.selectedProjectValidation}
                         width={350}
                     />
                     {
-                        this.employeeStore.canEditSelectedWork &&
+                        this.employeeStore.canEditSelectedProject &&
                         <div style={submitButtonStlyes}>
                             <PrimaryButton text="Submit Changes"
-                                onClick={this.employeeStore.submitSelectedWork}
-                                disabled={!this.employeeStore.canSubmitSelectedWork}
+                                onClick={this.employeeStore.submitSelectedProject}
+                                disabled={!this.employeeStore.canSubmitSelectedProject}
                             />
                         </div>
                     }
                 </div>
                 <div style={notesColumnStyles}>
                     <NotesBox
-                        title="Work Notes"
-                        notes={this.employeeStore.selectedWorkNotes}
+                        title="Project Notes"
+                        notes={this.employeeStore.selectedProjectNotes}
                         onCreateNote={this.employeeStore.submitNewNote}
-                        onUpdateNote={this.employeeStore.updateNote}
                         onDeleteNote={this.employeeStore.deleteNote}
-                        currentUser={this.sessionStore.currentUser}
+                        onUpdateNote={this.employeeStore.updateNote}
                         disableButtons={this.employeeStore.asyncPendingLockout || !this.employeeStore.isSelectedRequestActive}
-                        maxScope={NoteScope.EMPLOYEE}
-                        noteSource={NoteSource.WORK}
+                        currentUser={this.sessionStore.currentUser}
+                        noteSource={NoteSource.PROJECT}
                     />
                 </div>
             </div>

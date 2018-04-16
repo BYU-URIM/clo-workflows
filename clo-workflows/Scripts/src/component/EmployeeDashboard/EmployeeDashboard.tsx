@@ -18,7 +18,7 @@ const searchProcessTitleStyles = {
 
 @inject("rootStore")
 @observer
-export class EmployeeDashboard extends React.Component<any, any> {
+export default class EmployeeDashboard extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }

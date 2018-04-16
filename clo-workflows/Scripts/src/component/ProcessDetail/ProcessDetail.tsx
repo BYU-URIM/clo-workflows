@@ -42,7 +42,7 @@ const projectWorkSwitcherStyle = { marginLeft: 35 }
 @inject("rootStore")
 @autobind
 @observer
-export class ProcessDetail extends React.Component<any, any> {
+export default class ProcessDetail extends React.Component<any, any> {
 
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore

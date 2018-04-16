@@ -40,7 +40,7 @@ const styles = {
 
 @inject("rootStore")
 @observer
-export class Client extends React.Component<any, any> {
+export default class Client extends React.Component<any, any> {
     public componentWillMount() {
         this.clientStore = this.props.rootStore.clientStore
     }

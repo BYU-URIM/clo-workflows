@@ -2,7 +2,7 @@ import * as React from "react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
 import { List } from "office-ui-fabric-react/lib/List"
-import Header from "./Header"
+import Header from "../Header"
 import { IconButton } from "office-ui-fabric-react"
 
 export interface IListItem {
@@ -55,7 +55,7 @@ const listItemHeaderStyles = { display: "flex" } as React.CSSProperties
 
 @autobind
 @observer
-export class NonScrollableList extends React.Component<INonScrollableListProps, IProcessListState> {
+export default class NonScrollableList extends React.Component<INonScrollableListProps, IProcessListState> {
     constructor(props) {
         super(props)
         this.state = { hoverItemIndex: -1 }

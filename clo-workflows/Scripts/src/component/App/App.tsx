@@ -25,7 +25,7 @@ const appContentStyles = {
 initializeIcons()
 @inject("rootStore")
 @observer
-export class App extends React.Component<any, any> {
+export default class App extends React.Component<any, any> {
     componentWillMount() {
         this.rootStore = this.props.rootStore
     }
