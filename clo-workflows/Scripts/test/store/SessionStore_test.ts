@@ -1,10 +1,9 @@
 import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
 import { SessionStore, RootStore } from "../../src/store/"
-import { IDataService } from "../../src/service/dataService/IDataService"
-import { MockDataService } from "../../src/service/dataService/MockDataService"
-import { IUser } from "../../src/model/User"
-import { getRole } from "../../src/model/loader/resourceLoaders"
+import { IDataService, MockDataService,  } from "../../src/service"
+import { IUser } from "../../src/model"
+import { getRole } from "../../src/model/loader"
 
 ava.test("sessionStore recognizes employee", async t => {
     const mockDataService = mock(MockDataService)
@@ -14,7 +13,7 @@ ava.test("sessionStore recognizes employee", async t => {
         email: "email@gmail.com",
         Id: "1234-5678",
         roles: [getRole("Administrator")],
-        primaryRole: getRole("Administrator")
+        primaryRole: getRole("Administrator"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
 
@@ -36,7 +35,7 @@ ava.test("sessionStore recognizes anonymous user", async t => {
         email: "email@gmail.com",
         Id: "1234-5678",
         roles: [getRole("Anonymous")],
-        primaryRole: getRole("Anonymous")
+        primaryRole: getRole("Anonymous"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
 

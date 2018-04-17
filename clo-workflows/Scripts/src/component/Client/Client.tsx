@@ -3,7 +3,7 @@ import * as React from "react"
 
 import { SessionStore, ClientStore } from "../../store/"
 import { Header } from "../"
-import { NoteSource, NoteScope } from "../../model/Note"
+import { NoteSource, NoteScope } from "../../model"
 import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList } from "../"
 
 const styles = {

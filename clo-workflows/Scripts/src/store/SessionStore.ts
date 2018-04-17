@@ -1,7 +1,7 @@
 import { RootStore } from "./"
-import { IUser } from "../model/User"
+import { IUser } from "../model"
 import { observable, action, computed } from "mobx"
-import { IDataService } from "../service/dataService/IDataService"
+import { IDataService } from "../service/"
 
 export interface IFormState {
     newProjectChecked?: boolean

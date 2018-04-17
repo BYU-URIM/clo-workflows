@@ -4,7 +4,7 @@ import { inject } from "mobx-react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
 import { CompoundButton, IButtonProps } from "office-ui-fabric-react/lib/Button"
-import { IStep } from "../../model/Step"
+import { IStep } from "../../model"
 
 const wrapperStyles = { marginBottom: 40 }
 const stepButtonStyles = {

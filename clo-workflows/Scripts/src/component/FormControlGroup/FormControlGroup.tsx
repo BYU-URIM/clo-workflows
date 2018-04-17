@@ -1,10 +1,9 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { FormControl } from "../../model/FormControl"
+import { FormControl, FormEntryType } from "../../model"
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
 import { DescriptiveDropdown, DescriptiveCheckbox } from "../"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
-import { FormEntryType } from "../../model/CloRequestElement"
 import { ObservableMap } from "mobx"
 
 interface IFormControlGroupProps {

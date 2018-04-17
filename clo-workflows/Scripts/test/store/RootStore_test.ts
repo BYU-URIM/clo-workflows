@@ -2,11 +2,9 @@ import { SessionStore, RootStore, ClientStore } from "./../../src/store/"
 import * as ava from "ava"
 import { useStrict } from "mobx"
 import { when, mock, verify, instance, spy, anything } from "ts-mockito"
-import { IUser } from "../../src/model/User"
-import { MockProjects, MockUsers, MockProcesses, MockWorks } from "../../src/service/dataService/MockData"
-import { MockDataService } from "../../src/service/dataService/MockDataService"
-import { ListName } from "../../src/service/dataService/IDataService"
-import { getRole } from "../../src/model/loader/resourceLoaders"
+import { IUser } from "../../src/model"
+import { MockProjects, MockUsers, MockProcesses, MockWorks, MockDataService, ListName } from "../../src/service/"
+import { getRole } from "../../src/model/loader"
 
 ava.test("root store creates session store, employee store when an employee logs in", async t => {
     const mockDataService = mock(MockDataService)
@@ -16,7 +14,7 @@ ava.test("root store creates session store, employee store when an employee logs
         email: "email@gmail.com",
         Id: "1234-5678",
         roles: [getRole("Administrator")],
-        primaryRole: getRole("Administrator")
+        primaryRole: getRole("Administrator"),
     }
 
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
@@ -40,7 +38,7 @@ ava.test("root store creates sessionStore, client store when client logs in", as
         email: "email@gmail.com",
         Id: "1234-5678",
         roles: [getRole("Anonymous")],
-        primaryRole: getRole("Anonymous")
+        primaryRole: getRole("Anonymous"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
     when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(Promise.resolve(MockProjects))

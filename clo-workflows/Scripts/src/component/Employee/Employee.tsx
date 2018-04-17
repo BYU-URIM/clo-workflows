@@ -2,7 +2,7 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { EmployeeStore, EmployeeViewKey } from "../../store/"
 import { observable } from "mobx"
-import { IStep } from "../../model/Step"
+import { IStep } from "../../model/"
 import { autobind } from "core-decorators"
 import { EmployeeDashboard, HeaderBreadcrumb, ProcessDetail, Message } from "../"
 

@@ -3,7 +3,7 @@ import { EmployeeStore, SessionStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { NotesBox, FormControlGroup } from "../"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import { NoteSource } from "../../model/Note"
+import { NoteSource } from "../../model"
 
 const wrapperStyle = {
     padding: "20 0",

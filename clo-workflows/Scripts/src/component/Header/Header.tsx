@@ -1,5 +1,5 @@
 import * as React from "react"
-import { IUser } from "../../model/User"
+import { IUser } from "../../model"
 import { Persona, PersonaInitialsColor } from "office-ui-fabric-react/lib/Persona"
 export interface IHeaderProps {
     currentUser: IUser

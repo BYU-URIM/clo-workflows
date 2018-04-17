@@ -5,7 +5,7 @@ import { BrowserRouter, Router } from "react-router-dom"
 import { App } from "./component/"
 import { Provider } from "mobx-react"
 import { RootStore } from "./store/"
-import { DataServiceFactory } from "./service/dataService/DataServiceFactory"
+import { DataServiceFactory } from "./service/"
 
 // in strict mode, mobx requires that all observable data members only be modified through explicit @action mutators
 useStrict(true)

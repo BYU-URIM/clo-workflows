@@ -1,17 +1,25 @@
-import { RootStore } from "./"
+import RootStore from "./RootStore"
 import { action, ObservableMap, observable, runInAction, computed, toJS, IKeyValueMap } from "mobx"
-import { FormEntryType, CloRequestElement } from "../model/CloRequestElement"
+import {
+    FormEntryType,
+    CloRequestElement,
+    FormControl,
+    IFormControl,
+    IStep,
+    StepName,
+    getNextStepName,
+    View,
+    INote,
+    NoteSource,
+    NoteScope,
+} from "../model"
+import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProcessFieldName } from "../model/loader"
 import { autobind } from "core-decorators"
-import { FormControl, IFormControl } from "../model/FormControl"
-import { IStep, StepName, getNextStepName } from "../model/Step"
 import { IListItem } from "../component/NonScrollableList"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
 import Utils from "../utils"
-import { INote, NoteSource, NoteScope } from "../model/Note"
 import { IDataService, ListName } from "../service/dataService/IDataService"
-import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProcessFieldName } from "../model/loader/resourceLoaders"
 import StoreUtils from "./StoreUtils"
-import { View } from "../model/View"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
