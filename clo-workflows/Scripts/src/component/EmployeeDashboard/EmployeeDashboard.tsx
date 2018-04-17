@@ -30,29 +30,26 @@ export default class EmployeeDashboard extends React.Component<any, any> {
                 <RoleSteps />
                 <div style={searchProcessStyles}>
                     <div style={searchProcessTitleStyles}>Search Past Processes</div>
-                    <div style={{width: 300, marginTop: 10}}>
-                        <SearchBox
-                            placeholder="search by work or project"
-                            onSearch={employeeStore.searchProcesses}
-                        />
+                    <div style={{ width: 300, marginTop: 10 }}>
+                        <SearchBox placeholder="search by work or project" onSearch={employeeStore.searchProcesses} />
                     </div>
                 </div>
-                {employeeStore.isFocusStep &&
+                {employeeStore.isFocusStep && (
                     <ProcessBriefList
                         processBriefs={employeeStore.selectedStepProcessBriefs}
                         title={`${employeeStore.focusStep.name} Active Processes`}
                         emptyMessage="no active processes"
                         onSelectProcessBrief={employeeStore.selectActiveProcess}
                     />
-                }
-                {employeeStore.isFocusSearch &&
+                )}
+                {employeeStore.isFocusSearch && (
                     <ProcessBriefList
                         processBriefs={employeeStore.searchedProcessBriefs}
                         title="Search Results"
                         emptyMessage="no processes found"
                         onSelectProcessBrief={employeeStore.selectSearchedProcess}
                     />
-                }
+                )}
             </div>
         )
     }
