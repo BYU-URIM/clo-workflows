@@ -1,9 +1,8 @@
 import * as React from "react"
-import { EmployeeStore } from "../../store/EmployeeStore"
+import { EmployeeStore, SessionStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { NotesBox, FormControlGroup } from "../"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import { SessionStore } from "../../store/SessionStore"
 import { NoteSource } from "../../model/Note"
 
 const wrapperStyle = {

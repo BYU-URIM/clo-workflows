@@ -1,5 +1,5 @@
 import * as React from "react"
-import { INote, NoteScope, NoteSource, getEmptyNote } from "../../model/Note"
+import { INote, NoteScope, NoteSource, getEmptyNote } from "../../model/"
 import { observer } from "mobx-react"
 import { NonScrollableList, IListItem } from "../"
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button"

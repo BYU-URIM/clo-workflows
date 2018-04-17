@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
-import { EmployeeStore } from "../../store/EmployeeStore"
+import { EmployeeStore } from "../../store/"
 import { FormControlGroup, WorkDetail, ProjectDetail } from "../"
 import { autobind } from "core-decorators"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"

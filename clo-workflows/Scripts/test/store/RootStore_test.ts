@@ -1,7 +1,5 @@
-import { SessionStore } from "./../../src/store/SessionStore"
-import { ClientStore } from "./../../src/store/ClientStore/ClientStore"
+import { SessionStore, RootStore, ClientStore } from "./../../src/store/"
 import * as ava from "ava"
-import { RootStore } from "../../src/store/RootStore"
 import { useStrict } from "mobx"
 import { when, mock, verify, instance, spy, anything } from "ts-mockito"
 import { IUser } from "../../src/model/User"

@@ -1,14 +1,10 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { SessionStore } from "../../store/SessionStore"
+import { SessionStore, RootStore } from "../../store/"
 import { Fabric } from "office-ui-fabric-react/lib/Fabric"
-import { Client } from "../"
 import DevTools from "mobx-react-devtools"
 import { initializeIcons } from "@uifabric/icons"
-import { Header, IHeaderProps } from "../"
-import { Employee } from "../"
-import { RootStore } from "../../store/RootStore"
-import { LoadingPage } from "../"
+import { Header, IHeaderProps, Employee, LoadingPage, Client } from "../"
 
 const backgroundStyles = {} as React.CSSProperties
 

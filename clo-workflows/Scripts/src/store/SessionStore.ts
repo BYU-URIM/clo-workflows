@@ -1,4 +1,4 @@
-import { RootStore } from "./RootStore"
+import { RootStore } from "./"
 import { IUser } from "../model/User"
 import { observable, action, computed } from "mobx"
 import { IDataService } from "../service/dataService/IDataService"
@@ -8,7 +8,7 @@ export interface IFormState {
     newWorkChecked?: boolean
 }
 
-export class SessionStore {
+export default class SessionStore {
     constructor(private root: RootStore, private dataService: IDataService) {}
 
     @observable currentUser: IUser
