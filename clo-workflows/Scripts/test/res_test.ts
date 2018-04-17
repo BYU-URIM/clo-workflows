@@ -4,9 +4,7 @@ import * as STEPS from "../res/json/processing_config/PROCESS_STEPS.json"
 import * as VIEWS from "../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../res/json/form_templates/FORM_CONTROLS.json"
 import * as DB_CONFIG from "../res/json/DB_CONFIG.json"
-import { IFormControl } from "../src/model/FormControl"
-import { IStep } from "../src/model/Step"
-import { PROJECT_TYPES, WORK_TYPES } from "../src/model/CloRequestElement"
+import { IFormControl, IStep, PROJECT_TYPES, WORK_TYPES } from "../src/model"
 
 /*
     ensure all JSON roles have the correct shape:
@@ -18,7 +16,7 @@ import { PROJECT_TYPES, WORK_TYPES } from "../src/model/CloRequestElement"
 */
 ava.test("test json roles for correct shape", t => {
     for (const roleName in ROLES) {
-        const role: { name: string; permittedSteps: string[], rank: number } = ROLES[roleName]
+        const role: { name: string; permittedSteps: string[]; rank: number } = ROLES[roleName]
         t.true(typeof role.name === "string")
         t.true(Number.isInteger(role.rank))
         t.true(Array.isArray(role.permittedSteps))
@@ -60,7 +58,7 @@ ava.test("test json steps for correct shape", t => {
             // ensure that the view accurately displays the given step according to the rules above
             // first check the viewFormControls against the step processFormControls (they should contain the same field names)
             t.deepEqual(step.processFieldNames.length, jsonView.formControls.length)
-            for(const formControlName of jsonView.formControls) {
+            for (const formControlName of jsonView.formControls) {
                 const formControl: IFormControl = FORM_CONTROLS[formControlName]
                 t.true(step.processFieldNames.includes(formControl.dataRef))
             }
@@ -73,7 +71,7 @@ ava.test("test json steps for correct shape", t => {
                     return accumulator.concat(prevStepJson.processFieldNames)
                 }, [])
             t.deepEqual(previousStepsProcessFieldNames.length, jsonView.readonlyFormControls.length)
-            for(const formControlName of jsonView.readonlyFormControls) {
+            for (const formControlName of jsonView.readonlyFormControls) {
                 const formControl: IFormControl = FORM_CONTROLS[formControlName]
                 t.true(previousStepsProcessFieldNames.includes(formControl.dataRef))
             }
@@ -123,7 +121,7 @@ ava.test("test that all views contain only valid formControl names and have corr
         const view = VIEWS[viewName]
         t.true(typeof view.dataSource === "string")
 
-        if(view.formControls) {
+        if (view.formControls) {
             t.true(Array.isArray(view.formControls))
             const formControlNames: string[] = view.formControls
             formControlNames.forEach(formControlName => {
@@ -131,7 +129,7 @@ ava.test("test that all views contain only valid formControl names and have corr
             })
         }
 
-        if(view.readonlyFormControls) {
+        if (view.readonlyFormControls) {
             t.true(Array.isArray(view.readonlyFormControls))
             const formControlNames: string[] = view.readonlyFormControls
             formControlNames.forEach(formControlName => {
@@ -140,7 +138,7 @@ ava.test("test that all views contain only valid formControl names and have corr
         }
 
         // if the view is a process view, it must have form controls and readonlyFormControls
-        if(view.dataSource === "processes") {
+        if (view.dataSource === "processes") {
             t.truthy(view.formControls && view.readonlyFormControls)
         }
     }
@@ -171,7 +169,11 @@ ava.test("test that DB_CONFIG.json has the correct structure", t => {
 
         // make sure each field conforms to rules
         table.fields.forEach(fieldName => {
-            t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)
+            t.regex(
+                fieldName,
+                /^([A-Za-z | 0-9]){1,32}$/,
+                `${fieldName} should be < 32 characters long and only contain letters or numbers`
+            )
         })
     })
 })
@@ -200,11 +202,11 @@ ava.test("ensure that each form control dataRef references a valid field from th
 ava.test("ensure that the work type and project type arrays refer to valid view names", t => {
     const jsonViewNames = Object.keys(VIEWS)
 
-    for(const workName of WORK_TYPES) {
+    for (const workName of WORK_TYPES) {
         t.true(jsonViewNames.includes(workName))
     }
 
-    for(const projectName of PROJECT_TYPES) {
+    for (const projectName of PROJECT_TYPES) {
         t.true(jsonViewNames.includes(projectName))
     }
 })

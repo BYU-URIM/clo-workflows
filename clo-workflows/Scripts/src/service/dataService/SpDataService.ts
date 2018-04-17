@@ -1,17 +1,11 @@
-import { IUser, User, IUserDto } from "../../model/User"
-import { CloRequestElement } from "../../model/CloRequestElement"
-import { IFormControl } from "../../model/FormControl"
-import { IView } from "../../model/View"
+import { IUser, User, IUserDto, CloRequestElement, IFormControl, IView, IRole, INote, NoteScope, NoteSource, IWork } from "../../model"
 import { IDataService, ListName } from "./IDataService"
 import * as pnp from "sp-pnp-js"
 import { Web } from "sp-pnp-js/lib/sharepoint/webs"
-import { IRole } from "../../model/Role"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
-import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
-import { IWork } from "../../model/Work"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -51,8 +45,8 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            userRoleNames.map(roleName => getRole(roleName))
-            // [getRole("Anonymous")],
+            // userRoleNames.map(roleName => getRole(roleName))
+            [getRole("Anonymous")]
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend

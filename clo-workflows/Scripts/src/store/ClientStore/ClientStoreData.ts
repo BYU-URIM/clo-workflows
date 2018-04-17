@@ -1,11 +1,9 @@
 import { IDataService } from "../../service/dataService/IDataService"
 import { action, observable, computed } from "mobx"
-import { IUser } from "../../model/User"
-import { NoteSource, NoteScope } from "../../model/Note"
-import { IProjectGroup } from "../../component/ProjectProcessList"
-import { StepName } from "../../model/Step"
+import { IUser, StepName, CloRequestElement } from "../../model"
+import { NoteSource, NoteScope } from "../../model/"
+import { IProjectGroup } from "../../component/"
 import { getStep, getStepNames } from "../../model/loader/resourceLoaders"
-import { CloRequestElement } from "../../model/CloRequestElement"
 export class ClientStoreData {
     dataService: IDataService
     currentUser: IUser

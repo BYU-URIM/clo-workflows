@@ -5,7 +5,7 @@ import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig } from "./IUtil"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Util } from "sp-pnp-js"
-import { CloRequestElement } from "../../src/model/CloRequestElement"
+import { CloRequestElement } from "../../src/model/"
 
 const DB_CONFIG = db as any
 
