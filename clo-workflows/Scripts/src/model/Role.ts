@@ -1,4 +1,4 @@
-import { IStep } from "./Step"
+import { IStep } from "."
 import { observable } from "mobx"
 
 export interface IRole {

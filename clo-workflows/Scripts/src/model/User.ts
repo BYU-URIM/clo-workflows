@@ -1,4 +1,4 @@
-import { IRole } from "./Role"
+import { IRole } from "."
 import { observable, computed } from "mobx"
 
 export interface IUser {

@@ -30,7 +30,7 @@ export enum NoteSource {
     WORK = "work"
 }
 
-export function getEmptyNote(noteScope?: NoteScope): INote {
+export const getEmptyNote = (noteScope?: NoteScope): INote => {
     return {
         submitter: null,
         dateSubmitted: null,

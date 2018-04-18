@@ -1,6 +1,4 @@
-import { IUserDto, User } from "../../model/User"
-import { CloRequestElement } from "../../model/CloRequestElement"
-import { INote, NoteScope } from "../../model/Note"
+import { IUserDto, User, CloRequestElement, INote, NoteScope } from "../../model"
 
 export const MockUsersDtos: Array<IUserDto> = [
     {
