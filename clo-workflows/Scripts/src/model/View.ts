@@ -1,4 +1,4 @@
-import { IFormControl, FormControl } from "./FormControl"
+import { IFormControl, FormControl } from "."
 import { observable, action } from "mobx"
 
 // View is a list of form controls rendered as a group
