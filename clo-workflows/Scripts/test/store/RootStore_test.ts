@@ -6,7 +6,7 @@ import { IUser } from "../../src/model"
 import { MockProjects, MockUsers, MockProcesses, MockWorks, MockDataService, ListName } from "../../src/service/"
 import { getRole } from "../../src/model/loader"
 
-ava.test("root store creates session store, employee store when an employee logs in", async t => {
+ava.test("root store creates session store, employee store, and client store when an employee logs in", async t => {
     const mockDataService = mock(MockDataService)
     const user: IUser = {
         name: "Connor Moody",
@@ -27,7 +27,7 @@ ava.test("root store creates session store, employee store when an employee logs
     await rootStore.init()
     t.truthy(rootStore.sessionStore)
     t.truthy(rootStore.employeeStore)
-    t.falsy(rootStore.clientStore)
+    t.truthy(rootStore.clientStore)
 })
 
 ava.test("root store creates sessionStore, client store when client logs in", async t => {

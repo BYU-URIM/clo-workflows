@@ -11,7 +11,7 @@ declare const NODE_ENV: string
 
 // associates NODE_ENV string to Environment enum and checks for any uncrecognized NODE_ENV string
 // defaults to local if no NODE_ENV string is supplied by build script
-function getEnvironment(nodeEnv: string = "local"): EnvType {
+function getEnvironment(nodeEnv): EnvType {
     switch (nodeEnv) {
         case "local":
             return EnvType.LOCAL
@@ -25,4 +25,13 @@ function getEnvironment(nodeEnv: string = "local"): EnvType {
 }
 
 // make environment constant and publically available
-export const ENVIRONMENT: EnvType = getEnvironment(NODE_ENV)
+
+let _environment: EnvType
+// if NODE_ENV is undefined (happens during test execution), an error will be thrown and _environment will get a default value
+try {
+    _environment = getEnvironment(NODE_ENV)
+} catch(exeption) {
+    _environment = EnvType.LOCAL
+}
+
+export const ENVIRONMENT = _environment
