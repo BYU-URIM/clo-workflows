@@ -32,10 +32,8 @@ export class SpDataService implements IDataService {
         const currentUserGroups: IRole[] = spGroupNames.includes("Administrator")
             ? /* if admin is one of their groups, add all roles */
               [...allRoleNames].map(roleName => getRole(roleName))
-            : /* otherwise add all groups, if none add anon */
-              spGroupNames.length > 0
-                ? spGroupNames.map(roleName => getRole(roleName))
-                : [getRole("Anonymous")]
+            : /* otherwise add all groups */
+              [...spGroupNames, "Anonymous"].map(roleName => getRole(roleName))
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         return new User(
             rawUser.Title,
