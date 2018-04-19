@@ -21,7 +21,7 @@ const processListTitleStyles = {
     textAlign: "center",
     font: "26px Segoe UI, sans-serif",
     marginBottom: "8px",
-}
+} as React.CSSProperties
 
 interface IProcessBriefListProps {
     processBriefs: IListItem[]

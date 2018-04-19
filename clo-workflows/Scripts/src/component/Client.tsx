@@ -60,18 +60,10 @@ export class Client extends React.Component<any, any> {
                         />
                     </div>
                     <div style={styles.rightSection}>
-                        {this.clientStore.view.notesType && (
-                            <NotesBox
-                                title={this.clientStore.view.notesTitle}
-                                notes={this.clientStore.selectedNotes}
-                                onCreateNote={this.clientStore.submitNewNote}
-                                onUpdateNote={this.clientStore.updateNote}
-                                onDeleteNote={this.clientStore.deleteNote}
-                                currentUser={this.clientStore.data.currentUser}
-                                noteSource={this.clientStore.view.notesType}
-                                maxScope={NoteScope.CLIENT}
-                            />
-                        )}
+                        {this.clientStore.view.notesType && null
+                            // <NotesBox
+                            // />
+                        }
                     </div>
                 </div>
                 {clientStore.view.modal === "project" && <ProjectFormModal clientStore={clientStore} />}

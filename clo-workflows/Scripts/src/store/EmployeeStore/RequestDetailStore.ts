@@ -45,8 +45,8 @@ export class RequestDetailStore {
             this.process.get("submitterId") as string,
         )
         runInAction(() => {
-            this.workNotesStore = new NotesStore(this, this.dataService, NoteSource.WORK, workNotes)
-            this.projectNotesStore = new NotesStore(this, this.dataService, NoteSource.PROJECT, projectNotes)
+            this.workNotesStore = new NotesStore(this, this.dataService, NoteSource.WORK, NoteScope.EMPLOYEE, workNotes)
+            this.projectNotesStore = new NotesStore(this, this.dataService, NoteSource.PROJECT, NoteScope.EMPLOYEE, projectNotes)
         })
     }
 

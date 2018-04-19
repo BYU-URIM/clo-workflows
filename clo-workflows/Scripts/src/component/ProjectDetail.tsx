@@ -87,15 +87,8 @@ export class ProjectDetail extends React.Component<any, any> {
                 {
                     requestDetailStore.projectNotesStore &&
                     <NotesBox
+                        notesStore={requestDetailStore.projectNotesStore}
                         title="Project Notes"
-                        notes={requestDetailStore.projectNotesStore.notes}
-                        onCreateNote={requestDetailStore.projectNotesStore.submitNewNote}
-                        onDeleteNote={requestDetailStore.projectNotesStore.deleteNote}
-                        onUpdateNote={requestDetailStore.projectNotesStore.updateNote}
-                        disableButtons={this.employeeStore.asyncPendingLockout || !requestDetailStore.isRequestActive}
-                        currentUser={this.sessionStore.currentUser}
-                        maxScope={NoteScope.EMPLOYEE}
-                        noteSource={NoteSource.PROJECT}
                     />
                 }
                 </div>
