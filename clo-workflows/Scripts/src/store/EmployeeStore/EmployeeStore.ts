@@ -272,6 +272,9 @@ export class EmployeeStore implements IViewProvider {
             this.message = null
         }), displayTime)
     }
+
+    @observable clientMode: boolean = false
+    @action toggleClientMode = () => this.clientMode = !this.clientMode
 }
 
 export enum EmployeeViewKey {

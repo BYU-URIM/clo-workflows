@@ -1,5 +1,4 @@
-import { IFormControl } from "./FormControl"
-import { CloRequestElement } from "./CloRequestElement"
+import { IFormControl, CloRequestElement } from "."
 import { observable } from "mobx"
 
 export type StepName =

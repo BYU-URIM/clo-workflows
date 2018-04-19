@@ -1,17 +1,27 @@
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
 import { autobind } from "core-decorators"
-import { FormEntryType, CloRequestElement, PROJECT_TYPES, WORK_TYPES } from "../../model/CloRequestElement"
-import { FormControl } from "../../model/FormControl"
+import {
+    FormEntryType,
+    CloRequestElement,
+    PROJECT_TYPES,
+    WORK_TYPES,
+    FormControl,
+    User,
+    IUser,
+    getNextStepName,
+    StepName,
+    IStep,
+    INote,
+    NoteSource,
+    NoteScope
+} from "../../model"
 import { getView, getStep } from "../../model/loader/resourceLoaders"
-import { IDataService } from "../../service/dataService/IDataService"
+import { IDataService } from "../../service/dataService/"
 import Utils from "../../utils"
 import StoreUtils from "../StoreUtils"
 import { RootStore } from "../RootStore"
-import { User, IUser } from "../../model/User"
-import { getNextStepName, StepName, IStep } from "../../model/Step"
 import { IProjectGroup } from "../../component/ProjectProcessList"
 import { ClientViewState, ClientStoreData } from "./"
-import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { NotesStore } from "../NotesStore"
 import { IViewProvider, IMessage } from "../ViewProvider"
 
@@ -91,6 +101,10 @@ export class ClientStore implements IViewProvider {
         return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
     }
 
+    @computed get asyncPendingLockout(): boolean {
+        return this.view.asyncPendingLockout
+    }
+
     @computed
     get typesAsOptions() {
         return {
@@ -147,7 +161,9 @@ export class ClientStore implements IViewProvider {
     processClientRequest = async () => {
         this.view.project.type
             ? await this.submitProject()
-            : this.view.work.isNew ? (await this.submitWork(), await this.submitProcess()) : await this.submitProcess()
+            : this.view.work.isNew
+                ? (await this.submitWork(), await this.submitProcess())
+                : await this.submitProcess()
         this.view.resetClientState()
     }
 

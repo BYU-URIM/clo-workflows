@@ -1,16 +1,12 @@
 import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
-import { IRole } from "../../model/Role"
-import { IUserDto, IUser, User } from "../../model/User"
-import { CloRequestElement } from "../../model/CloRequestElement"
+import { IRole, IUserDto, IUser, User, CloRequestElement, INote, NoteSource, NoteScope, IWork } from "../../model"
 import Utils from "../../utils"
 import { IDataService, ListName } from "./IDataService"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
-import { INote, NoteSource, NoteScope } from "../../model/Note"
 import { getRole } from "../../model/loader/resourceLoaders"
 import { ItemAddResult } from "sp-pnp-js/lib/pnp"
 import { IKeyValueMap } from "mobx"
-import { IWork } from "../../model/Work"
 
 export class MockDataService implements IDataService {
     searchProcessesByTitle(searchTerm: string): Promise<CloRequestElement[]> {

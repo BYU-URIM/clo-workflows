@@ -1,5 +1,4 @@
-import { FormControl } from "../model/FormControl"
-import { FormEntryType, CloRequestElement, IdentifiableObject } from "../model/CloRequestElement"
+import { FormControl, FormEntryType, CloRequestElement, IdentifiableObject } from "../model"
 import { observable, action, ObservableMap } from "mobx"
 
 class StoreUtils {
@@ -12,18 +11,18 @@ class StoreUtils {
     private static DATE_INPUT_ERROR = "please enter a date: mm/dd/yyyy"
 
     validateFormControl = (formControl: FormControl, value: FormEntryType): string => {
-        if(formControl.touched) {
-        if(formControl.touched && formControl.required && !value) {
-            return StoreUtils.REQUIRED_INPUT_ERROR
-        }
+        if (formControl.touched) {
+            if (formControl.touched && formControl.required && !value) {
+                return StoreUtils.REQUIRED_INPUT_ERROR
+            }
 
-        if (value && formControl.type === "number" && !StoreUtils.NUMBER_REGEX.test(value as string)) {
-            return StoreUtils.NUMBER_INPUT_ERROR
-        }
+            if (value && formControl.type === "number" && !StoreUtils.NUMBER_REGEX.test(value as string)) {
+                return StoreUtils.NUMBER_INPUT_ERROR
+            }
 
-        if (value && formControl.type === "datetime" && !StoreUtils.DATE_REGEX.test(value as string)) {
-            return StoreUtils.DATE_INPUT_ERROR
-        }
+            if (value && formControl.type === "datetime" && !StoreUtils.DATE_REGEX.test(value as string)) {
+                return StoreUtils.DATE_INPUT_ERROR
+            }
         }
     }
 
@@ -33,7 +32,7 @@ class StoreUtils {
             const fieldName: string = formControl.dataRef
             const inputVal = formValues.get(fieldName)
             const error = this.validateFormControl(formControl, inputVal)
-            if(error) {
+            if (error) {
                 accumulator[fieldName] = error
             }
             return accumulator
@@ -55,7 +54,7 @@ class StoreUtils {
     replaceElementInListById(newItem: IdentifiableObject, list: IdentifiableObject[]): boolean {
         const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
 
-        if(staleItemIndex !== -1) {
+        if (staleItemIndex !== -1) {
             list[staleItemIndex] = newItem
             return true
         }

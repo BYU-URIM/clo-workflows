@@ -4,7 +4,7 @@ import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import { StepName } from "../../src/model/Step"
+import { StepName } from "../../src/model"
 import { toJS } from "mobx"
 
 /* ensure that getView() correctly builds view object with shape

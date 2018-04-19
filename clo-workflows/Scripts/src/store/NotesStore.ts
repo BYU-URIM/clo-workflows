@@ -25,7 +25,7 @@ export class NotesStore {
     constructor (
         config: INotesStoreConfig
     ) {
-        this.viewProvider = config.viewProvider
+        this.provider = config.viewProvider
         this.dataService = config.dataService
         this.source = config.source
         this.maxScope = config.maxScope
@@ -39,7 +39,7 @@ export class NotesStore {
 
     readonly source: NoteSource
     readonly maxScope: NoteScope
-    private readonly viewProvider: IViewProvider
+    readonly provider: IViewProvider
     private readonly dataService: IDataService
     private readonly attachedClientId: string
     private readonly attachedWorkId: number
@@ -93,31 +93,31 @@ export class NotesStore {
 
     @action
     private async createSelectedNote(): Promise<void> {
-        this.viewProvider.setAsyncPendingLockout(true)
+        this.provider.setAsyncPendingLockout(true)
 
         try {
             // fill in any info the new note needs before submission
             this.selectedNote.dateSubmitted = Utils.getFormattedDate()
-            this.selectedNote.submitter = this.viewProvider.root.sessionStore.currentUser.name
+            this.selectedNote.submitter = this.provider.root.sessionStore.currentUser.name
 
             const addResult = await this.dataService.createNote(toJS(this.selectedNote))
             this.selectedNote.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
 
             // if submission is successful, add the new note to the corresponding list
             runInAction(() => this.notes.unshift(this.selectedNote))
-            this.viewProvider.postMessage({messageText: "note successfully submitted", messageType: "success"})
+            this.provider.postMessage({messageText: "note successfully submitted", messageType: "success"})
             this.unselectNote()
         } catch(error) {
             console.error(error)
-            this.viewProvider.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
+            this.provider.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
         } finally {
-            this.viewProvider.setAsyncPendingLockout(false)
+            this.provider.setAsyncPendingLockout(false)
         }
     }
 
     @action
     private async updateSelectedNote(): Promise<void> {
-        this.viewProvider.setAsyncPendingLockout(true)
+        this.provider.setAsyncPendingLockout(true)
 
         try {
             this.selectedNote.dateSubmitted = Utils.getFormattedDate()
@@ -125,31 +125,31 @@ export class NotesStore {
 
             // if submission is successful, add the new note to the corresponding list
             StoreUtils.replaceElementInListById(this.selectedNote, this.notes)
-            this.viewProvider.postMessage({messageText: "note successfully updated", messageType: "success"})
+            this.provider.postMessage({messageText: "note successfully updated", messageType: "success"})
             this.unselectNote()
         } catch(error) {
             console.error(error)
-            this.viewProvider.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
+            this.provider.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
         } finally {
-            this.viewProvider.setAsyncPendingLockout(false)
+            this.provider.setAsyncPendingLockout(false)
         }
     }
 
     @action
     async deleteNote(noteToDelete: INote): Promise<void> {
-        this.viewProvider.setAsyncPendingLockout(true)
+        this.provider.setAsyncPendingLockout(true)
 
         try {
             await this.dataService.deleteNote(noteToDelete.Id)
 
             // if deletion is successful, remove the new note from the corresponding list
             StoreUtils.removeELementInListById(noteToDelete, this.notes)
-            this.viewProvider.postMessage({messageText: "note successfully deleted", messageType: "success"})
+            this.provider.postMessage({messageText: "note successfully deleted", messageType: "success"})
         } catch(error) {
             console.error(error)
-            this.viewProvider.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
+            this.provider.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
         } finally {
-            this.viewProvider.setAsyncPendingLockout(false)
+            this.provider.setAsyncPendingLockout(false)
         }
     }
 
