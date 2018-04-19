@@ -5,6 +5,7 @@ import { FormControlGroup, WorkDetail, ProjectDetail } from "../"
 import { autobind } from "core-decorators"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot"
+import { PivotState } from "../../store/EmployeeStore/RequestDetailStore"
 
 const wrapperStyles = {
     margin: "30 0",
@@ -47,25 +48,25 @@ export default class ProcessDetail extends React.Component<any, any> {
     private employeeStore: EmployeeStore
 
     public render() {
-        const { employeeStore } = this
+        const requestDetailStore = this.employeeStore.requestDetailStore
         return (
             <div style={wrapperStyles}>
                 <div style={processFormStyle}>
                     {/* Process Form */}
                     <div style={processTitleStyles}>Edit Process</div>
                     <FormControlGroup
-                        data={employeeStore.selectedProcess}
-                        formControls={employeeStore.selectedProcessView.formControls}
-                        validation={employeeStore.selectedProcessValidation}
-                        updateFormField={employeeStore.updateSelectedProcess}
+                        data={requestDetailStore.process}
+                        formControls={requestDetailStore.processView.formControls}
+                        validation={requestDetailStore.processValidation}
+                        updateFormField={requestDetailStore.updateProcess}
                         width={350}
-                        getFormControlDescription={employeeStore.getSelectedProcessSubmissionMetadata}
+                        getFormControlDescription={requestDetailStore.getProcessSubmissionMetadata}
                     />
                     <div style={submitButtonStlyes}>
                         <PrimaryButton
                             text="Submit to Next Step"
-                            onClick={this.employeeStore.submitSelectedProcess}
-                            disabled={!this.employeeStore.canSubmitSelectedProcess}
+                            onClick={requestDetailStore.submitProcess}
+                            disabled={!requestDetailStore.canSubmitProcess}
                         />
                     </div>
                 </div>
@@ -74,8 +75,8 @@ export default class ProcessDetail extends React.Component<any, any> {
                     <Pivot
                         linkFormat={PivotLinkFormat.tabs}
                         linkSize={PivotLinkSize.large}
-                        selectedKey={this.employeeStore.projectWorkPivotSelection}
-                        onLinkClick={item => this.employeeStore.setProjectWorkPivotSelection(item.props.itemKey)}
+                        selectedKey={requestDetailStore.pivotState}
+                        onLinkClick={(item) => requestDetailStore.setPivotState(item.props.itemKey as PivotState)}
                     >
                         <PivotItem linkText="Work" itemKey="work">
                             <WorkDetail />

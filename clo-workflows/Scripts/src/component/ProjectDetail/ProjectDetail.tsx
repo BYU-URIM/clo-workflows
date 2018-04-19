@@ -1,9 +1,9 @@
 import * as React from "react"
-import { EmployeeStore, SessionStore } from "../../store/"
+import { EmployeeStore, SessionStore } from "../../store"
 import { inject, observer } from "mobx-react"
 import { NotesBox, FormControlGroup } from "../"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import { NoteSource } from "../../model"
+import { NoteSource, NoteScope } from "../../model/Note"
 
 const wrapperStyle = {
     padding: "20 0",
@@ -46,53 +46,48 @@ export default class ProjectDetail extends React.Component<any, any> {
     private sessionStore: SessionStore
 
     public render() {
+        const requestDetailStore = this.employeeStore.requestDetailStore
         return (
             <div style={wrapperStyle}>
                 <div style={formColumnStyles}>
                     <div style={projectHeaderStyles}>
-                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedProject ? "Edit Project" : "View Project"}</div>
+                        <div style={titleStlyes}>{requestDetailStore.canEditProject ? "Edit Project" : "View Project"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
-                                disabled={!this.employeeStore.isSelectedRequestActive}
-                                iconProps={
-                                    this.employeeStore.canEditSelectedProject ? { iconName: "BoxMultiplySolid" } : { iconName: "edit" }
-                                }
-                                onClick={
-                                    this.employeeStore.canEditSelectedProject
-                                        ? this.employeeStore.stopEditingSelectedProject
-                                        : this.employeeStore.startEditingSelectedProject
+                                disabled={!requestDetailStore.isRequestActive}
+                                iconProps={ requestDetailStore.canEditProject ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
+                                onClick={requestDetailStore.canEditProject
+                                    ? requestDetailStore.stopEditingProject
+                                    : requestDetailStore.startEditingProject
                                 }
                             />
                         </div>
                     </div>
                     <FormControlGroup
-                        data={this.employeeStore.selectedProject}
-                        formControls={this.employeeStore.selectedProjectView.formControls}
-                        updateFormField={this.employeeStore.updateSelectedProject}
-                        validation={this.employeeStore.selectedProjectValidation}
+                        data={requestDetailStore.project}
+                        formControls={requestDetailStore.projectView.formControls}
+                        updateFormField={requestDetailStore.updateProject}
+                        validation={requestDetailStore.projectValidation}
                         width={350}
                     />
-                    {this.employeeStore.canEditSelectedProject && (
+                    {
+                        requestDetailStore.canEditProject &&
                         <div style={submitButtonStlyes}>
-                            <PrimaryButton
-                                text="Submit Changes"
-                                onClick={this.employeeStore.submitSelectedProject}
-                                disabled={!this.employeeStore.canSubmitSelectedProject}
+                            <PrimaryButton text="Submit Changes"
+                                onClick={requestDetailStore.submitProject}
+                                disabled={!requestDetailStore.canSubmitProject}
                             />
                         </div>
-                    )}
+                    }
                 </div>
                 <div style={notesColumnStyles}>
+                {
+                    requestDetailStore.projectNotesStore &&
                     <NotesBox
+                        notesStore={requestDetailStore.projectNotesStore}
                         title="Project Notes"
-                        notes={this.employeeStore.selectedProjectNotes}
-                        onCreateNote={this.employeeStore.submitNewNote}
-                        onDeleteNote={this.employeeStore.deleteNote}
-                        onUpdateNote={this.employeeStore.updateNote}
-                        disableButtons={this.employeeStore.asyncPendingLockout || !this.employeeStore.isSelectedRequestActive}
-                        currentUser={this.sessionStore.currentUser}
-                        noteSource={NoteSource.PROJECT}
                     />
+                }
                 </div>
             </div>
         )

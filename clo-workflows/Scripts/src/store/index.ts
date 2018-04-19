@@ -1,6 +1,6 @@
-import RootStore from "./RootStore"
-import SessionStore from "./SessionStore"
+import {RootStore} from "./RootStore"
+import {SessionStore} from "./SessionStore"
 import StoreUtils from "./StoreUtils"
-import EmployeeStore, {EmployeeViewKey} from "./EmployeeStore"
+import {EmployeeStore, EmployeeViewKey} from "./EmployeeStore/EmployeeStore"
 import ClientStore from "./ClientStore"
 export { RootStore, SessionStore, StoreUtils, EmployeeStore, ClientStore, EmployeeViewKey }

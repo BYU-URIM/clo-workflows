@@ -41,8 +41,8 @@ export default class RoleSteps extends React.Component<any, any> {
         return (
             <div style={wrapperStyles}>
                 <div style={stepButtonRowStyles}>
-                    {// first map each role to a new role row
-                    sessionStore.currentUser.roles.map((role, index) => (
+                    {// first map each role to a new role row (as long as that role has a nonzero number of permitted steps)
+                    sessionStore.currentUser.roles.filter(role => !!role.permittedSteps.length).map((role, index) => (
                         <div key={index}>
                             <div style={roleTitleStyles}>{`${role.name} Steps`}</div>
                             {// within each role row, map each permitted step to a step button

@@ -8,7 +8,7 @@ export interface IFormState {
     newWorkChecked?: boolean
 }
 
-export default class SessionStore {
+export class SessionStore {
     constructor(private root: RootStore, private dataService: IDataService) {}
 
     @observable currentUser: IUser

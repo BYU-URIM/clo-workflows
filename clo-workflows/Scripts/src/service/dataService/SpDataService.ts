@@ -27,13 +27,18 @@ export class SpDataService implements IDataService {
             .groups.get()
         const allRoleNames = getRoleNames()
         const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title).filter(groupName => allRoleNames.includes(groupName))
-        // if a user is part of the administrator group, that user receives every other role (besides anonymous)
         // TODO more generalizable way to make administrator have every role?
-        const currentUserGroups: IRole[] = spGroupNames.includes("Administrator")
+        let currentUserGroups: IRole[]
+        if(spGroupNames.length) {
+            currentUserGroups = spGroupNames.includes("Administrator")
             ? /* if admin is one of their groups, add all roles */
-              [...allRoleNames].map(roleName => getRole(roleName))
+              allRoleNames.map(roleName => getRole(roleName)).filter(role => role.name !== "Anonymous")
             : /* otherwise add all groups */
-              [...spGroupNames, "Anonymous"].map(roleName => getRole(roleName))
+              spGroupNames.map(roleName => getRole(roleName))
+        } else {
+            currentUserGroups = [getRole("Anonymous")]
+        }
+
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         return new User(
             rawUser.Title,
@@ -41,7 +46,6 @@ export class SpDataService implements IDataService {
             rawUser.Email,
             rawUser.UserId.NameId,
             currentUserGroups
-            // [getRole("Anonymous")]
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend

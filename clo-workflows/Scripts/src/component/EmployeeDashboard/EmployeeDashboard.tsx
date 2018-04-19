@@ -39,7 +39,7 @@ export default class EmployeeDashboard extends React.Component<any, any> {
                         processBriefs={employeeStore.selectedStepProcessBriefs}
                         title={`${employeeStore.focusStep.name} Active Processes`}
                         emptyMessage="no active processes"
-                        onSelectProcessBrief={employeeStore.selectActiveProcess}
+                        onSelectProcessBrief={employeeStore.selectActiveDetailProcess}
                     />
                 )}
                 {employeeStore.isFocusSearch && (
@@ -47,7 +47,7 @@ export default class EmployeeDashboard extends React.Component<any, any> {
                         processBriefs={employeeStore.searchedProcessBriefs}
                         title="Search Results"
                         emptyMessage="no processes found"
-                        onSelectProcessBrief={employeeStore.selectSearchedProcess}
+                        onSelectProcessBrief={employeeStore.selectSearchedDetailProcess}
                     />
                 )}
             </div>

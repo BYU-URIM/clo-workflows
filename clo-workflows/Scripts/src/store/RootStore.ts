@@ -1,11 +1,11 @@
 import { Employee } from "./../component/"
 import { IDataService } from "../service/dataService/IDataService"
 import { action, observable, runInAction } from "mobx"
-import SessionStore from "./SessionStore"
-import EmployeeStore from "./EmployeeStore"
-import ClientStore from "./ClientStore"
+import { ClientStore } from "./ClientStore/ClientStore"
+import { EmployeeStore } from "./EmployeeStore/EmployeeStore"
+import { SessionStore } from "./SessionStore"
 
-export default class RootStore {
+export class RootStore {
     sessionStore: SessionStore
     clientStore: ClientStore // created for any anonymous (non-employee) user logged into the app
     employeeStore: EmployeeStore // created for employees logged into the app

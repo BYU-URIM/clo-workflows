@@ -19,8 +19,8 @@ const styles = {
     dropDown: {
         width: "200px",
         margin: "20px 0px",
-    } as React.CSSProperties,
-}
+    },
+} as {[styleName: string]: React.CSSProperties}
 
 const WorkForm = (props: IFormPanelProps) => {
     return (

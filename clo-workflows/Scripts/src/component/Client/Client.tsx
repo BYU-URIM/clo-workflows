@@ -47,25 +47,19 @@ export default class Client extends React.Component<any, any> {
                 <div style={styles.wrapper}>
                     <div style={styles.leftSection}>
                         <ProjectProcessList
-                            messageVisible={clientStore.message}
+                            messageVisible={!!clientStore.message}
                             data={this.clientStore.data}
                             handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
                             view={clientStore.view}
                         />
                     </div>
                     <div style={styles.rightSection}>
-                        {this.clientStore.view.notesType && (
+                        {this.clientStore.view.notesType &&
                             <NotesBox
-                                title={this.clientStore.view.notesTitle}
-                                notes={this.clientStore.selectedNotes}
-                                onCreateNote={this.clientStore.submitNewNote}
-                                onUpdateNote={this.clientStore.updateNote}
-                                onDeleteNote={this.clientStore.deleteNote}
-                                currentUser={this.clientStore.data.currentUser}
-                                noteSource={this.clientStore.view.notesType}
-                                maxScope={NoteScope.CLIENT}
+                                title={clientStore.view.notesTitle}
+                                notesStore={clientStore.selectedNotesStore}
                             />
-                        )}
+                        }
                     </div>
                 </div>
                 {clientStore.view.modal === "project" && <ProjectFormModal clientStore={clientStore} />}

@@ -13,34 +13,36 @@ import {
     IStep,
     INote,
     NoteSource,
-    NoteScope,
+    NoteScope
 } from "../../model"
 import { getView, getStep } from "../../model/loader/resourceLoaders"
 import { IDataService } from "../../service/dataService/"
 import Utils from "../../utils"
 import StoreUtils from "../StoreUtils"
-import RootStore from "../RootStore"
+import { RootStore } from "../RootStore"
 import { IProjectGroup } from "../../component/ProjectProcessList"
 import { ClientViewState, ClientStoreData } from "./"
+import { NotesStore } from "../NotesStore"
+import { IViewProvider, IMessage } from "../ViewProvider"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
 @autobind
-export class ClientStore {
+export class ClientStore implements IViewProvider {
     @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* Observable maps to store the info entered that is not state */
     @observable newProject: ClientObsMap
     @observable newProcess: ClientObsMap
     @observable newWork: ClientObsMap
     /* any message to be shown in the view */
-    @observable message: any
+    @observable message: IMessage
     /* ------------------------------------------------------------ *
      * - data stores fetched data and GET api calls
      * - view stores user interactions that ui is derived from
      * ------------------------------------------------------------ */
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
-    constructor(private root: RootStore, private dataService: IDataService) {
+    constructor(public root: RootStore, private dataService: IDataService) {
         this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
@@ -79,6 +81,11 @@ export class ClientStore {
         )
     }
 
+    @action
+    setAsyncPendingLockout(val: boolean) {
+        this.view.asyncPendingLockout = val
+    }
+
     /* ------------------------------------------------------------ *
      *                  Computed Values for view
      * ------------------------------------------------------------ */
@@ -92,6 +99,10 @@ export class ClientStore {
         const typeToValidate = this.currentForm
         const newInstanceOfType = this.newWork || this.newProject
         return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
+    }
+
+    @computed get asyncPendingLockout(): boolean {
+        return this.view.asyncPendingLockout
     }
 
     @computed
@@ -120,6 +131,20 @@ export class ClientStore {
         return this.view.notesType === NoteSource.PROJECT
             ? this.data.process_notes.filter(n => n.projectId === this.view.project.id)
             : this.data.process_notes.filter(n => n.workId === this.view.work.id)
+    }
+
+    @computed
+    get selectedNotesStore() {
+        return new NotesStore({
+            viewProvider: this,
+            dataService: this.dataService,
+            source: NoteSource.PROJECT,
+            maxScope: NoteScope.EMPLOYEE,
+            notes: this.selectedNotes,
+            // TODO fill in with current selected process / project / work info
+            attachedClientId: /*this.process.get("submitterId") as string*/ null,
+            attachedProjectId: /*this.project.get("Id") as number*/ null
+        })
     }
 
     /* ------------------------------------------------------------ *
@@ -156,7 +181,7 @@ export class ClientStore {
 
     @action
     private submitProject = async (): Promise<void> => {
-        this.view.asyncPendingLockout = true
+        this.setAsyncPendingLockout(true)
         this.newProject.set("type", this.view.project.type)
         try {
             const res = await this.dataService.createProject(this.newProject.toJS())
@@ -168,13 +193,13 @@ export class ClientStore {
             console.error(error)
             this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: "error" })
         } finally {
-            this.view.asyncPendingLockout = false
+            this.setAsyncPendingLockout(false)
         }
     }
 
     @action
     private submitWork = async (): Promise<void> => {
-        this.view.asyncPendingLockout = true
+        this.setAsyncPendingLockout(true)
         try {
             this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
@@ -185,13 +210,13 @@ export class ClientStore {
                 messageType: "error",
             })
         } finally {
-            this.view.asyncPendingLockout = false
+            this.setAsyncPendingLockout(false)
         }
     }
 
     @action
     private submitProcess = async (): Promise<void> => {
-        this.view.asyncPendingLockout = true
+        this.setAsyncPendingLockout(true)
         try {
             const previousStep: IStep = getStep("Intake")
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
@@ -217,7 +242,7 @@ export class ClientStore {
                 messageType: "error",
             })
         } finally {
-            this.view.asyncPendingLockout = false
+            this.setAsyncPendingLockout(false)
         }
     }
 
@@ -226,7 +251,7 @@ export class ClientStore {
     /*******************************************************************************************************/
     @action
     async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
-        this.view.asyncPendingLockout = true
+        this.setAsyncPendingLockout(true)
         let submissionStatus = true
         try {
             // fill in any info the new note needs before submission

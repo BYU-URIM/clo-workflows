@@ -26,6 +26,10 @@ const titleStyles = {
     alignSelf: "center",
 } as React.CSSProperties
 
+const toggleStyles = {
+    marginTop: 18
+}
+
 const Header = (props: IHeaderProps) => {
     const { currentUser } = props
     return (
@@ -39,7 +43,16 @@ const Header = (props: IHeaderProps) => {
                     secondaryText={`${currentUser.username} - ${currentUser.primaryRole.name}`}
                 />
             </div>
-            {props.toggleClientMode && <Toggle label="Client Mode" checked={props.clientMode} onClick={props.toggleClientMode} />}
+            {
+                props.toggleClientMode &&
+                <div style={toggleStyles}>
+                    <Toggle
+                        label="Client Mode"
+                        checked={props.clientMode}
+                        onClick={props.toggleClientMode}
+                    />
+                </div>
+            }
         </div>
     )
 }

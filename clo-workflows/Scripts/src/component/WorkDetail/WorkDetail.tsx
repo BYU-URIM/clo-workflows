@@ -47,52 +47,48 @@ export default class WorkDetail extends React.Component<any, any> {
     private sessionStore: SessionStore
 
     public render() {
+        const requestDetailStore = this.employeeStore.requestDetailStore
         return (
             <div style={wrapperStyle}>
                 <div style={formColumnStyles}>
                     <div style={workHeaderStyles}>
-                        <div style={titleStlyes}>{this.employeeStore.canEditSelectedWork ? "Edit Work" : "View Work"}</div>
+                        <div style={titleStlyes}>{requestDetailStore.canEditWork ? "Edit Work" : "View Work"}</div>
                         <div style={editButtonStyles}>
                             <IconButton
-                                disabled={!this.employeeStore.isSelectedRequestActive}
-                                iconProps={this.employeeStore.canEditSelectedWork ? { iconName: "BoxMultiplySolid" } : { iconName: "edit" }}
-                                onClick={
-                                    this.employeeStore.canEditSelectedWork
-                                        ? this.employeeStore.stopEditingSelectedWork
-                                        : this.employeeStore.startEditingSelectedWork
+                                disabled={!requestDetailStore.isRequestActive}
+                                iconProps={ requestDetailStore.canEditWork ? {iconName: "BoxMultiplySolid"} : {iconName: "edit"} }
+                                onClick={requestDetailStore.canEditWork
+                                    ? requestDetailStore.stopEditingWork
+                                    : requestDetailStore.startEditingWork
                                 }
                             />
                         </div>
                     </div>
                     <FormControlGroup
-                        data={this.employeeStore.selectedWork}
-                        formControls={this.employeeStore.selectedWorkView.formControls}
-                        updateFormField={this.employeeStore.updateSelectedWork}
-                        validation={this.employeeStore.selectedWorkValidation}
+                        data={requestDetailStore.work}
+                        formControls={requestDetailStore.workView.formControls}
+                        updateFormField={requestDetailStore.updateWork}
+                        validation={requestDetailStore.workValidation}
                         width={350}
                     />
-                    {this.employeeStore.canEditSelectedWork && (
+                    {
+                        requestDetailStore.canEditWork &&
                         <div style={submitButtonStlyes}>
-                            <PrimaryButton
-                                text="Submit Changes"
-                                onClick={this.employeeStore.submitSelectedWork}
-                                disabled={!this.employeeStore.canSubmitSelectedWork}
+                            <PrimaryButton text="Submit Changes"
+                                onClick={requestDetailStore.submitWork}
+                                disabled={!requestDetailStore.canSubmitWork}
                             />
                         </div>
-                    )}
+                    }
                 </div>
                 <div style={notesColumnStyles}>
+                {
+                    requestDetailStore.workNotesStore &&
                     <NotesBox
+                        notesStore={requestDetailStore.workNotesStore}
                         title="Work Notes"
-                        notes={this.employeeStore.selectedWorkNotes}
-                        onCreateNote={this.employeeStore.submitNewNote}
-                        onUpdateNote={this.employeeStore.updateNote}
-                        onDeleteNote={this.employeeStore.deleteNote}
-                        currentUser={this.sessionStore.currentUser}
-                        disableButtons={this.employeeStore.asyncPendingLockout || !this.employeeStore.isSelectedRequestActive}
-                        maxScope={NoteScope.EMPLOYEE}
-                        noteSource={NoteSource.WORK}
                     />
+                }
                 </div>
             </div>
         )

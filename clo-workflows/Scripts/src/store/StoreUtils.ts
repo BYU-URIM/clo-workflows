@@ -60,6 +60,11 @@ class StoreUtils {
         }
         return false
     }
+
+    @action
+    removeELementInListById(itemToDelete: IdentifiableObject, list: Array<IdentifiableObject>) {
+        list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
+    }
 }
 
 export default new StoreUtils()
