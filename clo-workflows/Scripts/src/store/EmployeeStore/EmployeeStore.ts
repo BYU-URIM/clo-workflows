@@ -13,10 +13,11 @@ import { getView, getStep, getViewAndMakeReadonly, getStepById, getStepForProces
 import StoreUtils from "./../StoreUtils"
 import { View } from "../../model/View"
 import { RequestDetailStore } from "./RequestDetailStore"
+import { IMessage, IViewProvider } from "../ViewProvider"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
 @autobind
-export class EmployeeStore {
+export class EmployeeStore implements IViewProvider {
     constructor(
         public readonly root: RootStore,
         private readonly dataService: IDataService
@@ -276,9 +277,4 @@ export class EmployeeStore {
 export enum EmployeeViewKey {
     Dashboard = "DASHBOARD",
     ProcessDetail = "PROCESS_DETAIL",
-}
-
-interface IMessage {
-    messageText: string,
-    messageType: "error" | "success"
 }

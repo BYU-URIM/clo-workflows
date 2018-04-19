@@ -53,16 +53,18 @@ export class Client extends React.Component<any, any> {
                 <div style={styles.wrapper}>
                     <div style={styles.leftSection}>
                         <ProjectProcessList
-                            messageVisible={clientStore.message}
+                            messageVisible={!!clientStore.message}
                             data={this.clientStore.data}
                             handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
                             view={clientStore.view}
                         />
                     </div>
                     <div style={styles.rightSection}>
-                        {this.clientStore.view.notesType && null
-                            // <NotesBox
-                            // />
+                        {this.clientStore.view.notesType &&
+                            <NotesBox
+                                title={clientStore.view.notesTitle}
+                                notesStore={clientStore.selectedNotesStore}
+                            />
                         }
                     </div>
                 </div>

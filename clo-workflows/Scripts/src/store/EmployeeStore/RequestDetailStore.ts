@@ -9,12 +9,11 @@ import Utils from "../../utils"
 import StoreUtils from "./../StoreUtils"
 import { StepName, getNextStepName } from "../../model/Step"
 import { IFormControl } from "../../model/FormControl"
-import { NotesStore } from "./NotesStore"
+import { NotesStore } from "../NotesStore"
 import { NoteSource, NoteScope } from "../../model/Note"
 
 @autobind
 export class RequestDetailStore {
-
     constructor(
         public readonly employeeStore: EmployeeStore,
         private readonly dataService: IDataService,
@@ -45,8 +44,24 @@ export class RequestDetailStore {
             this.process.get("submitterId") as string,
         )
         runInAction(() => {
-            this.workNotesStore = new NotesStore(this, this.dataService, NoteSource.WORK, NoteScope.EMPLOYEE, workNotes)
-            this.projectNotesStore = new NotesStore(this, this.dataService, NoteSource.PROJECT, NoteScope.EMPLOYEE, projectNotes)
+            this.workNotesStore = new NotesStore({
+                viewProvider: this.employeeStore,
+                dataService: this.dataService,
+                source: NoteSource.WORK,
+                maxScope: NoteScope.EMPLOYEE,
+                notes: workNotes,
+                attachedClientId: this.process.get("submitterId") as string,
+                attachedWorkId: this.work.get("Id") as number
+            })
+            this.projectNotesStore = new NotesStore({
+                viewProvider: this.employeeStore,
+                dataService: this.dataService,
+                source: NoteSource.PROJECT,
+                maxScope: NoteScope.EMPLOYEE,
+                notes: workNotes,
+                attachedClientId: this.process.get("submitterId") as string,
+                attachedProjectId: this.project.get("Id") as number
+            })
         })
     }
 

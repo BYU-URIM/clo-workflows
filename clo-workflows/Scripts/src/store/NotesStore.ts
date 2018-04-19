@@ -1,29 +1,50 @@
 import { autobind } from "core-decorators"
 import { observable, action, runInAction, computed, toJS } from "mobx"
-import { INote, NoteSource, NoteScope, getEmptyNote } from "../../model/Note"
-import { RequestDetailStore } from "./RequestDetailStore"
-import { IDataService } from "../../service/dataService/IDataService"
-import { EmployeeStore } from "./EmployeeStore"
-import Utils from "../../utils"
-import StoreUtils from "../StoreUtils"
-import { IListItem } from "../../component/NonScrollableList"
+import { INote, NoteSource, NoteScope, getEmptyNote } from "./../model/Note"
+import { RequestDetailStore } from "./EmployeeStore/RequestDetailStore"
+import { IDataService } from "./../service/dataService/IDataService"
+import { EmployeeStore } from "./EmployeeStore/EmployeeStore"
+import Utils from "./../utils"
+import StoreUtils from "./StoreUtils"
+import { IListItem } from "./../component/NonScrollableList"
+import { IViewProvider } from "./ViewProvider"
+
+export interface INotesStoreConfig {
+    viewProvider: IViewProvider,
+    dataService: IDataService,
+    source: NoteSource,
+    maxScope: NoteScope,
+    notes: INote[],
+    attachedClientId: string
+    attachedWorkId?: number,
+    attachedProjectId?: number
+}
 
 @autobind
 export class NotesStore {
     constructor (
-        public readonly requestDetailStore: RequestDetailStore,
-        private readonly dataService: IDataService,
-        public readonly source: NoteSource,
-        public readonly maxScope: NoteScope,
-        notes: INote[]
+        config: INotesStoreConfig
     ) {
-        this.notes = notes
-        this.employeeStore = this.requestDetailStore.employeeStore
+        this.viewProvider = config.viewProvider
+        this.dataService = config.dataService
+        this.source = config.source
+        this.maxScope = config.maxScope
+        this.notes = config.notes
+        this.attachedClientId = config.attachedClientId
+        this.attachedWorkId = config.attachedWorkId
+        this.attachedProjectId = config.attachedProjectId
 
-        this.displayCount = Math.min(this.DEFAULT_DISPLAY_COUNT, notes.length)
+        this.displayCount = Math.min(this.DEFAULT_DISPLAY_COUNT, this.notes.length)
     }
 
-    public readonly employeeStore: EmployeeStore
+    readonly source: NoteSource
+    readonly maxScope: NoteScope
+    private readonly viewProvider: IViewProvider
+    private readonly dataService: IDataService
+    private readonly attachedClientId: string
+    private readonly attachedWorkId: number
+    private readonly attachedProjectId: number
+
     @observable notes: INote[]
     @observable displayCount: number
     @observable selectedNote: INote
@@ -72,31 +93,31 @@ export class NotesStore {
 
     @action
     private async createSelectedNote(): Promise<void> {
-        this.employeeStore.setAsyncPendingLockout(true)
+        this.viewProvider.setAsyncPendingLockout(true)
 
         try {
             // fill in any info the new note needs before submission
             this.selectedNote.dateSubmitted = Utils.getFormattedDate()
-            this.selectedNote.submitter = this.employeeStore.root.sessionStore.currentUser.name
+            this.selectedNote.submitter = this.viewProvider.root.sessionStore.currentUser.name
 
             const addResult = await this.dataService.createNote(toJS(this.selectedNote))
             this.selectedNote.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
 
             // if submission is successful, add the new note to the corresponding list
             runInAction(() => this.notes.unshift(this.selectedNote))
-            this.employeeStore.postMessage({messageText: "note successfully submitted", messageType: "success"})
+            this.viewProvider.postMessage({messageText: "note successfully submitted", messageType: "success"})
             this.unselectNote()
         } catch(error) {
             console.error(error)
-            this.employeeStore.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
+            this.viewProvider.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
         } finally {
-            this.employeeStore.setAsyncPendingLockout(false)
+            this.viewProvider.setAsyncPendingLockout(false)
         }
     }
 
     @action
     private async updateSelectedNote(): Promise<void> {
-        this.employeeStore.setAsyncPendingLockout(true)
+        this.viewProvider.setAsyncPendingLockout(true)
 
         try {
             this.selectedNote.dateSubmitted = Utils.getFormattedDate()
@@ -104,31 +125,31 @@ export class NotesStore {
 
             // if submission is successful, add the new note to the corresponding list
             StoreUtils.replaceElementInListById(this.selectedNote, this.notes)
-            this.employeeStore.postMessage({messageText: "note successfully updated", messageType: "success"})
+            this.viewProvider.postMessage({messageText: "note successfully updated", messageType: "success"})
             this.unselectNote()
         } catch(error) {
             console.error(error)
-            this.employeeStore.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
+            this.viewProvider.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
         } finally {
-            this.employeeStore.setAsyncPendingLockout(false)
+            this.viewProvider.setAsyncPendingLockout(false)
         }
     }
 
     @action
     async deleteNote(noteToDelete: INote): Promise<void> {
-        this.employeeStore.setAsyncPendingLockout(true)
+        this.viewProvider.setAsyncPendingLockout(true)
 
         try {
             await this.dataService.deleteNote(noteToDelete.Id)
 
             // if deletion is successful, remove the new note from the corresponding list
             StoreUtils.removeELementInListById(noteToDelete, this.notes)
-            this.employeeStore.postMessage({messageText: "note successfully deleted", messageType: "success"})
+            this.viewProvider.postMessage({messageText: "note successfully deleted", messageType: "success"})
         } catch(error) {
             console.error(error)
-            this.employeeStore.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
+            this.viewProvider.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
         } finally {
-            this.employeeStore.setAsyncPendingLockout(false)
+            this.viewProvider.setAsyncPendingLockout(false)
         }
     }
 
@@ -138,13 +159,13 @@ export class NotesStore {
 
         // initialize an empty note with starting information
         if(this.selectedNote.scope === NoteScope.CLIENT) {
-            this.selectedNote.attachedClientId = this.requestDetailStore.process.get("submitterId") as string
+            this.selectedNote.attachedClientId = this.attachedClientId
         }
 
         if(this.source === NoteSource.PROJECT) {
-            this.selectedNote.projectId = String(this.requestDetailStore.project.get("Id"))
+            this.selectedNote.projectId = String(this.attachedProjectId)
         } else if(this.source === NoteSource.WORK) {
-            this.selectedNote.workId = String(this.requestDetailStore.work.get("Id"))
+            this.selectedNote.workId = String(this.attachedWorkId)
         }
     }
 
