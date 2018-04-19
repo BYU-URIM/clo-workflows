@@ -9,7 +9,7 @@
     "build:local": "webpack-cli --env.NODE_ENV=local",
     "build:sharepoint": "webpack-cli --env.NODE_ENV=sharepoint",
     "build:sharepointProxy": "webpack-cli --env.NODE_ENV=sharepointProxy",
-    "build:production": "webpack-cli --env.Node_ENV=sharepoint --mode production",
+    "build:production": "webpack-cli --env.NODE_ENV=sharepoint --mode production",
     "test": "rimraf test_build/** && tsc --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
     "lint": "tslint -c tslint.json 'src/**/*.ts*' && tslint -c tslint.json 'test/**/*.ts*'",
     "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll",

@@ -22,7 +22,7 @@ const personaStyles = {
 const titleStyles = {
     font: "65px Segoe UI, sans-serif",
     color: "#686868",
-    margin: "0 10% 0 30%",
+    margin: "0 10% 0 25%",
     alignSelf: "center",
 } as React.CSSProperties
 
