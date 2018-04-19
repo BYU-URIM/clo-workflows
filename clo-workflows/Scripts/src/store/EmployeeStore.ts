@@ -564,6 +564,8 @@ export default class EmployeeStore {
             this.canEditSelectedProject = false
         }
     }
+    @observable clientMode: boolean = false
+    @action toggleClientMode = () => this.clientMode = !this.clientMode
 
     /*******************************************************************************************************/
     // MISCELLANEOUS MEMBERS AND HELPER METHODS

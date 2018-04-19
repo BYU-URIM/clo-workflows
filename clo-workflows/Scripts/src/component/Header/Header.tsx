@@ -1,8 +1,10 @@
 import * as React from "react"
 import { IUser } from "../../model"
-import { Persona, PersonaInitialsColor } from "office-ui-fabric-react/lib/Persona"
+import { Persona, PersonaInitialsColor, Toggle } from "office-ui-fabric-react"
 export interface IHeaderProps {
     currentUser: IUser
+    clientMode?: boolean
+    toggleClientMode?(): void
 }
 
 const wrapperStyles = {
@@ -37,6 +39,7 @@ const Header = (props: IHeaderProps) => {
                     secondaryText={`${currentUser.username} - ${currentUser.primaryRole.name}`}
                 />
             </div>
+            {props.toggleClientMode && <Toggle label="Client Mode" checked={props.clientMode} onClick={props.toggleClientMode} />}
         </div>
     )
 }

@@ -6,6 +6,7 @@ import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
 import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
+import { CLIENT_RENEG_LIMIT } from "tls"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -24,29 +25,23 @@ export class SpDataService implements IDataService {
         const rawSpGroups: any[] = await this.getAppWeb()
             .siteUsers.getById(rawUser.Id)
             .groups.get()
-        const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title)
         const allRoleNames = getRoleNames()
-
-        // resolve roles from the SharePoint groups the user is a member of
-        let userRoleNames: string[]
+        const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title).filter(groupName => allRoleNames.includes(groupName))
         // if a user is part of the administrator group, that user receives every other role (besides anonymous)
         // TODO more generalizable way to make administrator have every role?
-        if (spGroupNames.includes("Administrator")) {
-            userRoleNames = allRoleNames.filter(roleName => roleName !== "Anonymous" && roleName !== "Administrator")
-        } else {
-            // if a user is not an administrator, they receive every role corresponding to a SP group they are a member of
-            // if a user doesn't belong to any groups (non-employee user), their only role will be "Anonymous"
-            userRoleNames = spGroupNames.length ? spGroupNames.filter(spGroupName => allRoleNames.includes(spGroupName)) : ["Anonymous"]
-        }
+        const currentUserGroups: IRole[] = spGroupNames.includes("Administrator")
+            ? /* if admin is one of their groups, add all roles */
+              [...allRoleNames].map(roleName => getRole(roleName))
+            : /* otherwise add all groups */
+              [...spGroupNames, "Anonymous"].map(roleName => getRole(roleName))
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-
         return new User(
             rawUser.Title,
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            // userRoleNames.map(roleName => getRole(roleName))
-            [getRole("Anonymous")]
+            currentUserGroups
+            // [getRole("Anonymous")]
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend

@@ -26,7 +26,9 @@ export default class RootStore {
             // create and initialize the employee store if the current user is an employee
             if (this.sessionStore.isEmployee) {
                 this.employeeStore = new EmployeeStore(this, this.dataService)
+                this.clientStore = new ClientStore(this, this.dataService)
                 await this.employeeStore.init()
+                await this.clientStore.init()
             } else {
                 this.clientStore = new ClientStore(this, this.dataService)
                 await this.clientStore.init()
