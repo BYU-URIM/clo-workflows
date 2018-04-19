@@ -8,28 +8,6 @@ import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Dialog, DialogFooter, DialogType } from "office-ui-fabric-react"
 import Utils from "../../utils"
 import { NotesStore } from "../../store/NotesStore"
-// export interface INotesBoxProps {
-//     title: string
-//     notes: ReadonlyArray<INote>
-//     onCreateNote: (noteToCreate: INote, noteSource: NoteSource) => Promise<boolean>
-//     onUpdateNote: (noteToUpdate: INote, noteSource: NoteSource) => Promise<boolean>
-//     onDeleteNote: (noteToDelete: INote, noteSource: NoteSource) => Promise<boolean>
-//     currentUser: IUser
-//     noteSource: NoteSource
-//     maxScope?: NoteScope
-//     disableButtons?: boolean
-// }
-
-// interface INotesBoxState {
-//     showNoteDialog: boolean,
-//     // how many notes to display
-//     displayCount: number,
-//     // at what interval the display count may be incrased by when the "view __ more notes" button is clicked
-//     // has a default value of 3, unless there are fewer than 3 notes remaining to display
-//     displayCountChangeInterval: number
-//     selectedNote: INote
-//     selectedNoteOperation: NoteOperation // state of selected note (is it being created of updated ?)
-// }
 
 interface INotesBoxProps {
     notesStore: NotesStore,
