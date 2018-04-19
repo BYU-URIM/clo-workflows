@@ -5,7 +5,7 @@
   "scripts": {
     "dev:local": "webpack-dev-server --env.NODE_ENV=local --inline --hot --content-base dist",
     "dev:sharepoint": "webpack-cli --watch --env.NODE_ENV=sharepoint",
-    "dev:sharepointProxy": "concurrently --kill-others \"webpack-cli --watch --env.NODE_ENV=sharepointProxy\" \"npm run sp:proxyServer\"",
+    "dev:sharepointProxy": "concurrently --kill-others \"webpack-cli --watch --env.NODE_ENV=sharepointProxy --mode=development\" \"npm run sp:proxyServer\"",
     "build:local": "webpack-cli --env.NODE_ENV=local",
     "build:sharepoint": "webpack-cli --env.NODE_ENV=sharepoint",
     "build:sharepointProxy": "webpack-cli --env.NODE_ENV=sharepointProxy",
@@ -42,7 +42,7 @@
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.10.0",
     "tslint-react": "^3.5.1",
-    "typescript": "2.6.2",
+    "typescript": "2.7",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14",
     "webpack-dev-server": "^3.1.3"
