@@ -34,11 +34,21 @@ export default class App extends React.Component<any, any> {
                 {this.rootStore.initialized ? (
                     /* data is initialized - render out app content (client / employee dashbpard) */
                     <div>
-                        <Header currentUser={this.rootStore.sessionStore.currentUser} />
+                        <Header
+                            currentUser={this.rootStore.sessionStore.currentUser}
+                            clientMode={this.rootStore.employeeStore.clientMode}
+                            toggleClientMode={this.rootStore.employeeStore.toggleClientMode}
+                        />
                         <div style={backgroundStyles}>
                             <div style={appContentStyles}>
                                 {this.rootStore.sessionStore.isEmployee ? (
-                                    <Employee currentUser={this.rootStore.sessionStore.currentUser} />
+                                    <>
+                                        {!this.rootStore.employeeStore.clientMode ? (
+                                            <Employee currentUser={this.rootStore.sessionStore.currentUser} />
+                                        ) : (
+                                            <Client currentUser={this.rootStore.sessionStore.currentUser} />
+                                        )}
+                                    </>
                                 ) : (
                                     <Client currentUser={this.rootStore.sessionStore.currentUser} />
                                 )}
