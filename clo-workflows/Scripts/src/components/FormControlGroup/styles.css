@@ -1,0 +1,13 @@
+
+.formControlGroup-styles {
+    width: 450px;
+    margin: 0px 0px;
+}
+
+.formControlGroup-checkbox {
+    margin: 20px 0px;
+}
+
+.formControlGroup-disabledInput-styles {
+    background-color: #F0F0F0;
+}

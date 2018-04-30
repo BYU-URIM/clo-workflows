@@ -1,0 +1,43 @@
+import { inject, observer } from "mobx-react"
+import * as React from "react"
+
+import { SessionStore, ClientStore } from "../../store/"
+import { NoteSource, NoteScope } from "../../model"
+import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList, Header } from "../"
+
+import "./styles.css"
+
+@inject("rootStore")
+@observer
+export default class Client extends React.Component<any, any> {
+    public componentWillMount() {
+        this.clientStore = this.props.rootStore.clientStore
+    }
+    clientStore: ClientStore
+
+    render() {
+        const clientStore = this.clientStore
+        return (
+            <div>
+                <div className="client-wrapper">
+                    <div className="client-left-section">
+                        <ProjectProcessList
+                            messageVisible={!!clientStore.message}
+                            data={this.clientStore.data}
+                            handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
+                            view={clientStore.view}
+                        />
+                    </div>
+                    <div className="client-right-section">
+                        {this.clientStore.view.notesType && (
+                            <NotesBox title={clientStore.view.notesTitle} notesStore={clientStore.selectedNotesStore} />
+                        )}
+                    </div>
+                </div>
+                {clientStore.view.modal === "project" && <ProjectFormModal clientStore={clientStore} />}
+                {clientStore.view.modal === "process" && <ProcessFormModal clientStore={clientStore} />}
+                {clientStore.message && <Message {...clientStore.message} />}
+            </div>
+        )
+    }
+}

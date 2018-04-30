@@ -1,0 +1,28 @@
+.projectDetail-wrapper-styles {
+    padding: 20 0;
+    margin-bottom: 20;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    background: #F8F8F8;
+}
+
+.projectDetail-title-styles {
+    text-align: center;
+    margin-bottom: 10;
+    font: 30px Segoe UI, sans-serif;
+    width: 350;
+}
+
+.projectDetail-submitButton-styles {
+    display: flex;
+    justify-content: center;
+    margin-top: 30;
+}
+
+.projectDetail-projectHeader-styles { display: flex }
+.projectDetail-editButton-styles { transform: translateX(-25px) }
+.projectDetail-formColumn-styles { padding: 0px 8px 0px 30px }
+.projectDetail-notesColumn-styles { padding: 0px 30px 0px 8px }
