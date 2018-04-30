@@ -19,8 +19,8 @@ export default class Client extends React.Component<any, any> {
         const clientStore = this.clientStore
         return (
             <div>
-                <div className="client-wrapper">
-                    <div className="client-left-section">
+                <div className="client-wrapper-styles">
+                    <div className="client-left-section-styles">
                         <ProjectProcessList
                             messageVisible={!!clientStore.message}
                             data={this.clientStore.data}
@@ -28,7 +28,7 @@ export default class Client extends React.Component<any, any> {
                             view={clientStore.view}
                         />
                     </div>
-                    <div className="client-right-section">
+                    <div className="client-right-section-styles">
                         {this.clientStore.view.notesType && (
                             <NotesBox title={clientStore.view.notesTitle} notesStore={clientStore.selectedNotesStore} />
                         )}
