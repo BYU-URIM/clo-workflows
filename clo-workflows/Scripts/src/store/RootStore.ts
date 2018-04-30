@@ -1,4 +1,4 @@
-import { Employee } from "./../component/"
+import { Employee } from "./../components/"
 import { IDataService } from "../service/dataService/IDataService"
 import { action, observable, runInAction } from "mobx"
 import { ClientStore } from "./ClientStore/ClientStore"
