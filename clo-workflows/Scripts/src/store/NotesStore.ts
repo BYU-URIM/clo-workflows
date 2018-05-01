@@ -6,7 +6,7 @@ import { IDataService } from "./../service/dataService/IDataService"
 import { EmployeeStore } from "./EmployeeStore/EmployeeStore"
 import Utils from "./../utils"
 import StoreUtils from "./StoreUtils"
-import { IListItem } from "./../component/NonScrollableList"
+import { IListItem } from "./../components/NonScrollableList/NonScrollableList"
 import { IViewProvider } from "./ViewProvider"
 
 export interface INotesStoreConfig {

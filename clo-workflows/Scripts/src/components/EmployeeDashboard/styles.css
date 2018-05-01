@@ -1,0 +1,13 @@
+.searchProcess-styles {
+    max-width: 95%;
+    margin: auto;
+}
+
+.searchProcess-title-styles {
+    font: 24px Segoe UI, sans-serif;
+}
+
+.searchProcess-searchbox-styles {
+    width: 300;
+    margin-top: 10;
+}

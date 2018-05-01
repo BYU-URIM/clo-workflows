@@ -1,0 +1,21 @@
+
+.processBriefList-wrapper-styles {
+    margin: 80px 32px 80px 32px;
+    background: #F8F8F8;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    padding: 20px;
+    width: 500px;
+}
+.processBriefList-text-styles {
+    font: 20px Segoe UI, sans-serif;
+    color: #202020;
+    font-weight: 200;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.processBriefList-processListTitle-styles {
+    text-align: center;
+    font: 26px Segoe UI, sans-serif;
+    margin-bottom: 8px;
+}

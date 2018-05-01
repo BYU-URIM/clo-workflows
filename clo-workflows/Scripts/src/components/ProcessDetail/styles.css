@@ -1,0 +1,30 @@
+.processDetail-wrapper-styles {
+    margin: 30px 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.processDetail-submitButton-styles {
+    display: flex;
+    justify-content: center;
+    margin-top: 30;
+}
+
+.processDetail-processTitle-styles {
+    text-align: center;
+    margin-bottom: 10;
+    font: 30px Segoe UI, sans-serif;
+}
+
+.processDetail-processFor-styles {
+    background: #F8F8F8;
+    padding: 20 25;
+    margin-top: 40;
+    margin-right: 35;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.processDetail-projectWorkSwitcher-styles {
+    margin-left: 35;
+}
