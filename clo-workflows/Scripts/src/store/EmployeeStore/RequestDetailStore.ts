@@ -94,7 +94,7 @@ export class RequestDetailStore {
             if(submitter && submissionDate) {
                 return `submitted by ${submitter} on ${submissionDate}`
             } else {
-                return `skipped`
+                return "skipped"
             }
         }
     }
