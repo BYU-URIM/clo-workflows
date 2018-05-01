@@ -9,6 +9,9 @@ import { ItemAddResult } from "sp-pnp-js/lib/pnp"
 import { IKeyValueMap } from "mobx"
 
 export class MockDataService implements IDataService {
+    ensureClient(user: User): Promise<void> {
+        throw new Error("Method not implemented.")
+    }
     searchProcessesByTitle(searchTerm: string): Promise<CloRequestElement[]> {
         throw new Error("Method not implemented.")
     }
@@ -35,7 +38,8 @@ export class MockDataService implements IDataService {
             userDto.username,
             userDto.email,
             userDto.Id,
-            userDto.roleNames.map(roleName => getRole(roleName))
+            userDto.roleNames.map(roleName => getRole(roleName)),
+            userDto.loginName
         )
         return Promise.resolve(user)
     }

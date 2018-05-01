@@ -1,8 +1,9 @@
-import { CloRequestElement, IUser, IWork, INote, NoteSource, NoteScope } from "../../model"
+import { CloRequestElement, IUser, IWork, INote, NoteSource, NoteScope, User } from "../../model"
 import { ItemAddResult } from "sp-pnp-js/lib/pnp"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
+    ensureClient(user: IUser): Promise<void>
     fetchClientNotes(userId: string): Promise<Array<INote>>
     fetchClientProcesses(userId: string): Promise<Array<CloRequestElement>>
     fetchClientProjects(userId: string): Promise<Array<CloRequestElement>>

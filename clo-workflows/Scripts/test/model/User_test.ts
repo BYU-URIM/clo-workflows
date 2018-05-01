@@ -9,6 +9,6 @@ ava.test("test that the primary role function on the User object works as expect
     const jlpRole = getRole("LTT Junior License Processor")
     const supRole = getRole("LTT Supervisor")
 
-    const user = new User("name", "username", "email", "id", [slpRole, jlpRole, supRole])
+    const user = new User("name", "username", "email", "id", [slpRole, jlpRole, supRole], "loginName")
     t.deepEqual(mobx.toJS(user.primaryRole), mobx.toJS(supRole))
 })

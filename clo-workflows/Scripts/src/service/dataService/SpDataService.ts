@@ -29,24 +29,37 @@ export class SpDataService implements IDataService {
         const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title).filter(groupName => allRoleNames.includes(groupName))
         // TODO more generalizable way to make administrator have every role?
         let currentUserGroups: IRole[]
-        if(spGroupNames.length) {
+        if (spGroupNames.length) {
             currentUserGroups = spGroupNames.includes("LTT Administrator")
-            ? /* if admin is one of their groups, add all roles */
-              allRoleNames.map(roleName => getRole(roleName)).filter(role => role.name !== "Anonymous")
-            : /* otherwise add all groups */
-              spGroupNames.map(roleName => getRole(roleName))
+                ? /* if admin is one of their groups, add all roles */
+                  allRoleNames.map(roleName => getRole(roleName)).filter(role => role.name !== "LTT Client")
+                : /* otherwise add all groups */
+                  spGroupNames.map(roleName => getRole(roleName))
         } else {
-            currentUserGroups = [getRole("Anonymous")]
+            currentUserGroups = [getRole("LTT Client")]
         }
-
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         return new User(
             rawUser.Title,
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            currentUserGroups
+            // currentUserGroups
+            [getRole("LTT Client")],
+            rawUser.LoginName
         )
+    }
+    async ensureClient(user: User): Promise<void> {
+        try {
+            const res = await this.getAppWeb()
+                .siteGroups.getByName("LTT Client")
+                .users.add(user.loginName)
+            console.log(res)
+            // .users.add(user.username)
+            // await this.getHostWeb().siteGroups.getByName("LTT Client").users.
+        } catch (err) {
+            console.log(err)
+        }
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {

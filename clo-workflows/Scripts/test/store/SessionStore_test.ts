@@ -13,6 +13,7 @@ ava.test("sessionStore recognizes employee", async t => {
         email: "email@gmail.com",
         Id: "1234-5678",
         roles: [getRole("LTT Administrator")],
+        loginName: "i:0#.w|byu\cmoody4",
         primaryRole: getRole("LTT Administrator"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
@@ -27,15 +28,16 @@ ava.test("sessionStore recognizes employee", async t => {
     t.true(sessionStore.isEmployee)
 })
 
-ava.test("sessionStore recognizes anonymous user", async t => {
+ava.test("sessionStore recognizes LTT Client user", async t => {
     const mockDataService = mock(MockDataService)
     const user: IUser = {
         name: "Connor Moody",
         username: "cmoody4",
         email: "email@gmail.com",
         Id: "1234-5678",
-        roles: [getRole("Anonymous")],
-        primaryRole: getRole("Anonymous"),
+        loginName: "i:0#.w|byu\cmoody4",
+        roles: [getRole("LTT Client")],
+        primaryRole: getRole("LTT Client"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
 

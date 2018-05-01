@@ -16,11 +16,15 @@ export interface IData {
     currentListTitles: Array<string>
     missingLists: Array<string>
 }
+export interface IGroup {
+    name: string
+    members?: Array<string>
+}
 export interface IDBConfig {
     hostUrl: string
     defaultTables: string[]
     defaultFields: string[]
-    groups: string[]
+    groups: Array<IGroup>
 
     tables: ITables
 }
