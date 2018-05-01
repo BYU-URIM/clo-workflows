@@ -204,6 +204,8 @@ export class ClientStore implements IViewProvider {
         try {
             this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
+            this.view.work.id = res.data.Id
+            runInAction(() => this.data.works.push(this.newWork.toJS()))
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -225,7 +227,7 @@ export class ClientStore implements IViewProvider {
             this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
                 : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
-            this.newProcess.set("workId", this.view.work.id)
+            this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
             const res = await this.dataService.createProcess(this.newProcess.toJS())
