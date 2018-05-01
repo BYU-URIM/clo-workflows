@@ -30,7 +30,7 @@ export class SpDataService implements IDataService {
         // TODO more generalizable way to make administrator have every role?
         let currentUserGroups: IRole[]
         if(spGroupNames.length) {
-            currentUserGroups = spGroupNames.includes("Administrator")
+            currentUserGroups = spGroupNames.includes("LTT Administrator")
             ? /* if admin is one of their groups, add all roles */
               allRoleNames.map(roleName => getRole(roleName)).filter(role => role.name !== "Anonymous")
             : /* otherwise add all groups */

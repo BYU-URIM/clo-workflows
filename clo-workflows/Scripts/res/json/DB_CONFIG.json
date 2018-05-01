@@ -10,11 +10,11 @@
         "Id"
     ],
     "groups": [
-        "Junior License Processor",
-        "Senior License Processor",
-        "Supervisor",
-        "Admin Assistant",
-        "Administrator"
+        "LTT Junior License Processor",
+        "LTT Senior License Processor",
+        "LTT Supervisor",
+        "LTT Admin Assistant",
+        "LTT Administrator"
     ],
     "tables": {
         "processes": {
