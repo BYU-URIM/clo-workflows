@@ -6,7 +6,7 @@ import { App } from "./components/"
 import { Provider } from "mobx-react"
 import { RootStore } from "./store/"
 import { DataServiceFactory } from "./service/"
-
+import "./styles.css"
 // in strict mode, mobx requires that all observable data members only be modified through explicit @action mutators
 useStrict(true)
 

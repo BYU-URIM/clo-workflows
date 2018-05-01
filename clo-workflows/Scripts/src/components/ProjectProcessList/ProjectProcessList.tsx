@@ -70,7 +70,7 @@ const ProjectProcessList = observer((props: IProjectProcessListProps) => {
                     iconProps={{
                         iconName: "CircleAdditionSolid",
                     }}
-                    text="Add a Process"
+                    text="Add a Work"
                     key={renderHeaderProps.group.key}
                     onClick={() => {
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
