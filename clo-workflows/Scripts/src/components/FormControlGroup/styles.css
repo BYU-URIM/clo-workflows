@@ -4,8 +4,17 @@
     margin: 0px 0px;
 }
 
-.formControlGroup-checkbox {
+.formControlGroup-formControl-styles {
     margin: 20px 0px;
+}
+
+.formControlGroup-formControl-styles label {
+    font-weight: 600
+}
+
+.ms-Checkbox-text.css-100 {
+    font-weight: 600;
+    color: rgb(51, 51, 51);
 }
 
 .formControlGroup-disabledInput-styles {

@@ -42,46 +42,49 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                     props.formControls.map((formControl, index) => {
                         if (formControl.type === "text" || formControl.type === "datetime" || formControl.type === "number") {
                             return (
-                                <TextField
-                                    value={(props.data.get(formControl.dataRef) as string) || ""}
-                                    onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
-                                    label={formControl.displayName}
-                                    key={index}
-                                    disabled={formControl.readonly}
-                                    className={formControl.readonly ? "formControlGroup-disabledInputBackground" : ""}
-                                    description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
-                                    onBlur={() => formControl.touch()}
-                                    errorMessage={props.validation[formControl.dataRef]}
-                                />
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <TextField
+                                        value={(props.data.get(formControl.dataRef) as string) || ""}
+                                        onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        className={formControl.readonly ? "formControlGroup-disabledInputBackground" : ""}
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
+                                    />
+                                </div>
                             )
                         } else if (formControl.type === "choice") {
                             return (
-                                <DescriptiveDropdown
-                                    options={formControl.choices.map(choice => ({ key: choice, text: choice }))}
-                                    selectedKey={props.data.get(formControl.dataRef) as string}
-                                    onChanged={(option: IDropdownOption) => props.updateFormField(formControl.dataRef, option.text)}
-                                    label={formControl.displayName}
-                                    key={index}
-                                    disabled={formControl.readonly}
-                                    description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
-                                    onBlur={() => formControl.touch()}
-                                    errorMessage={props.validation[formControl.dataRef]}
-                                />
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <DescriptiveDropdown
+                                        options={formControl.choices.map(choice => ({ key: choice, text: choice }))}
+                                        selectedKey={props.data.get(formControl.dataRef) as string}
+                                        onChanged={(option: IDropdownOption) => props.updateFormField(formControl.dataRef, option.text)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
+                                    />
+                                </div>
                             )
                         } else if (formControl.type === "textarea") {
                             return (
-                                <TextField
-                                    multiline
-                                    value={(props.data.get(formControl.dataRef) as string) || ""}
-                                    key={index}
-                                    onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
-                                    label={formControl.displayName}
-                                    disabled={formControl.readonly}
-                                    className={formControl.readonly ? "formControlGroup-disabledInput-styles" : ""}
-                                    description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
-                                    onBlur={() => formControl.touch()}
-                                    errorMessage={props.validation[formControl.dataRef]}
-                                />
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <TextField
+                                        multiline
+                                        value={(props.data.get(formControl.dataRef) as string) || ""}
+                                        onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        className={formControl.readonly ? "formControlGroup-disabledInput-styles" : ""}
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
+                                    />
+                                </div>
                             )
                         } else if (formControl.type === "checkbox") {
                             return (
