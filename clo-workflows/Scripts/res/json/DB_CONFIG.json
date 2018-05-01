@@ -10,11 +10,12 @@
         "Id"
     ],
     "groups": [
-        "LTT Junior License Processor",
-        "LTT Senior License Processor",
-        "LTT Supervisor",
-        "LTT Admin Assistant",
-        "LTT Administrator"
+        {"name": "LTT Client"},
+        {"name": "LTT Junior License Processor"},
+        {"name": "LTT Senior License Processor", "members": ["tgilland"]},
+        {"name": "LTT Supervisor"},
+        {"name": "LTT Admin Assistant"},
+        {"name": "LTT Administrator"}
     ],
     "tables": {
         "processes": {
