@@ -30,7 +30,6 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     checked={props.clientStore.view.work.isNew}
                     onChange={(m, v) => {
                         props.clientStore.newProcess.set("projectId", props.clientStore.view.project.id)
-                        // props.clientStore.clearState()
                         props.clientStore.view.modal = "process"
                         props.clientStore.view.work.isNew = v
                         props.clientStore.view.work.type = ""

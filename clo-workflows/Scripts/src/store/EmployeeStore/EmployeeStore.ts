@@ -274,7 +274,6 @@ export class EmployeeStore implements IViewProvider {
     }
 
     @observable clientMode: boolean = false
-    // @action toggleClientMode = () => this.clientMode = !this.clientMode
     @action toggleClientMode() {
         this.clientMode = !this.clientMode
         if(this.clientMode) {
