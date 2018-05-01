@@ -21,8 +21,8 @@ export class ClientStoreData {
     init = async () => {
         await this.fetchClientProcesses()
         await this.fetchClientProjects()
-        await this.fetchWorks()
-        await this.fetchNotes()
+        this.fetchWorks()
+        this.fetchNotes()
     }
     @action
     fetchClientProcesses = async () => {
