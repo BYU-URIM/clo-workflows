@@ -12,8 +12,8 @@ ava.test("sessionStore recognizes employee", async t => {
         username: "cmoody4",
         email: "email@gmail.com",
         Id: "1234-5678",
-        roles: [getRole("Administrator")],
-        primaryRole: getRole("Administrator"),
+        roles: [getRole("LTT Administrator")],
+        primaryRole: getRole("LTT Administrator"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
 
