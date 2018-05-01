@@ -28,12 +28,11 @@ export class RootStore {
                 this.employeeStore = new EmployeeStore(this, this.dataService)
                 this.clientStore = new ClientStore(this, this.dataService)
                 await this.employeeStore.init()
-                await this.clientStore.init()
+                this.clientStore.init()
             } else {
                 this.clientStore = new ClientStore(this, this.dataService)
                 await this.clientStore.init()
             }
-
             runInAction(() => (this.initialized = true))
         }
     }
