@@ -1,5 +1,5 @@
 import { IDataService } from "../../service/dataService/IDataService"
-import { action, observable, computed } from "mobx"
+import { action, observable, computed, runInAction } from "mobx"
 import { IUser, StepName, CloRequestElement } from "../../model"
 import { NoteSource, NoteScope } from "../../model/"
 import { IProjectGroup } from "../../components/"
@@ -24,22 +24,21 @@ export class ClientStoreData {
         this.fetchWorks()
         this.fetchNotes()
     }
-    @action
     fetchClientProcesses = async () => {
-        this.processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
+        const processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
+        runInAction(() => this.processes = processes)
     }
-    @action
     fetchClientProjects = async () => {
-        this.projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
+        const projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
+        runInAction(() => this.projects = projects)
     }
-    @action
     fetchWorks = async () => {
-        this.works = await this.dataService.fetchWorks()
+        const works = await this.dataService.fetchWorks()
+        runInAction(() => this.works = works)
     }
-
-    @action
     fetchNotes = async () => {
-        this.process_notes = await this.dataService.fetchClientNotes(this.currentUser.Id)
+        const notes = await this.dataService.fetchClientNotes(this.currentUser.Id)
+        runInAction(() => this.process_notes = notes)
     }
 
     @computed

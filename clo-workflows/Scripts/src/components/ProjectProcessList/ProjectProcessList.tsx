@@ -73,6 +73,7 @@ const ProjectProcessList = observer((props: IProjectProcessListProps) => {
                     text="Add a Work"
                     key={renderHeaderProps.group.key}
                     onClick={() => {
+                        props.view.project.id = renderHeaderProps.group.projectId.toString()
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
                     }}
                     disabled={props.messageVisible}

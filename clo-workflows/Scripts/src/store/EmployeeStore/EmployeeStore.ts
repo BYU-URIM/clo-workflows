@@ -28,17 +28,17 @@ export class EmployeeStore implements IViewProvider {
         // fetch request elements
         const currentUser = this.root.sessionStore.currentUser
         const activeProcessList = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
-        this.activeProcesses = StoreUtils.mapRequestElementArrayById(activeProcessList)
+        runInAction(() => this.activeProcesses = StoreUtils.mapRequestElementArrayById(activeProcessList))
 
         const activeProjectList = await this.dataService.fetchRequestElementsById(
             activeProcessList.map(process => Number(process.projectId)
         ), ListName.PROJECTS)
-        this.activeProjects = StoreUtils.mapRequestElementArrayById(activeProjectList)
+        runInAction(() => this.activeProjects = StoreUtils.mapRequestElementArrayById(activeProjectList))
 
         const activeWorkList = await this.dataService.fetchRequestElementsById(
             activeProcessList.map(process => Number(process.workId)
         ), ListName.WORKS)
-        this.activeWorks = StoreUtils.mapRequestElementArrayById(activeWorkList)
+        runInAction(() => this.activeWorks = StoreUtils.mapRequestElementArrayById(activeWorkList))
 
         this.setAsyncPendingLockout(false)
 
@@ -274,7 +274,14 @@ export class EmployeeStore implements IViewProvider {
     }
 
     @observable clientMode: boolean = false
-    @action toggleClientMode = () => this.clientMode = !this.clientMode
+    @action toggleClientMode() {
+        this.clientMode = !this.clientMode
+        if(this.clientMode) {
+            this.root.clientStore.data.init()
+        } else {
+            this.init()
+        }
+    }
 }
 
 export enum EmployeeViewKey {
