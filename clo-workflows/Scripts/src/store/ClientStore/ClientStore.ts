@@ -48,11 +48,11 @@ export class ClientStore implements IViewProvider {
         this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.data = new ClientStoreData(this.dataService, this.currentUser)
         this.view = new ClientViewState()
+        this.currentUser = this.root.sessionStore.currentUser
     }
 
     @action
     async init(): Promise<void> {
-        this.currentUser = this.root.sessionStore.currentUser
         await this.data.init()
     }
 
@@ -101,7 +101,8 @@ export class ClientStore implements IViewProvider {
         return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
     }
 
-    @computed get asyncPendingLockout(): boolean {
+    @computed
+    get asyncPendingLockout(): boolean {
         return this.view.asyncPendingLockout
     }
 
@@ -143,7 +144,7 @@ export class ClientStore implements IViewProvider {
             notes: this.selectedNotes,
             // TODO fill in with current selected process / project / work info
             attachedClientId: /*this.process.get("submitterId") as string*/ null,
-            attachedProjectId: /*this.project.get("Id") as number*/ null
+            attachedProjectId: /*this.project.get("Id") as number*/ null,
         })
     }
 
@@ -173,9 +174,9 @@ export class ClientStore implements IViewProvider {
         this.view.modal = "process"
     }
 
-    /*********************************************************
+    /* ------------------------------------------------------------ *
      * DataService Requests
-     *********************************************************/
+     * ------------------------------------------------------------ */
 
     /* POST's */
 
@@ -246,9 +247,9 @@ export class ClientStore implements IViewProvider {
         }
     }
 
-    /*******************************************************************************************************/
-    // NOTES - SHARED BY PROJECTS AND WORKS
-    /*******************************************************************************************************/
+    /* ------------------------------------------------------------ *
+     * NOTES - SHARED BY PROJECTS AND WORKS
+     * ------------------------------------------------------------ */
     @action
     async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
         this.setAsyncPendingLockout(true)
