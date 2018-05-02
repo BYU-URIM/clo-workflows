@@ -571,5 +571,10 @@
         "displayName": "Hard Copy Owner",
         "dataRef": "hardCopyOwner",
         "type": "text"
+    },
+    "Owner NetID": {
+        "displayName": "Owner NetID",
+        "dataRef": "submitterId",
+        "type": "text"
     }
 }

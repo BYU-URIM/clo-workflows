@@ -7,14 +7,21 @@ import Utils from "../../utils"
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-export function getView(viewName: string): View {
+export function getView(viewName: string, privileged: boolean = false): View {
     const normalizedView = VIEWS[viewName]
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formControls array and the readonlyFormControls array
     // the readonlyFormControls appear first followed by the standard formControls
     let formControls: FormControl[] = []
-
+    if (privileged && normalizedView.privilegedControls.length) {
+        formControls = formControls.concat(
+            normalizedView.privilegedControls.map(formControlName => {
+                const formControl = new FormControl(FORM_CONTROLS[formControlName])
+                return formControl
+            })
+        )
+    }
     // first add in the readonly form controls (if present)
     if (normalizedView.readonlyFormControls) {
         formControls = formControls.concat(
@@ -45,8 +52,9 @@ export function getView(viewName: string): View {
 // this function programatically adds the readonly proprterty to all form controls of a view
 // this functionality is for instances when a view needs to be made readonly at runtime or when it is not practical
 // to make multiple JSON view definitions differing only by readonly form controls
-export function getViewAndMakeReadonly(viewName: string): View {
-    const view = getView(viewName)
+export function getViewAndMakeReadonly(viewName: string, priveleged: boolean = true): View {
+    /* priveleged defaults to true because we only use it with employees currently */
+    const view = getView(viewName, priveleged)
     view.formControls.forEach(formControl => formControl.makeReadOnly())
     return view
 }

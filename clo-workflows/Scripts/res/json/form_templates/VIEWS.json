@@ -30,6 +30,9 @@
             "Date Sent to Client",
             "Materials Requested",
             "Credits Read"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Arranging": {
@@ -63,6 +66,9 @@
             "Materials Requested",
             "Credits Read",
             "Copy of Score"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Masters": {
@@ -91,6 +97,9 @@
             "Track Number",
             "Release Date",
             "Source"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Grand": {
@@ -124,6 +133,9 @@
             "Date Sent to Client",
             "Materials Requested",
             "Credits Read"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Theatrical": {
@@ -146,6 +158,9 @@
             "Censoring",
             "Additional Edits",
             "CLO Determination"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Movies": {
@@ -176,6 +191,9 @@
             "Digital Format",
             "FT Number",
             "Account Code"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Images": {
@@ -193,6 +211,9 @@
             "Date Request Send",
             "Source",
             "Link"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Music": {
@@ -210,12 +231,15 @@
             "Call Number",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Book": {
         "dataSource": "works",
         "formControls": [
-            
+
             "Course",
             "Format",
             "Title",
@@ -230,6 +254,9 @@
             "Total Chapters",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Article": {
@@ -252,6 +279,9 @@
             "Total Pages",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Book Chapter": {
@@ -272,6 +302,9 @@
             "Total Pages",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Image": {
@@ -289,6 +322,9 @@
             "Call Number",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Video": {
@@ -304,6 +340,9 @@
             "Year",
             "Director",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Website": {
@@ -316,6 +355,9 @@
             "Year Published",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Other": {
@@ -333,6 +375,9 @@
             "Call Number",
             "URL",
             "Hard Copy Owner"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Public Domain Research": {
@@ -340,6 +385,9 @@
         "readonlyFormControls": [],
         "formControls": [
             "Public Domain Research"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Public Domain Approval": {
@@ -349,6 +397,9 @@
         ],
         "formControls": [
             "Public Domain Approval"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Existing License": {
@@ -359,6 +410,9 @@
         ],
         "formControls": [
             "Existing License"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Existing License Approval": {
@@ -370,6 +424,9 @@
         ],
         "formControls": [
             "Existing License Approval"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Exemption Analysis": {
@@ -382,6 +439,9 @@
         ],
         "formControls": [
             "Exemption Analysis"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Exemption Approval": {
@@ -395,6 +455,9 @@
         ],
         "formControls": [
             "Exemption Approval"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Ownership Research Licensing Exchange": {
@@ -409,6 +472,9 @@
         ],
         "formControls": [
             "Licensing Exchange"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Ownership Research Direct to Rights Holder": {
@@ -424,6 +490,9 @@
         ],
         "formControls": [
             "Direct to Rights Holders"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Request Submitted": {
@@ -440,6 +509,9 @@
         ],
         "formControls": [
             "Request Submitted"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Response from Rights Holder Received": {
@@ -457,6 +529,9 @@
         ],
         "formControls": [
             "Rights Holder Response"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "CLO Response to Rights Holder": {
@@ -475,6 +550,9 @@
         ],
         "formControls": [
             "CLO Response to Rights Holder"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Receipt of License": {
@@ -494,6 +572,9 @@
         ],
         "formControls": [
             "Receipt of License"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Supervisor Signature": {
@@ -514,6 +595,9 @@
         ],
         "formControls": [
             "Supervisor Signature"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Payment": {
@@ -535,6 +619,9 @@
         ],
         "formControls": [
             "Payment"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Process Payment": {
@@ -558,6 +645,9 @@
         "formControls": [
             "Process Payment",
             "Fast Track Number"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Initial Request Completion": {
@@ -582,6 +672,9 @@
         ],
         "formControls": [
             "Initial Request Completion"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Final Request Completion": {
@@ -607,6 +700,9 @@
         ],
         "formControls": [
             "Final Request Completion"
+        ],
+        "privilegedControls": [
+            "Owner NetID"
         ]
     },
     "Complete": {

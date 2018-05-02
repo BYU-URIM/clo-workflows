@@ -78,9 +78,9 @@ export class RequestDetailStore {
     @computed
     get processView(): View {
         if(this.isRequestActive)
-            return getView(this.employeeStore.focusStep.view)
+            return getView(this.employeeStore.focusStep.view, true)
         else {
-            return getView("Complete")
+            return getView("Complete", true)
         }
     }
 
@@ -156,7 +156,7 @@ export class RequestDetailStore {
     @computed
     get projectView(): View {
         return this.canEditProject
-            ? getView(this.project.get("type") as string)
+            ? getView(this.project.get("type") as string, true)
             : getViewAndMakeReadonly(this.project.get("type") as string)
     }
 
@@ -220,7 +220,7 @@ export class RequestDetailStore {
 
     @computed get workView(): View {
         return this.canEditWork
-            ? getView(this.work.get("type") as string)
+            ? getView(this.work.get("type") as string, true)
             : getViewAndMakeReadonly(this.work.get("type") as string)
     }
 

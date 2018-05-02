@@ -137,6 +137,14 @@ ava.test("test that all views contain only valid formControl names and have corr
             })
         }
 
+        if (view.privilegedControls) {
+            t.true(Array.isArray(view.privilegedControls))
+            const formControlNames: string[] = view.privilegedControls
+            formControlNames.forEach(formControlName => {
+                t.truthy(FORM_CONTROLS[formControlName])
+            })
+        }
+
         // if the view is a process view, it must have form controls and readonlyFormControls
         if (view.dataSource === "processes") {
             t.truthy(view.formControls && view.readonlyFormControls)

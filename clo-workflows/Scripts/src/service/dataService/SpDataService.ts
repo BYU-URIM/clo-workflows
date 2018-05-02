@@ -42,7 +42,7 @@ export class SpDataService implements IDataService {
             currentUserGroups = [getRole("LTT Client")]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-        return new User(rawUser.Title, userName, rawUser.Email, rawUser.UserId.NameId, currentUserGroups)
+        return new User(rawUser.Title, userName, rawUser.Email, userName, currentUserGroups)
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
