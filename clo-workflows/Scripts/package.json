@@ -57,6 +57,7 @@
     "@pnp/nodejs": "^1.0.4",
     "@pnp/odata": "^1.0.4",
     "@pnp/sp": "^1.0.4",
+    "@pnp/sp-addinhelpers": "^1.0.4",
     "@uifabric/icons": "^5.4.0",
     "core-decorators": "^0.20.0",
     "mobx": "^3.3.2",

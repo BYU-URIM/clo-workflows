@@ -4,12 +4,15 @@ import { IUser, User, IUserDto, CloRequestElement, IFormControl, IView, IRole, I
 // import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import { IDataService, ListName } from "./IDataService"
 import { graph } from "@pnp/graph"
-import { Web, ItemAddResult, sp } from "@pnp/sp"
+import { sp } from "@pnp/sp-addinhelpers"
+
+import { Web, ItemAddResult, SearchResults } from "@pnp/sp"
 import { ODataDefaultParser } from "@pnp/odata"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
 import { CLIENT_RENEG_LIMIT } from "tls"
+import { FetchClient, AdalClient } from "@pnp/common"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -66,8 +69,8 @@ export class SpDataService implements IDataService {
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
-        const activeProcesses: Array<CloRequestElement> = await sp.web
-            .lists.getByTitle(ListName.PROCESSES)
+        const activeProcesses: Array<CloRequestElement> = await sp.web.lists
+            .getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
 
@@ -167,7 +170,7 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(`submitterId eq '${submitterId}'`)
             .orderBy("projectId", true)
-            .get(this.cloRequestElementParser)
+            .get()
     }
     async fetchWorks(): Promise<Array<IWork>> {
         return await this.getHostWeb()
@@ -214,24 +217,19 @@ export class SpDataService implements IDataService {
     private readonly cloRequestElementParser: CloRequestElementParser
 
     private getAppWeb(): Web {
-        return sp.configure(
-            {
-                headers: { Accept: "application/json; odata=verbose" },
-                credentials: "same-origin",
+        sp.setup({
+            sp: {
+                headers: {
+                    Accept: "application/json;odata=verbose",
+                },
+                baseUrl: this.APP_WEB_URL,
             },
-            "../"
-        ).web
+        })
+        return sp.web
     }
 
     private getHostWeb(): Web {
-        return sp
-            .configure(
-                {
-                    headers: { Accept: "application/json; odata=verbose" },
-                    credentials: "same-origin",
-                },
-                "../../"
-            ).web
+        return sp.crossDomainWeb(this.APP_WEB_URL, this.HOST_WEB_URL)
     }
 
     // the loginName string returned form the server contains some garbage appended to the username - take it out here
@@ -265,7 +263,8 @@ export class CloRequestElementParser extends ODataDefaultParser {
     // this method is called automatically by PNP once for each request
     public async parse(response: Response): Promise<any> {
         // the ODataDefaultParser base method returns a JSON with all fields for the given list - a mix of CLO fields and garbage SP metadata fields
-        const parsedResponse = await super.parse(response)
+        console.log()
+        const parsedResponse = await super.parse(await response)
 
         // the parsedResponse may be an array of response objects or a single object, depending on what was requested
         if (Array.isArray(parsedResponse)) {
