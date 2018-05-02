@@ -13,7 +13,7 @@ export const MockUsersDtos: Array<IUserDto> = [
         email: "email@gmail.com",
         username: "cmoody",
         Id: "1234-5678",
-        roleNames: ["Anonymous"],
+        roleNames: ["LTT Client"],
     },
 ]
 

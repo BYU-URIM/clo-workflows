@@ -2,7 +2,7 @@ import chalk from "chalk"
 import * as pnp from "sp-pnp-js"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
 import * as db from "../../res/json/DB_CONFIG.json"
-import { IUtil, IData, IDBConfig } from "./IUtil"
+import { IUtil, IData, IDBConfig, IGroup } from "./IUtil"
 import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Util } from "sp-pnp-js"
 import { CloRequestElement } from "../../src/model/"
@@ -151,20 +151,28 @@ ERROR: INVALID  FIELD
         const groups = await pnp.sp.web.siteGroups.get()
         return groups.map(group => group.Title)
     }
-    async getMissingGroups(): Promise<Array<string>> {
+    async getMissingGroups(): Promise<Array<IGroup>> {
         const allGroupTitles = await this.getAllGroupTitles()
-        return this.DB_CONFIG.groups.filter(groupName => !allGroupTitles.includes(groupName))
+        return this.DB_CONFIG.groups.filter(group => !allGroupTitles.includes(group.name))
     }
     async createGroup(groupName: string) {
         await pnp.sp.web.siteGroups.add({
             Title: groupName,
         })
     }
-    async createGroups(groupTitles: Array<string>): Promise<void> {
-        groupTitles.forEach(groupTitle => this.createGroup(groupTitle))
+    async createGroups(groups: Array<IGroup>): Promise<void> {
+        groups.forEach(group => this.createGroup(group.name))
+    }
+    async addUsersToGroups(groups: Array<IGroup>) {
+        groups.forEach(group => {
+            if (group.members.length > 0) group.members.forEach(member => pnp.sp.web.siteGroups.getByName(group.name).users.add(member))
+        })
     }
     async createMissingGroups(): Promise<void> {
-        return await this.createGroups(await this.getMissingGroups())
+        const missingGroups = await this.getMissingGroups()
+        const groups = await this.createGroups(missingGroups)
+        await this.addUsersToGroups(missingGroups)
+        return groups
     }
 }
 

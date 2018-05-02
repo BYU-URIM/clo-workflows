@@ -1,12 +1,15 @@
 import { IUser, User, IUserDto, CloRequestElement, IFormControl, IView, IRole, INote, NoteScope, NoteSource, IWork } from "../../model"
 import { IDataService, ListName } from "./IDataService"
-import * as pnp from "sp-pnp-js"
-import { Web } from "sp-pnp-js/lib/sharepoint/webs"
+import { graph } from "@pnp/graph"
+import { sp } from "@pnp/sp-addinhelpers"
+
+import { Web, ItemAddResult, SearchResults } from "@pnp/sp"
+import { ODataDefaultParser } from "@pnp/odata"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
-import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
 import { CLIENT_RENEG_LIMIT } from "tls"
+import { FetchClient, AdalClient } from "@pnp/common"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -29,16 +32,15 @@ export class SpDataService implements IDataService {
         const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title).filter(groupName => allRoleNames.includes(groupName))
         // TODO more generalizable way to make administrator have every role?
         let currentUserGroups: IRole[]
-        if(spGroupNames.length) {
+        if (spGroupNames.length) {
             currentUserGroups = spGroupNames.includes("LTT Administrator")
-            ? /* if admin is one of their groups, add all roles */
-              allRoleNames.map(roleName => getRole(roleName)).filter(role => role.name !== "Anonymous")
-            : /* otherwise add all groups */
-              spGroupNames.map(roleName => getRole(roleName))
+                ? /* if admin is one of their groups, add all roles */
+                  allRoleNames.map(roleName => getRole(roleName)).filter(role => role.name !== "LTT Client")
+                : /* otherwise add all groups */
+                  spGroupNames.map(roleName => getRole(roleName))
         } else {
-            currentUserGroups = [getRole("Anonymous")]
+            currentUserGroups = [getRole("LTT Client")]
         }
-
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         return new User(
             rawUser.Title,
@@ -48,10 +50,22 @@ export class SpDataService implements IDataService {
             currentUserGroups
         )
     }
+    async ensureClient(user: User): Promise<void> {
+        try {
+            const res = await this.getAppWeb()
+                .siteGroups.getByName("LTT Client")
+                .users.get()
+            console.log(res)
+            // .users.add(user.username)
+            // await this.getHostWeb().siteGroups.getByName("LTT Client").users.
+        } catch (err) {
+            console.log(err)
+        }
+    }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
-        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
-            .lists.getByTitle(ListName.PROCESSES)
+        const activeProcesses: Array<CloRequestElement> = await sp.web.lists
+            .getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
 
@@ -151,7 +165,7 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(`submitterId eq '${submitterId}'`)
             .orderBy("projectId", true)
-            .get(this.cloRequestElementParser)
+            .get()
     }
     async fetchWorks(): Promise<Array<IWork>> {
         return await this.getHostWeb()
@@ -198,25 +212,19 @@ export class SpDataService implements IDataService {
     private readonly cloRequestElementParser: CloRequestElementParser
 
     private getAppWeb(): Web {
-        return pnp.sp.configure(
-            {
-                headers: { Accept: "application/json; odata=verbose" },
-                credentials: "same-origin",
+        sp.setup({
+            sp: {
+                headers: {
+                    Accept: "application/json;odata=verbose",
+                },
+                baseUrl: this.APP_WEB_URL,
             },
-            "../"
-        ).web
+        })
+        return sp.web
     }
 
     private getHostWeb(): Web {
-        return pnp.sp
-            .configure(
-                {
-                    headers: { Accept: "application/json; odata=verbose" },
-                    credentials: "same-origin",
-                },
-                "../"
-            )
-            .crossDomainWeb(this.APP_WEB_URL, this.HOST_WEB_URL)
+        return sp.crossDomainWeb(this.APP_WEB_URL, this.HOST_WEB_URL)
     }
 
     // the loginName string returned form the server contains some garbage appended to the username - take it out here
@@ -250,7 +258,8 @@ export class CloRequestElementParser extends ODataDefaultParser {
     // this method is called automatically by PNP once for each request
     public async parse(response: Response): Promise<any> {
         // the ODataDefaultParser base method returns a JSON with all fields for the given list - a mix of CLO fields and garbage SP metadata fields
-        const parsedResponse = await super.parse(response)
+        console.log()
+        const parsedResponse = await super.parse(await response)
 
         // the parsedResponse may be an array of response objects or a single object, depending on what was requested
         if (Array.isArray(parsedResponse)) {

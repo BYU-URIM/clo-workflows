@@ -38,8 +38,8 @@ ava.test("root store creates sessionStore, client store when client logs in", as
         username: "cmoody4",
         email: "email@gmail.com",
         Id: "1234-5678",
-        roles: [getRole("Anonymous")],
-        primaryRole: getRole("Anonymous"),
+        roles: [getRole("LTT Client")],
+        primaryRole: getRole("LTT Client"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
     when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(Promise.resolve(MockProjects))

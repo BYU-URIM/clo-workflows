@@ -7,7 +7,7 @@ import { SessionStore } from "./SessionStore"
 
 export class RootStore {
     sessionStore: SessionStore
-    clientStore: ClientStore // created for any anonymous (non-employee) user logged into the app
+    clientStore: ClientStore // created for any ltt client (non-employee) user logged into the app
     employeeStore: EmployeeStore // created for employees logged into the app
 
     constructor(private dataService: IDataService) {}
