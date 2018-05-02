@@ -18,8 +18,8 @@ export default class EmployeeDashboard extends React.Component<any, any> {
     public render() {
         const { employeeStore } = this
         return (
-            <div style={{display: "flex"}}>
-                <div style={{minWidth: "60%", maxWidth: "75%"}}>
+            <div className={"employeeDashboard-wrapper"}>
+                <div className={"employeeDashboard-roles-search"}>
                     <RoleSteps />
                     <div className="searchProcess-styles">
                         <div className="searchProcess-title-styles">Search Past Processes</div>

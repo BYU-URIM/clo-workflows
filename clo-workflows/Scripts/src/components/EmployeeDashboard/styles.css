@@ -15,3 +15,8 @@
 .employeeDashboard-wrapper {
     display: "flex";
 }
+
+.employeeDashboard-roles-search {
+    min-width: 60%;
+    max-width: 75%;
+}
