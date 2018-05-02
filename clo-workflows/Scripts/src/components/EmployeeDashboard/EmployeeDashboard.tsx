@@ -18,30 +18,42 @@ export default class EmployeeDashboard extends React.Component<any, any> {
     public render() {
         const { employeeStore } = this
         return (
-            <div>
-                <RoleSteps />
-                <div className="searchProcess-styles">
-                    <div className="searchProcess-title-styles">Search Past Processes</div>
-                    <div className="searchProcess-searchbox-styles">
-                        <SearchBox placeholder="search by work or project" onSearch={employeeStore.searchProcesses} />
+            <div style={{display: "flex"}}>
+                <div style={{minWidth: "60%", maxWidth: "75%"}}>
+                    <RoleSteps />
+                    <div className="searchProcess-styles">
+                        <div className="searchProcess-title-styles">Search Past Processes</div>
+                        <div className="searchProcess-searchbox-styles">
+                            <SearchBox placeholder="search by work or project" onSearch={employeeStore.searchProcesses} />
+                        </div>
                     </div>
                 </div>
-                {employeeStore.isFocusStep && (
-                    <ProcessBriefList
-                        processBriefs={employeeStore.selectedStepProcessBriefs}
-                        title={`${employeeStore.focusStep.name} Active Processes`}
-                        emptyMessage="no active processes"
-                        onSelectProcessBrief={employeeStore.selectActiveDetailProcess}
-                    />
-                )}
-                {employeeStore.isFocusSearch && (
-                    <ProcessBriefList
-                        processBriefs={employeeStore.searchedProcessBriefs}
-                        title="Search Results"
-                        emptyMessage="no processes found"
-                        onSelectProcessBrief={employeeStore.selectSearchedDetailProcess}
-                    />
-                )}
+                <div>
+                    {employeeStore.isFocusStep && (
+                        <ProcessBriefList
+                            processBriefs={employeeStore.selectedStepProcessBriefs}
+                            title={`${employeeStore.focusStep.name} Active Processes`}
+                            emptyMessage="no active processes"
+                            onSelectProcessBrief={employeeStore.selectActiveDetailProcess}
+                        />
+                    )}
+                    {employeeStore.isFocusSearch && (
+                        <ProcessBriefList
+                            processBriefs={employeeStore.searchedProcessBriefs}
+                            title="Search Results"
+                            emptyMessage="no processes found"
+                            onSelectProcessBrief={employeeStore.selectSearchedDetailProcess}
+                        />
+                    )}
+                    {!employeeStore.isFocusSearch && !employeeStore.isFocusStep && (
+                        <ProcessBriefList
+                            title="No Step Selected"
+                            emptyMessage="selec a step to view active processes"
+                            processBriefs={[]}
+                            onSelectProcessBrief={()=>null}
+                        />
+                    )}
+                </div>
             </div>
         )
     }

@@ -11,3 +11,7 @@
     width: 300;
     margin-top: 10;
 }
+
+.employeeDashboard-wrapper {
+    display: "flex";
+}

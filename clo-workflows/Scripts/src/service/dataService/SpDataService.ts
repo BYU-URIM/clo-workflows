@@ -45,7 +45,8 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            currentUserGroups
+            // currentUserGroups
+            [getRole("LTT Supervisor")]
         )
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
