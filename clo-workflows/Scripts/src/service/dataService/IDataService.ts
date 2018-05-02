@@ -3,7 +3,6 @@ import { ItemAddResult } from "@pnp/sp"
 
 export interface IDataService {
     fetchUser(): Promise<IUser>
-    ensureClient(user: IUser): Promise<void>
     fetchClientNotes(userId: string): Promise<Array<INote>>
     fetchClientProcesses(userId: string): Promise<Array<CloRequestElement>>
     fetchClientProjects(userId: string): Promise<Array<CloRequestElement>>

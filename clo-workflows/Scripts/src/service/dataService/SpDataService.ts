@@ -25,7 +25,7 @@ export class SpDataService implements IDataService {
     /******************************************************************************************************/
     async fetchUser(): Promise<IUser> {
         const rawUser = await this.getAppWeb().currentUser.get()
-        const rawSpGroups: any[] = await this.getAppWeb()
+        const rawSpGroups: any[] = await this.getHostWeb()
             .siteUsers.getById(rawUser.Id)
             .groups.get()
         const allRoleNames = getRoleNames()
@@ -42,30 +42,12 @@ export class SpDataService implements IDataService {
             currentUserGroups = [getRole("LTT Client")]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-        return new User(
-            rawUser.Title,
-            userName,
-            rawUser.Email,
-            rawUser.UserId.NameId,
-            currentUserGroups
-        )
-    }
-    async ensureClient(user: User): Promise<void> {
-        try {
-            const res = await this.getAppWeb()
-                .siteGroups.getByName("LTT Client")
-                .users.get()
-            console.log(res)
-            // .users.add(user.username)
-            // await this.getHostWeb().siteGroups.getByName("LTT Client").users.
-        } catch (err) {
-            console.log(err)
-        }
+        return new User(rawUser.Title, userName, rawUser.Email, rawUser.UserId.NameId, currentUserGroups)
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
-        const activeProcesses: Array<CloRequestElement> = await sp.web.lists
-            .getByTitle(ListName.PROCESSES)
+        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
+            .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
 

@@ -9,9 +9,6 @@ import { ItemAddResult } from "@pnp/sp"
 import { IKeyValueMap } from "mobx"
 
 export class MockDataService implements IDataService {
-    ensureClient(user: User): Promise<void> {
-        throw new Error("Method not implemented.")
-    }
     searchProcessesByTitle(searchTerm: string): Promise<CloRequestElement[]> {
         throw new Error("Method not implemented.")
     }

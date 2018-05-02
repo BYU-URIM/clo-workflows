@@ -16,7 +16,6 @@ export class SessionStore {
     @action
     async init(): Promise<void> {
         this.currentUser = await this.dataService.fetchUser()
-        if(!this.isEmployee) this.dataService.ensureClient(this.currentUser)
     }
 
     @computed
