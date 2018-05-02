@@ -1,7 +1,4 @@
 import { IUser, User, IUserDto, CloRequestElement, IFormControl, IView, IRole, INote, NoteScope, NoteSource, IWork } from "../../model"
-// import * as pnp from "sp-pnp-js"
-// import { Web } from "sp-pnp-js/lib/sharepoint/webs"
-// import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import { IDataService, ListName } from "./IDataService"
 import { graph } from "@pnp/graph"
 import { sp } from "@pnp/sp-addinhelpers"
