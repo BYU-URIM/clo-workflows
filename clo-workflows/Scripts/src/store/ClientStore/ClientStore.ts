@@ -121,11 +121,6 @@ export class ClientStore implements IViewProvider {
             })),
         }
     }
-    // @computed
-    // get clientNotes(): Array<INote> {
-    //     const filtered = this.data.process_notes.filter(n => n.length > 0)
-    //     return this.data.process_notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr), [])[0]
-    // }
 
     @computed
     get selectedNotes() {
