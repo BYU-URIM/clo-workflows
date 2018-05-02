@@ -58,7 +58,7 @@ export class RequestDetailStore {
                 dataService: this.dataService,
                 source: NoteSource.PROJECT,
                 maxScope: NoteScope.EMPLOYEE,
-                notes: workNotes,
+                notes: projectNotes,
                 attachedClientId: this.process.get("submitterId") as string,
                 attachedProjectId: this.project.get("Id") as number
             })

@@ -1,9 +1,11 @@
 import { IDataService } from "../../service/dataService/IDataService"
-import { action, observable, computed, runInAction } from "mobx"
+import { action, observable, computed, runInAction, ObservableMap } from "mobx"
 import { IUser, StepName, CloRequestElement } from "../../model"
 import { NoteSource, NoteScope } from "../../model/"
 import { IProjectGroup } from "../../components/"
 import { getStep, getStepNames } from "../../model/loader/resourceLoaders"
+import { INote } from "../../model/Note"
+
 export class ClientStoreData {
     dataService: IDataService
     currentUser: IUser
@@ -11,6 +13,9 @@ export class ClientStoreData {
     @observable processes: Array<any> = []
     @observable process_notes: Array<any> = []
     @observable project_notes: Array<any> = []
+
+    @observable workNotesByWorkId: ObservableMap<INote[]>
+    @observable projectNotesByProjectId: ObservableMap<INote[]>
 
     @observable works: Array<any> = []
     constructor(dataService: IDataService, currentUser: IUser) {
@@ -37,8 +42,23 @@ export class ClientStoreData {
         runInAction(() => this.works = works)
     }
     fetchNotes = async () => {
-        const notes = await this.dataService.fetchClientNotes(this.currentUser.Id)
-        runInAction(() => this.process_notes = notes)
+        this.projectNotesByProjectId = observable.map()
+        this.workNotesByWorkId = observable.map()
+        const allNotes = await this.dataService.fetchClientNotes(this.currentUser.Id)
+        allNotes.forEach(note => {
+            if(note.projectId) {
+                if(this.projectNotesByProjectId.get(note.projectId))
+                    runInAction(() => this.projectNotesByProjectId.get(note.projectId).push(note))
+                else
+                    runInAction(() => this.projectNotesByProjectId.set(note.projectId, observable([note])))
+            }
+            else if(note.workId) {
+                if(this.workNotesByWorkId.get(note.workId))
+                    runInAction(() => this.workNotesByWorkId.get(note.workId).push(note))
+                else
+                    runInAction(() => this.workNotesByWorkId.set(note.workId, observable([note])))
+            }
+        })
     }
 
     @computed

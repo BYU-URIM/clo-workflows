@@ -27,8 +27,9 @@ export class RootStore {
             if (this.sessionStore.isEmployee) {
                 this.employeeStore = new EmployeeStore(this, this.dataService)
                 this.clientStore = new ClientStore(this, this.dataService)
+
+                // init employee store since it will be displayed first, client store will be initialized if/when mode is switched
                 await this.employeeStore.init()
-                this.clientStore.init()
             } else {
                 this.clientStore = new ClientStore(this, this.dataService)
                 await this.clientStore.init()

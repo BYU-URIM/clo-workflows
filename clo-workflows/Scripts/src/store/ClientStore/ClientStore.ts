@@ -121,31 +121,37 @@ export class ClientStore implements IViewProvider {
             })),
         }
     }
-    @computed
-    get clientNotes(): Array<INote> {
-        const filtered = this.data.process_notes.filter(n => n.length > 0)
-        return this.data.process_notes.filter(n => n.length > 0).reduce((prev, curr) => prev.concat(curr), [])[0]
-    }
 
     @computed
     get selectedNotes() {
         return this.view.notesType === NoteSource.PROJECT
-            ? this.data.process_notes.filter(n => n.projectId === this.view.project.id)
-            : this.data.process_notes.filter(n => n.workId === this.view.work.id)
+            ? this.data.projectNotesByProjectId.get(this.view.project.id) || []
+            : this.data.workNotesByWorkId.get(this.view.work.id) || []
     }
 
     @computed
     get selectedNotesStore() {
-        return new NotesStore({
-            viewProvider: this,
-            dataService: this.dataService,
-            source: NoteSource.PROJECT,
-            maxScope: NoteScope.EMPLOYEE,
-            notes: this.selectedNotes,
-            // TODO fill in with current selected process / project / work info
-            attachedClientId: /*this.process.get("submitterId") as string*/ null,
-            attachedProjectId: /*this.project.get("Id") as number*/ null,
-        })
+        return this.view.notesType === NoteSource.PROJECT
+            // create projects notes store
+            ? new NotesStore({
+                viewProvider: this,
+                dataService: this.dataService,
+                source: NoteSource.PROJECT,
+                maxScope: NoteScope.CLIENT,
+                notes: this.selectedNotes,
+                attachedClientId: this.root.sessionStore.currentUser.Id,
+                attachedProjectId: Number(this.view.project.id),
+            })
+            // create works notes store
+            : new NotesStore({
+                viewProvider: this,
+                dataService: this.dataService,
+                source: NoteSource.WORK,
+                maxScope: NoteScope.CLIENT,
+                notes: this.selectedNotes,
+                attachedClientId: this.root.sessionStore.currentUser.Id,
+                attachedWorkId: Number(this.view.work.id),
+            })
     }
 
     /* ------------------------------------------------------------ *
