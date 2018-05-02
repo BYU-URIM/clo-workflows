@@ -5,7 +5,7 @@ import { IDataService, ListName } from "./IDataService"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import { getRole } from "../../model/loader/resourceLoaders"
-import { ItemAddResult } from "sp-pnp-js/lib/pnp"
+import { ItemAddResult } from "@pnp/sp"
 import { IKeyValueMap } from "mobx"
 
 export class MockDataService implements IDataService {

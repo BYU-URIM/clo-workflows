@@ -1,9 +1,12 @@
 import { IUser, User, IUserDto, CloRequestElement, IFormControl, IView, IRole, INote, NoteScope, NoteSource, IWork } from "../../model"
+// import * as pnp from "sp-pnp-js"
+// import { Web } from "sp-pnp-js/lib/sharepoint/webs"
+// import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import { IDataService, ListName } from "./IDataService"
-import * as pnp from "sp-pnp-js"
-import { Web } from "sp-pnp-js/lib/sharepoint/webs"
+import { graph } from "@pnp/graph"
+import { Web, ItemAddResult, sp } from "@pnp/sp"
+import { ODataDefaultParser } from "@pnp/odata"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
-import { ODataDefaultParser, ItemAddResult } from "sp-pnp-js"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { debug } from "util"
 import { CLIENT_RENEG_LIMIT } from "tls"
@@ -53,7 +56,7 @@ export class SpDataService implements IDataService {
         try {
             const res = await this.getAppWeb()
                 .siteGroups.getByName("LTT Client")
-                .users.add(user.loginName)
+                .users.get()
             console.log(res)
             // .users.add(user.username)
             // await this.getHostWeb().siteGroups.getByName("LTT Client").users.
@@ -63,7 +66,7 @@ export class SpDataService implements IDataService {
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
-        const activeProcesses: Array<CloRequestElement> = await this.getHostWeb()
+        const activeProcesses: Array<CloRequestElement> = await sp.web
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(this.ACTIVE_FILTER_STRING)
             .get(this.cloRequestElementParser)
@@ -211,7 +214,7 @@ export class SpDataService implements IDataService {
     private readonly cloRequestElementParser: CloRequestElementParser
 
     private getAppWeb(): Web {
-        return pnp.sp.configure(
+        return sp.configure(
             {
                 headers: { Accept: "application/json; odata=verbose" },
                 credentials: "same-origin",
@@ -221,15 +224,14 @@ export class SpDataService implements IDataService {
     }
 
     private getHostWeb(): Web {
-        return pnp.sp
+        return sp
             .configure(
                 {
                     headers: { Accept: "application/json; odata=verbose" },
                     credentials: "same-origin",
                 },
-                "../"
-            )
-            .crossDomainWeb(this.APP_WEB_URL, this.HOST_WEB_URL)
+                "../../"
+            ).web
     }
 
     // the loginName string returned form the server contains some garbage appended to the username - take it out here
