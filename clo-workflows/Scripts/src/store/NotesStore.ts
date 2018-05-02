@@ -1,5 +1,5 @@
 import { autobind } from "core-decorators"
-import { observable, action, runInAction, computed, toJS } from "mobx"
+import { observable, action, runInAction, computed, toJS, reaction } from "mobx"
 import { INote, NoteSource, NoteScope, getEmptyNote } from "./../model/Note"
 import { RequestDetailStore } from "./EmployeeStore/RequestDetailStore"
 import { IDataService } from "./../service/dataService/IDataService"
@@ -35,6 +35,11 @@ export class NotesStore {
         this.attachedProjectId = config.attachedProjectId
 
         this.displayCount = Math.min(this.DEFAULT_DISPLAY_COUNT, this.notes.length)
+
+        reaction(
+            () => this.notes.length,
+            () => Math.min(this.DEFAULT_DISPLAY_COUNT, this.notes.length)
+        )
     }
 
     readonly source: NoteSource

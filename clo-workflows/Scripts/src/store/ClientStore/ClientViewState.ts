@@ -37,7 +37,7 @@ export class ClientViewState {
 
     @computed
     get notesTitle() {
-        return this.notesType === NoteSource.WORK ? "Process Notes" : "Projects Notes"
+        return this.notesType === NoteSource.WORK ? "Work Notes" : "Projects Notes"
     }
     @action
     resetClientState() {
