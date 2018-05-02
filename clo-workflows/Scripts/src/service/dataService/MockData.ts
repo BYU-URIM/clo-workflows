@@ -7,7 +7,6 @@ export const MockUsersDtos: Array<IUserDto> = [
         username: "cmoody",
         Id: "1234-5678",
         roleNames: ["Junior License Processor"],
-        loginName: "i:0#.w|byu\cmoody4"
     },
     {
         name: "Connor Moody",
@@ -15,7 +14,6 @@ export const MockUsersDtos: Array<IUserDto> = [
         username: "cmoody",
         Id: "1234-5678",
         roleNames: ["LTT Client"],
-        loginName: "i:0#.w|byu\cmoody4"
     },
 ]
 
@@ -25,8 +23,7 @@ export const MockUsers: Array<User> = [
         "cmoody",
         "email@gmail.com",
         "1234-5678",
-        [],
-        "i:0#.w|byu\cmoody4"
+        []
     )
 ]
 

@@ -47,9 +47,7 @@ export class SpDataService implements IDataService {
             userName,
             rawUser.Email,
             rawUser.UserId.NameId,
-            // currentUserGroups
-            [getRole("LTT Client")],
-            rawUser.LoginName
+            currentUserGroups
         )
     }
     async ensureClient(user: User): Promise<void> {

@@ -13,7 +13,6 @@ ava.test("sessionStore recognizes employee", async t => {
         email: "email@gmail.com",
         Id: "1234-5678",
         roles: [getRole("LTT Administrator")],
-        loginName: "i:0#.w|byu\cmoody4",
         primaryRole: getRole("LTT Administrator"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
@@ -35,7 +34,6 @@ ava.test("sessionStore recognizes LTT Client user", async t => {
         username: "cmoody4",
         email: "email@gmail.com",
         Id: "1234-5678",
-        loginName: "i:0#.w|byu\cmoody4",
         roles: [getRole("LTT Client")],
         primaryRole: getRole("LTT Client"),
     }

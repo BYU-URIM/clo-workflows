@@ -38,8 +38,7 @@ export class MockDataService implements IDataService {
             userDto.username,
             userDto.email,
             userDto.Id,
-            userDto.roleNames.map(roleName => getRole(roleName)),
-            userDto.loginName
+            userDto.roleNames.map(roleName => getRole(roleName))
         )
         return Promise.resolve(user)
     }
