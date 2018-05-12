@@ -1,5 +1,5 @@
 import * as React from "react"
-import "./styles.css"
+import "./styles.scss"
 
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner"
 

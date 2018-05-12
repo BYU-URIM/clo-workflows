@@ -6,7 +6,7 @@ import { autobind } from "core-decorators"
 import { CompoundButton, IButtonProps } from "office-ui-fabric-react/lib/Button"
 import { IStep } from "../../model"
 
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @autobind

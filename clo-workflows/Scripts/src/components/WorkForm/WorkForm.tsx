@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { ClientStore } from "../../store/ClientStore/ClientStore"
 import { FormControlGroup } from "../"
-import "./styles.css"
+import "./styles.scss"
 
 export interface IFormPanelProps {
     clientStore: ClientStore

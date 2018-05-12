@@ -1,7 +1,7 @@
 import * as React from "react"
 import { MessageBar, MessageBarType } from "office-ui-fabric-react/lib/MessageBar"
 
-import "./styles.css"
+import "./styles.scss"
 
 interface IMessageProps {
     messageText: string

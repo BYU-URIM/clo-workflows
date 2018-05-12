@@ -1,0 +1,27 @@
+
+.client-wrapper-styles {
+  display: inline-flex;
+  width: 100%;
+  height: auto;
+}
+
+.client-right-section-styles {
+  margin: 0;
+  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 30%;
+}
+
+.client-left-section-styles {
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 70%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.18);
+}

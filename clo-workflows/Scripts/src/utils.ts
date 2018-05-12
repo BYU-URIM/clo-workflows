@@ -1,6 +1,3 @@
-import { ObservableMap } from "mobx/lib/types/observablemap"
-import { observable } from "mobx"
-
 class Utils {
     deepCopy = <T>(ob: T): T => ob
 

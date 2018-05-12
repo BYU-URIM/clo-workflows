@@ -4,7 +4,7 @@ import * as React from "react"
 import { ClientStore } from "../../store/"
 import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList } from "../"
 
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @observer

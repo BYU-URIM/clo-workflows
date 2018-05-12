@@ -1,6 +1,7 @@
-var path = require("path")
-var webpack = require("webpack")
-var ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
+const path = require("path")
+const webpack = require("webpack")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
 
 module.exports = function(env) {
     return {
@@ -22,7 +23,7 @@ module.exports = function(env) {
                     },
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.scss$/,
                     use: [
                         {
                             loader: "style-loader",
@@ -43,6 +44,9 @@ module.exports = function(env) {
                 NODE_ENV: JSON.stringify(env.NODE_ENV),
             }),
             new ForkTsCheckerWebpackPlugin(),
+            new HtmlWebpackPlugin({
+                template: "./res/index.html",
+            }),
         ],
     }
 }

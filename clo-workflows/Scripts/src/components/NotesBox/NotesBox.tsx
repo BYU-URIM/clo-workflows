@@ -8,7 +8,7 @@ import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { Dialog, DialogFooter, DialogType } from "office-ui-fabric-react"
 import Utils from "../../utils"
 import { NotesStore } from "../../store"
-import "./styles.css"
+import "./styles.scss"
 
 interface INotesBoxProps {
     notesStore: NotesStore

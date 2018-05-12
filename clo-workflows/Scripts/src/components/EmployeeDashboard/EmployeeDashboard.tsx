@@ -4,7 +4,7 @@ import { EmployeeStore } from "../../store/"
 import { NonScrollableList, RoleSteps, ProcessBriefList } from "../"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { SearchBox } from "office-ui-fabric-react"
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @observer

@@ -6,7 +6,7 @@ import { autobind } from "core-decorators"
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
 import { Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot"
 import { PivotState } from "../../store/EmployeeStore/RequestDetailStore"
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @autobind

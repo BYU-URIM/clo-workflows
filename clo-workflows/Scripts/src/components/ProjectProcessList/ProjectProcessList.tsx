@@ -21,7 +21,7 @@ import { ClientViewState, ClientStoreData } from "../../store/"
 import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
 import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
 
-import "./styles.css"
+import "./styles.scss"
 
 export interface IColumns {
     key: string

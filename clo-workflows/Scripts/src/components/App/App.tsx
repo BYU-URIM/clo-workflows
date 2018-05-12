@@ -4,7 +4,7 @@ import { RootStore } from "../../store/"
 import { Fabric } from "office-ui-fabric-react/lib/Fabric"
 import { initializeIcons } from "@uifabric/icons"
 import { Header, Employee, LoadingPage, Client } from "../"
-import "./styles.css"
+import "./styles.scss"
 
 // Register icons and pull the fonts from the default SharePoint cdn.
 initializeIcons()

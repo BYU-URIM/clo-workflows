@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react"
 import { IListItem, NonScrollableList } from "../"
-import "./styles.css"
+import "./styles.scss"
 interface IProcessBriefListProps {
     processBriefs: IListItem[]
     title: string

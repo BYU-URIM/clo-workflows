@@ -5,7 +5,7 @@ import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown"
 import { DescriptiveDropdown, DescriptiveCheckbox } from "../"
 import { TextField } from "office-ui-fabric-react/lib/TextField"
 import { ObservableMap } from "mobx"
-import "./styles.css"
+import "./styles.scss"
 interface IFormControlGroupProps {
     data: ObservableMap<FormEntryType> // map of fieldName to fieldValue
     formControls: Array<FormControl>

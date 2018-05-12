@@ -3,7 +3,7 @@ import { EmployeeStore, SessionStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { FormControlGroup, NotesBox } from "../"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @observer

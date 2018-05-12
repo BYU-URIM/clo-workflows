@@ -4,7 +4,7 @@ import { EmployeeStore, EmployeeViewKey } from "../../store/"
 import { autobind } from "core-decorators"
 import { EmployeeDashboard, HeaderBreadcrumb, ProcessDetail, Message } from "../"
 
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @autobind

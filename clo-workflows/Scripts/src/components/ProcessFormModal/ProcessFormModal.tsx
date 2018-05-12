@@ -7,7 +7,7 @@ import * as React from "react"
 import { ClientStore } from "../../store/ClientStore/ClientStore"
 import { WorkForm } from "../"
 
-import "./styles.css"
+import "./styles.scss"
 
 export interface IFormPanelProps {
     clientStore: ClientStore

@@ -1,0 +1,41 @@
+.notesBox-notesWrapper-styles {
+  background-color: #f0f0f0;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  width: 320px;
+  padding: 10px;
+}
+
+.notesBox-notesTitle-styles {
+  text-align: center;
+  font: 26px Segoe UI, sans-serif;
+  margin-bottom: 8px;
+}
+
+.notesBox-noNotesMessage-styles {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 200;
+  margin: 18px 0;
+}
+
+.notesBox-addNoteButton-styles {
+  display: flex;
+  justify-content: center;
+}
+
+.notesBox-submitNoteButton-styles {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.notesBox-noteEntry-styles {
+  margin-top: 10px
+}
+
+.notesBox-rightAlignedButton-styles {
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px 0;
+}
+

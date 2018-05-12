@@ -4,7 +4,7 @@ import { autobind } from "core-decorators"
 import { List } from "office-ui-fabric-react/lib/List"
 import { Header } from "../"
 import { IconButton } from "office-ui-fabric-react"
-import "./styles.css"
+import "./styles.scss"
 export interface IListItem {
     header: string
     subheader?: string
