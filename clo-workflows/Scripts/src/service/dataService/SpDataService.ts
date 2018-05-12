@@ -1,15 +1,10 @@
-import { IUser, User, IUserDto, CloRequestElement, IFormControl, IView, IRole, INote, NoteScope, NoteSource, IWork } from "../../model"
+import { IUser, User, CloRequestElement, IRole, INote, NoteScope, NoteSource } from "../../model"
 import { IDataService, ListName } from "./IDataService"
-import { graph } from "@pnp/graph"
 import { sp } from "@pnp/sp-addinhelpers"
-
-import { Web, ItemAddResult, SearchResults } from "@pnp/sp"
+import { Web, ItemAddResult } from "@pnp/sp"
 import { ODataDefaultParser } from "@pnp/odata"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
-import { debug } from "util"
-import { CLIENT_RENEG_LIMIT } from "tls"
-import { FetchClient, AdalClient } from "@pnp/common"
 
 // abstraction used to acess the SharePoint REST API
 // should only be used when the app is deployed against a SharePoint Instance conforming to the schema defined in "res/json/DB_CONFIG.json"
@@ -42,7 +37,7 @@ export class SpDataService implements IDataService {
             currentUserGroups = [getRole("LTT Client")]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-        return new User(rawUser.Title, userName, rawUser.Email, userName, currentUserGroups)
+        return new User(rawUser.Title, userName, rawUser.Email, userName, /* currentUserGroups */ [getRole("LTT Client")])
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
@@ -149,7 +144,7 @@ export class SpDataService implements IDataService {
             .orderBy("projectId", true)
             .get()
     }
-    async fetchWorks(): Promise<Array<IWork>> {
+    async fetchWorks(): Promise<Array<CloRequestElement>> {
         return await this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
@@ -240,7 +235,6 @@ export class CloRequestElementParser extends ODataDefaultParser {
     // this method is called automatically by PNP once for each request
     public async parse(response: Response): Promise<any> {
         // the ODataDefaultParser base method returns a JSON with all fields for the given list - a mix of CLO fields and garbage SP metadata fields
-        console.log()
         const parsedResponse = await super.parse(await response)
 
         // the parsedResponse may be an array of response objects or a single object, depending on what was requested

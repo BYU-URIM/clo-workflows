@@ -1,8 +1,5 @@
 import { observer } from "mobx-react"
 import { Dropdown } from "office-ui-fabric-react"
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/Button"
-import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
-import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
 
 import { ClientStore } from "../../store/ClientStore/ClientStore"

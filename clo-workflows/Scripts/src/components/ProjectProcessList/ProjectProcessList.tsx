@@ -17,7 +17,7 @@ import { CloRequestElement, StepName, NoteSource } from "../../model"
 
 import { Message } from "../"
 import { getStep, getStepNames } from "../../model/loader/"
-import { ClientViewState, ClientStoreData } from "../../store/ClientStore"
+import { ClientViewState, ClientStoreData } from "../../store/"
 import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
 import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
 

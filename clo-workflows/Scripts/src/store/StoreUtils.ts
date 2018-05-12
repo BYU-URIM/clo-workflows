@@ -66,5 +66,5 @@ class StoreUtils {
         list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
     }
 }
+export const storeUtils = new StoreUtils()
 
-export default new StoreUtils()

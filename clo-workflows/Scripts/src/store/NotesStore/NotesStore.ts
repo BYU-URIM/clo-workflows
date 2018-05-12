@@ -1,13 +1,10 @@
 import { autobind } from "core-decorators"
 import { observable, action, runInAction, computed, toJS, reaction } from "mobx"
-import { INote, NoteSource, NoteScope, getEmptyNote } from "./../model/Note"
-import { RequestDetailStore } from "./EmployeeStore/RequestDetailStore"
-import { IDataService } from "./../service/dataService/IDataService"
-import { EmployeeStore } from "./EmployeeStore/EmployeeStore"
-import Utils from "./../utils"
-import StoreUtils from "./StoreUtils"
-import { IListItem } from "./../components/NonScrollableList/NonScrollableList"
-import { IViewProvider } from "./ViewProvider"
+import { INote, NoteSource, NoteScope, getEmptyNote } from "./../../model/"
+import { IDataService } from "./../../service/"
+import { StoreUtils } from ".."
+import Utils from "./../../utils"
+import { IViewProvider } from "../ViewProvider"
 
 export interface INotesStoreConfig {
     viewProvider: IViewProvider,

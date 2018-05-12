@@ -31,20 +31,22 @@ export const MockProjects: Array<CloRequestElement> = [
     {
         type: "Theatrical",
         Id: 1,
-        title: "Test Theatrical Project",
+        Title: "Test Theatrical Project",
         descriptionOfWork: "description...",
         artist: "artist name",
         copyrightOwner: "owner name",
         department: "Test department",
+        submitterId: "cmoody4"
     },
     {
         type: "Theatrical",
         Id: 2,
-        title: "Another Theatrical Project",
+        Title: "Another Theatrical Project",
         descriptionOfWork: "More description stuff",
         artist: "Miley Cyrus",
         copyrightOwner: "Disney",
         department: "Club Disney Department",
+        submitterId: "cmoody4"
     },
 ]
 
@@ -125,20 +127,20 @@ export const MockWorks: Array<CloRequestElement> = [
     {
         Id: 1,
         type: "Music",
-        title: "Song Name",
+        Title: "Song Name",
         artist: "Artist Name",
     },
     {
         Id: 2,
         type: "Book",
-        title: "Book Name",
-        author: "Author Name",
+        Title: "Book Name",
+        authorName: "Author Name",
     },
     {
         Id: 3,
         type: "Article",
-        title: "Article Name",
-        author: "Author Name",
+        Title: "Article Name",
+        authorName: "Author Name",
     }
 ]
 

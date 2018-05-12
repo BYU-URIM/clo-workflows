@@ -6,23 +6,19 @@ import {
     PROJECT_TYPES,
     WORK_TYPES,
     FormControl,
-    User,
     IUser,
     getNextStepName,
     StepName,
     IStep,
     INote,
     NoteSource,
-    NoteScope
+    NoteScope,
+    getView,
+    getStep,
 } from "../../model"
-import { getView, getStep } from "../../model/loader/resourceLoaders"
-import { IDataService } from "../../service/dataService/"
+import { IDataService } from "../../service"
 import Utils from "../../utils"
-import StoreUtils from "../StoreUtils"
-import { RootStore } from "../RootStore"
-import { IProjectGroup } from "../../components/ProjectProcessList/ProjectProcessList"
-import { ClientViewState, ClientStoreData } from "./"
-import { NotesStore } from "../NotesStore"
+import { StoreUtils, RootStore, ClientViewState, ClientStoreData, NotesStore } from ".."
 import { IViewProvider, IMessage } from "../ViewProvider"
 
 type ClientObsMap = ObservableMap<FormEntryType>
@@ -132,26 +128,26 @@ export class ClientStore implements IViewProvider {
     @computed
     get selectedNotesStore() {
         return this.view.notesType === NoteSource.PROJECT
-            // create projects notes store
-            ? new NotesStore({
-                viewProvider: this,
-                dataService: this.dataService,
-                source: NoteSource.PROJECT,
-                maxScope: NoteScope.CLIENT,
-                notes: this.selectedNotes,
-                attachedClientId: this.root.sessionStore.currentUser.Id,
-                attachedProjectId: Number(this.view.project.id),
-            })
-            // create works notes store
-            : new NotesStore({
-                viewProvider: this,
-                dataService: this.dataService,
-                source: NoteSource.WORK,
-                maxScope: NoteScope.CLIENT,
-                notes: this.selectedNotes,
-                attachedClientId: this.root.sessionStore.currentUser.Id,
-                attachedWorkId: Number(this.view.work.id),
-            })
+            ? // create projects notes store
+              new NotesStore({
+                  viewProvider: this,
+                  dataService: this.dataService,
+                  source: NoteSource.PROJECT,
+                  maxScope: NoteScope.CLIENT,
+                  notes: this.selectedNotes,
+                  attachedClientId: this.root.sessionStore.currentUser.Id,
+                  attachedProjectId: Number(this.view.project.id),
+              })
+            : // create works notes store
+              new NotesStore({
+                  viewProvider: this,
+                  dataService: this.dataService,
+                  source: NoteSource.WORK,
+                  maxScope: NoteScope.CLIENT,
+                  notes: this.selectedNotes,
+                  attachedClientId: this.root.sessionStore.currentUser.Id,
+                  attachedWorkId: Number(this.view.work.id),
+              })
     }
 
     /* ------------------------------------------------------------ *

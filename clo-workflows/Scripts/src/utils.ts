@@ -2,9 +2,7 @@ import { ObservableMap } from "mobx/lib/types/observablemap"
 import { observable } from "mobx"
 
 class Utils {
-    deepCopy = <T>(ob: T): T => {
-        return JSON.parse(JSON.stringify(ob))
-    }
+    deepCopy = <T>(ob: T): T => ob
 
     getQueryStringParameter = (paramToRetrieve: string) => {
         const urlContainsParams = document.URL.includes("?")

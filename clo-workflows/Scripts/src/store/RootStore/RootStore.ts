@@ -1,9 +1,6 @@
-import { Employee } from "./../components/"
-import { IDataService } from "../service/dataService/IDataService"
+import { IDataService } from "../../service"
 import { action, observable, runInAction } from "mobx"
-import { ClientStore } from "./ClientStore/ClientStore"
-import { EmployeeStore } from "./EmployeeStore/EmployeeStore"
-import { SessionStore } from "./SessionStore"
+import { ClientStore, EmployeeStore, SessionStore } from ".."
 
 export class RootStore {
     sessionStore: SessionStore

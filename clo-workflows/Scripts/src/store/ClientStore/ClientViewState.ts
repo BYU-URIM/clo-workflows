@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx"
-import { ClientRequest } from "./index"
+import { ClientRequest } from ".."
 import { NoteSource } from "../../model/"
 
 type Modal = "project" | "process" | null

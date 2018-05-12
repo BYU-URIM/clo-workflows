@@ -1,4 +1,4 @@
-import { RootStore } from "./RootStore"
+import { RootStore } from "."
 
 // defines parent-store view functionality so that child stores can consume view services agnostic to the parent-store
 export interface IViewProvider {
@@ -9,6 +9,6 @@ export interface IViewProvider {
 }
 
 export interface IMessage {
-    messageText: string,
+    messageText: string
     messageType: "error" | "success"
 }

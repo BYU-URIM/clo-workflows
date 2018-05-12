@@ -1,4 +1,4 @@
-import { IRole, Role, View, FormControl, StepName, Step, IStep } from ".."
+import { Role, View, FormControl, StepName, Step, IStep } from ".."
 import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
@@ -60,7 +60,7 @@ export function getViewAndMakeReadonly(viewName: string, priveleged: boolean = t
 }
 
 export function getRole(roleName: string): Role {
-    const normalizedRole = ROLES[roleName]
+    const normalizedRole = ROLES[roleName] || getRole("LTT Client")
     return new Role({
         name: normalizedRole.name,
         permittedSteps: normalizedRole.permittedSteps.map(stepName => Utils.deepCopy(STEPS[stepName])),
