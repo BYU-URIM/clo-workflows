@@ -12,7 +12,7 @@
     "build:production": "webpack-cli --env.NODE_ENV=sharepoint --mode production",
     "test": "rimraf test_build/** && tsc --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
     "lint:css": "stylelint --fix '*.scss'",
-    "lint:ts": "tslint -c tslint.json --fix 'src/**/*.ts*' && tslint -c tslint.json 'test/**/*.ts*'",
+    "lint:ts": "\"tslint -c tslint.json 'src/**/*.ts*'\" \"tslint -c tslint.json 'test/**/*.ts*'\"",
     "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll",
     "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateAll &&  ts-node ./sp_config/migrations/tasks/CreateGroups",
     "sp:deleteAllAndCreateAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll && ts-node ./sp_config/migrations/tasks/CreateAll",
@@ -25,6 +25,7 @@
     "@types/core-decorators": "^0.10.32",
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.3",
+    "@types/shelljs": "^0.7.9",
     "ava": "^0.24.0",
     "chalk": "^2.3.1",
     "concurrently": "^3.5.1",
@@ -36,6 +37,7 @@
     "mini-css-extract-plugin": "^0.4.0",
     "react-docgen-typescript": "^1.2.6",
     "react-styleguidist": "^7.0.4",
+    "shelljs": "^0.8.2",
     "source-map-loader": "^0.2.1",
     "sp-pnp-node": "^2.0.2",
     "sp-rest-proxy": "^2.5.3",
@@ -73,7 +75,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx tslint"
+      "pre-commit": "ts-node ./tasks/lint.ts"
     }
   }
 }
