@@ -75,7 +75,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "ts-node ./tasks/lint.ts"
+      "pre-commit": "npx ts-node ./tasks/lint.ts"
     }
   }
 }
