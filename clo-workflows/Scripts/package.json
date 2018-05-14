@@ -10,6 +10,7 @@
     "build:sharepoint": "webpack-cli --env.NODE_ENV=sharepoint",
     "build:sharepointProxy": "webpack-cli --env.NODE_ENV=sharepointProxy",
     "build:production": "webpack-cli --env.NODE_ENV=sharepoint --mode production",
+    "lint": "ts-node ./scripts/lint.ts",
     "test": "rimraf test_build/** && tsc --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
     "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll",
     "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateAll &&  ts-node ./sp_config/migrations/tasks/CreateGroups",
@@ -73,7 +74,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "ts-node ./scripts/lint.ts"
+      "pre-commit": "npm run lint"
     }
   }
 }
