@@ -1,13 +1,9 @@
+import * as React from "react"
 import { observer } from "mobx-react"
 import { Dropdown } from "office-ui-fabric-react"
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/Button"
-import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel"
-import { Modal } from "office-ui-fabric-react/lib/Modal"
-import * as React from "react"
-
-import { ClientStore } from "../../store/ClientStore/ClientStore"
+import { ClientStore } from "../../store"
 import { FormControlGroup } from "../"
-import "./styles.css"
+import "./styles.scss"
 
 export interface IFormPanelProps {
     clientStore: ClientStore
@@ -32,7 +28,9 @@ const WorkForm = (props: IFormPanelProps) => {
                         data={props.clientStore.newWork}
                         formControls={props.clientStore.currentForm}
                         validation={props.clientStore.currentFormValidation}
-                        updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newWork")}
+                        updateFormField={(fieldName, value) =>
+                            props.clientStore.updateClientStoreMember(fieldName, value, "newWork")
+                        }
                     />
                 </div>
             )}

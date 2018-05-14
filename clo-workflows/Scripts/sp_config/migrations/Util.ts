@@ -1,24 +1,23 @@
 import chalk from "chalk"
-import * as pnp from "sp-pnp-js"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
 import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig, IGroup } from "./IUtil"
-import { SPRest } from "sp-pnp-js/lib/sharepoint/rest"
 import { Util } from "sp-pnp-js"
 import { CloRequestElement } from "../../src/model/"
+import { SPRest, sp } from "@pnp/sp"
 
 const DB_CONFIG = db as any
 
 export class Utils implements IUtil {
     pnpNodeSettings: IPnpNodeSettings
     config: any
-    constructor(dbConfig: any) {
+    constructor() {
         this.config = require("./private.json")
         this.pnpNodeSettings = {
             siteUrl: `${this.config.siteUrl}`,
             authOptions: this.config,
         }
-        pnp.setup({
+        sp.setup({
             sp: {
                 fetchClientFactory: () => {
                     return new PnpNode(this.pnpNodeSettings)
@@ -26,26 +25,24 @@ export class Utils implements IUtil {
                 baseUrl: `${this.config.siteUrl}`,
             },
         }),
-            (this.DB_CONFIG = dbConfig),
             (this.data = {
                 proposedLists: Object.keys(this.DB_CONFIG.tables),
                 currentListTitles: Array<string>(),
                 missingLists: Array<string>(),
             })
-        this.sp = pnp.sp
     }
-    DB_CONFIG: IDBConfig
+    DB_CONFIG: IDBConfig = DB_CONFIG
     data: IData
-    sp: SPRest
+    sp: SPRest = sp
     /* -------------------------------------------------- *
      * ----------             LISTS            ---------- *
      * -------------------------------------------------- */
     async getAllCurrentListTitles() {
-        const res = await pnp.sp.web.lists.select("Title").get()
-        return await res.map(listinfo => listinfo.Title)
+        const res = await sp.web.lists.select("Title").get()
+        return res.map(listinfo => listinfo.Title)
     }
     async getCurrentListTitles() {
-        const res = await pnp.sp.web.lists.select("Title").get()
+        const res = await sp.web.lists.select("Title").get()
         const titles = await res.map(listinfo => listinfo.Title)
         return titles.filter(list => !this.DB_CONFIG.defaultTables.includes(list))
     }
@@ -61,10 +58,10 @@ export class Utils implements IUtil {
         const nonDefaultListTitles = await this.getCurrentListTitles()
         const len = nonDefaultListTitles.length
         for (const title of nonDefaultListTitles) {
-            await pnp.sp.web.lists.getByTitle(title).delete()
+            await sp.web.lists.getByTitle(title).delete()
             console.log(chalk`{red deleted}: {blue ${title}}`)
         }
-        console.log(chalk`{red deleted}: {blue ${len}} lists`)
+        console.log(chalk`{red deleted}: {blue ${len.toString()}} lists`)
     }
     async createAll() {
         const currentListTitles = await this.getCurrentListTitles()
@@ -80,26 +77,21 @@ export class Utils implements IUtil {
     }
 
     async ensureList(title: string) {
-        const x = pnp.sp.web.lists.ensure(title, `${title} description`, 100, true)
-        const y = x.then(async () => {
-            const allfields = this.DB_CONFIG.tables[title].fields
-            for (const field of allfields) {
-                if (!this.DB_CONFIG.defaultFields.includes(field)) {
-                    await pnp.sp.web.lists.getByTitle(title).fields.addText(field)
-                    console.log(chalk`{green created field}: {blue ${field}} `)
-                } else {
-                    console.log(chalk`{green field already exists}: {blue ${field}} `)
-                }
-            }
-        })
+        await sp.web.lists.ensure(title, `${title} description`, 100, true)
+        for (const field of this.DB_CONFIG.tables[title].fields) {
+            !this.DB_CONFIG.defaultFields.includes(field)
+                ? (await sp.web.lists.getByTitle(title).fields.addText(field),
+                  console.log(chalk`{green created field}: {blue ${field}} `))
+                : console.log(chalk`{green field already exists}: {blue ${field}} `)
+        }
     }
     async addChanged() {
-        const current = await this.getCurrentListTitles()
+        await this.getCurrentListTitles()
     }
 
     validateDBConfig() {
         const tables = this.DB_CONFIG.tables
-        const x = (Object as any).values(tables).forEach(element => {
+        Object.values(tables).forEach(element => {
             console.log(utils.validateStringArray(element.fields))
         })
     }
@@ -145,10 +137,10 @@ ERROR: INVALID  FIELD
      * ----------            Groups            ---------- *
      * -------------------------------------------------- */
     async getAllGroups(): Promise<Array<CloRequestElement>> {
-        return await pnp.sp.web.siteGroups.get()
+        return sp.web.siteGroups.get()
     }
     async getAllGroupTitles(): Promise<Array<string>> {
-        const groups = await pnp.sp.web.siteGroups.get()
+        const groups = await sp.web.siteGroups.get()
         return groups.map(group => group.Title)
     }
     async getMissingGroups(): Promise<Array<IGroup>> {
@@ -156,7 +148,7 @@ ERROR: INVALID  FIELD
         return this.DB_CONFIG.groups.filter(group => !allGroupTitles.includes(group.name))
     }
     async createGroup(groupName: string) {
-        await pnp.sp.web.siteGroups.add({
+        await sp.web.siteGroups.add({
             Title: groupName,
         })
     }
@@ -165,7 +157,8 @@ ERROR: INVALID  FIELD
     }
     async addUsersToGroups(groups: Array<IGroup>) {
         groups.forEach(group => {
-            if (group.members.length > 0) group.members.forEach(member => pnp.sp.web.siteGroups.getByName(group.name).users.add(member))
+            if (group.members.length > 0)
+                group.members.forEach(member => sp.web.siteGroups.getByName(group.name).users.add(member))
         })
     }
     async createMissingGroups(): Promise<void> {
@@ -176,4 +169,4 @@ ERROR: INVALID  FIELD
     }
 }
 
-export const utils = new Utils(db)
+export const utils = new Utils()

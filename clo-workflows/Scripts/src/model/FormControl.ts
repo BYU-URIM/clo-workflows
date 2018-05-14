@@ -15,7 +15,7 @@ export class FormControl implements IFormControl {
         Object.assign(this, formControlDefinition)
         this.readonly = false
         this.touched = false
-        if(this.type === "checkbox") {
+        if (this.type === "checkbox") {
             this.defaultValue = "false"
         }
     }
@@ -30,10 +30,14 @@ export class FormControl implements IFormControl {
     @observable touched: boolean
 
     @action
-    touch() { this.touched = true }
+    touch() {
+        this.touched = true
+    }
 
     @action
-    makeReadOnly() { this.readonly = true }
+    makeReadOnly() {
+        this.readonly = true
+    }
 }
 
 export type FormControlType = "text" | "choice" | "checkbox" | "textarea" | "datetime" | "number"

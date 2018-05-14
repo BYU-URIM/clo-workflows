@@ -6,23 +6,18 @@ import {
     PROJECT_TYPES,
     WORK_TYPES,
     FormControl,
-    User,
     IUser,
     getNextStepName,
     StepName,
     IStep,
     INote,
     NoteSource,
-    NoteScope
+    NoteScope,
+    resourceLoaders,
 } from "../../model"
-import { getView, getStep } from "../../model/loader/resourceLoaders"
-import { IDataService } from "../../service/dataService/"
+import { IDataService } from "../../service"
 import Utils from "../../utils"
-import StoreUtils from "../StoreUtils"
-import { RootStore } from "../RootStore"
-import { IProjectGroup } from "../../components/ProjectProcessList/ProjectProcessList"
-import { ClientViewState, ClientStoreData } from "./"
-import { NotesStore } from "../NotesStore"
+import { StoreUtils, RootStore, ClientViewState, ClientStoreData, NotesStore } from ".."
 import { IViewProvider, IMessage } from "../ViewProvider"
 
 type ClientObsMap = ObservableMap<FormEntryType>
@@ -91,7 +86,7 @@ export class ClientStore implements IViewProvider {
      * ------------------------------------------------------------ */
     @computed
     get currentForm(): Array<FormControl> {
-        return getView(this.view.work.type || this.view.project.type).formControls
+        return resourceLoaders.getView(this.view.work.type || this.view.project.type).formControls
     }
 
     @computed
@@ -132,26 +127,26 @@ export class ClientStore implements IViewProvider {
     @computed
     get selectedNotesStore() {
         return this.view.notesType === NoteSource.PROJECT
-            // create projects notes store
-            ? new NotesStore({
-                viewProvider: this,
-                dataService: this.dataService,
-                source: NoteSource.PROJECT,
-                maxScope: NoteScope.CLIENT,
-                notes: this.selectedNotes,
-                attachedClientId: this.root.sessionStore.currentUser.Id,
-                attachedProjectId: Number(this.view.project.id),
-            })
-            // create works notes store
-            : new NotesStore({
-                viewProvider: this,
-                dataService: this.dataService,
-                source: NoteSource.WORK,
-                maxScope: NoteScope.CLIENT,
-                notes: this.selectedNotes,
-                attachedClientId: this.root.sessionStore.currentUser.Id,
-                attachedWorkId: Number(this.view.work.id),
-            })
+            ? // create projects notes store
+              new NotesStore({
+                  viewProvider: this,
+                  dataService: this.dataService,
+                  source: NoteSource.PROJECT,
+                  maxScope: NoteScope.CLIENT,
+                  notes: this.selectedNotes,
+                  attachedClientId: this.root.sessionStore.currentUser.Id,
+                  attachedProjectId: Number(this.view.project.id),
+              })
+            : // create works notes store
+              new NotesStore({
+                  viewProvider: this,
+                  dataService: this.dataService,
+                  source: NoteSource.WORK,
+                  maxScope: NoteScope.CLIENT,
+                  notes: this.selectedNotes,
+                  attachedClientId: this.root.sessionStore.currentUser.Id,
+                  attachedWorkId: Number(this.view.work.id),
+              })
     }
 
     /* ------------------------------------------------------------ *
@@ -198,7 +193,10 @@ export class ClientStore implements IViewProvider {
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
             console.error(error)
-            this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: "error" })
+            this.postMessage({
+                messageText: "there was a problem creating your new Project, try again",
+                messageType: "error",
+            })
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -227,12 +225,15 @@ export class ClientStore implements IViewProvider {
     private submitProcess = async (): Promise<void> => {
         this.setAsyncPendingLockout(true)
         try {
-            const previousStep: IStep = getStep("Intake")
+            const previousStep: IStep = resourceLoaders.getStep("Intake")
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
             this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
+                : this.newProcess.set(
+                      "Title",
+                      this.data.works.find(work => work.Id.toString() === this.view.work.id).Title
+                  )
             this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
@@ -286,7 +287,10 @@ export class ClientStore implements IViewProvider {
         } catch (error) {
             console.error(error)
             submissionStatus = false
-            this.postMessage({ messageText: "there was a problem submitting your note, try again", messageType: "error" })
+            this.postMessage({
+                messageText: "there was a problem submitting your note, try again",
+                messageType: "error",
+            })
         } finally {
             this.view.asyncPendingLockout = false
         }
@@ -338,7 +342,10 @@ export class ClientStore implements IViewProvider {
         return submissionStatus
     }
     @action
-    private replaceElementInListById = (newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean => {
+    private replaceElementInListById = (
+        newItem: CloRequestElement | INote,
+        list: Array<CloRequestElement | INote>
+    ): boolean => {
         const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
 
         if (staleItemIndex !== -1) {
@@ -349,7 +356,10 @@ export class ClientStore implements IViewProvider {
     }
 
     @action
-    private removeELementInListById = (itemToDelete: CloRequestElement | INote, list: Array<CloRequestElement | INote>) => {
+    private removeELementInListById = (
+        itemToDelete: CloRequestElement | INote,
+        list: Array<CloRequestElement | INote>
+    ) => {
         list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
     }
 }

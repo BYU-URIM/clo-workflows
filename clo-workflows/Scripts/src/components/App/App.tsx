@@ -1,12 +1,10 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { SessionStore, RootStore } from "../../store/"
-import { Fabric } from "office-ui-fabric-react/lib/Fabric"
-import DevTools from "mobx-react-devtools"
+import { RootStore } from "../../store/"
+import { Header, Employee, LoadingPage, Client } from "../"
+import { Fabric } from "office-ui-fabric-react"
+import "./styles.scss"
 import { initializeIcons } from "@uifabric/icons"
-import { Header, IHeaderProps, Employee, LoadingPage, Client } from "../"
-import "./styles.css"
-
 // Register icons and pull the fonts from the default SharePoint cdn.
 initializeIcons()
 @inject("rootStore")
@@ -26,9 +24,15 @@ export default class App extends React.Component<any, any> {
                     <div>
                         <Header
                             currentUser={this.rootStore.sessionStore.currentUser}
-                            clientMode={this.rootStore.sessionStore.isEmployee ? this.rootStore.employeeStore.clientMode : undefined}
+                            clientMode={
+                                this.rootStore.sessionStore.isEmployee
+                                    ? this.rootStore.employeeStore.clientMode
+                                    : undefined
+                            }
                             toggleClientMode={
-                                this.rootStore.sessionStore.isEmployee ? this.rootStore.employeeStore.toggleClientMode : undefined
+                                this.rootStore.sessionStore.isEmployee
+                                    ? this.rootStore.employeeStore.toggleClientMode
+                                    : undefined
                             }
                         />
                         <div>

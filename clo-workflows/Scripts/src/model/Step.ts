@@ -1,4 +1,4 @@
-import { IFormControl, CloRequestElement } from "."
+import { CloRequestElement } from "."
 import { observable } from "mobx"
 
 export type StepName =
@@ -27,9 +27,12 @@ export type StepName =
 export interface IStep {
     name: StepName // string identifier used mostly for display purposes
     orderId: number
-    view: string // contains the name of a view, which is a list of form controls displayed at this step
-    submitterFieldName: string // name of the process field name corresponding to the ID of the last person to submit the process at this step
-    submissionDateFieldName: string // name of the process field name corresponding to the date this item was submitted at this step
+    view: string
+    // contains the name of a view, which is a list of form controls displayed at this step
+    submitterFieldName: string
+    // name of the process field name corresponding to the ID of the last person to submit the process at this step
+    submissionDateFieldName: string
+    // name of the process field name corresponding to the date this item was submitted at this step
     processFieldNames: string[] // name of the process fields that are editable by a processor at this step
 }
 
@@ -52,133 +55,147 @@ export class Step implements IStep {
 // TODO possible to make this more typesafe??
 export function getNextStepName(process: CloRequestElement, currentStep?: StepName): StepName {
     const curStepName: StepName = (process.step as StepName) || currentStep
-    switch(curStepName) {
+    switch (curStepName) {
         case "Intake":
             return "Public Domain Research"
         case "Public Domain Research":
-            if(process.publicDomainResearch === "Public Domain") {
+            if (process.publicDomainResearch === "Public Domain") {
                 return "Public Domain Approval"
-            } else if(process.publicDomainResearch === "Non Public Domain" || process.publicDomainResearch === "Unclear") {
+            } else if (
+                process.publicDomainResearch === "Non Public Domain" ||
+                process.publicDomainResearch === "Unclear"
+            ) {
                 return "Existing License"
             }
             return curStepName
 
         case "Public Domain Approval":
-            if(process.publicDomainApproval === "true") {
+            if (process.publicDomainApproval === "true") {
                 return "Complete"
-            } else if(process.publicDomainApproval === "false") {
+            } else if (process.publicDomainApproval === "false") {
                 return "Existing License"
             }
             return curStepName
 
         case "Existing License":
-            if(process.existingLicense === "CC" || process.existingLicense === "Library Database"
-            || process.existingLicense === "Terms of Use" || process.existingLicense === "Permission from Rights Holder") {
+            if (
+                process.existingLicense === "CC" ||
+                process.existingLicense === "Library Database" ||
+                process.existingLicense === "Terms of Use" ||
+                process.existingLicense === "Permission from Rights Holder"
+            ) {
                 return "Existing License Approval"
-            } else if(process.existingLicense === "None") {
+            } else if (process.existingLicense === "None") {
                 return "Exemption Analysis"
             }
             return curStepName
 
         case "Existing License Approval":
-            if(process.existingLicenseApproval === "true") {
+            if (process.existingLicenseApproval === "true") {
                 return "Complete"
-            } else if(process.existingLicenseApproval === "false") {
+            } else if (process.existingLicenseApproval === "false") {
                 return "Exemption Analysis"
             }
             return curStepName
 
         case "Exemption Analysis":
-            if(process.exemptionAnalysis === "Fair Use") {
+            if (process.exemptionAnalysis === "Fair Use") {
                 return "Exemption Approval"
-            } else if(process.exemptionAnalysis === "No Exemption") {
+            } else if (process.exemptionAnalysis === "No Exemption") {
                 return "Ownership Research Licensing Exchange"
             }
             return curStepName
 
         case "Exemption Approval":
-            if(process.exemptionApproval === "true") {
+            if (process.exemptionApproval === "true") {
                 return "Complete"
-            } else if(process.exemptionApproval === "false") {
+            } else if (process.exemptionApproval === "false") {
                 return "Ownership Research Licensing Exchange"
             }
             return curStepName
 
         case "Ownership Research Licensing Exchange":
-            if(process.licensingExchange === "Tresona" || process.licensingExchange === "Wearethehits.com") {
+            if (process.licensingExchange === "Tresona" || process.licensingExchange === "Wearethehits.com") {
                 return "Request Submitted"
-            } else if(process.licensingExchange === "Not found in licensing exchange") {
+            } else if (process.licensingExchange === "Not found in licensing exchange") {
                 return "Ownership Research Direct to Rights Holder"
             }
             return curStepName
 
         case "Ownership Research Direct to Rights Holder":
-            if(process.directToRightsHolders) {
+            if (process.directToRightsHolders) {
                 return "Request Submitted"
             }
             return curStepName
 
         case "Request Submitted":
-            if(process.requestSubmitted === "true") {
+            if (process.requestSubmitted === "true") {
                 return "Response from Rights Holder Received"
             }
             return curStepName
 
         case "Response from Rights Holder Received":
-            if(process.rightsHolderResponse === "License request approved" || process.rightsHolderResponse === "License request denied") {
+            if (
+                process.rightsHolderResponse === "License request approved" ||
+                process.rightsHolderResponse === "License request denied"
+            ) {
                 return "CLO Response to Rights Holder"
             }
             return curStepName
 
         case "CLO Response to Rights Holder":
-            if(process.cloResponseToRightsHolder === "Cancel request" || process.cloResponseToRightsHolder === "Public domain override"
-            || process.cloResponseToRightsHolder === "Exemption override" || process.cloResponseToRightsHolder === "Low risk override") {
+            if (
+                process.cloResponseToRightsHolder === "Cancel request" ||
+                process.cloResponseToRightsHolder === "Public domain override" ||
+                process.cloResponseToRightsHolder === "Exemption override" ||
+                process.cloResponseToRightsHolder === "Low risk override"
+            ) {
                 return "Complete"
-            } else if(process.cloResponseToRightsHolder === "Renegotiating") {
+            } else if (process.cloResponseToRightsHolder === "Renegotiating") {
                 return curStepName
-            } else if(process.cloResponseToRightsHolder === "Rights holder offer accepted") {
+            } else if (process.cloResponseToRightsHolder === "Rights holder offer accepted") {
                 return "Receipt of License"
             }
             return curStepName
 
         case "Receipt of License":
-            if(process.receiptOfLicense === "Signature required") {
+            if (process.receiptOfLicense === "Signature required") {
                 return "Supervisor Signature"
-            } else if(process.receiptOfLicense === "Signature not Required") {
+            } else if (process.receiptOfLicense === "Signature not Required") {
                 return "Payment"
             }
             return curStepName
 
         case "Supervisor Signature":
-            if(process.supervisorSignature === "true") {
+            if (process.supervisorSignature === "true") {
                 return "Payment"
             }
             return curStepName
 
         case "Payment":
-            if(process.payment === "Fee required") {
+            if (process.payment === "Fee required") {
                 return "Process Payment"
-            } else if(process.payment === "Gratis") {
+            } else if (process.payment === "Gratis") {
                 return "Complete Request"
             }
             return curStepName
 
         case "Process Payment":
-            if(process.processPayment === "true") {
+            if (process.processPayment === "true") {
                 return "Complete Request"
             }
             return curStepName
 
         case "Initial Request Completion":
-            if(process.initialRequestCompletion === "Received fully executed license") {
+            if (process.initialRequestCompletion === "Received fully executed license") {
                 return "Complete"
-            } else if(process.initialRequestCompletion === "Signed license to be sent") {
+            } else if (process.initialRequestCompletion === "Signed license to be sent") {
                 return "Final Request Completion"
             }
             return curStepName
 
         case "Final Request Completion":
-            if(process.finalRequestCompletion === "Countersignature received") {
+            if (process.finalRequestCompletion === "Countersignature received") {
                 return "Complete"
             }
             return curStepName

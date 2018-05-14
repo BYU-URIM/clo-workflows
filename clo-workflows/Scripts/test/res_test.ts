@@ -177,11 +177,7 @@ ava.test("test that DB_CONFIG.json has the correct structure", t => {
 
         // make sure each field conforms to rules
         table.fields.forEach(fieldName => {
-            t.regex(
-                fieldName,
-                /^([A-Za-z | 0-9]){1,32}$/,
-                `${fieldName} should be < 32 characters long and only contain letters or numbers`
-            )
+            t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)
         })
     })
 })

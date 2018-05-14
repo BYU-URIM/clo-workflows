@@ -1,11 +1,9 @@
 import { inject, observer } from "mobx-react"
 import * as React from "react"
+import { ClientStore } from "../../store/"
+import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList } from "../"
 
-import { SessionStore, ClientStore } from "../../store/"
-import { NoteSource, NoteScope } from "../../model"
-import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList, Header } from "../"
-
-import "./styles.css"
+import "./styles.scss"
 
 @inject("rootStore")
 @observer

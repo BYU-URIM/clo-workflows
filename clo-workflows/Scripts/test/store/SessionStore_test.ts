@@ -1,9 +1,9 @@
 import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
 import { SessionStore, RootStore } from "../../src/store/"
-import { IDataService, MockDataService,  } from "../../src/service"
+import { MockDataService } from "../../src/service"
 import { IUser } from "../../src/model"
-import { getRole } from "../../src/model/loader"
+import { getRole } from "../../src/model/loader/resourceLoaders"
 
 ava.test("sessionStore recognizes employee", async t => {
     const mockDataService = mock(MockDataService)

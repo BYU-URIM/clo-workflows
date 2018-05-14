@@ -1,11 +1,10 @@
-import { SessionStore, RootStore, ClientStore } from "./../../src/store/"
+import { RootStore } from "./../../src/store/"
 import * as ava from "ava"
-import { useStrict } from "mobx"
-import { when, mock, verify, instance, spy, anything } from "ts-mockito"
+import { when, mock, instance, anything } from "ts-mockito"
 import { IUser } from "../../src/model"
-import { MockProjects, MockUsers, MockProcesses, MockWorks, MockDataService, ListName } from "../../src/service/"
-import { getRole } from "../../src/model/loader"
-import { MockNotes } from "../../src/service/dataService/MockData"
+import { getRole } from "../../src/model/loader/resourceLoaders"
+
+import { MockProjects, MockNotes, MockProcesses, MockWorks, MockDataService, ListName } from "../../src/service/"
 
 ava.test("root store creates session store, employee store, and client store when an employee logs in", async t => {
     const mockDataService = mock(MockDataService)
@@ -20,7 +19,9 @@ ava.test("root store creates session store, employee store, and client store whe
 
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
     when(mockDataService.fetchEmployeeActiveProcesses(anything())).thenReturn(Promise.resolve(MockProcesses))
-    when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(
+        Promise.resolve(MockProjects)
+    )
     when(mockDataService.fetchRequestElementsById(anything(), ListName.WORKS)).thenReturn(Promise.resolve(MockWorks))
     when(mockDataService.fetchClientActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
 
@@ -42,7 +43,9 @@ ava.test("root store creates sessionStore, client store when client logs in", as
         primaryRole: getRole("LTT Client"),
     }
     when(mockDataService.fetchUser()).thenReturn(Promise.resolve(user))
-    when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(Promise.resolve(MockProjects))
+    when(mockDataService.fetchRequestElementsById(anything(), ListName.PROJECTS)).thenReturn(
+        Promise.resolve(MockProjects)
+    )
     when(mockDataService.fetchClientActiveProjects(anything())).thenReturn(Promise.resolve(MockProjects))
     when(mockDataService.fetchClientProjects()).thenReturn(Promise.resolve(MockProjects))
     when(mockDataService.fetchClientProcesses()).thenReturn(Promise.resolve(MockProcesses))

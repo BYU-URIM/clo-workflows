@@ -6,7 +6,7 @@ const main = async () => {
     const missingGroups = await utils.getMissingGroups()
     console.log(`${missingGroups.length > 0 ? "missing groups:" + JSON.stringify(missingGroups) : "no groups missing"}`)
     if (missingGroups.length > 0) {
-        const res = (await utils.createMissingGroups())
+        const res = await utils.createMissingGroups()
         console.log(res)
     }
 }

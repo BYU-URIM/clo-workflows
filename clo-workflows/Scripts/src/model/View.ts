@@ -5,13 +5,16 @@ import { observable, action } from "mobx"
 export interface IView {
     dataSource: string
 
-    // NOTE: the JSON definition of a view consists of a formControls array and a readonlyFormControls array
-    // however, once the JSON definitions are loaded into stores, the two arrays are combiined into a single formControls array
+    /**
+     * NOTE: the JSON definition of a view consists of a formControls array and a readonlyFormControls array
+     * however, once the JSON definitions are loaded into stores,
+     * the two arrays are combiined into a single formControls array
+     */
     formControls: Array<IFormControl>
 }
 
 export class View implements IView {
-    // copy constructor for copying JSON definition objects into observable model objects
+    /* copy constructor for copying JSON definition objects into observable model objects */
     constructor(viewDefinition: IView) {
         Object.assign(this, viewDefinition)
     }
@@ -22,7 +25,7 @@ export class View implements IView {
     @action
     touchAllRequiredFormControls() {
         this.formControls.forEach(formControl => {
-            if(formControl.required) formControl.touch()
+            if (formControl.required) formControl.touch()
         })
     }
 }

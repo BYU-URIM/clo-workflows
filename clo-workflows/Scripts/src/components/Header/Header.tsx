@@ -1,7 +1,7 @@
 import * as React from "react"
 import { IUser } from "../../model"
-import { Persona, PersonaInitialsColor, Toggle } from "office-ui-fabric-react"
-import "./styles.css"
+import { Persona, Toggle } from "office-ui-fabric-react"
+import "./styles.scss"
 
 export interface IHeaderProps {
     currentUser: IUser

@@ -1,4 +1,4 @@
-import { CloRequestElement, IUser, IWork, INote, NoteSource, NoteScope, User } from "../../model"
+import { CloRequestElement, IUser, INote, NoteSource, NoteScope } from "../../model"
 import { ItemAddResult } from "@pnp/sp"
 
 export interface IDataService {
@@ -8,7 +8,7 @@ export interface IDataService {
     fetchClientProjects(userId: string): Promise<Array<CloRequestElement>>
     fetchEmployeeActiveProcesses(employee: IUser): Promise<Array<CloRequestElement>>
     fetchClientActiveProjects(client: IUser): Promise<Array<CloRequestElement>>
-    fetchWorks(): Promise<Array<IWork>>
+    fetchWorks(): Promise<Array<CloRequestElement>>
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
     searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>>
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>

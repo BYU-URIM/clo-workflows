@@ -31,32 +31,29 @@ export class ClientStoreData {
     }
     fetchClientProcesses = async () => {
         const processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
-        runInAction(() => this.processes = processes)
+        runInAction(() => (this.processes = processes))
     }
     fetchClientProjects = async () => {
         const projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
-        runInAction(() => this.projects = projects)
+        runInAction(() => (this.projects = projects))
     }
     fetchWorks = async () => {
         const works = await this.dataService.fetchWorks()
-        runInAction(() => this.works = works)
+        runInAction(() => (this.works = works))
     }
     fetchNotes = async () => {
         this.projectNotesByProjectId = observable.map()
         this.workNotesByWorkId = observable.map()
-        const allNotes = await this.dataService.fetchClientNotes(this.currentUser.Id)
+        const allNotes = await this.dataService.fetchClientNotes(this.currentUser.Id) || []
         allNotes.forEach(note => {
-            if(note.projectId) {
-                if(this.projectNotesByProjectId.get(note.projectId))
+            if (note.projectId) {
+                if (this.projectNotesByProjectId.get(note.projectId))
                     runInAction(() => this.projectNotesByProjectId.get(note.projectId).push(note))
-                else
-                    runInAction(() => this.projectNotesByProjectId.set(note.projectId, observable([note])))
-            }
-            else if(note.workId) {
-                if(this.workNotesByWorkId.get(note.workId))
+                else runInAction(() => this.projectNotesByProjectId.set(note.projectId, observable([note])))
+            } else if (note.workId) {
+                if (this.workNotesByWorkId.get(note.workId))
                     runInAction(() => this.workNotesByWorkId.get(note.workId).push(note))
-                else
-                    runInAction(() => this.workNotesByWorkId.set(note.workId, observable([note])))
+                else runInAction(() => this.workNotesByWorkId.set(note.workId, observable([note])))
             }
         })
     }

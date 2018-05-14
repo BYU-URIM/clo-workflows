@@ -1,7 +1,6 @@
 import * as React from "react"
-import "./styles.css"
-
-import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner"
+import { Spinner, SpinnerSize } from "office-ui-fabric-react"
+import "./styles.scss"
 
 export default function LoadingPage() {
     return (

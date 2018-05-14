@@ -1,4 +1,4 @@
-import { IPnpNodeSettings } from "sp-pnp-node/dist"
+import { IPnpNodeSettings } from "sp-pnp-node"
 
 export interface ITable {
     title: string
@@ -25,7 +25,6 @@ export interface IDBConfig {
     defaultTables: string[]
     defaultFields: string[]
     groups: Array<IGroup>
-
     tables: ITables
 }
 

@@ -1,5 +1,5 @@
 import * as ava from "ava"
-import { getRole } from "../../src/model/loader"
+import { getRole } from "../../src/model/loader/resourceLoaders"
 import { User } from "../../src/model"
 import * as mobx from "mobx"
 

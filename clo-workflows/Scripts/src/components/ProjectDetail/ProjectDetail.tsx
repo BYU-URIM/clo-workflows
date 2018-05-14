@@ -1,10 +1,9 @@
 import * as React from "react"
-import { EmployeeStore, SessionStore } from "../../store"
 import { inject, observer } from "mobx-react"
+import { PrimaryButton, IconButton } from "office-ui-fabric-react"
+import { EmployeeStore, SessionStore } from "../../store"
 import { NotesBox, FormControlGroup } from "../"
-import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import { NoteSource, NoteScope } from "../../model/Note"
-import "./styles.css"
+import "./styles.scss"
 @inject("rootStore")
 @observer
 export default class ProjectDetail extends React.Component<any, any> {
@@ -28,7 +27,11 @@ export default class ProjectDetail extends React.Component<any, any> {
                         <div className="projectDetail-editButton-styles">
                             <IconButton
                                 disabled={!requestDetailStore.isRequestActive}
-                                iconProps={requestDetailStore.canEditProject ? { iconName: "BoxMultiplySolid" } : { iconName: "edit" }}
+                                iconProps={
+                                    requestDetailStore.canEditProject
+                                        ? { iconName: "BoxMultiplySolid" }
+                                        : { iconName: "edit" }
+                                }
                                 onClick={
                                     requestDetailStore.canEditProject
                                         ? requestDetailStore.stopEditingProject

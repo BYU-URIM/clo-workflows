@@ -1,30 +1,25 @@
 import { autobind } from "core-decorators"
 import { observable, action, runInAction, computed, toJS, reaction } from "mobx"
-import { INote, NoteSource, NoteScope, getEmptyNote } from "./../model/Note"
-import { RequestDetailStore } from "./EmployeeStore/RequestDetailStore"
-import { IDataService } from "./../service/dataService/IDataService"
-import { EmployeeStore } from "./EmployeeStore/EmployeeStore"
-import Utils from "./../utils"
-import StoreUtils from "./StoreUtils"
-import { IListItem } from "./../components/NonScrollableList/NonScrollableList"
-import { IViewProvider } from "./ViewProvider"
+import { INote, NoteSource, NoteScope, getEmptyNote } from "./../../model/"
+import { IDataService } from "./../../service/"
+import { StoreUtils } from ".."
+import Utils from "./../../utils"
+import { IViewProvider } from "../ViewProvider"
 
 export interface INotesStoreConfig {
-    viewProvider: IViewProvider,
-    dataService: IDataService,
-    source: NoteSource,
-    maxScope: NoteScope,
-    notes: INote[],
+    viewProvider: IViewProvider
+    dataService: IDataService
+    source: NoteSource
+    maxScope: NoteScope
+    notes: INote[]
     attachedClientId: string
-    attachedWorkId?: number,
+    attachedWorkId?: number
     attachedProjectId?: number
 }
 
 @autobind
 export class NotesStore {
-    constructor (
-        config: INotesStoreConfig
-    ) {
+    constructor(config: INotesStoreConfig) {
         this.provider = config.viewProvider
         this.dataService = config.dataService
         this.source = config.source
@@ -36,10 +31,7 @@ export class NotesStore {
 
         this.displayCount = Math.min(this.DEFAULT_DISPLAY_COUNT, this.notes.length)
 
-        reaction(
-            () => this.notes.length,
-            () => Math.min(this.DEFAULT_DISPLAY_COUNT, this.notes.length)
-        )
+        reaction(() => this.notes.length, () => Math.min(this.DEFAULT_DISPLAY_COUNT, this.notes.length))
     }
 
     readonly source: NoteSource
@@ -54,28 +46,30 @@ export class NotesStore {
     @observable displayCount: number
     @observable selectedNote: INote
 
-    @computed get showNoteDialog(): boolean {
+    @computed
+    get showNoteDialog(): boolean {
         return !!this.selectedNote
     }
 
-    @computed get selectedNoteOperation(): NoteOperation {
-        // if a note has a submitter and submission metadata, it has already been submitted and we are currently updating it
+    @computed
+    get selectedNoteOperation(): NoteOperation {
+        // if a note has a submitter and submission metadata
+        // it has already been submitted and we are currently updating it
         // otherwise, it is a new note
-        if(this.selectedNote) {
+        if (this.selectedNote) {
             return this.selectedNote.submitter && this.selectedNote.dateSubmitted && this.selectedNote.Id
                 ? NoteOperation.UPDATE_NOTE
                 : NoteOperation.CREATE_NOTE
         }
     }
 
-    @computed get displayCountChangeInterval(): number {
-        return Math.min(
-            this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL,
-            this.zeroFloor(this.notes.length - this.displayCount)
-        )
+    @computed
+    get displayCountChangeInterval(): number {
+        return Math.min(this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL, this.zeroFloor(this.notes.length - this.displayCount))
     }
 
-    @action increaseDisplayCount() {
+    @action
+    increaseDisplayCount() {
         this.displayCount += this.displayCountChangeInterval
     }
 
@@ -89,9 +83,9 @@ export class NotesStore {
 
     // handler for the note dialog submit button, contains logic to determine whether note should be created or updated
     async submitSelectedNote(): Promise<void> {
-        if(this.selectedNoteOperation === NoteOperation.CREATE_NOTE) {
+        if (this.selectedNoteOperation === NoteOperation.CREATE_NOTE) {
             await this.createSelectedNote()
-        } else if(this.selectedNoteOperation === NoteOperation.UPDATE_NOTE) {
+        } else if (this.selectedNoteOperation === NoteOperation.UPDATE_NOTE) {
             await this.updateSelectedNote()
         }
     }
@@ -110,11 +104,14 @@ export class NotesStore {
 
             // if submission is successful, add the new note to the corresponding list
             runInAction(() => this.notes.unshift(this.selectedNote))
-            this.provider.postMessage({messageText: "note successfully submitted", messageType: "success"})
+            this.provider.postMessage({ messageText: "note successfully submitted", messageType: "success" })
             this.unselectNote()
-        } catch(error) {
+        } catch (error) {
             console.error(error)
-            this.provider.postMessage({messageText: "there was a problem submitting your note, try again", messageType: "error"})
+            this.provider.postMessage({
+                messageText: "there was a problem submitting your note, try again",
+                messageType: "error",
+            })
         } finally {
             this.provider.setAsyncPendingLockout(false)
         }
@@ -130,11 +127,14 @@ export class NotesStore {
 
             // if submission is successful, add the new note to the corresponding list
             StoreUtils.replaceElementInListById(this.selectedNote, this.notes)
-            this.provider.postMessage({messageText: "note successfully updated", messageType: "success"})
+            this.provider.postMessage({ messageText: "note successfully updated", messageType: "success" })
             this.unselectNote()
-        } catch(error) {
+        } catch (error) {
             console.error(error)
-            this.provider.postMessage({messageText: "there was a problem updating your note, try again", messageType: "error"})
+            this.provider.postMessage({
+                messageText: "there was a problem updating your note, try again",
+                messageType: "error",
+            })
         } finally {
             this.provider.setAsyncPendingLockout(false)
         }
@@ -148,11 +148,14 @@ export class NotesStore {
             await this.dataService.deleteNote(noteToDelete.Id)
 
             // if deletion is successful, remove the new note from the corresponding list
-            StoreUtils.removeELementInListById(noteToDelete, this.notes)
-            this.provider.postMessage({messageText: "note successfully deleted", messageType: "success"})
-        } catch(error) {
+            StoreUtils.removeELementInListById(this.notes)
+            this.provider.postMessage({ messageText: "note successfully deleted", messageType: "success" })
+        } catch (error) {
             console.error(error)
-            this.provider.postMessage({messageText: "there was a problem deleting your note, try again", messageType: "error"})
+            this.provider.postMessage({
+                messageText: "there was a problem deleting your note, try again",
+                messageType: "error",
+            })
         } finally {
             this.provider.setAsyncPendingLockout(false)
         }
@@ -163,13 +166,13 @@ export class NotesStore {
         this.selectedNote = getEmptyNote(noteScope)
 
         // initialize an empty note with starting information
-        if(this.selectedNote.scope === NoteScope.CLIENT) {
+        if (this.selectedNote.scope === NoteScope.CLIENT) {
             this.selectedNote.attachedClientId = this.attachedClientId
         }
 
-        if(this.source === NoteSource.PROJECT) {
+        if (this.source === NoteSource.PROJECT) {
             this.selectedNote.projectId = String(this.attachedProjectId)
-        } else if(this.source === NoteSource.WORK) {
+        } else if (this.source === NoteSource.WORK) {
             this.selectedNote.workId = String(this.attachedWorkId)
         }
     }
@@ -179,12 +182,12 @@ export class NotesStore {
         this.selectedNote = Utils.deepCopy(noteToSelect)
     }
 
-    @action unselectNote() {
+    @action
+    unselectNote() {
         this.selectedNote = null
     }
 
     // HELPERS
-
 
     private zeroFloor(val: number): number {
         return val >= 0 ? val : 0
@@ -193,6 +196,5 @@ export class NotesStore {
 
 enum NoteOperation {
     UPDATE_NOTE = "update_note",
-    CREATE_NOTE = "create_note"
+    CREATE_NOTE = "create_note",
 }
-

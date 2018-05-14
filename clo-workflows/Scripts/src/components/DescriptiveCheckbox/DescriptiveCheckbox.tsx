@@ -1,8 +1,8 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { ICheckboxProps } from "office-ui-fabric-react"
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox"
-import "./styles.css"
+// tslint:disable-next-line:no-submodule-imports
+import { ICheckboxProps, Checkbox } from "office-ui-fabric-react"
+import "./styles.scss"
 
 export interface IDescriptiveCheckboxProps extends ICheckboxProps {
     description: string

@@ -1,12 +1,10 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
-import { EmployeeStore } from "../../store/"
+import { EmployeeStore, PivotState } from "../../store/"
 import { FormControlGroup, WorkDetail, ProjectDetail } from "../"
 import { autobind } from "core-decorators"
-import { PrimaryButton } from "office-ui-fabric-react/lib/Button"
-import { Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react/lib/Pivot"
-import { PivotState } from "../../store/EmployeeStore/RequestDetailStore"
-import "./styles.css"
+import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react"
+import "./styles.scss"
 
 @inject("rootStore")
 @autobind

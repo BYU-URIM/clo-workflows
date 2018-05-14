@@ -1,12 +1,9 @@
 import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
-import { IRole, IUserDto, IUser, User, CloRequestElement, INote, NoteSource, NoteScope, IWork } from "../../model"
+import { IUser, User, CloRequestElement, INote, NoteSource, NoteScope } from "../../model"
 import Utils from "../../utils"
 import { IDataService, ListName } from "./IDataService"
-import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
-import { getRole } from "../../model/loader/resourceLoaders"
 import { ItemAddResult } from "@pnp/sp"
-import { IKeyValueMap } from "mobx"
+import { getRole } from "../../model/loader/resourceLoaders"
 
 export class MockDataService implements IDataService {
     searchProcessesByTitle(searchTerm: string): Promise<CloRequestElement[]> {
@@ -18,14 +15,14 @@ export class MockDataService implements IDataService {
     deleteNote(noteId: number): Promise<void> {
         throw new Error("Method not implemented.")
     }
-    fetchWorks(): Promise<Array<IWork>> {
-        throw new Error("Method not implemented.")
+    fetchWorks(): Promise<Array<CloRequestElement>> {
+        return Promise.resolve(Utils.deepCopy(MockWorks))
     }
     fetchCurrentUserId() {
         throw new Error("Method not implemented.")
     }
     fetchClientProjects(): Promise<CloRequestElement[]> {
-        throw new Error("Method not implemented.")
+        return Promise.resolve(Utils.deepCopy(MockProjects))
     }
 
     fetchUser(): Promise<IUser> {
@@ -47,11 +44,15 @@ export class MockDataService implements IDataService {
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<CloRequestElement[]> {
         switch (listName) {
             case ListName.PROJECTS:
-                return Promise.resolve(Utils.deepCopy(MockProjects.filter(project => ids.includes(project.Id as number))))
+                return Promise.resolve(
+                    Utils.deepCopy(MockProjects.filter(project => ids.includes(project.Id as number)))
+                )
             case ListName.WORKS:
                 return Promise.resolve(Utils.deepCopy(MockWorks.filter(work => ids.includes(work.Id as number))))
-            case ListName.PROJECTS:
-                return Promise.resolve(Utils.deepCopy(MockProcesses.filter(process => ids.includes(process.Id as number))))
+            case ListName.PROCESSES:
+                return Promise.resolve(
+                    Utils.deepCopy(MockProcesses.filter(process => ids.includes(process.Id as number)))
+                )
             default:
                 return Promise.resolve([])
         }
@@ -72,7 +73,12 @@ export class MockDataService implements IDataService {
         return Promise.resolve(Utils.deepCopy(MockProcesses))
     }
 
-    fetchNotes(source: NoteSource, scope: NoteScope, sourceId: string, attachedClientId: string): Promise<Array<INote>> {
+    fetchNotes(
+        source: NoteSource,
+        scope: NoteScope,
+        sourceId: string,
+        attachedClientId: string
+    ): Promise<Array<INote>> {
         return source === NoteSource.PROJECT
             ? Promise.resolve(Utils.deepCopy(MockNotes.filter(note => note.projectId === sourceId)))
             : Promise.resolve(Utils.deepCopy(MockNotes.filter(note => note.workId === sourceId)))

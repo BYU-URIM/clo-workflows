@@ -2,20 +2,17 @@ import * as React from "react"
 import { EmployeeStore, SessionStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { FormControlGroup, NotesBox } from "../"
-import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/Button"
-import { NoteScope, NoteSource } from "../../model/"
-import "./styles.css"
+import { PrimaryButton, IconButton } from "office-ui-fabric-react"
+import "./styles.scss"
 
 @inject("rootStore")
 @observer
 export default class WorkDetail extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
-        this.sessionStore = this.props.rootStore.sessionStore
     }
 
     private employeeStore: EmployeeStore
-    private sessionStore: SessionStore
 
     public render() {
         const requestDetailStore = this.employeeStore.requestDetailStore
@@ -27,7 +24,11 @@ export default class WorkDetail extends React.Component<any, any> {
                         <div className="editButton-styles">
                             <IconButton
                                 disabled={!requestDetailStore.isRequestActive}
-                                iconProps={requestDetailStore.canEditWork ? { iconName: "BoxMultiplySolid" } : { iconName: "edit" }}
+                                iconProps={
+                                    requestDetailStore.canEditWork
+                                        ? { iconName: "BoxMultiplySolid" }
+                                        : { iconName: "edit" }
+                                }
                                 onClick={
                                     requestDetailStore.canEditWork
                                         ? requestDetailStore.stopEditingWork
@@ -54,7 +55,9 @@ export default class WorkDetail extends React.Component<any, any> {
                     )}
                 </div>
                 <div className="notesColumn-styles">
-                    {requestDetailStore.workNotesStore && <NotesBox notesStore={requestDetailStore.workNotesStore} title="Work Notes" />}
+                    {requestDetailStore.workNotesStore && (
+                        <NotesBox notesStore={requestDetailStore.workNotesStore} title="Work Notes" />
+                    )}
                 </div>
             </div>
         )

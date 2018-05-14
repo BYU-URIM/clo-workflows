@@ -1,10 +1,11 @@
-var path = require("path")
-var webpack = require("webpack")
-var ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
+const path = require("path")
+const webpack = require("webpack")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
 
 module.exports = function(env) {
     return {
-        devtool: "source-map",
+        devtool: "inline-source-map",
         entry: "./src/main.tsx",
         output: {
             filename: "bundle.js",
@@ -15,14 +16,14 @@ module.exports = function(env) {
                 {
                     test: /\.tsx?$/,
                     loader: "ts-loader",
-                    include: path.resolve(__dirname, "src"),
+                    include: path.resolve(__dirname, "./src"),
                     exclude: /node_modules/,
                     options: {
                         transpileOnly: true,
                     },
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.scss$/,
                     use: [
                         {
                             loader: "style-loader",
@@ -43,6 +44,9 @@ module.exports = function(env) {
                 NODE_ENV: JSON.stringify(env.NODE_ENV),
             }),
             new ForkTsCheckerWebpackPlugin(),
+            new HtmlWebpackPlugin({
+                template: "./res/index.html",
+            }),
         ],
     }
 }
