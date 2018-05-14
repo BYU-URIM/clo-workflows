@@ -11,8 +11,6 @@
     "build:sharepointProxy": "webpack-cli --env.NODE_ENV=sharepointProxy",
     "build:production": "webpack-cli --env.NODE_ENV=sharepoint --mode production",
     "test": "rimraf test_build/** && tsc --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
-    "lint:css": "stylelint --fix '*.scss'",
-    "lint:ts": "\"tslint -c tslint.json 'src/**/*.ts*'\" \"tslint -c tslint.json 'test/**/*.ts*'\"",
     "sp:deleteAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll",
     "sp:createAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/CreateAll &&  ts-node ./sp_config/migrations/tasks/CreateGroups",
     "sp:deleteAllAndCreateAll": "ts-node ./sp_config/migrations/tasks/Init && ts-node ./sp_config/migrations/tasks/DeleteAll && ts-node ./sp_config/migrations/tasks/CreateAll",
@@ -75,7 +73,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx ts-node ./tasks/lint.ts"
+      "pre-commit": "ts-node ./scripts/lint.ts"
     }
   }
 }
