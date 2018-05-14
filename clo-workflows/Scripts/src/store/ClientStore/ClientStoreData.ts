@@ -44,7 +44,7 @@ export class ClientStoreData {
     fetchNotes = async () => {
         this.projectNotesByProjectId = observable.map()
         this.workNotesByWorkId = observable.map()
-        const allNotes = await this.dataService.fetchClientNotes(this.currentUser.Id)
+        const allNotes = await this.dataService.fetchClientNotes(this.currentUser.Id) || []
         allNotes.forEach(note => {
             if (note.projectId) {
                 if (this.projectNotesByProjectId.get(note.projectId))
