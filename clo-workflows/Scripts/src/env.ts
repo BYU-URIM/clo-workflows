@@ -5,8 +5,6 @@ export enum EnvType {
     OTHER = "other",
 }
 
-/* gloabal variable set at build time through build script passed in through webpack plugin */
-
 declare const NODE_ENV: string
 
 /**

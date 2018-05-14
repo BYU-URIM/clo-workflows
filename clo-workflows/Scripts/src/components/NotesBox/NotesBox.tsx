@@ -1,11 +1,9 @@
 import * as React from "react"
-import { IUser, INote, NoteScope, NoteSource, getEmptyNote } from "../../model/"
+import { NoteScope } from "../../model/"
 import { observer } from "mobx-react"
 import { NonScrollableList, IListItem } from "../"
-import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button"
+import { PrimaryButton, TextField, Dialog, DialogFooter } from "office-ui-fabric-react"
 import { autobind } from "core-decorators"
-import { TextField } from "office-ui-fabric-react/lib/TextField"
-import { Dialog, DialogFooter, DialogType } from "office-ui-fabric-react"
 import Utils from "../../utils"
 import { NotesStore } from "../../store"
 import "./styles.scss"
@@ -24,8 +22,7 @@ enum NoteOperation {
 @observer
 export default class NotesBox extends React.Component<INotesBoxProps, any> {
     public render() {
-        const { props } = this
-        const { notesStore } = props
+        const { notesStore } = this.props
         const currentUser = notesStore.provider.root.sessionStore.currentUser
         return (
             <div className="notesBox-notesWrapper-styles">
@@ -34,7 +31,11 @@ export default class NotesBox extends React.Component<INotesBoxProps, any> {
                     <PrimaryButton
                         text="Add Note"
                         iconProps={{ iconName: "Add" }}
-                        onClick={notesStore.maxScope === NoteScope.CLIENT ? () => this.onClickAddNote(NoteScope.CLIENT) : () => null}
+                        onClick={
+                            notesStore.maxScope === NoteScope.CLIENT
+                                ? () => this.onClickAddNote(NoteScope.CLIENT)
+                                : () => null
+                        }
                         disabled={notesStore.provider.asyncPendingLockout}
                         menuProps={
                             notesStore.maxScope === NoteScope.EMPLOYEE && {
@@ -59,11 +60,14 @@ export default class NotesBox extends React.Component<INotesBoxProps, any> {
                         <NonScrollableList
                             items={notesStore.notes.slice(0, notesStore.displayCount).map(note => ({
                                 header: `${note.submitter} - ${note.dateSubmitted}`,
-                                subheader: notesStore.maxScope === NoteScope.EMPLOYEE ? `${note.scope} level note` : null,
+                                subheader:
+                                    notesStore.maxScope === NoteScope.EMPLOYEE ? `${note.scope} level note` : null,
                                 body: note.text,
                                 id: note.Id,
-                                deletable: note.submitter === currentUser.name && !notesStore.provider.asyncPendingLockout,
-                                editable: note.submitter === currentUser.name && !notesStore.provider.asyncPendingLockout,
+                                deletable:
+                                    note.submitter === currentUser.name && !notesStore.provider.asyncPendingLockout,
+                                editable:
+                                    note.submitter === currentUser.name && !notesStore.provider.asyncPendingLockout,
                             }))}
                             onEditItem={this.onClickEditNote}
                             onDeleteItem={this.onClickDeleteNote}
@@ -73,12 +77,16 @@ export default class NotesBox extends React.Component<INotesBoxProps, any> {
                                 text={`view ${notesStore.displayCountChangeInterval} more`}
                                 iconProps={{ iconName: "Add" }}
                                 onClick={notesStore.increaseDisplayCount}
-                                disabled={notesStore.provider.asyncPendingLockout || !notesStore.displayCountChangeInterval}
+                                disabled={
+                                    notesStore.provider.asyncPendingLockout || !notesStore.displayCountChangeInterval
+                                }
                             />
                         </div>
                     </div>
                 ) : (
-                    <div className="notesBox-noNotesMessage-styles">{`no ${props.title.toLowerCase()} have been submitted yet`}</div>
+                    <div className="notesBox-noNotesMessage-styles">
+                        {`no ${this.props.title.toLowerCase()} have been submitted yet`}
+                    </div>
                 )}
 
                 <Dialog
@@ -99,7 +107,10 @@ export default class NotesBox extends React.Component<INotesBoxProps, any> {
                         <PrimaryButton
                             text="submit note"
                             onClick={notesStore.submitSelectedNote}
-                            disabled={!(notesStore.selectedNote && notesStore.selectedNote.text) || notesStore.provider.asyncPendingLockout}
+                            disabled={
+                                !(notesStore.selectedNote && notesStore.selectedNote.text) ||
+                                notesStore.provider.asyncPendingLockout
+                            }
                         />
                     </DialogFooter>
                 </Dialog>

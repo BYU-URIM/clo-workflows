@@ -43,12 +43,11 @@ class StoreUtils {
         return observable.map([["submitterId", userId]])
     }
 
-    mapRequestElementArrayById(requestElementArray: CloRequestElement[]): ObservableMap<CloRequestElement> {
-        return requestElementArray.reduce((requestElementMap, requestElement) => {
+    mapRequestElementArrayById = (requestElementArray: CloRequestElement[]): ObservableMap<CloRequestElement> =>
+        requestElementArray.reduce((requestElementMap, requestElement) => {
             requestElementMap.set(String(requestElement.Id), requestElement)
             return requestElementMap
         }, new ObservableMap<CloRequestElement>())
-    }
 
     @action
     replaceElementInListById(newItem: IdentifiableObject, list: IdentifiableObject[]): boolean {
@@ -62,9 +61,8 @@ class StoreUtils {
     }
 
     @action
-    removeELementInListById(itemToDelete: IdentifiableObject, list: Array<IdentifiableObject>) {
+    removeELementInListById = (list: Array<IdentifiableObject>) => {
         list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
     }
 }
 export const storeUtils = new StoreUtils()
-

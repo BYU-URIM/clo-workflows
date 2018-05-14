@@ -2,16 +2,14 @@ class Utils {
     deepCopy = <T>(ob: T): T => ob
 
     getQueryStringParameter = (paramToRetrieve: string) => {
-        const urlContainsParams = document.URL.includes("?")
-        if (urlContainsParams) {
-            const params = document.URL.split("?")[1].split("&")
-            for (const param of params) {
-                const paramComponents = param.split("=")
-                const paramName = paramComponents[0]
-                const paramVal = paramComponents[1]
-                if (paramName === paramToRetrieve) {
-                    return decodeURIComponent(paramVal)
+        const params = document.URL.includes("?") ? document.URL.split("?")[1].split("&") : undefined
+        if (params) {
+            for (const _param of params) {
+                const param = {
+                    name: _param.split("=")[0],
+                    val: _param.split("=")[1],
                 }
+                if (param.name === paramToRetrieve) return decodeURIComponent(param.val)
             }
             throw new Error(`parameter ${paramToRetrieve} is not present in the current URL`)
         } else {

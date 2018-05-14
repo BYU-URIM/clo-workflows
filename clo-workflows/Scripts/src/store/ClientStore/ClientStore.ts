@@ -13,8 +13,7 @@ import {
     INote,
     NoteSource,
     NoteScope,
-    getView,
-    getStep,
+    resourceLoaders,
 } from "../../model"
 import { IDataService } from "../../service"
 import Utils from "../../utils"
@@ -87,7 +86,7 @@ export class ClientStore implements IViewProvider {
      * ------------------------------------------------------------ */
     @computed
     get currentForm(): Array<FormControl> {
-        return getView(this.view.work.type || this.view.project.type).formControls
+        return resourceLoaders.getView(this.view.work.type || this.view.project.type).formControls
     }
 
     @computed
@@ -194,7 +193,10 @@ export class ClientStore implements IViewProvider {
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
         } catch (error) {
             console.error(error)
-            this.postMessage({ messageText: "there was a problem creating your new Project, try again", messageType: "error" })
+            this.postMessage({
+                messageText: "there was a problem creating your new Project, try again",
+                messageType: "error",
+            })
         } finally {
             this.setAsyncPendingLockout(false)
         }
@@ -223,12 +225,15 @@ export class ClientStore implements IViewProvider {
     private submitProcess = async (): Promise<void> => {
         this.setAsyncPendingLockout(true)
         try {
-            const previousStep: IStep = getStep("Intake")
+            const previousStep: IStep = resourceLoaders.getStep("Intake")
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
             this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
+                : this.newProcess.set(
+                      "Title",
+                      this.data.works.find(work => work.Id.toString() === this.view.work.id).Title
+                  )
             this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
@@ -282,7 +287,10 @@ export class ClientStore implements IViewProvider {
         } catch (error) {
             console.error(error)
             submissionStatus = false
-            this.postMessage({ messageText: "there was a problem submitting your note, try again", messageType: "error" })
+            this.postMessage({
+                messageText: "there was a problem submitting your note, try again",
+                messageType: "error",
+            })
         } finally {
             this.view.asyncPendingLockout = false
         }
@@ -334,7 +342,10 @@ export class ClientStore implements IViewProvider {
         return submissionStatus
     }
     @action
-    private replaceElementInListById = (newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean => {
+    private replaceElementInListById = (
+        newItem: CloRequestElement | INote,
+        list: Array<CloRequestElement | INote>
+    ): boolean => {
         const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
 
         if (staleItemIndex !== -1) {
@@ -345,7 +356,10 @@ export class ClientStore implements IViewProvider {
     }
 
     @action
-    private removeELementInListById = (itemToDelete: CloRequestElement | INote, list: Array<CloRequestElement | INote>) => {
+    private removeELementInListById = (
+        itemToDelete: CloRequestElement | INote,
+        list: Array<CloRequestElement | INote>
+    ) => {
         list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
     }
 }

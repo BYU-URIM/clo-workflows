@@ -11,7 +11,8 @@ export interface INote {
 
 /* EMPLOYEE SCOPE
     Employee scope notes are submitted by employees and can only be seen by other employees
-    They are attached ONLY to a work or project - meaning tha either the projectId OR the workId will be filled in (not both)
+    They are attached ONLY to a work or project -
+    meaning tha either the projectId OR the workId will be filled in (not both)
     This means that these notes will appear on any process that reuses that work or project
 
    CLIENT SCOPE
@@ -22,12 +23,12 @@ export interface INote {
 */
 export enum NoteScope {
     EMPLOYEE = "employee",
-    CLIENT = "client"
+    CLIENT = "client",
 }
 
 export enum NoteSource {
     PROJECT = "project",
-    WORK = "work"
+    WORK = "work",
 }
 
 export const getEmptyNote = (noteScope?: NoteScope): INote => {
@@ -35,6 +36,6 @@ export const getEmptyNote = (noteScope?: NoteScope): INote => {
         submitter: null,
         dateSubmitted: null,
         text: "",
-        scope: noteScope
+        scope: noteScope,
     }
 }

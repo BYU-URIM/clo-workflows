@@ -17,12 +17,13 @@ export default class Employee extends React.Component<any, any> {
     private employeeStore: EmployeeStore
 
     public render() {
-        const { employeeStore } = this
+        const employeeStore = this.employeeStore
         return (
-            <div
-                className="employee-wrapper-styles"
-            >
-                <HeaderBreadcrumb items={employeeStore.breadcrumbItems} onClickItem={employeeStore.reduceViewHierarchy} />
+            <div className="employee-wrapper-styles">
+                <HeaderBreadcrumb
+                    items={employeeStore.breadcrumbItems}
+                    onClickItem={employeeStore.reduceViewHierarchy}
+                />
                 {employeeStore.currentView === EmployeeViewKey.Dashboard && <EmployeeDashboard />}
                 {employeeStore.currentView === EmployeeViewKey.ProcessDetail && <ProcessDetail />}
                 {employeeStore.message && <Message {...employeeStore.message} />}

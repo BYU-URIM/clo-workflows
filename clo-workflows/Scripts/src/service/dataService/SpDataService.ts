@@ -1,7 +1,7 @@
 import { IUser, User, CloRequestElement, IRole, INote, NoteScope, NoteSource } from "../../model"
 import { IDataService, ListName } from "./IDataService"
 import { sp } from "@pnp/sp-addinhelpers"
-import { Web, ItemAddResult } from "@pnp/sp"
+import { Web, ItemAddResult, SearchResults } from "@pnp/sp"
 import { ODataDefaultParser } from "@pnp/odata"
 import { getRole, getRoleNames } from "../../model/loader/resourceLoaders"
 import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
@@ -24,7 +24,9 @@ export class SpDataService implements IDataService {
             .siteUsers.getById(rawUser.Id)
             .groups.get()
         const allRoleNames = getRoleNames()
-        const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title).filter(groupName => allRoleNames.includes(groupName))
+        const spGroupNames: string[] = rawSpGroups
+            .map(rawRole => rawRole.Title)
+            .filter(groupName => allRoleNames.includes(groupName))
         // TODO more generalizable way to make administrator have every role?
         let currentUserGroups: IRole[]
         if (spGroupNames.length) {
@@ -37,7 +39,7 @@ export class SpDataService implements IDataService {
             currentUserGroups = [getRole("LTT Client")]
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
-        return new User(rawUser.Title, userName, rawUser.Email, userName, /* currentUserGroups */ [getRole("LTT Client")])
+        return new User(rawUser.Title, userName, rawUser.Email, userName, currentUserGroups)
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
@@ -90,7 +92,12 @@ export class SpDataService implements IDataService {
         return activeProjects.filter(item => item.submitterId === client.name)
     }
 
-    async fetchNotes(source: NoteSource, maxScope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
+    async fetchNotes(
+        source: NoteSource,
+        maxScope: NoteScope,
+        sourceId: string,
+        attachedClientId: string
+    ): Promise<INote[]> {
         let filterString: string
         if (source === NoteSource.PROJECT) {
             filterString = `projectId eq ${sourceId}`
@@ -104,7 +111,7 @@ export class SpDataService implements IDataService {
             filterString += ` and (attachedClientId eq '${attachedClientId}' or scope eq '${NoteScope.EMPLOYEE}')`
         }
 
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(filterString)
             .orderBy("Created", false /*ascending = false*/)
@@ -112,7 +119,7 @@ export class SpDataService implements IDataService {
     }
 
     async createNote(note: INote): Promise<ItemAddResult> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.add(note)
     }
@@ -131,31 +138,31 @@ export class SpDataService implements IDataService {
     }
 
     async fetchClientProjects(submitterId: string): Promise<Array<CloRequestElement>> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.filter(`submitterId eq '${submitterId}'`)
             .orderBy("ID", true)
             .get(this.cloRequestElementParser)
     }
     async fetchClientProcesses(submitterId: string): Promise<Array<CloRequestElement>> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(`submitterId eq '${submitterId}'`)
             .orderBy("projectId", true)
             .get()
     }
     async fetchWorks(): Promise<Array<CloRequestElement>> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
     }
     async createProject(projectData: {}): Promise<ItemAddResult> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
     }
     async searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(`substringof('${searchTerm}',Title)`)
             .top(10)
@@ -164,17 +171,17 @@ export class SpDataService implements IDataService {
 
     /* this sorting keps the process order lined up with project order this probably needs to be changed to something more stable longterm */
     async createProcess(process: {}): Promise<ItemAddResult> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.add(process)
     }
     async createWork(work: {}): Promise<ItemAddResult> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.WORKS)
             .items.add(work)
     }
     async fetchClientNotes(userId: string): Promise<Array<INote>> {
-        return await this.getHostWeb()
+        return this.getHostWeb()
             .lists.getByTitle(ListName.NOTES)
             .items.filter(`attachedClientId eq '${userId}'`)
             .get(this.cloRequestElementParser)

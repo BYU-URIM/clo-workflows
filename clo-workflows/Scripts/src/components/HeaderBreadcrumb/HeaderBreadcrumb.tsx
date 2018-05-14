@@ -1,9 +1,7 @@
 import * as React from "react"
-import { IBreadcrumbItem, Breadcrumb, IBreadcrumb } from "office-ui-fabric-react/lib/Breadcrumb"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
-import { DefaultButton } from "office-ui-fabric-react/lib/Button"
-import { IHeaderProps } from "../"
+import { DefaultButton, Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react"
 import "./styles.scss"
 
 export interface IHeaderBreadcrumbProps {
@@ -26,7 +24,11 @@ export default class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbP
     public render() {
         return (
             <div className="headerBreadcrumb-wrapper-styles">
-                <Breadcrumb items={this.props.items} onRenderItem={this.renderBreadcrumbItem} ariaLabel={"Website breadcrumb"} />
+                <Breadcrumb
+                    items={this.props.items}
+                    onRenderItem={this.renderBreadcrumbItem}
+                    ariaLabel={"Website breadcrumb"}
+                />
             </div>
         )
     }

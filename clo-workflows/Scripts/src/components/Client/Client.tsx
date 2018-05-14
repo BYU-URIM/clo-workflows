@@ -1,6 +1,5 @@
 import { inject, observer } from "mobx-react"
 import * as React from "react"
-
 import { ClientStore } from "../../store/"
 import { NotesBox, Message, ProcessFormModal, ProjectFormModal, ProjectProcessList } from "../"
 

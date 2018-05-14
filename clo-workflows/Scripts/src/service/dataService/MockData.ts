@@ -17,15 +17,7 @@ export const MockUsersDtos: Array<IUserDto> = [
     },
 ]
 
-export const MockUsers: Array<User> = [
-    new User(
-        "Connor Moody",
-        "cmoody",
-        "email@gmail.com",
-        "1234-5678",
-        []
-    )
-]
+export const MockUsers: Array<User> = [new User("Connor Moody", "cmoody", "email@gmail.com", "1234-5678", [])]
 
 export const MockProjects: Array<CloRequestElement> = [
     {
@@ -36,7 +28,7 @@ export const MockProjects: Array<CloRequestElement> = [
         artist: "artist name",
         copyrightOwner: "owner name",
         department: "Test department",
-        submitterId: "cmoody4"
+        submitterId: "cmoody4",
     },
     {
         type: "Theatrical",
@@ -46,7 +38,7 @@ export const MockProjects: Array<CloRequestElement> = [
         artist: "Miley Cyrus",
         copyrightOwner: "Disney",
         department: "Club Disney Department",
-        submitterId: "cmoody4"
+        submitterId: "cmoody4",
     },
 ]
 
@@ -141,7 +133,7 @@ export const MockWorks: Array<CloRequestElement> = [
         type: "Article",
         Title: "Article Name",
         authorName: "Author Name",
-    }
+    },
 ]
 
 export const MockNotes: Array<INote> = [
@@ -150,90 +142,90 @@ export const MockNotes: Array<INote> = [
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
         projectId: "1",
-        scope: NoteScope.CLIENT
+        scope: NoteScope.CLIENT,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
         projectId: "1",
-        scope: NoteScope.CLIENT
+        scope: NoteScope.CLIENT,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2010",
         text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis",
         projectId: "2",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
         projectId: "2",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
         workId: "1",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2010",
         text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis",
         workId: "1",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
         workId: "1",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
         workId: "2",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2010",
         text: "Sed ut perspiciatis unde omnis, quis nostrum exercitationem ullam corporis",
         workId: "2",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
         workId: "2",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
         workId: "3",
-        scope: NoteScope.EMPLOYEE
+        scope: NoteScope.EMPLOYEE,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2015",
         text: "Sed ut perspiciatis unde omnis iste natus error sit",
         workId: "1",
-        scope: NoteScope.CLIENT
+        scope: NoteScope.CLIENT,
     },
     {
         submitter: "employee name",
         dateSubmitted: "1/1/2013",
         text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis",
         workId: "1",
-        scope: NoteScope.CLIENT
+        scope: NoteScope.CLIENT,
     },
 ]

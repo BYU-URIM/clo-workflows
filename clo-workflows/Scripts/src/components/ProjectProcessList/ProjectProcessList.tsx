@@ -3,23 +3,13 @@ import {
     CommandBar,
     DetailsList,
     IGroup,
-    IColumn,
     CheckboxVisibility,
     IGroupDividerProps,
-    IRenderFunction,
-    DefaultButton,
-    IconType,
-    PrimaryButton,
     CommandButton,
 } from "office-ui-fabric-react"
 import * as React from "react"
-import { CloRequestElement, StepName, NoteSource } from "../../model"
-
-import { Message } from "../"
-import { getStep, getStepNames } from "../../model/loader/"
-import { ClientViewState, ClientStoreData } from "../../store/"
-import { loadTheme, getTheme } from "office-ui-fabric-react/lib/Styling"
-import { ThemeSettingName } from "@uifabric/styling/lib-es2015/styles/theme"
+import { NoteSource } from "../../model"
+import { ClientViewState, ClientStoreData } from "../../store"
 
 import "./styles.scss"
 

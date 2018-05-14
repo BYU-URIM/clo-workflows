@@ -1,12 +1,9 @@
-import { observer } from "mobx-react"
-import { Dropdown, Checkbox } from "office-ui-fabric-react"
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/Button"
-import { Modal } from "office-ui-fabric-react/lib/Modal"
 import * as React from "react"
-
-import { ClientStore } from "../../store/ClientStore/ClientStore"
+import { observer } from "mobx-react"
+import { Dropdown, Checkbox, DefaultButton, PrimaryButton } from "office-ui-fabric-react"
+import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
+import { ClientStore } from "../../store"
 import { WorkForm } from "../"
-
 import "./styles.scss"
 
 export interface IFormPanelProps {
@@ -48,7 +45,9 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                             }
                         })}
                         className="processFormModal-dropdown-styles"
-                        placeHolder={props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work"}
+                        placeHolder={
+                            props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work"
+                        }
                         onChanged={e => {
                             props.clientStore.view.work.id = e.key.toString()
                         }}

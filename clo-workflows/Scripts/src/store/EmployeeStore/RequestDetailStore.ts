@@ -3,7 +3,12 @@ import { FormEntryType, CloRequestElement } from "../../model/CloRequestElement"
 import { EmployeeStore, EmployeeViewKey } from "./EmployeeStore"
 import { IDataService, ListName } from "../../service/dataService/IDataService"
 import { autobind } from "core-decorators"
-import { getView, getViewAndMakeReadonly, getStepForProcessFieldName, getStep } from "../../model/loader/resourceLoaders"
+import {
+    getView,
+    getViewAndMakeReadonly,
+    getStepForProcessFieldName,
+    getStep,
+} from "../../model/loader/resourceLoaders"
 import { View } from "../../model/View"
 import Utils from "../../utils"
 import { StoreUtils } from ".."
@@ -100,7 +105,11 @@ export class RequestDetailStore {
 
     @computed
     get canSubmitProcess(): boolean {
-        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.processValidation) && this.isRequestActive
+        return (
+            !this.employeeStore.asyncPendingLockout &&
+            Utils.isObjectEmpty(this.processValidation) &&
+            this.isRequestActive
+        )
     }
 
     @computed
@@ -141,7 +150,10 @@ export class RequestDetailStore {
             this.employeeStore.postMessage({ messageText: "process successfully submitted", messageType: "success" })
         } catch (error) {
             console.log(error)
-            this.employeeStore.postMessage({ messageText: "there was a problem submitting your process, try again", messageType: "error" })
+            this.employeeStore.postMessage({
+                messageText: "there was a problem submitting your process, try again",
+                messageType: "error",
+            })
         } finally {
             this.employeeStore.setAsyncPendingLockout(false)
         }
@@ -155,7 +167,9 @@ export class RequestDetailStore {
 
     @computed
     get projectView(): View {
-        return this.canEditProject ? getView(this.project.get("type") as string, true) : getViewAndMakeReadonly(this.project.get("type") as string)
+        return this.canEditProject
+            ? getView(this.project.get("type") as string, true)
+            : getViewAndMakeReadonly(this.project.get("type") as string)
     }
 
     @action
@@ -180,7 +194,10 @@ export class RequestDetailStore {
             runInAction(() => (this.canEditProject = false))
         } catch (error) {
             console.log(error)
-            this.employeeStore.postMessage({ messageText: "there was a problem submitting your project, try again", messageType: "error" })
+            this.employeeStore.postMessage({
+                messageText: "there was a problem submitting your project, try again",
+                messageType: "error",
+            })
         } finally {
             this.employeeStore.setAsyncPendingLockout(false)
         }
@@ -188,7 +205,11 @@ export class RequestDetailStore {
 
     @computed
     get canSubmitProject(): boolean {
-        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.projectValidation) && this.isRequestActive
+        return (
+            !this.employeeStore.asyncPendingLockout &&
+            Utils.isObjectEmpty(this.projectValidation) &&
+            this.isRequestActive
+        )
     }
 
     @computed
@@ -219,7 +240,9 @@ export class RequestDetailStore {
 
     @computed
     get workView(): View {
-        return this.canEditWork ? getView(this.work.get("type") as string, true) : getViewAndMakeReadonly(this.work.get("type") as string)
+        return this.canEditWork
+            ? getView(this.work.get("type") as string, true)
+            : getViewAndMakeReadonly(this.work.get("type") as string)
     }
 
     @action
@@ -244,7 +267,10 @@ export class RequestDetailStore {
             runInAction(() => (this.canEditWork = false))
         } catch (error) {
             console.log(error)
-            this.employeeStore.postMessage({ messageText: "there was a problem submitting your work, try again", messageType: "error" })
+            this.employeeStore.postMessage({
+                messageText: "there was a problem submitting your work, try again",
+                messageType: "error",
+            })
         } finally {
             this.employeeStore.setAsyncPendingLockout(false)
         }
@@ -252,7 +278,9 @@ export class RequestDetailStore {
 
     @computed
     get canSubmitWork(): boolean {
-        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.workValidation) && this.isRequestActive
+        return (
+            !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.workValidation) && this.isRequestActive
+        )
     }
 
     @action

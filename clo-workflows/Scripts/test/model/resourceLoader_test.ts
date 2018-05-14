@@ -22,10 +22,12 @@ ava.test("test that getView() correctly builds a View Object", t => {
     t.true(Array.isArray(toJS(view.formControls)))
 
     // ensure that each readonly form control has the correct shape and that readonly is set to true
-    if(jsonViewDefinition.readonlyFormControls) {
+    if (jsonViewDefinition.readonlyFormControls) {
         jsonViewDefinition.readonlyFormControls.forEach(formControlName => {
             const jsonFormControlDefinition = FORM_CONTROLS[formControlName]
-            const formControl = view.formControls.find(curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName)
+            const formControl = view.formControls.find(
+                curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName
+            )
 
             t.true(typeof formControl.displayName === "string")
             t.true(typeof formControl.dataRef === "string")
@@ -35,10 +37,12 @@ ava.test("test that getView() correctly builds a View Object", t => {
     }
 
     // ensure that each standard form control has the correct shape and that readonly is set to false
-    if(jsonViewDefinition.formControls) {
+    if (jsonViewDefinition.formControls) {
         jsonViewDefinition.formControls.forEach(formControlName => {
             const jsonFormControlDefinition = FORM_CONTROLS[formControlName]
-            const formControl = view.formControls.find(curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName)
+            const formControl = view.formControls.find(
+                curFormControl => curFormControl.displayName === jsonFormControlDefinition.displayName
+            )
 
             t.true(typeof formControl.displayName === "string")
             t.true(typeof formControl.dataRef === "string")
@@ -54,7 +58,6 @@ ava.test("test that getView() correctly builds a View Object", t => {
     numFormControls += jsonViewDefinition.formControls ? jsonViewDefinition.formControls.length : 0
     t.true(view.formControls.length === numFormControls)
 })
-
 
 // ensure that getViewAndMakeReadonly creates a view with all readonly form controls
 ava.test("test that getViewAndMakeReadonly creates a view with all readonly form controls", t => {
