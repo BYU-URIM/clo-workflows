@@ -45,9 +45,7 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                             }
                         })}
                         className="processFormModal-dropdown-styles"
-                        placeHolder={
-                            props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work"
-                        }
+                        placeHolder={props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work"}
                         onChanged={e => {
                             props.clientStore.view.work.id = e.key.toString()
                         }}
@@ -72,7 +70,7 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.clientStore.view.modal = null
+                        props.clientStore.clearState()
                     }}
                     disabled={props.clientStore.view.asyncPendingLockout}
                 />
