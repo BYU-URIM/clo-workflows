@@ -20,7 +20,7 @@ export default class App extends React.Component<any, any> {
         return (
             <Fabric>
                 {this.rootStore.initialized ? (
-                    /* data is initialized - render out app content (client / employee dashbpard) */
+                    /* data is initialized - render out app content (client / employee dashboard) */
                     <div>
                         <Header
                             currentUser={this.rootStore.sessionStore.currentUser}
