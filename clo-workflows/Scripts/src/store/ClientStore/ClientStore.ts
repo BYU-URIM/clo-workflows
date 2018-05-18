@@ -92,7 +92,7 @@ export class ClientStore implements IViewProvider {
     @computed
     get currentFormValidation(): {} {
         const typeToValidate = this.currentForm
-        const newInstanceOfType = this.newWork || this.newProject
+        const newInstanceOfType = this.view.modal === "project" ? this.newProject : this.newWork
         return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
     }
 
@@ -230,10 +230,7 @@ export class ClientStore implements IViewProvider {
             this.newProcess.set("step", nextStepName)
             this.view.work.isNew
                 ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set(
-                      "Title",
-                      this.data.works.find(work => work.Id.toString() === this.view.work.id).Title
-                  )
+                : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
             this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
@@ -342,10 +339,7 @@ export class ClientStore implements IViewProvider {
         return submissionStatus
     }
     @action
-    private replaceElementInListById = (
-        newItem: CloRequestElement | INote,
-        list: Array<CloRequestElement | INote>
-    ): boolean => {
+    private replaceElementInListById = (newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean => {
         const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
 
         if (staleItemIndex !== -1) {
@@ -356,10 +350,7 @@ export class ClientStore implements IViewProvider {
     }
 
     @action
-    private removeELementInListById = (
-        itemToDelete: CloRequestElement | INote,
-        list: Array<CloRequestElement | INote>
-    ) => {
+    private removeELementInListById = (itemToDelete: CloRequestElement | INote, list: Array<CloRequestElement | INote>) => {
         list.splice(list.findIndex(listItem => listItem["Id"] === listItem["Id"]), 1 /*remove 1 elem*/)
     }
 }
