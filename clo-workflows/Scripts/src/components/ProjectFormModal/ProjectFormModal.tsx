@@ -32,11 +32,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                         key: field.text,
                     }))}
                     className="project-dropdown-styles"
-                    placeHolder={
-                        props.clientStore.view.project.type
-                            ? props.clientStore.view.project.type
-                            : "select a project type"
-                    }
+                    placeHolder={props.clientStore.view.project.type ? props.clientStore.view.project.type : "select a project type"}
                     onChanged={e => {
                         props.clientStore.view.project.type = e.text
                     }}
@@ -48,9 +44,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                             data={props.clientStore.newProject}
                             formControls={props.clientStore.currentForm}
                             validation={props.clientStore.currentFormValidation}
-                            updateFormField={(fieldName, value) =>
-                                props.clientStore.updateClientStoreMember(fieldName, value, "newProject")
-                            }
+                            updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />
                     </div>
                 )}
@@ -71,7 +65,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                     text="Close"
                     description="close without submitting"
                     onClick={() => {
-                        props.clientStore.view.modal = null
+                        props.clientStore.clearState()
                     }}
                     disabled={props.clientStore.view.asyncPendingLockout}
                 />
