@@ -32,7 +32,8 @@
             "Credits Read"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Arranging": {
@@ -68,7 +69,8 @@
             "Copy of Score"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Masters": {
@@ -99,7 +101,8 @@
             "Source"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Grand": {
@@ -135,7 +138,8 @@
             "Credits Read"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Theatrical": {
@@ -160,7 +164,8 @@
             "CLO Determination"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Movies": {
@@ -193,7 +198,8 @@
             "Account Code"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Images": {
@@ -213,7 +219,8 @@
             "Link"
         ],
         "privilegedControls": [
-            "Owner NetID"
+            "Owner NetID",
+            "Status"
         ]
     },
     "Music": {
@@ -239,7 +246,6 @@
     "Book": {
         "dataSource": "works",
         "formControls": [
-
             "Course",
             "Format",
             "Title",
