@@ -142,7 +142,8 @@
                 "censoring",
                 "additionalEdits",
                 "cloDetermination",
-                "submitterId"
+                "submitterId",
+                "status"
             ]
         },
         "works": {

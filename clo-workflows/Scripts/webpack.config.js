@@ -5,7 +5,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
 
 module.exports = function(env) {
     return {
-        devtool: "inline-source-map",
+        devtool: "source-map",
         entry: "./src/main.tsx",
         output: {
             filename: "bundle.js",

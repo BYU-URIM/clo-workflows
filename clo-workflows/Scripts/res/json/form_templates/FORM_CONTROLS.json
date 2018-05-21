@@ -576,5 +576,14 @@
         "displayName": "Owner NetID",
         "dataRef": "submitterId",
         "type": "text"
+    },
+    "Status": {
+        "displayName": "Status",
+        "dataRef": "status",
+        "type": "choice",
+        "choices": [
+            "Active",
+            "Cancelled"
+        ]
     }
 }
