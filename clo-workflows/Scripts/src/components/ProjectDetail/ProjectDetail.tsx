@@ -3,7 +3,9 @@ import { inject, observer } from "mobx-react"
 import { PrimaryButton, IconButton } from "office-ui-fabric-react"
 import { EmployeeStore, SessionStore } from "../../store"
 import { NotesBox, FormControlGroup } from "../"
+import * as db from "../../../res/json/DB_CONFIG.json"
 import "./styles.scss"
+const DB_CONFIG = db as any
 @inject("rootStore")
 @observer
 export default class ProjectDetail extends React.Component<any, any> {
@@ -36,6 +38,23 @@ export default class ProjectDetail extends React.Component<any, any> {
                                     requestDetailStore.canEditProject
                                         ? requestDetailStore.stopEditingProject
                                         : requestDetailStore.startEditingProject
+                                }
+                            />
+                        </div>
+                        <div className="projectDetail-editButton-styles">
+                            <IconButton
+                                disabled={!requestDetailStore.isRequestActive}
+                                iconProps={{
+                                    iconName: "link"
+                                }}
+                                onClick={
+                                    () => {
+                                        const id = requestDetailStore.project.get("Id")
+                                        const title = requestDetailStore.project.get("Title")
+                                        window
+                                            .open(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
+                                        console.log(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
+                                    }
                                 }
                             />
                         </div>
