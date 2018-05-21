@@ -2,7 +2,7 @@ import chalk from "chalk"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
 import * as db from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig, IGroup } from "./IUtil"
-import { Util } from "sp-pnp-js"
+import { Util } from "@pnp/common"
 import { CloRequestElement } from "../../src/model/"
 import { SPRest, sp } from "@pnp/sp"
 
@@ -80,8 +80,7 @@ export class Utils implements IUtil {
         await sp.web.lists.ensure(title, `${title} description`, 100, true)
         for (const field of this.DB_CONFIG.tables[title].fields) {
             !this.DB_CONFIG.defaultFields.includes(field)
-                ? (await sp.web.lists.getByTitle(title).fields.addText(field),
-                  console.log(chalk`{green created field}: {blue ${field}} `))
+                ? (await sp.web.lists.getByTitle(title).fields.addText(field), console.log(chalk`{green created field}: {blue ${field}} `))
                 : console.log(chalk`{green field already exists}: {blue ${field}} `)
         }
     }
@@ -157,8 +156,7 @@ ERROR: INVALID  FIELD
     }
     async addUsersToGroups(groups: Array<IGroup>) {
         groups.forEach(group => {
-            if (group.members.length > 0)
-                group.members.forEach(member => sp.web.siteGroups.getByName(group.name).users.add(member))
+            if (group.members.length > 0) group.members.forEach(member => sp.web.siteGroups.getByName(group.name).users.add(member))
         })
     }
     async createMissingGroups(): Promise<void> {
