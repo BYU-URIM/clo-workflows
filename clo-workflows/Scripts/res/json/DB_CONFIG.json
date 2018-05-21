@@ -87,7 +87,7 @@
             ]
         },
         "projects": {
-            "type": "library",
+            "type": "list",
             "fields": [
                 "Id",
                 "type",
