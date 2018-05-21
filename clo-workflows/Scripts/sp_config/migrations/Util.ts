@@ -75,7 +75,9 @@ export class Utils implements IUtil {
             await this.ensureList(listTitle)
         }
     }
-
+    async ensureSiteAssetsLibrary() {
+        return await sp.web.lists.ensureSiteAssetsLibrary().catch(console.log)
+    }
     async ensureList(title: string) {
         await sp.web.lists.ensure(title, `${title} description`, 100, true)
         for (const field of this.DB_CONFIG.tables[title].fields) {
