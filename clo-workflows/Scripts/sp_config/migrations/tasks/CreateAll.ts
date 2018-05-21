@@ -5,6 +5,7 @@ console.log(chalk`{blue creating lists and fields}`)
 const main = async () => {
     utils.validateDBConfig()
     await utils.createAll()
+    await utils.ensureSiteAssetsLibrary()
 }
 
 main()

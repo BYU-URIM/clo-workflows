@@ -75,14 +75,8 @@ export class Utils implements IUtil {
             await this.ensureList(listTitle)
         }
     }
-    async createFolder() {
-        return await sp.web.lists
-            .getByTitle("ltt docs")
-            .items.add({
-                Title: "Folder 2",
-                ContentTypeId: "0x012000B46934A6797EC846A8838980CC74D737",
-            })
-            .catch(console.log)
+    async ensureSiteAssetsLibrary() {
+        return await sp.web.lists.ensureSiteAssetsLibrary().catch(console.log)
     }
     async ensureList(title: string) {
         await sp.web.lists.ensure(title, `${title} description`, 100, true)

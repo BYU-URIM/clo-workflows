@@ -149,10 +149,14 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
     }
-    async createProject(projectData: {}): Promise<ItemAddResult> {
-        return this.getHostWeb()
+    async createProject(projectData: { Title: string }): Promise<ItemAddResult> {
+        const projectAddResult = await this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
+        await this.getHostWeb()
+            .lists.getByTitle("Site Assets")
+            .rootFolder.folders.add(`${projectData.Title}---${projectAddResult.data.Id}`)
+        return projectAddResult
     }
     async searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>> {
         return this.getHostWeb()
