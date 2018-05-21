@@ -321,7 +321,7 @@ OpenCover/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-clo-workflows/Scripts/.prettierrc
+
 clo-workflows/Scripts/notes.md
 clo-workflows/Scripts/src/component/Testing.tsx
 clo-workflows/Scripts/config/private.json
