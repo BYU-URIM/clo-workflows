@@ -185,5 +185,13 @@
         "submitterFieldName": "completeSubName",
         "submissionDateFieldName": "completeSubDate",
         "processFieldNames": []
+    },
+    "Cancelled": {
+        "name": "Cancelled",
+        "orderId": 19,
+        "view": null,
+        "submitterFieldName": "cancelledSubName",
+        "submissionDateFieldName": "cancelledSubDate",
+        "processFieldNames": []
     }
 }

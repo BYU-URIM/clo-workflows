@@ -24,9 +24,7 @@ export class SpDataService implements IDataService {
             .siteUsers.getById(rawUser.Id)
             .groups.get()
         const allRoleNames = getRoleNames()
-        const spGroupNames: string[] = rawSpGroups
-            .map(rawRole => rawRole.Title)
-            .filter(groupName => allRoleNames.includes(groupName))
+        const spGroupNames: string[] = rawSpGroups.map(rawRole => rawRole.Title).filter(groupName => allRoleNames.includes(groupName))
         // TODO more generalizable way to make administrator have every role?
         let currentUserGroups: IRole[]
         if (spGroupNames.length) {
@@ -92,12 +90,7 @@ export class SpDataService implements IDataService {
         return activeProjects.filter(item => item.submitterId === client.name)
     }
 
-    async fetchNotes(
-        source: NoteSource,
-        maxScope: NoteScope,
-        sourceId: string,
-        attachedClientId: string
-    ): Promise<INote[]> {
+    async fetchNotes(source: NoteSource, maxScope: NoteScope, sourceId: string, attachedClientId: string): Promise<INote[]> {
         let filterString: string
         if (source === NoteSource.PROJECT) {
             filterString = `projectId eq ${sourceId}`
@@ -140,7 +133,7 @@ export class SpDataService implements IDataService {
     async fetchClientProjects(submitterId: string): Promise<Array<CloRequestElement>> {
         return this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.filter(`submitterId eq '${submitterId}'`)
+            .items.filter(`submitterId eq '${submitterId}' and status ne 'Cancelled'`)
             .orderBy("ID", true)
             .get(this.cloRequestElementParser)
     }
@@ -190,7 +183,7 @@ export class SpDataService implements IDataService {
     /******************************************************************************************************/
     // helper data and methods
     /******************************************************************************************************/
-    private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete'"
+    private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete' and step ne 'cancelled'"
     private readonly HOST_WEB_URL: string
     private readonly APP_WEB_URL: string
     private readonly cloRequestElementParser: CloRequestElementParser
