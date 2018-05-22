@@ -18,7 +18,7 @@ const Header = (props: IHeaderProps) => {
                 <Persona
                     size={4}
                     initialsColor="#0078d7"
-                    primaryText={currentUser.name}
+                    text={currentUser.name}
                     secondaryText={`${currentUser.username} - ${currentUser.primaryRole.name}`}
                 />
             </div>

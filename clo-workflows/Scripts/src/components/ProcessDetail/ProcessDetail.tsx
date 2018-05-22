@@ -1,10 +1,12 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
 import { EmployeeStore, PivotState } from "../../store/"
-import { FormControlGroup, WorkDetail, ProjectDetail } from "../"
+import { FormControlGroup, WorkDetail, ProjectDetail, DescriptiveDropdown } from "../"
 import { autobind } from "core-decorators"
-import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize } from "office-ui-fabric-react"
+import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize, IDropdownOption } from "office-ui-fabric-react"
 import "./styles.scss"
+import { getStepNames } from "../../model/loader/resourceLoaders";
+import { StepName } from "../../model";
 
 @inject("rootStore")
 @autobind
@@ -30,6 +32,15 @@ export default class ProcessDetail extends React.Component<any, any> {
                         updateFormField={requestDetailStore.updateProcess}
                         width={350}
                         getFormControlDescription={requestDetailStore.getProcessSubmissionMetadata}
+                    />
+                    <DescriptiveDropdown
+                        options={getStepNames().map(choice => ({ key: choice, text: choice }))}
+                        selectedKey={requestDetailStore.nextStepName}
+                        onChanged={(option: IDropdownOption) => requestDetailStore.updateNextStepName(option.text as StepName)}
+                        label={"Next Process Step"}
+                        disabled={!this.employeeStore.root.sessionStore.isAdmin}
+                        description={this.employeeStore.root.sessionStore.isAdmin
+                            && "as an administrator, you can override the calculated next process step"}
                     />
                     <div className="processDetail-submitButton-styles">
                         <PrimaryButton

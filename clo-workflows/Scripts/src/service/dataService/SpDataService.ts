@@ -133,7 +133,7 @@ export class SpDataService implements IDataService {
     async fetchClientProjects(submitterId: string): Promise<Array<CloRequestElement>> {
         return this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
-            .items.filter(`submitterId eq '${submitterId}' and status ne 'Cancelled'`)
+            .items.filter(`submitterId eq '${submitterId}' and status ne 'Canceled'`)
             .orderBy("ID", true)
             .get(this.cloRequestElementParser)
     }
@@ -187,7 +187,7 @@ export class SpDataService implements IDataService {
     /******************************************************************************************************/
     // helper data and methods
     /******************************************************************************************************/
-    private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete' and step ne 'cancelled'"
+    private readonly ACTIVE_FILTER_STRING: string = "step ne 'complete' and step ne 'canceled'"
     private readonly HOST_WEB_URL: string
     private readonly APP_WEB_URL: string
     private readonly cloRequestElementParser: CloRequestElementParser

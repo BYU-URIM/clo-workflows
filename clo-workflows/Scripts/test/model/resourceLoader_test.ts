@@ -4,7 +4,7 @@ import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
 import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
-import { StepName } from "../../src/model"
+import { StepName, IRole } from "../../src/model"
 import { toJS } from "mobx"
 
 /* ensure that getView() correctly builds view object with shape
@@ -14,9 +14,13 @@ import { toJS } from "mobx"
     }
 */
 ava.test("test that getView() correctly builds a View Object", t => {
+    const testRole: IRole = {name: "Administrator", permittedSteps: [], rank: 10}
     const testViewName = Object.keys(VIEWS)[0]
     const jsonViewDefinition = VIEWS[testViewName]
-    const view = getView(testViewName)
+    const view = getView(testViewName, testRole)
+
+    const isUserEmployee = testRole.name !== "LTT Client"
+    const isUserAdmin = testRole.name === "Administrator"
 
     t.true(typeof view.dataSource === "string")
     t.true(Array.isArray(toJS(view.formControls)))
@@ -56,13 +60,17 @@ ava.test("test that getView() correctly builds a View Object", t => {
     let numFormControls = 0
     numFormControls += jsonViewDefinition.readonlyFormControls ? jsonViewDefinition.readonlyFormControls.length : 0
     numFormControls += jsonViewDefinition.formControls ? jsonViewDefinition.formControls.length : 0
-    t.true(view.formControls.length === numFormControls)
+    numFormControls += jsonViewDefinition.privilegedFormControls && isUserEmployee
+        ? jsonViewDefinition.privilegedFormControls.length
+        : 0
+    t.deepEqual(view.formControls.length, numFormControls)
 })
 
 // ensure that getViewAndMakeReadonly creates a view with all readonly form controls
 ava.test("test that getViewAndMakeReadonly creates a view with all readonly form controls", t => {
+    const testRole: IRole = {name: "LTT Admin", permittedSteps: [], rank: 10}
     const testViewName = Object.keys(VIEWS)[0]
-    const view = getViewAndMakeReadonly(testViewName)
+    const view = getViewAndMakeReadonly(testViewName, testRole)
     view.formControls.forEach(formControl => {
         t.true(formControl.readonly)
     })

@@ -1,4 +1,4 @@
-import { Role, View, FormControl, StepName, Step, IStep } from ".."
+import { Role, View, FormControl, StepName, Step, IStep, IRole } from ".."
 import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
 import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
 import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
@@ -7,27 +7,37 @@ import Utils from "../../utils"
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-export const getView = (viewName: string, privileged: boolean = false): View => {
+export const getView = (viewName: string, userRole: IRole): View => {
+    const isUserEmployee = userRole.name !== "LTT Client"
+    const isUserAdmin = userRole.name === "Administrator"
+
     const normalizedView = VIEWS[viewName]
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formControls array and the readonlyFormControls array
     // the readonlyFormControls appear first followed by the standard formControls
     let formControls: FormControl[] = []
-    if (privileged && normalizedView.privilegedControls.length) {
+    if (isUserEmployee && normalizedView.privilegedFormControls) {
         formControls = formControls.concat(
-            normalizedView.privilegedControls.map(formControlName => {
+            normalizedView.privilegedFormControls.map(formControlName => {
                 const formControl = new FormControl(FORM_CONTROLS[formControlName])
                 return formControl
             })
         )
     }
+
+    // almost always, every readonly form control will be made readonly
+    // the exception is for admin processes, in which the form control is created as is
+    const readonlyAdminOverride: boolean = isUserEmployee && normalizedView.dataSource === "processes"
+
     // first add in the readonly form controls (if present)
     if (normalizedView.readonlyFormControls) {
         formControls = formControls.concat(
             normalizedView.readonlyFormControls.map(formControlName => {
                 const formControl = new FormControl(FORM_CONTROLS[formControlName])
-                formControl.makeReadOnly()
+                // make the form control readonly, except for the special case of admin override
+                if(!readonlyAdminOverride)
+                    formControl.makeReadOnly()
                 return formControl
             })
         )
@@ -52,9 +62,8 @@ export const getView = (viewName: string, privileged: boolean = false): View => 
 // this const programatically =  adds the readonly proprterty to all form controls of a view
 // this constality =  is for instances when a view needs to be made readonly at runtime or when it is not practical
 // to make multiple JSON view definitions differing only by readonly form controls
-export const getViewAndMakeReadonly = (viewName: string, priveleged: boolean = true): View => {
-    /* priveleged defaults to true because we only use it with employees currently */
-    const view = getView(viewName, priveleged)
+export const getViewAndMakeReadonly = (viewName: string, userRole: IRole): View => {
+    const view = getView(viewName, userRole)
     view.formControls.forEach(formControl => formControl.makeReadOnly())
     return view
 }
