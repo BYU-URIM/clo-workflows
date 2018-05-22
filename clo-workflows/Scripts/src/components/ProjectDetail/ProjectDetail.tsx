@@ -1,6 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { PrimaryButton, IconButton } from "office-ui-fabric-react"
+import { PrimaryButton, IconButton, IconFontSizes, IconType } from "office-ui-fabric-react"
 import { EmployeeStore, SessionStore } from "../../store"
 import { NotesBox, FormControlGroup } from "../"
 import * as db from "../../../res/json/DB_CONFIG.json"
@@ -23,21 +23,24 @@ export default class ProjectDetail extends React.Component<any, any> {
             <div className="projectDetail-wrapper-styles">
                 <div className="projectDetail-formColumn-styles">
                     <div className="projectDetail-projectHeader-styles">
-                        <div className="projectDetail-title-styles">
-                            {requestDetailStore.canEditProject ? "Edit Project" : "View Project"}
-                        </div>
+                        <div className="projectDetail-title-styles">{requestDetailStore.canEditProject ? "Edit Project" : "View Project"}</div>
                         <div className="projectDetail-editButton-styles">
                             <IconButton
                                 disabled={!requestDetailStore.isRequestActive}
                                 iconProps={
                                     requestDetailStore.canEditProject
                                         ? { iconName: "BoxMultiplySolid" }
-                                        : { iconName: "edit" }
+                                        : {
+                                              iconName: "edit",
+                                              getStyles: () => ({
+                                                  root: {
+                                                      fontSize: "1.4em",
+                                                  },
+                                              }),
+                                          }
                                 }
                                 onClick={
-                                    requestDetailStore.canEditProject
-                                        ? requestDetailStore.stopEditingProject
-                                        : requestDetailStore.startEditingProject
+                                    requestDetailStore.canEditProject ? requestDetailStore.stopEditingProject : requestDetailStore.startEditingProject
                                 }
                             />
                         </div>
@@ -45,17 +48,20 @@ export default class ProjectDetail extends React.Component<any, any> {
                             <IconButton
                                 disabled={!requestDetailStore.isRequestActive}
                                 iconProps={{
-                                    iconName: "link"
+                                    iconName: "OpenFolderHorizontal",
+                                    getStyles: () => ({
+                                        root: {
+                                            fontSize: "1.4em",
+                                        },
+                                    }),
                                 }}
-                                onClick={
-                                    () => {
-                                        const id = requestDetailStore.project.get("Id")
-                                        const title = requestDetailStore.project.get("Title")
-                                        window
-                                            .open(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
-                                        console.log(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
-                                    }
-                                }
+                                title="open project documents folder"
+                                onClick={() => {
+                                    const id = requestDetailStore.project.get("Id")
+                                    const title = requestDetailStore.project.get("Title")
+                                    window.open(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
+                                    console.log(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
+                                }}
                             />
                         </div>
                     </div>
@@ -77,9 +83,7 @@ export default class ProjectDetail extends React.Component<any, any> {
                     )}
                 </div>
                 <div className="projectDetail-notesColumn-styles">
-                    {requestDetailStore.projectNotesStore && (
-                        <NotesBox notesStore={requestDetailStore.projectNotesStore} title="Project Notes" />
-                    )}
+                    {requestDetailStore.projectNotesStore && <NotesBox notesStore={requestDetailStore.projectNotesStore} title="Project Notes" />}
                 </div>
             </div>
         )

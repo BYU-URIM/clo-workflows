@@ -24,16 +24,15 @@ export default class WorkDetail extends React.Component<any, any> {
                         <div className="editButton-styles">
                             <IconButton
                                 disabled={!requestDetailStore.isRequestActive}
-                                iconProps={
-                                    requestDetailStore.canEditWork
-                                        ? { iconName: "BoxMultiplySolid" }
-                                        : { iconName: "edit" }
-                                }
-                                onClick={
-                                    requestDetailStore.canEditWork
-                                        ? requestDetailStore.stopEditingWork
-                                        : requestDetailStore.startEditingWork
-                                }
+                                iconProps={{
+                                    getStyles: () => ({
+                                        root: {
+                                            fontSize: "1.4em",
+                                        },
+                                    }),
+                                    iconName: requestDetailStore.canEditWork ? "BoxMultiplySolid" : "edit",
+                                }}
+                                onClick={requestDetailStore.canEditWork ? requestDetailStore.stopEditingWork : requestDetailStore.startEditingWork}
                             />
                         </div>
                     </div>
@@ -55,9 +54,7 @@ export default class WorkDetail extends React.Component<any, any> {
                     )}
                 </div>
                 <div className="notesColumn-styles">
-                    {requestDetailStore.workNotesStore && (
-                        <NotesBox notesStore={requestDetailStore.workNotesStore} title="Work Notes" />
-                    )}
+                    {requestDetailStore.workNotesStore && <NotesBox notesStore={requestDetailStore.workNotesStore} title="Work Notes" />}
                 </div>
             </div>
         )

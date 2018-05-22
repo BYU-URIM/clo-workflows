@@ -1,4 +1,4 @@
-import { observable, computed, action, runInAction, ObservableMap } from "mobx"
+import { observable, computed, action, runInAction, ObservableMap, reaction, toJS } from "mobx"
 import { FormEntryType, CloRequestElement } from "../../model/CloRequestElement"
 import { EmployeeStore, EmployeeViewKey } from "./EmployeeStore"
 import { IDataService, ListName } from "../../service/dataService/IDataService"
@@ -29,10 +29,16 @@ export class RequestDetailStore {
         this.process = observable.map(originalProcess)
         this.project = observable.map(originalProject)
         this.work = observable.map(originalWork)
+
+        // if process is changed, recalculate next step
+        reaction(
+            () => this.process.values(),
+            () => this.nextStepName = getNextStepName(this.process.toJS())
+        )
     }
 
     @observable workNotesStore: NotesStore
-    @observable projectNotesStore: NotesStore
+    @observable projectNotesStore: NotesStore    
 
     @action
     async init(): Promise<void> {
@@ -73,19 +79,25 @@ export class RequestDetailStore {
     @computed
     get isRequestActive(): boolean {
         return (this.process.get("step") as StepName) !== "Complete"
+            && (this.process.get("step") as StepName) !== "Canceled"
     }
 
     /*******************************************************************************************************/
     // PROCESSES
     /*******************************************************************************************************/
     @observable process: ObservableMap<FormEntryType>
+    @observable nextStepName: StepName
+    @action updateNextStepName(stepName: StepName) {
+        this.nextStepName = stepName
+    }
 
     @computed
     get processView(): View {
-        if (this.isRequestActive) return getView(this.employeeStore.focusStep.view, true)
-        else {
-            return getView("Complete", true)
-        }
+        const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
+        if (this.isRequestActive)
+            return getView(this.employeeStore.focusStep.view, curUserRole)
+        else
+            return getView("Complete", curUserRole)
     }
 
     getProcessSubmissionMetadata(formControl: IFormControl): string {
@@ -109,6 +121,7 @@ export class RequestDetailStore {
             !this.employeeStore.asyncPendingLockout &&
             Utils.isObjectEmpty(this.processValidation) &&
             this.isRequestActive
+            && !!this.nextStepName
         )
     }
 
@@ -137,7 +150,7 @@ export class RequestDetailStore {
             updatedProcess = {
                 ...updatedProcess,
                 ...{
-                    step: getNextStepName(updatedProcess),
+                    step: this.nextStepName,
                     [currentStep.submissionDateFieldName]: Utils.getFormattedDate(),
                     [currentStep.submitterFieldName]: this.employeeStore.root.sessionStore.currentUser.name,
                 },
@@ -167,9 +180,10 @@ export class RequestDetailStore {
 
     @computed
     get projectView(): View {
+        const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
         return this.canEditProject
-            ? getView(this.project.get("type") as string, true)
-            : getViewAndMakeReadonly(this.project.get("type") as string)
+            ? getView(this.project.get("type") as string, curUserRole)
+            : getViewAndMakeReadonly(this.project.get("type") as string, curUserRole)
     }
 
     @action
@@ -240,9 +254,10 @@ export class RequestDetailStore {
 
     @computed
     get workView(): View {
+        const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
         return this.canEditWork
-            ? getView(this.work.get("type") as string, true)
-            : getViewAndMakeReadonly(this.work.get("type") as string)
+            ? getView(this.work.get("type") as string, curUserRole)
+            : getViewAndMakeReadonly(this.work.get("type") as string, curUserRole)
     }
 
     @action

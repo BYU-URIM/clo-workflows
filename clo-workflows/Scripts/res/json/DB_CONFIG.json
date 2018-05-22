@@ -82,8 +82,8 @@
                 "finalRequestCompletionSubDate",
                 "completeSubName",
                 "completeSubDate",
-                "cancelledSubName",
-                "cancelledSubDate"
+                "canceledSubName",
+                "canceledSubDate"
             ]
         },
         "projects": {

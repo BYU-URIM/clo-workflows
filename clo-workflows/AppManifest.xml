@@ -3,7 +3,7 @@
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
      Name="clo-workflows"
      ProductID="{7cb53b3b-ad30-4cd4-ac94-a8ac69c35cf6}"
-     Version="1.0.0.1"
+     Version="1.0.0.2"
      SharePointMinVersion="15.0.0.0"
 >
   <Properties>
