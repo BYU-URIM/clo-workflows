@@ -735,7 +735,7 @@
         ],
         "formControls": []
     },
-    "Cancelled": {
+    "Canceled": {
         "dataSource": "processes",
         "readonlyFormControls": [
             "Public Domain Research",

@@ -79,7 +79,7 @@ export class RequestDetailStore {
     @computed
     get isRequestActive(): boolean {
         return (this.process.get("step") as StepName) !== "Complete"
-            && (this.process.get("step") as StepName) !== "Cancelled"
+            && (this.process.get("step") as StepName) !== "Canceled"
     }
 
     /*******************************************************************************************************/

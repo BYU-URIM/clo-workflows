@@ -583,7 +583,7 @@
         "type": "choice",
         "choices": [
             "Active",
-            "Cancelled"
+            "Canceled"
         ]
     }
 }
