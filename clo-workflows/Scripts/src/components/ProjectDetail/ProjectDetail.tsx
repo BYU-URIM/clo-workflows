@@ -55,6 +55,7 @@ export default class ProjectDetail extends React.Component<any, any> {
                                         },
                                     }),
                                 }}
+                                title="open project documents folder"
                                 onClick={() => {
                                     const id = requestDetailStore.project.get("Id")
                                     const title = requestDetailStore.project.get("Title")
