@@ -3,11 +3,6 @@ import { RootStore } from ".."
 import { IUser } from "../../model"
 import { IDataService } from "../../service/"
 
-export interface IFormState {
-    newProjectChecked?: boolean
-    newWorkChecked?: boolean
-}
-
 export class SessionStore {
     constructor(private root: RootStore, private dataService: IDataService) {}
 
@@ -21,5 +16,10 @@ export class SessionStore {
     @computed
     get isEmployee(): boolean {
         return this.currentUser && this.currentUser.primaryRole.name !== "LTT Client"
+    }
+
+    @computed
+    get isAdmin(): boolean {
+        return this.currentUser && this.currentUser.primaryRole.name === "Administrator"
     }
 }

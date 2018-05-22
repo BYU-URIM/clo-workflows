@@ -31,7 +31,7 @@
             "Materials Requested",
             "Credits Read"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -68,7 +68,7 @@
             "Credits Read",
             "Copy of Score"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -100,7 +100,7 @@
             "Release Date",
             "Source"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -137,7 +137,7 @@
             "Materials Requested",
             "Credits Read"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -163,7 +163,7 @@
             "Additional Edits",
             "CLO Determination"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -197,7 +197,7 @@
             "FT Number",
             "Account Code"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -218,7 +218,7 @@
             "Source",
             "Link"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID",
             "Status"
         ]
@@ -239,7 +239,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -261,7 +261,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -286,7 +286,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -309,7 +309,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -329,7 +329,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -347,7 +347,7 @@
             "Director",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -362,7 +362,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -382,7 +382,7 @@
             "URL",
             "Hard Copy Owner"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -392,7 +392,7 @@
         "formControls": [
             "Public Domain Research"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -404,7 +404,7 @@
         "formControls": [
             "Public Domain Approval"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -417,7 +417,7 @@
         "formControls": [
             "Existing License"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -431,7 +431,7 @@
         "formControls": [
             "Existing License Approval"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -446,7 +446,7 @@
         "formControls": [
             "Exemption Analysis"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -462,7 +462,7 @@
         "formControls": [
             "Exemption Approval"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -479,7 +479,7 @@
         "formControls": [
             "Licensing Exchange"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -497,7 +497,7 @@
         "formControls": [
             "Direct to Rights Holders"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -516,7 +516,7 @@
         "formControls": [
             "Request Submitted"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -536,7 +536,7 @@
         "formControls": [
             "Rights Holder Response"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -557,7 +557,7 @@
         "formControls": [
             "CLO Response to Rights Holder"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -579,7 +579,7 @@
         "formControls": [
             "Receipt of License"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -602,7 +602,7 @@
         "formControls": [
             "Supervisor Signature"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -626,7 +626,7 @@
         "formControls": [
             "Payment"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -652,7 +652,7 @@
             "Process Payment",
             "Fast Track Number"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -679,7 +679,7 @@
         "formControls": [
             "Initial Request Completion"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
@@ -707,11 +707,35 @@
         "formControls": [
             "Final Request Completion"
         ],
-        "privilegedControls": [
+        "privilegedFormControls": [
             "Owner NetID"
         ]
     },
     "Complete": {
+        "dataSource": "processes",
+        "readonlyFormControls": [
+            "Public Domain Research",
+            "Public Domain Approval",
+            "Existing License",
+            "Existing License Approval",
+            "Exemption Analysis",
+            "Exemption Approval",
+            "Licensing Exchange",
+            "Direct to Rights Holders",
+            "Request Submitted",
+            "Rights Holder Response",
+            "CLO Response to Rights Holder",
+            "Receipt of License",
+            "Supervisor Signature",
+            "Payment",
+            "Process Payment",
+            "Fast Track Number",
+            "Initial Request Completion",
+            "Final Request Completion"
+        ],
+        "formControls": []
+    },
+    "Canceled": {
         "dataSource": "processes",
         "readonlyFormControls": [
             "Public Domain Research",

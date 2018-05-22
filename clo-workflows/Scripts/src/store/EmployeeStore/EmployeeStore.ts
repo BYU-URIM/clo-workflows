@@ -53,11 +53,17 @@ export class EmployeeStore implements IViewProvider {
          * if the user has focused on a step, automatically clear out searched requests
          * so that step-specific requests can be displayed
          */
-        reaction(() => this.isFocusStep, () => this.isFocusStep && this.unfocusSearch())
+        reaction(
+            () => this.isFocusStep,
+            () => this.isFocusStep && this.unfocusSearch()
+        )
 
         /* if the user has executed a search for past processes,
         automatically clear out step requests so that searched requests can be displayed */
-        reaction(() => this.isFocusSearch, () => this.isFocusSearch && this.unfocusStep())
+        reaction(
+            () => this.isFocusSearch,
+            () => this.isFocusSearch && this.unfocusStep()
+        )
     }
 
     @observable requestDetailStore: RequestDetailStore

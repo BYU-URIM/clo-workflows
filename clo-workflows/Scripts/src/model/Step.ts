@@ -23,7 +23,7 @@ export type StepName =
     | "Initial Request Completion"
     | "Final Request Completion"
     | "Complete"
-    | "Cancelled"
+    | "Canceled"
 
 export interface IStep {
     name: StepName // string identifier used mostly for display purposes
