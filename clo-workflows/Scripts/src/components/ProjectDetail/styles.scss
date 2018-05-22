@@ -1,28 +1,28 @@
 .projectDetail-wrapper-styles {
-  padding: 20 0;
-  margin-bottom: 20;
+  padding: 20px 0px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: flex-start;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23);
   background: #f8f8f8;
 }
 
 .projectDetail-title-styles {
   text-align: center;
-  margin-bottom: 10;
+  margin-bottom: 10px;
   font: 30px Segoe UI, sans-serif;
-  width: 350;
+  width: 350px;
 }
 
 .projectDetail-submitButton-styles {
   display: flex;
   justify-content: center;
-  margin-top: 30;
+  margin-top: 30px;
 }
 
 .projectDetail-projectHeader-styles { display: flex }
 .projectDetail-editButton-styles { transform: translateX(-25px) }
-.projectDetail-formColumn-styles { padding: 0 8px 0 30px }
-.projectDetail-notesColumn-styles { padding: 0 30px 0 8px }
+.projectDetail-formColumn-styles { padding: 0px 8px 0px 30px }
+.projectDetail-notesColumn-styles { padding: 0px 30px 0px 8px }
