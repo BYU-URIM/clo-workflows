@@ -121,6 +121,7 @@ export class RequestDetailStore {
             !this.employeeStore.asyncPendingLockout &&
             Utils.isObjectEmpty(this.processValidation) &&
             this.isRequestActive
+            && !!this.nextStepName
         )
     }
 
