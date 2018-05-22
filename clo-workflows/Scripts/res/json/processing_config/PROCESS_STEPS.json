@@ -189,7 +189,7 @@
     "Cancelled": {
         "name": "Cancelled",
         "orderId": 19,
-        "view": null,
+        "view": "Cancelled",
         "submitterFieldName": "cancelledSubName",
         "submissionDateFieldName": "cancelledSubDate",
         "processFieldNames": []
