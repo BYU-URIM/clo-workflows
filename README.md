@@ -227,7 +227,7 @@ The res folder holds the resources including:
 *   This is the file that all form fields are defined in
 *   If you want to add a new field to a form (meaning a field that doesn't already exist on another form), add it here.
 
-```json
+```ts
     /* the name of the form control as a key */
     "ID": {
         /* the label of the field */
@@ -242,7 +242,7 @@ The res folder holds the resources including:
 *   the different types accepted are text, textarea, number, choice, checkbox, and choice
 *   if you use choice, add a choice property with an array of strings for the choices
 
-```json
+```ts
     "Status": {
         "displayName": "Status",
         "dataRef": "status",
@@ -259,7 +259,7 @@ The res folder holds the resources including:
 *   The Views file is used to compose forms out of form controls.
 *   Any form in the site had a view defined here.
 
-```json
+```ts
     /* the name the view as a key */
     "Website": {
         /* the type of data the form is associated with (works, processes, or projects ) */
@@ -289,7 +289,7 @@ The views are pretty straight-foreword. Give it a name, the type of data (dataSo
 *   Note the order (orderId) of the steps are defined here
 *   Note that there can be multiple "processFieldNames" if there are multiple results that come from the same step (i.e. "Process Payment" step)
 
-```json
+```ts
     /* the name of the step as a key */
     "Public Domain Research": {
         /* name of the step */
@@ -315,7 +315,7 @@ User roles are the definitions for the different employee roles that exist. This
 
 Adding a new role requires adding the role to the DB_CONFIG groups section and running migrations
 
-```json
+```ts
     /* the name of the role as a key*/
     "LTT Junior License Processor": {
         /* the name of the role */
