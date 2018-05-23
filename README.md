@@ -1,6 +1,16 @@
 # clo-workflows
 This app handles copyright request intake and management for the Copyright Liscensing Office. It is built with React, Typescript, and Mobx.
 
+[Architecture](#Architecture)
+
+[Model: Request Elements](#Model:-Request-Elements)
+
+[Build System](#Build-System)
+
+[Migrations](#Migrations)
+
+[Common Tasks](#Common-Tasks)
+
 ## Architecture
 block diagram of major components:
 ![clo-workflows architecture - page 1](https://user-images.githubusercontent.com/19392776/37235376-5c7164b4-23bb-11e8-99f5-9fd256dfde96.png)
@@ -59,7 +69,7 @@ block diagram of major components:
    ```
    
 
-## Business Logic - Request Elements
+## Model: Request Elements
 Each copyright licensing request is broken up into pieces to make it easier to manage.
 These pieces are diagrammed and described below:
 ![clo workflows model - request elements](https://user-images.githubusercontent.com/19392776/37231219-9d97025a-23a7-11e8-95df-09b068c5780f.png)
@@ -82,3 +92,22 @@ These pieces are diagrammed and described below:
   A work contians all relevant metadata about about the requested song, dance, movie, etc.
   Clients may input a new work during request intake or they may reference a previously submitted work.
   All work fields are found here: https://docs.google.com/spreadsheets/d/1vGkzYIOZE2k62cmGciDJA8EsEgI82pr6CrJGi5aX0L4/edit?usp=sharing
+
+## Build System
+The build system is composed of several build scripts that allow you to target different environments and build types. All of these scripts are found in package.json.
+
+### Production Build
+
+### Local Build
+
+### Sharepoint Build
+
+### Sharepoint Proxy Build
+
+## Migrations
+
+## Common Tasks
+### First Time Setup
+### Creating / Editing Fields
+### Creating / Editing Views
+### Creating / Editing Roles
