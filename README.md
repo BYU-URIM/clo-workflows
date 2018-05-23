@@ -1,16 +1,6 @@
 # clo-workflows
 This app handles copyright request intake and management for the Copyright Liscensing Office. It is built with React, Typescript, and Mobx.
 
-[Architecture](#Architecture)
-
-[Model](#Model---Request-Elements)
-
-[Build System](#Build-System)
-
-[Migrations](#Migrations)
-
-[Common Tasks](#Common-Tasks)
-
 ## Architecture
 block diagram of major components:
 ![clo-workflows architecture - page 1](https://user-images.githubusercontent.com/19392776/37235376-5c7164b4-23bb-11e8-99f5-9fd256dfde96.png)
