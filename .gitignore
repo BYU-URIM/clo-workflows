@@ -3,7 +3,7 @@ test_build/
 config/
 .vscode/
 *.map
-bundle.js
+
 yarn.lock
 *.yarnclean
 private.json
