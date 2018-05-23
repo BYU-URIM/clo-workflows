@@ -3,7 +3,7 @@ This app handles copyright request intake and management for the Copyright Lisce
 
 [Architecture](#Architecture)
 
-[Model: Request Elements](#Model:-Request-Elements)
+[Model](#Model---Request-Elements)
 
 [Build System](#Build-System)
 
@@ -69,7 +69,7 @@ block diagram of major components:
    ```
    
 
-## Model: Request Elements
+## Model - Request Elements
 Each copyright licensing request is broken up into pieces to make it easier to manage.
 These pieces are diagrammed and described below:
 ![clo workflows model - request elements](https://user-images.githubusercontent.com/19392776/37231219-9d97025a-23a7-11e8-95df-09b068c5780f.png)
