@@ -1,6 +1,46 @@
 # clo-workflows
 
+- [clo-workflows](#clo-workflows)
+    - [Architecture](#architecture)
+        - [Stores](#stores)
+        - [Data Service](#data-service)
+        - [JSON Resources](#json-resources)
+        - [Smart Components / Layouts](#smart-components---layouts)
+        - [Dumb Components](#dumb-components)
+    - [Model - Request Elements](#model---request-elements)
+        - [Projects](#projects)
+        - [Processes](#processes)
+        - [Works](#works)
+    - [Build System](#build-system)
+        - [Production Build](#production-build)
+        - [Local Build](#local-build)
+        - [SharePoint Build](#sharepoint-build)
+        - [SharePoint Proxy Build](#sharepoint-proxy-build)
+    - [Migrations](#migrations)
+    - [Common Tasks](#common-tasks)
+        - [First Time Setup](#first-time-setup)
+        - [Creating / Editing Fields](#creating---editing-fields)
+        - [Creating / Editing Views](#creating---editing-views)
+        - [Creating / Editing Roles](#creating---editing-roles)
+    - [Res Folder](#res-folder)
+        - [index.html](#indexhtml)
+        - [types_res.d.ts](#types-resdts)
+        - [FORM_CONTROLS.json](#form-controlsjson)
+        - [VIEWS.json](#viewsjson)
+        - [PROCESS_STEPS.json](#process-stepsjson)
+        - [USER_ROLES.json](#user-rolesjson)
+
 This app handles copyright request intake and management for the Copyright Licensing Office. It is built with React, Typescript, and Mobx.
+
+[Architecture](#Architecture)
+
+[Model](#Model---Request-Elements)
+
+[Build System](#Build-System)
+
+[Migrations](#Migrations)
+
+[Common Tasks](#Common-Tasks)
 
 ## Architecture
 
@@ -68,7 +108,9 @@ Component = props => (
 )
 ```
 
-## Business Logic - Request Elements
+---
+
+## Model - Request Elements
 
 Each copyright licensing request is broken up into pieces to make it easier to manage.
 These pieces are diagrammed and described below:
@@ -96,6 +138,61 @@ A work contains all relevant metadata about about the requested song, dance, mov
 Clients may input a new work during request intake or they may reference a previously submitted work.
 All work fields are found here: https://docs.google.com/spreadsheets/d/1vGkzYIOZE2k62cmGciDJA8EsEgI82pr6CrJGi5aX0L4/edit?usp=sharing
 
+---
+
+## Build System
+
+The build system is composed of several build scripts that allow you to target different environments and build types. All of these scripts are found in package.json.
+
+### Production Build
+
+### Local Build
+
+### SharePoint Build
+
+### SharePoint Proxy Build
+
+---
+
+## Migrations
+
+---
+
+## Common Tasks
+
+### First Time Setup
+
+### Creating / Editing Fields
+
+see for more info [Views](#FORM_CONTROLS.json)
+
+1.  goto res/json/form_templates/FORM_CONTROLS.json
+2.  add a new entry to the json, following the same schema as the other for controls
+3.  use the properties "displayName", "dataRef", and "type"
+4.  save and start using the new/updated field.
+
+### Creating / Editing Views
+
+see for more info [Views](#VIEWS.json)
+
+1.  goto res/json/form_templates/VIEWS.json
+2.  add a new entry to the json following the schema of the others
+3.  use the fields "dataSource", "formControls", and "privilegedFormControls"
+4.  save and start using the new view.
+
+### Creating / Editing Roles
+
+see for more info [Roles](#USER_ROLES.json)
+
+roles are added to the groups section of DB_CONFIG
+
+1.  goto res/json/form_templates/USER_ROLES.json
+2.  add a new entry to the json following the schema of the others
+3.  use the fields "name", "permittedSteps", and "rank"
+4.  save and start using the new Role.
+
+---
+
 ## Res Folder
 
 The res folder holds the resources including:
@@ -114,10 +211,14 @@ The res folder holds the resources including:
 *   If you want to add a new field to a form (meaning a field that doesn't already exist on another form), add it here.
 
 ```json
-    "ID": { /* this is the name used to reference the field from forms */
-        "displayName": "ID", /* the label of the field */
-        "dataRef": "Id", /* the name of the field on the SharePoint list, this maps to what's sent and received in requests to SharePoint */
-        "type": "number" /* the type of data that the field accepts */
+    /* the name of the form control as a key */
+    "ID": {
+        /* the label of the field */
+        "displayName": "ID",
+        /* the name of the field on the SharePoint list, this maps to what's sent and received in requests to SharePoint */
+        "dataRef": "Id",
+        /* the type of data that the field accepts */
+        "type": "number"
     },
 ```
 
@@ -134,4 +235,84 @@ The res folder holds the resources including:
             "Canceled"
         ]
     }
+```
+
+### VIEWS.json
+
+*   The Views file is used to compose forms out of form controls.
+*   Any form in the site had a view defined here.
+
+```json
+    /* the name the view as a key */
+    "Website": {
+        /* the type of data the form is associated with (works, processes, or projects ) */
+        "dataSource": "works",
+        /* the fields you want on the form (defined in FORM_CONTROLS.json ) */
+        "formControls": [
+            "Course",
+            "Title",
+            "Author",
+            "Publisher",
+            "Year Published",
+            "URL",
+            "Hard Copy Owner"
+        ],
+        /* the fields you want to be accessible only from the employee dashboard */
+        "privilegedFormControls": [
+            "Owner NetID"
+        ]
+    },
+```
+
+The views are pretty straight-foreword. Give it a name, the type of data (dataSource), the fields you want on it (formControls), and any privilegedFields for employee use only.
+
+### PROCESS_STEPS.json
+
+*   the various steps a process goes through are defined and configured here.
+*   Note the order (orderId) of the steps are defined here
+*   Note that there can be multiple "processFieldNames" if there are multiple results that come from the same step (i.e. "Process Payment" step)
+
+```json
+    /* the name of the step as a key */
+    "Public Domain Research": {
+        /* name of the step */
+        "name": "Public Domain Research",
+        /* the order this step fits in with the other steps */
+        "orderId": 1,
+        /* the view/form associated with the step */
+        "view": "Public Domain Research",
+        /* the name of the field used to store the submitter name */
+        "submitterFieldName": "publicDomainResearchSubName",
+        /* the name of the field used to store the submission date */
+        "submissionDateFieldName": "publicDomainResearchSubDate",
+        /* the name of the field used to store the result of this step */
+        "processFieldNames": [
+            "publicDomainResearch"
+        ]
+    },
+```
+
+### USER_ROLES.json
+
+User roles are the definitions for the different employee roles that exist. This is used to define what the roles are and which steps each role is allowed to access. New roles and updates to existing roles happen in this file.
+
+Adding a new role requires adding the role to the DB_CONFIG groups section and running migrations
+
+```json
+    /* the name of the role as a key*/
+    "LTT Junior License Processor": {
+        /* the name of the role */
+        "name": "Junior License Processor",
+        /* the steps they can access, found in PROCESS_STEPS.json */
+        "permittedSteps": [
+            "Existing License",
+            "Ownership Research Licensing Exchange",
+            "Request Submitted",
+            "Response from Rights Holder Received",
+            "Receipt of License",
+            "Payment"
+        ],
+        /* the order number/rank of the step */
+        "rank": 1
+    },
 ```
