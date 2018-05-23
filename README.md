@@ -95,14 +95,34 @@ These pieces are diagrammed and described below:
 
 ## Build System
 The build system is composed of several build scripts that allow you to target different environments and build types. All of these scripts are found in package.json.
+To run any of the build scripts, use a terminal to navigate to ```/clo-workflows/Scripts```. After entering the build command, the bundled app is stored in ```/clo-workflows/dist/bundle.js```. Note that parts of the code are environment-dependent and will not work if they are being run against an environment different than their build environment.
+
+**Dev vs Build**: each script is prefixed by either dev or build. Build signifies that the build script will run once, and dev signifies that it will run once and then watch for file changes to rebuild when necessary.
 
 ### Production Build
-
+This build targets a SharePoint environment and utilizes Webpack's 'production mode' to optimize for production. For small changes to the code that will not require debugging, use this build in conjunction with the deploy steps to quickly update a production instance of the app.
+```
+npm run build:production
+```
 ### Local Build
+Local build targets a local dev environment. Instead of pulling data from a SharePoint server, it pulls mock data from ```/clo-workflows/Scripts/src/service/dataService/MockData.ts```. During ```dev:local```, the app is served up to localhost:8080.
+```
+npm run build:local
+npm run dev:local
+```
 
-### Sharepoint Build
+### SharePoint Build
+SharePoint Build targets a SharePoint instance. It is identical to production build except that it does not contain production optimizations.
+```
+npm run build:sharepont
+npm run dev:sharepont
+```
 
-### Sharepoint Proxy Build
+### SharePoint Proxy Build
+Sharepoint Proxy build mode targets a SharePoint instance, but is run locally for ease of testing. It does this by serving a SharePoint-targeted build to ```localhost:8080```, and then routing all SharePoint API calls to a remote SharePoint instance. This way, you can locally test the app against the real SharePoint API and real SharePoint data.
+```
+npm run dev:sharepontProxy
+```
 
 ## Migrations
 
