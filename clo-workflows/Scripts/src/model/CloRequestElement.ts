@@ -1,4 +1,5 @@
 import { IKeyValueMap } from "mobx"
+import * as VIEWS from "../../res/json/form_templates/VIEWS.json"
 // Request Element is a process, project, or work
 // it is a plain javascript object sent from the server containing form data
 // an alternate and identical definition would be interface CloRequestElement {[field: string]: FormEntryType}
@@ -13,6 +14,7 @@ export interface IdentifiableObject {
 export type FormEntryType = string | number
 
 // TODO should these be in JSON??
-export const WORK_TYPES = ["Music", "Book", "Article", "Book Chapter", "Image", "Video", "Website", "Other"]
+export const WORK_TYPES = Object.keys(VIEWS).filter(view => VIEWS[view].dataSource === "works")
 
-export const PROJECT_TYPES = ["Synch", "Arranging", "Masters", "Grand", "Theatrical", "Movies", "Images"]
+// export const PROJECT_TYPES = ["Synch", "Arranging", "Masters", "Grand", "Theatrical", "Movies", "Images"]
+export const PROJECT_TYPES = Object.keys(VIEWS).filter(view => VIEWS[view].dataSource === "projects")

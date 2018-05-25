@@ -585,5 +585,34 @@
             "Active",
             "Canceled"
         ]
+    },
+    "Project Name": {
+        "displayName": "Project Name* (If for a class, use Course name/number)",
+        "dataRef": "Title",
+        "type": "text",
+        "required": true
+    },
+    "Preferred Email Address": {
+        "displayName": "Preferred Email Address",
+        "dataRef": "preferredEmailAddress",
+        "type": "text",
+        "required": true
+    },
+    "Preferred Contact Phone Number": {
+        "displayName": "Preferred Contact Phone Number",
+        "dataRef": "preferredContactPhoneNumber",
+        "type": "text",
+        "required": true
+    },
+    "Professor Name": {
+        "displayName": "Professor Name (if different than Contact Name)",
+        "dataRef": "professorName",
+        "type": "text"
+    },
+    "Semester Content Required": {
+        "displayName": "Semester Content Required",
+        "dataRef": "semesterContentRequired",
+        "type": "text",
+        "required": true
     }
 }

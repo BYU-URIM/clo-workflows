@@ -223,12 +223,22 @@
             "Status"
         ]
     },
+    "Literary Work": {
+        "dataSource": "projects",
+        "formControls": [
+            "Project Name",
+            "Preferred Email Address",
+            "Preferred Contact Phone Number",
+            "Professor Name",
+            "Semester Content Required"
+        ]
+    },
     "Music": {
         "dataSource": "works",
         "formControls": [
+            "Title",
             "Course",
             "Format",
-            "Title",
             "Artist",
             "Publisher",
             "Year Published",
@@ -246,9 +256,9 @@
     "Book": {
         "dataSource": "works",
         "formControls": [
+            "Title",
             "Course",
             "Format",
-            "Title",
             "Author",
             "Publisher",
             "Year Published",
@@ -268,9 +278,9 @@
     "Article": {
         "dataSource": "works",
         "formControls": [
+            "Title",
             "Course",
             "Format",
-            "Title",
             "Author",
             "Publisher",
             "Year Published",
@@ -293,9 +303,9 @@
     "Book Chapter": {
         "dataSource": "works",
         "formControls": [
+            "Title",
             "Course",
             "Format",
-            "Title",
             "Author",
             "Publisher",
             "Year Published",
@@ -316,9 +326,9 @@
     "Image": {
         "dataSource": "works",
         "formControls": [
+            "Title",
             "Course",
             "Format",
-            "Title",
             "Author",
             "Publisher",
             "Year Published",
@@ -336,9 +346,9 @@
     "Video": {
         "dataSource": "works",
         "formControls": [
+            "Title",
             "Course",
             "Format",
-            "Title",
             "URL",
             "Hold Type",
             "Hold From",
@@ -354,8 +364,8 @@
     "Website": {
         "dataSource": "works",
         "formControls": [
-            "Course",
             "Title",
+            "Course",
             "Author",
             "Publisher",
             "Year Published",
