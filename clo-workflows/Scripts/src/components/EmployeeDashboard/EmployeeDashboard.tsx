@@ -51,7 +51,7 @@ export default class EmployeeDashboard extends React.Component<any, any> {
                         !employeeStore.isFocusStep && (
                             <ProcessBriefList
                                 title="No Step Selected"
-                                emptyMessage="selec a step to view active processes"
+                                emptyMessage="select a step to view active processes"
                                 processBriefs={[]}
                                 onSelectProcessBrief={() => null}
                             />
