@@ -1,5 +1,5 @@
 {
-    "hostUrl": "https://urimdev2.byu.edu/clo_workflows_dev",
+    "hostUrl": "https://clo.byu.edu/clo_filing/licensingtasktracker",
     "defaultTables": [
         "Composed Looks",
         "Master Page Gallery",
