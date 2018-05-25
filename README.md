@@ -137,6 +137,8 @@ To run any of the build scripts, use a terminal to navigate to `/clo-workflows/S
 
 **Dev vs Build**: each script is prefixed by either dev or build. Build signifies that the build script will run once, and dev signifies that it will run once and then watch for file changes to rebuild when necessary.
 
+**Host URL**: Before running any of the builds that target a SharePoint environment (production, SharePoint, and SharePoint proxy), navigate to `clo-workflows/Scripts/res/json/DB_CONFIG` and make sure that the hostUrl property contains the url of the host site you are deploying against. This URL needs to be correct so that the app knows what site to query for process, project, and work lists. 
+
 ### Production Build
 
 This build targets a SharePoint environment and utilizes Webpack's 'production mode' to optimize for production. For small changes to the code that will not require debugging, use this build in conjunction with the deploy steps to quickly update a production instance of the app.
@@ -166,6 +168,9 @@ npm run dev:sharepoint
 ### SharePoint Proxy Build
 
 Sharepoint Proxy build mode targets a SharePoint instance, but is run locally for ease of testing. It does this by serving a SharePoint-targeted build to `localhost:8080`, and then routing all SharePoint API calls to a remote SharePoint instance. This way, you can locally test the app against the real SharePoint API and real SharePoint data.
+
+
+The first time you run this build mode, you will be prompted for a url, username, and password. Your username and password should be your normal BYU login. The URL must be an **app instance URL** of a previously deployed sharepoint app, not a host URL. An example of an app instance URL is `https://sp13-c3d12ebd09d216.spapps.byu.edu/clo_workflows_dev/clo-workflows`. If want to change the URL that you gave in the prompt, update the file `clo-workflows/Scripts/sp_config/proxy-server/private.json`. This file is automatically created by the proxy server but can be updated manually at any time.
 
 ```
 npm run dev:sharepointProxy
@@ -239,7 +244,7 @@ The res folder holds the resources including:
     },
 ```
 
-*   the different types accepted are text, textarea, number, choice, checkbox, and choice
+*   the different types accepted are text, textarea, number, checkbox, and choice
 *   if you use choice, add a choice property with an array of strings for the choices
 
 ```ts

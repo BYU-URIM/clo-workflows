@@ -94,7 +94,7 @@ export class RequestDetailStore {
     @computed
     get processView(): View {
         const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
-        if (this.isRequestActive)
+        if (this.isRequestActive && this.employeeStore.focusStep)
             return getView(this.employeeStore.focusStep.view, curUserRole)
         else
             return getView("Complete", curUserRole)
