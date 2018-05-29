@@ -86,8 +86,9 @@ export class Utils implements IUtil {
                 : console.log(chalk`{green field already exists}: {blue ${field}} `)
         }
     }
-    async addChanged() {
-        await this.getCurrentListTitles()
+    async updateListFields(listTitle: string) {
+        const fields = await this.sp.web.lists.getByTitle(listTitle).fields.get()
+        return fields.map(field => field.Title)
     }
 
     validateDBConfig() {
