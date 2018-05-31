@@ -15,15 +15,14 @@
         "type": "number"
     },
     "Public Domain Research": {
-        "displayName": "Public Domain Research",
+        "displayName": "Public Domain Research *",
         "dataRef": "publicDomainResearch",
         "type": "choice",
         "choices": [
             "Public Domain",
             "Non Public Domain",
             "Unclear"
-        ],
-        "required": true
+        ]
     },
     "Public Domain Approval": {
         "displayName": "Public Domain Approval",
@@ -31,7 +30,7 @@
         "type": "checkbox"
     },
     "Existing License": {
-        "displayName": "Existing License",
+        "displayName": "Existing License *",
         "dataRef": "existingLicense",
         "type": "choice",
         "choices": [
@@ -40,8 +39,7 @@
             "Terms of Use",
             "Permission from Rights Holder",
             "None"
-        ],
-        "required": true
+        ]
     },
     "Existing License Approval": {
         "displayName": "Existing License Approval",
@@ -49,14 +47,13 @@
         "type": "checkbox"
     },
     "Exemption Analysis": {
-        "displayName": "Exemption Analysis",
+        "displayName": "Exemption Analysis *",
         "dataRef": "exemptionAnalysis",
         "type": "choice",
         "choices": [
             "Fair Use",
             "No Exemption"
-        ],
-        "required": true
+        ]
     },
     "Exemption Approval": {
         "displayName": "Exemption Approval",
@@ -64,21 +61,19 @@
         "type": "checkbox"
     },
     "Licensing Exchange": {
-        "displayName": "Licensing Exchange",
+        "displayName": "Licensing Exchange *",
         "dataRef": "licensingExchange",
         "type": "choice",
         "choices": [
             "Tresona",
             "Wearethehits.com",
             "Not found in licensing exchange"
-        ],
-        "required": true
+        ]
     },
     "Direct to Rights Holders": {
-        "displayName": "Direct to Rights Holders",
+        "displayName": "Direct to Rights Holders *",
         "dataRef": "directToRightsHolders",
-        "type": "textarea",
-        "required": true
+        "type": "textarea"
     },
     "Request Submitted": {
         "displayName": "Request Submitted",
@@ -86,7 +81,7 @@
         "type": "checkbox"
     },
     "Rights Holder Response": {
-        "displayName": "Rights Holder Response",
+        "displayName": "Rights Holder Response *",
         "dataRef": "rightsHolderResponse",
         "type": "choice",
         "choices": [
@@ -94,11 +89,10 @@
             "License request approved",
             "License request denied"
         ],
-        "defaultValue": "Waiting for rights holder response",
-        "required": true
+        "defaultValue": "Waiting for rights holder response"
     },
     "CLO Response to Rights Holder": {
-        "displayName": "CLO Response to Rights Holder",
+        "displayName": "CLO Response to Rights Holder *",
         "dataRef": "cloResponseToRightsHolder",
         "type": "choice",
         "choices": [
@@ -108,11 +102,10 @@
             "Exemption override",
             "Low risk override",
             "Cancel request"
-        ],
-        "required": true
+        ]
     },
     "Receipt of License": {
-        "displayName": "Receipt of License",
+        "displayName": "Receipt of License *",
         "dataRef": "receiptOfLicense",
         "type": "choice",
         "choices": [
@@ -120,8 +113,7 @@
             "Signature required",
             "Signature not required"
         ],
-        "defaultValue": "License not received",
-        "required": true
+        "defaultValue": "License not received"
     },
     "Supervisor Signature": {
         "displayName": "Supervisor Signature",
@@ -129,14 +121,13 @@
         "type": "checkbox"
     },
     "Payment": {
-        "displayName": "Payment",
+        "displayName": "Payment *",
         "dataRef": "payment",
         "type": "choice",
         "choices": [
             "Fee required",
             "Gratis"
-        ],
-        "required": true
+        ]
     },
     "Process Payment": {
         "displayName": "Process Payment",
@@ -144,13 +135,12 @@
         "type": "checkbox"
     },
     "Fast Track Number": {
-        "displayName": "fastTrackNumber",
+        "displayName": "fastTrackNumber *",
         "dataRef": "fastTrackNumber",
-        "type": "number",
-        "required": true
+        "type": "number"
     },
     "Initial Request Completion": {
-        "displayName": "Initial Request Completion",
+        "displayName": "Initial Request Completion *",
         "dataRef": "initialRequestCompletion",
         "type": "choice",
         "choices": [
@@ -158,19 +148,17 @@
             "Signed license sent to rights holder",
             "Received fully executed license"
         ],
-        "defaultValue": "Signed license to be sent",
-        "required": true
+        "defaultValue": "Signed license to be sent"
     },
     "Final Request Completion": {
-        "displayName": "Final Request Completion",
+        "displayName": "Final Request Completion *",
         "dataRef": "finalRequestCompletion",
         "type": "choice",
         "choices": [
             "Awaiting countersignature",
             "Countersignature received"
         ],
-        "defaultValue": "Awaiting countersignature",
-        "required": true
+        "defaultValue": "Awaiting countersignature"
     },
     "Type": {
         "displayName": "Type",
@@ -178,10 +166,9 @@
         "type": "text"
     },
     "Title": {
-        "displayName": "Title",
+        "displayName": "Title *",
         "dataRef": "Title",
-        "type": "text",
-        "required": true
+        "type": "text"
     },
     "Department": {
         "displayName": "Department",
@@ -373,10 +360,10 @@
         "dataRef": "actualAudienceSize",
         "type": "number"
     },
-    "Date of Showing": {
-        "displayName": "Date of Showing",
+    "Date Time Location of Showing": {
+        "displayName": "Date, Time, and location of Showing(s)",
         "dataRef": "dateOfShowing",
-        "type": "datetime"
+        "type": "textarea"
     },
     "Requestor Contact Info": {
         "displayName": "Requestor Contact Info",
@@ -503,13 +490,8 @@
         "type": "number"
     },
     "ISSN": {
-        "displayName": "ISSN",
+        "displayName": "ISSN/ISBN",
         "dataRef": "ISSN",
-        "type": "number"
-    },
-    "ISBN": {
-        "displayName": "ISBN",
-        "dataRef": "ISBN",
         "type": "number"
     },
     "Volume": {
@@ -573,36 +555,35 @@
         "type": "text"
     },
     "Owner NetID": {
-        "displayName": "Owner NetID",
+        "displayName": "Owner NetID *",
         "dataRef": "submitterId",
         "type": "text"
     },
     "Status": {
-        "displayName": "Status",
+        "displayName": "Status *",
         "dataRef": "status",
         "type": "choice",
         "choices": [
             "Active",
             "Canceled"
-        ]
+        ],
+        "defaultValue": "Active"
     },
     "Project Name": {
-        "displayName": "Project Name* (If for a class, use Course name/number)",
+        "displayName": "Project Name *",
         "dataRef": "Title",
         "type": "text",
-        "required": true
+        "description": "If for a class, use Course name/number"
     },
     "Preferred Email Address": {
-        "displayName": "Preferred Email Address",
+        "displayName": "Preferred Email Address *",
         "dataRef": "preferredEmailAddress",
-        "type": "text",
-        "required": true
+        "type": "text"
     },
     "Preferred Contact Phone Number": {
-        "displayName": "Preferred Contact Phone Number",
+        "displayName": "Preferred Contact Phone Number *",
         "dataRef": "preferredContactPhoneNumber",
-        "type": "text",
-        "required": true
+        "type": "text"
     },
     "Professor Name": {
         "displayName": "Professor Name (if different than Contact Name)",
@@ -610,9 +591,128 @@
         "type": "text"
     },
     "Semester Content Required": {
-        "displayName": "Semester Content Required",
+        "displayName": "Semester Content Required *",
         "dataRef": "semesterContentRequired",
+        "type": "text"
+    },
+    "Requesting Group Name": {
+        "displayName": "Name of Club/Group/Department Showing the Film *",
+        "dataRef": "requestingGroupName",
+        "type": "text"
+    },
+    "Club Type": {
+        "displayName": "Type of Club *",
+        "dataRef": "clubType",
+        "type": "choice",
+        "choices": [
+            "Academic Club",
+            "Special Interest Club (e.g. Disney, Fencing, Martial Arts, etc.)",
+            "Not a BYUSA Club"
+        ]
+    },
+    "Club Approval": {
+        "displayName": "If this is an official BYU Clubs showing, have you received approval from Darren Hinton (for BYUSA clubs) or Kirsten Thompson (for Academic Clubs) for the showing of this film? *",
+        "dataRef": "clubApproval",
+        "type": "choice",
+        "choices": [
+            "Yes",
+            "No",
+            "Pending",
+            "N/A - this is not a club showing",
+            "Approved by someone else"
+        ]
+    },
+    "Club Approver": {
+        "displayName": "Other Approver",
+        "dataRef": "clubApprover",
         "type": "text",
-        "required": true
+        "description": "Only applies if you selected \"Approved by someone else\""
+    },
+    "Contact Name": {
+        "displayName": "Contact name for Faculty/Admin Advisor *",
+        "type": "text",
+        "dataRef": "contactName",
+        "description": "Re-enter name even if the requestor is the same."
+    },
+    "Contact Email": {
+        "displayName": "Contact email for Faculty/Admin Advisor *",
+        "dataRef": "contactEmail",
+        "type": "text",
+        "description": "Re-enter email even if the requestor is the same."
+    },
+    "Reason for Showing": {
+        "displayName": "Reason for Showing(s) *",
+        "dataRef": "reasonForShowing",
+        "type": "textarea",
+        "description": "Please be as detailed as possible. This description will help us determine whether your showing could qualify as an academic exemption and not require a fee. Generally, showings hosted by Academic clubs for purposes of academic discussion or analysis and led by a faculty or TA qualify for this exemption. The CLO reserves the right to make this determination."
+    },
+    "Targeted Demographic": {
+        "displayName": "Targeted Demographic *",
+        "dataRef": "targetedDemographic",
+        "type": "text",
+        "description": "e.g. students, staff, general club, specific club, etc."
+    },
+    "Anticipated Audience Size": {
+        "displayName": "Anticipated Audience Size *",
+        "dataRef": "anticipatedAudienceSize",
+        "description": "Please be as specific as possible as this is the primary indicator for the fee. If unknown, give your best estimated range (e.g. 100-400 people). It’s better to guess on the lower end in general (realistic vs. hopeful), but please be honest and as accurate as possible. Use prior, similarly marketed events as a guide when possible. Anticipated audience size is the primary indicator of fee so it’s important for this to be accurate. Studios will ask for audience reports after the event.",
+        "type": "text"
+    },
+    "Admission": {
+        "displayName": "Admission *",
+        "dataRef": "admission",
+        "type": "text",
+        "description": "Will admission be charged? If yes, please include the ticket price. FYI - if admission is charged the licensing fee will be either a flat fee or 50% of proceeds, whichever is greater."
+    },
+    "Advertising": {
+        "displayName": "Advertising: Will you be advertising this film showing? If so, how and where? *",
+        "dataRef": "advertising",
+        "type": "textarea",
+        "description": "e.g. Posters, email blasts facebook, other social media, etc.  Upon request, some film studios will provide legit movie posters for you to use in your advertising. Please indicate in your notes if you'd like us to try and procure film posters for your event."
+    },
+    "Budget": {
+        "displayName": "Budget: Do you have a budget for this activity? If so, how much? *",
+        "dataRef": "budget",
+        "type": "text",
+        "description": "Movie rights typically costs hundreds of dollars ($150-$1k), depending on audience size. Please visit the BYU Copyright Licensing Office's website - \"Movies and Copyright\" Knowledgebase page - for more info on how to host cheaper or even free movie events if you don't have a budget. BYU has secured a blanket license for the showing of Excel Films on campus for audiences < 100. More details on our"
+    },
+    "Need a Copy": {
+        "displayName": "Need a copy of the DVD to show the film?",
+        "dataRef": "copyNeeded",
+        "type": "checkbox",
+        "description": "The studios can provide a copy of the movie (DVD or Blu-Ray) if requested, but it costs an additional shipping/rental fee of approx. $28 so it may be wiser to purchase and keep the DVD yourself if that is possible. Just be sure to obtain a lawfully made copy (i.e. No downloading from pirate sites or burning a DVD from a friend). Purchasing a DVD at reputable retailers such as Walmart or Amazon is sufficient."
+    },
+    "Other Notes": {
+        "displayName": "Other Notes",
+        "dataRef": "otherNotes",
+        "type": "textarea",
+        "description": "Please give us any additional detail that may help us understand your request better. The more details the better. Include in this section any prior permission obtained for your screening."
+    },
+    "How You Found CLO": {
+        "displayName": "How did you hear about the Copyright Licensing Office? *",
+        "dataRef": "foundClo",
+        "type": "choice",
+        "choices": [
+            "BYU Copyright Licensing Office Website",
+            "Email from the University",
+            "BYUSA",
+            "Club Advisor",
+            "Copyright Booth in the Wilk",
+            "Social Media",
+            "Scheduling Office",
+            "Word of Mouth",
+            "Other"
+        ]
+    },
+    "Title of Film": {
+        "displayName": "Title of Film *",
+        "dataRef": "Title",
+        "type": "text",
+        "description": "Please note that newer releases typically cost more and not all films may be available for showing."
+    },
+    "Film Studio": {
+        "displayName": "Film Studio",
+        "dataRef": "filmStudio",
+        "type": "text"
     }
 }
