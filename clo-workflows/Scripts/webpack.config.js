@@ -8,7 +8,7 @@ module.exports = function(env) {
         devtool: "source-map",
         entry: "./src/main.tsx",
         output: {
-            filename: "bundle.js",
+            filename: env.NODE_ENV === "sharepoint" ? "final_bundle.js" : "bundle.js",
             path: path.join(__dirname, "dist"),
         },
         module: {
@@ -41,7 +41,7 @@ module.exports = function(env) {
         },
         plugins: [
             new webpack.DefinePlugin({
-                NODE_ENV: JSON.stringify(env.NODE_ENV),
+                NODE_ENV: JSON.stringify(env.cc),
             }),
             new ForkTsCheckerWebpackPlugin(),
             new HtmlWebpackPlugin({
