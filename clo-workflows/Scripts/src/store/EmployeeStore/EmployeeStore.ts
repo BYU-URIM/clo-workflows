@@ -4,7 +4,7 @@ import { CloRequestElement } from "../../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IStep, StepName } from "../../model/Step"
 import { IListItem } from "../../components/NonScrollableList/NonScrollableList"
-import { IBreadcrumbItem } from "office-ui-fabric-react/lib/Breadcrumb"
+import { IBreadcrumbItem } from "office-ui-fabric-react"
 import { IDataService, ListName } from "../../service/dataService/IDataService"
 import { getStep, getStepById } from "../../model/loader/resourceLoaders"
 import { StoreUtils } from "./.."
@@ -305,6 +305,7 @@ export class EmployeeStore implements IViewProvider {
         this.clientMode = !this.clientMode
         if (this.clientMode) {
             this.root.clientStore.data.init()
+            this.root.clientStore.view.resetClientState()
         } else {
             this.init()
         }

@@ -12,7 +12,7 @@
     "groups": [
         {"name": "LTT Client"},
         {"name": "LTT Junior License Processor"},
-        {"name": "LTT Senior License Processor", "members": ["tgilland"]},
+        {"name": "LTT Senior License Processor"},
         {"name": "LTT Supervisor"},
         {"name": "LTT Admin Assistant"},
         {"name": "LTT Administrator"}
@@ -149,7 +149,22 @@
                 "professorName",
                 "semesterContentRequired",
                 "preferredContactPhoneNumber",
-                "preferredEmailAddress"
+                "preferredEmailAddress",
+                "clubType",
+                "requestingGroupName",
+                "clubApproval",
+                "clubApprover",
+                "foundClo",
+                "otherNotes",
+                "copyNeeded",
+                "admission",
+                "advertising",
+                "budget",
+                "anticipatedAudienceSize",
+                "targetedDemographic",
+                "reasonForShowing",
+                "contactName",
+                "contactEmail"
             ]
         },
         "works": {
@@ -186,7 +201,9 @@
                 "holdUntil",
                 "year",
                 "director",
-                "hardCopyOwner"
+                "hardCopyOwner",
+                "filmStudio",
+                "releaseDate"
             ]
         },
         "notes": {

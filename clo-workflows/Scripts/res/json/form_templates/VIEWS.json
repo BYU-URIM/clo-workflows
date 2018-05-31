@@ -1,5 +1,5 @@
 {
-    "Literary Work": {
+    "Literary Project": {
         "dataSource": "projects",
         "formControls": [
             "Project Name",
@@ -7,6 +7,34 @@
             "Preferred Contact Phone Number",
             "Professor Name",
             "Semester Content Required"
+        ],
+        "privilegedFormControls": [
+            "Owner NetID",
+            "Status"
+        ]
+    },
+    "Movie Project": {
+        "dataSource": "projects",
+        "formControls": [
+            "Project Name",
+            "Preferred Email Address",
+            "Preferred Contact Phone Number",
+            "Requesting Group Name",
+            "Club Type",
+            "Club Approval",
+            "Club Approver",
+            "Contact Name",
+            "Contact Email",
+            "Date Time Location of Showing",
+            "Reason for Showing",
+            "Targeted Demographic",
+            "Anticipated Audience Size",
+            "Admission",
+            "Advertising",
+            "Budget",
+            "Need a Copy",
+            "Other Notes",
+            "How You Found CLO"
         ],
         "privilegedFormControls": [
             "Owner NetID",
@@ -22,7 +50,18 @@
             "Publisher",
             "Year Published",
             "Edition",
-            "ISBN"
+            "ISSN"
+        ],
+        "privilegedFormControls": [
+            "Owner NetID"
+        ]
+    },
+    "Movie": {
+        "dataSource": "works",
+        "formControls": [
+            "Title of Film",
+            "Release Date",
+            "Film Studio"
         ],
         "privilegedFormControls": [
             "Owner NetID"

@@ -49,29 +49,23 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                     </div>
                 )}
 
-                <PrimaryButton
-                    description="Create the new project"
-                    onClick={() => props.clientStore.processClientRequest()}
-                    text="Create Project"
-                    disabled={
-                        props.clientStore.view.asyncPendingLockout ||
-                        props.clientStore.newProject.get("Title") === undefined ||
-                        props.clientStore.newProject.get("Title") === ""
-                    }
-                />
-                <br />
-                <br />
-                <DefaultButton
-                    text="Close"
-                    description="close without submitting"
-                    onClick={() => {
-                        props.clientStore.clearState()
-                    }}
-                    disabled={props.clientStore.view.asyncPendingLockout}
-                />
+                <div className="project-buttonbar-styles">
+                    <DefaultButton
+                        text="Close"
+                        description="close without submitting"
+                        onClick={() => {
+                            props.clientStore.clearState()
+                        }}
+                        disabled={props.clientStore.view.asyncPendingLockout}
+                    />
+                    <PrimaryButton
+                        description="Create the new project"
+                        onClick={() => props.clientStore.processClientRequest()}
+                        text="Create Project"
+                        disabled={!props.clientStore.currentProjectFormIsValid}
+                    />
+                </div>
             </div>
-            <br />
-            <br />
         </Modal>
     )
 })

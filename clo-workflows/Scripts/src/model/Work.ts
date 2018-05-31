@@ -22,7 +22,6 @@ export interface IWork {
     formatInformation?: string
     callNumber?: string
     ISSN?: any
-    ISBN?: string
     volume?: any
     issue?: any
     pageRange?: any

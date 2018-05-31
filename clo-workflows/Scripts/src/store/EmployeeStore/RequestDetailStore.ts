@@ -38,7 +38,7 @@ export class RequestDetailStore {
     }
 
     @observable workNotesStore: NotesStore
-    @observable projectNotesStore: NotesStore    
+    @observable projectNotesStore: NotesStore
 
     @action
     async init(): Promise<void> {
