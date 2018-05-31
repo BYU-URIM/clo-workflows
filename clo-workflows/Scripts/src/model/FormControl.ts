@@ -6,7 +6,7 @@ export interface IFormControl {
     choices?: Array<string>
     defaultValue?: any
     readonly?: boolean
-    required?: boolean
+    description?: string
 }
 
 export class FormControl implements IFormControl {
@@ -15,9 +15,11 @@ export class FormControl implements IFormControl {
         Object.assign(this, formControlDefinition)
         this.readonly = false
         this.touched = false
+        this.description = formControlDefinition.description || ""
         if (this.type === "checkbox") {
             this.defaultValue = "false"
         }
+        this.required = formControlDefinition.displayName.includes("*")
     }
 
     @observable displayName: string
@@ -28,6 +30,7 @@ export class FormControl implements IFormControl {
     @observable readonly?: boolean
     @observable required?: boolean
     @observable touched: boolean
+    @observable description?: string
 
     @action
     touch() {

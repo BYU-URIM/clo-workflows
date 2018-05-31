@@ -1,6 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react"
 import { Dropdown, Checkbox, DefaultButton, PrimaryButton } from "office-ui-fabric-react"
+// tslint:disable-next-line:no-submodule-imports
 import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
 import { ClientStore } from "../../store"
 import { WorkForm } from "../"
@@ -29,6 +30,7 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                         props.clientStore.view.modal = "process"
                         props.clientStore.view.work.isNew = v
                         props.clientStore.view.work.type = ""
+                        props.clientStore.view.work.id = ""
                     }}
                 />
                 {props.clientStore.view.work.isNew ? (
@@ -53,27 +55,26 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     />
                 )}
 
-                <PrimaryButton
-                    description="Submit Process Request"
-                    onClick={props.clientStore.processClientRequest}
-                    text="Submit Work Request"
-                    disabled={
-                        props.clientStore.view.asyncPendingLockout ||
-                        ((!props.clientStore.view.work.id && !(props.clientStore.newWork.get("Title") !== undefined)) ||
-                            !(props.clientStore.newWork.get("Title") !== ""))
-                    }
-                />
-                <br />
-                <br />
-
-                <DefaultButton
-                    text="Close"
-                    description="close without submitting"
-                    onClick={() => {
-                        props.clientStore.clearState()
-                    }}
-                    disabled={props.clientStore.view.asyncPendingLockout}
-                />
+                <div className="process-buttonbar-styles">
+                    <PrimaryButton
+                        description="Submit Process Request"
+                        onClick={props.clientStore.processClientRequest}
+                        text="Submit Work Request"
+                        disabled={
+                            !props.clientStore.view.work.isNew && !!props.clientStore.view.work.id
+                                ? false
+                                : !props.clientStore.currentProcessFormIsValid
+                        }
+                    />
+                    <DefaultButton
+                        text="Close"
+                        description="close without submitting"
+                        onClick={() => {
+                            props.clientStore.clearState()
+                        }}
+                        disabled={props.clientStore.view.asyncPendingLockout}
+                    />
+                </div>
             </div>{" "}
         </Modal>
     )

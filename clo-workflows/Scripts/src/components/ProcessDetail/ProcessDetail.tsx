@@ -5,8 +5,8 @@ import { FormControlGroup, WorkDetail, ProjectDetail, DescriptiveDropdown } from
 import { autobind } from "core-decorators"
 import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize, IDropdownOption } from "office-ui-fabric-react"
 import "./styles.scss"
-import { getStepNames } from "../../model/loader/resourceLoaders";
-import { StepName } from "../../model";
+import { getStepNames } from "../../model/loader/resourceLoaders"
+import { StepName } from "../../model"
 
 @inject("rootStore")
 @autobind
@@ -39,8 +39,9 @@ export default class ProcessDetail extends React.Component<any, any> {
                         onChanged={(option: IDropdownOption) => requestDetailStore.updateNextStepName(option.text as StepName)}
                         label={"Next Process Step"}
                         disabled={!this.employeeStore.root.sessionStore.isAdmin}
-                        description={this.employeeStore.root.sessionStore.isAdmin
-                            && "as an administrator, you can override the calculated next process step"}
+                        description={
+                            this.employeeStore.root.sessionStore.isAdmin && "as an administrator, you can override the calculated next process step"
+                        }
                     />
                     <div className="processDetail-submitButton-styles">
                         <PrimaryButton

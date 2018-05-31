@@ -86,7 +86,9 @@ export class ClientStore implements IViewProvider {
      * ------------------------------------------------------------ */
     @computed
     get currentForm(): Array<FormControl> {
-        return resourceLoaders.getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formControls
+        return this.view.work.type || this.view.project.type
+            ? resourceLoaders.getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formControls
+            : undefined
     }
 
     @computed
@@ -94,6 +96,26 @@ export class ClientStore implements IViewProvider {
         const typeToValidate = this.currentForm
         const newInstanceOfType = this.view.modal === "project" ? this.newProject : this.newWork
         return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
+    }
+
+    @computed
+    get currentProcessFormIsValid(): boolean {
+        return (
+            !!this.view.work.type &&
+            !this.asyncPendingLockout &&
+            Utils.isObjectEmpty(this.currentFormValidation) &&
+            this.currentForm.filter(fc => fc.required).filter(fc => !this.newWork.has(fc.dataRef)).length === 0
+        )
+    }
+
+    @computed
+    get currentProjectFormIsValid(): boolean {
+        return (
+            !!this.view.project.type &&
+            !this.asyncPendingLockout &&
+            Utils.isObjectEmpty(this.currentFormValidation) &&
+            this.currentForm.filter(fc => fc.required).filter(fc => !this.newProject.has(fc.dataRef)).length === 0
+        )
     }
 
     @computed

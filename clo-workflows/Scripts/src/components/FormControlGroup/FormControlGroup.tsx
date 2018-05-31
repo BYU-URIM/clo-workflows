@@ -31,10 +31,7 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
         this.props.formControls.forEach(formControl => {
             const formValue = this.props.data[formControl.dataRef]
             const defaultValue = formControl.defaultValue
-            if (
-                (formValue === null || formValue === undefined) &&
-                (defaultValue !== null && defaultValue !== undefined)
-            ) {
+            if ((formValue === null || formValue === undefined) && (defaultValue !== null && defaultValue !== undefined)) {
                 this.props.updateFormField(formControl.dataRef, formControl.defaultValue)
             }
         })
@@ -46,26 +43,18 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
             <div className="formControlGroup-styles" style={props.width && { width: props.width }}>
                 {props.formControls &&
                     props.formControls.map((formControl, index) => {
-                        if (
-                            formControl.type === "text" ||
-                            formControl.type === "datetime" ||
-                            formControl.type === "number"
-                        ) {
+                        if (formControl.type === "text" || formControl.type === "datetime" || formControl.type === "number") {
                             return (
                                 <div className="formControlGroup-formControl-styles" key={index}>
                                     <TextField
                                         value={(props.data.get(formControl.dataRef) as string) || ""}
-                                        onChanged={(newVal: string) =>
-                                            props.updateFormField(formControl.dataRef, newVal)
-                                        }
+                                        onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
                                         label={formControl.displayName}
                                         disabled={formControl.readonly}
-                                        className={
-                                            formControl.readonly ? "formControlGroup-disabledInputBackground" : ""
-                                        }
+                                        className={formControl.readonly ? "formControlGroup-disabledInputBackground" : ""}
                                         description={
-                                            props.getFormControlDescription &&
-                                            props.getFormControlDescription(formControl)
+                                            formControl.description ||
+                                            (props.getFormControlDescription && props.getFormControlDescription(formControl))
                                         }
                                         onBlur={() => formControl.touch()}
                                         errorMessage={props.validation[formControl.dataRef]}
@@ -78,15 +67,10 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                                     <DescriptiveDropdown
                                         options={formControl.choices.map(choice => ({ key: choice, text: choice }))}
                                         selectedKey={props.data.get(formControl.dataRef) as string}
-                                        onChanged={(option: IDropdownOption) =>
-                                            props.updateFormField(formControl.dataRef, option.text)
-                                        }
+                                        onChanged={(option: IDropdownOption) => props.updateFormField(formControl.dataRef, option.text)}
                                         label={formControl.displayName}
                                         disabled={formControl.readonly}
-                                        description={
-                                            props.getFormControlDescription &&
-                                            props.getFormControlDescription(formControl)
-                                        }
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                         onBlur={() => formControl.touch()}
                                         errorMessage={props.validation[formControl.dataRef]}
                                     />
@@ -98,16 +82,11 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                                     <TextField
                                         multiline
                                         value={(props.data.get(formControl.dataRef) as string) || ""}
-                                        onChanged={(newVal: string) =>
-                                            props.updateFormField(formControl.dataRef, newVal)
-                                        }
+                                        onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
                                         label={formControl.displayName}
                                         disabled={formControl.readonly}
                                         className={formControl.readonly ? "formControlGroup-disabledInput-styles" : ""}
-                                        description={
-                                            props.getFormControlDescription &&
-                                            props.getFormControlDescription(formControl)
-                                        }
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                         onBlur={() => formControl.touch()}
                                         errorMessage={props.validation[formControl.dataRef]}
                                     />
@@ -123,10 +102,7 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                                             props.updateFormField(formControl.dataRef, String(isChecked))
                                         }
                                         disabled={formControl.readonly}
-                                        description={
-                                            props.getFormControlDescription &&
-                                            props.getFormControlDescription(formControl)
-                                        }
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                         onBlur={() => formControl.touch()}
                                     />
                                 </div>
