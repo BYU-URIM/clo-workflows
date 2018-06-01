@@ -8,7 +8,7 @@ module.exports = function(env) {
         devtool: "source-map",
         entry: "./src/main.tsx",
         output: {
-            filename: env.NODE_ENV === "sharepoint" ? "final_bundle.js" : "bundle.js",
+            filename: "bundle.js",
             path: path.join(__dirname, "dist"),
         },
         module: {
