@@ -41,7 +41,7 @@ module.exports = function(env) {
         },
         plugins: [
             new webpack.DefinePlugin({
-                NODE_ENV: JSON.stringify(env.cc),
+                NODE_ENV: JSON.stringify(env.NODE_ENV),
             }),
             new ForkTsCheckerWebpackPlugin(),
             new HtmlWebpackPlugin({
