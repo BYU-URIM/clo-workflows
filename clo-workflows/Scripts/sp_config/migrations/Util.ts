@@ -12,7 +12,7 @@ export class Utils implements IUtil {
     pnpNodeSettings: IPnpNodeSettings
     config: any
     constructor() {
-        this.config = require("./private.json")
+        this.config = require("../../config/dev/migrations/private.json")
         this.pnpNodeSettings = {
             siteUrl: `${this.config.siteUrl}`,
             authOptions: this.config,
