@@ -44,13 +44,14 @@
     "Literary": {
         "dataSource": "works",
         "formControls": [
-            "Title",
-            "URL",
-            "Author",
+            "Literary Work Title",
+            "Literary URL",
+            "Chapter/Article Title",
+            "Author/Editor",
             "Publisher",
-            "Year Published",
-            "Edition",
-            "ISSN"
+            "Year",
+            "ISSN/ISBN",
+            "Volume/Edition"
         ],
         "privilegedFormControls": [
             "Owner NetID"
