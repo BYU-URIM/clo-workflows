@@ -181,20 +181,15 @@
                 "artist",
                 "publisher",
                 "yearPublished",
-                "seriesTitle",
-                "albumTitle",
-                "bookTitle",
                 "journalTitle",
-                "edition",
                 "formatInformation",
                 "callNumber",
-                "ISSN",
-                "ISBN",
-                "volume",
+                "ISSNISBN",
                 "issue",
                 "pageRange",
                 "totalPages",
                 "totalChapters",
+                "chapterArticleTitle",
                 "URL",
                 "holdType",
                 "holdFrom",
@@ -203,7 +198,9 @@
                 "director",
                 "hardCopyOwner",
                 "filmStudio",
-                "releaseDate"
+                "releaseDate",
+                "authorOrEditor",
+                "volumeEdition"
             ]
         },
         "notes": {
