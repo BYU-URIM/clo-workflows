@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "target": "es5",
-      "module": "commonjs",
+      "module": "esnext",
       "declaration": false,
       "noImplicitAny": false,
       "removeComments": true,
@@ -25,6 +25,7 @@
         "src/**/*",
         "test/**/*",
         "res/**/*",
-        "sp_config/**/*"
+        "sp_config/**/*",
+        "scripts/**/*"
       ]
 }
