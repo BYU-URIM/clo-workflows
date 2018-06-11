@@ -73,7 +73,6 @@ export class ClientStore implements IViewProvider {
     @action
     postMessage(message: any, displayTime: number = 5000) {
         this.message = message
-
         setTimeout(
             action(() => {
                 this.message = null
