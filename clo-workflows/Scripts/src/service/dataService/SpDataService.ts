@@ -38,6 +38,7 @@ export class SpDataService implements IDataService {
         }
         const userName = this.extractUsernameFromLoginName(rawUser.LoginName)
         return new User(rawUser.Title, userName, rawUser.Email, userName, currentUserGroups)
+        // return new User(rawUser.Title, userName, rawUser.Email, userName, [getRole("LTT Client")])
     }
     // TODO add filter string to query for smaller requests and filtering on the backend
     async fetchEmployeeActiveProcesses(employee: User): Promise<Array<CloRequestElement>> {
@@ -149,20 +150,26 @@ export class SpDataService implements IDataService {
             .lists.getByTitle(ListName.WORKS)
             .items.get(this.cloRequestElementParser)
     }
-    async createProject(projectData: { Title: string }): Promise<ItemAddResult> {
-        const projectAddResult = await this.getHostWeb()
+    async createProject(projectData: { Title: string, type: string }): Promise<ItemAddResult> {
+        return this.getHostWeb()
             .lists.getByTitle(ListName.PROJECTS)
             .items.add(projectData)
-        await this.getHostWeb()
-            .lists.getByTitle("Site Assets")
-            .rootFolder.folders.add(`${projectData.Title}---${projectAddResult.data.Id}`)
-        return projectAddResult
+        // await this.getHostWeb()
+        //     .lists.getByTitle("Site Assets")
+        //     .rootFolder.folders.add(`${projectData.type} - ${projectData.Title} - ${projectAddResult.data.Id}`)
     }
     async searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>> {
         return this.getHostWeb()
             .lists.getByTitle(ListName.PROCESSES)
             .items.filter(`substringof('${searchTerm}',Title)`)
             .top(10)
+            .get(this.cloRequestElementParser)
+    }
+    async searchWorksByTitle(searchTerm: string, workType: string): Promise<CloRequestElement[]> {
+        return this.getHostWeb()
+            .lists.getByTitle(ListName.WORKS)
+            .items.filter(`type eq '${workType}' and substringof('${searchTerm}',Title)`)
+            .top(20)
             .get(this.cloRequestElementParser)
     }
 
