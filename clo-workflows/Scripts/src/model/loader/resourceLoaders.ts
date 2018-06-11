@@ -10,7 +10,6 @@ import Utils from "../../utils"
 export const getView = (viewName: string, userRole: IRole): View => {
     const isUserEmployee = userRole.name !== "LTT Client"
     const isUserAdmin = userRole.name === "Administrator"
-
     const normalizedView = VIEWS[viewName]
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
@@ -36,8 +35,7 @@ export const getView = (viewName: string, userRole: IRole): View => {
             normalizedView.readonlyFormControls.map(formControlName => {
                 const formControl = new FormControl(FORM_CONTROLS[formControlName])
                 // make the form control readonly, except for the special case of admin override
-                if(!readonlyAdminOverride)
-                    formControl.makeReadOnly()
+                if (!readonlyAdminOverride) formControl.makeReadOnly()
                 return formControl
             })
         )
@@ -100,5 +98,5 @@ export const getStepNames = (): string[] => {
 }
 
 export const getRoleNames = (): string[] => {
-    return Object.keys(ROLES)
+    return Object.keys(ROLES.default)
 }
