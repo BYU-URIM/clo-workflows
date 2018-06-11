@@ -439,9 +439,14 @@
         "dataRef": "format",
         "type": "text"
     },
-    "Author": {
-        "displayName": "Author",
-        "dataRef": "authorName",
+    "Author/Editor": {
+        "displayName": "Author/Editor",
+        "dataRef": "authorOrEditor",
+        "type": "text"
+    },
+    "Chapter/Article Title": {
+        "displayName": "Chapter/Article Title",
+        "dataRef": "chapterArticleTitle",
         "type": "text"
     },
     "Publisher": {
@@ -454,29 +459,14 @@
         "dataRef": "yearPublished",
         "type": "text"
     },
-    "Series Title": {
-        "displayName": "Series Title",
-        "dataRef": "seriesTitle",
+    "Literary Work Title": {
+        "displayName": "Book/Journal/Publication Title *",
+        "dataRef": "Title",
         "type": "text"
     },
-    "Album Title": {
-        "displayName": "Album Title",
-        "dataRef": "albumTitle",
-        "type": "text"
-    },
-    "Book Title": {
-        "displayName": "Book Title",
-        "dataRef": "bookTitle",
-        "type": "text"
-    },
-    "Journal Title": {
-        "displayName": "Journal Title",
-        "dataRef": "journalTitle",
-        "type": "text"
-    },
-    "Edition": {
-        "displayName": "Edition",
-        "dataRef": "edition",
+    "Volume/Edition": {
+        "displayName": "Volume/Edition",
+        "dataRef": "volumeEdition",
         "type": "text"
     },
     "Format Information": {
@@ -489,9 +479,9 @@
         "dataRef": "callNumber",
         "type": "number"
     },
-    "ISSN": {
+    "ISSN/ISBN": {
         "displayName": "ISSN/ISBN",
-        "dataRef": "ISSN",
+        "dataRef": "ISSNISBN",
         "type": "number"
     },
     "Volume": {
@@ -521,6 +511,12 @@
     },
     "URL": {
         "displayName": "URL",
+        "dataRef": "URL",
+        "type": "text"
+    },
+    "Literary URL": {
+        "displayName": "URL Link to the source on Amazon or other site",
+        "description": "NOTE: you may enter a url link to the source on Amazon or other site OR fill out each field.",
         "dataRef": "URL",
         "type": "text"
     },

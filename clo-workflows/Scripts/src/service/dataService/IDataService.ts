@@ -11,6 +11,7 @@ export interface IDataService {
     fetchWorks(): Promise<Array<CloRequestElement>>
     fetchRequestElementsById(ids: number[], listName: ListName): Promise<Array<CloRequestElement>>
     searchProcessesByTitle(searchTerm: string): Promise<Array<CloRequestElement>>
+    searchWorksByTitle(searchTerm: string, workType?: string): Promise<Array<CloRequestElement>>
     createRequestElement(requestElement: CloRequestElement, listName: ListName): Promise<CloRequestElement>
     createProject(projectData: {}): Promise<ItemAddResult>
     createProcess(processData: {}): Promise<ItemAddResult>

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
-import { IconButton } from "office-ui-fabric-react"
+import { IconButton } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 export interface IListItem {
     header: string
@@ -30,7 +30,7 @@ interface IProcessListState {
 
 @autobind
 @observer
-export default class NonScrollableList extends React.Component<INonScrollableListProps, IProcessListState> {
+export class NonScrollableList extends React.Component<INonScrollableListProps, IProcessListState> {
     constructor(props) {
         super(props)
         this.state = { hoverItemIndex: -1 }

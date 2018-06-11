@@ -1,12 +1,5 @@
 import { observer } from "mobx-react"
-import {
-    CommandBar,
-    DetailsList,
-    IGroup,
-    CheckboxVisibility,
-    IGroupDividerProps,
-    CommandButton,
-} from "office-ui-fabric-react"
+import { CommandBar, DetailsList, IGroup, CheckboxVisibility, IGroupDividerProps, CommandButton } from "office-ui-fabric-react/lib/"
 import * as React from "react"
 import { NoteSource } from "../../model"
 import { ClientViewState, ClientStoreData } from "../../store"
@@ -25,12 +18,13 @@ export interface IProjectGroup extends IGroup {
     submitterId: string
     Title?: string
     projectId: string
+    type: string
 }
 export interface ICustomGroup extends IGroup {
     projectId: string
 }
 export interface IProjectProcessListProps {
-    messageVisible: boolean
+    asyncPendingLockout: boolean
     handleSubmit(projectId: string): void
     view: ClientViewState
     data: ClientStoreData
@@ -39,16 +33,18 @@ export interface ICustomGroupDividerProps extends IGroupDividerProps {
     group: ICustomGroup
 }
 
-const ProjectProcessList = observer((props: IProjectProcessListProps) => {
+export const ProjectProcessList = observer((props: IProjectProcessListProps) => {
     const fields = ["title", "step"]
-    const _columns = fields.map((f, i): IColumns => ({
-        key: i.toString(),
-        name: f.split(/(?=[A-Z])/).join(" "),
-        fieldName: f,
-        minWidth: 40,
-        maxWidth: 300,
-        isResizable: true,
-    }))
+    const _columns = fields.map(
+        (f, i): IColumns => ({
+            key: i.toString(),
+            name: f.split(/(?=[A-Z])/).join(" "),
+            fieldName: f,
+            minWidth: 40,
+            maxWidth: 300,
+            isResizable: true,
+        })
+    )
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {
         return (
             <div>
@@ -66,7 +62,7 @@ const ProjectProcessList = observer((props: IProjectProcessListProps) => {
                         props.view.project.id = renderHeaderProps.group.projectId.toString()
                         props.handleSubmit(renderHeaderProps.group.projectId.toString())
                     }}
-                    disabled={props.messageVisible}
+                    disabled={props.asyncPendingLockout}
                 />
                 <CommandButton
                     iconProps={{
@@ -78,7 +74,7 @@ const ProjectProcessList = observer((props: IProjectProcessListProps) => {
                         props.view.project.id = renderHeaderProps.group.projectId.toString()
                         props.view.notesType = NoteSource.PROJECT
                     }}
-                    disabled={props.messageVisible}
+                    disabled={props.asyncPendingLockout}
                 />
             </div>
         )
@@ -94,7 +90,7 @@ const ProjectProcessList = observer((props: IProjectProcessListProps) => {
                         onClick: () => {
                             props.view.modal = "project"
                         },
-                        disabled: props.messageVisible,
+                        disabled: props.asyncPendingLockout,
                         className: "projectProcessList-larger-styles",
                     },
                 ]}
@@ -125,5 +121,3 @@ const ProjectProcessList = observer((props: IProjectProcessListProps) => {
         </div>
     )
 })
-
-export default ProjectProcessList

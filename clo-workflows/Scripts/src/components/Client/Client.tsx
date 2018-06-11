@@ -20,7 +20,7 @@ export default class Client extends React.Component<any, any> {
                 <div className="client-wrapper-styles">
                     <div className="client-left-section-styles">
                         <ProjectProcessList
-                            messageVisible={!!clientStore.message}
+                            asyncPendingLockout={clientStore.asyncPendingLockout}
                             data={this.clientStore.data}
                             handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
                             view={clientStore.view}

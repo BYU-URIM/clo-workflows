@@ -44,15 +44,13 @@ export class ClientStoreData {
     fetchNotes = async () => {
         this.projectNotesByProjectId = observable.map()
         this.workNotesByWorkId = observable.map()
-        const allNotes = await this.dataService.fetchClientNotes(this.currentUser.Id) || []
+        const allNotes = (await this.dataService.fetchClientNotes(this.currentUser.Id)) || []
         allNotes.forEach(note => {
             if (note.projectId) {
-                if (this.projectNotesByProjectId.get(note.projectId))
-                    runInAction(() => this.projectNotesByProjectId.get(note.projectId).push(note))
+                if (this.projectNotesByProjectId.get(note.projectId)) runInAction(() => this.projectNotesByProjectId.get(note.projectId).push(note))
                 else runInAction(() => this.projectNotesByProjectId.set(note.projectId, observable([note])))
             } else if (note.workId) {
-                if (this.workNotesByWorkId.get(note.workId))
-                    runInAction(() => this.workNotesByWorkId.get(note.workId).push(note))
+                if (this.workNotesByWorkId.get(note.workId)) runInAction(() => this.workNotesByWorkId.get(note.workId).push(note))
                 else runInAction(() => this.workNotesByWorkId.set(note.workId, observable([note])))
             }
         })
@@ -78,16 +76,19 @@ export class ClientStoreData {
     @computed
     get clientProjects() {
         return this.projects
-            .map((proj: CloRequestElement, i): IProjectGroup => ({
-                key: proj.Id.toString(),
-                projectId: proj.Id.toString(),
-                Title: proj.Title.toString(),
-                name: proj.Title.toString(),
-                count: this.processes.filter(proc => proj.Id.toString() === proc.projectId).length,
-                submitterId: proj.submitterId.toString(),
-                startIndex: 0,
-                isShowingAll: false,
-            }))
+            .map(
+                (proj: CloRequestElement, i): IProjectGroup => ({
+                    key: proj.Id.toString(),
+                    projectId: proj.Id.toString(),
+                    Title: proj.Title.toString(),
+                    name: proj.Title.toString(),
+                    count: this.processes.filter(proc => proj.Id.toString() === proc.projectId).length,
+                    submitterId: proj.submitterId.toString(),
+                    startIndex: 0,
+                    isShowingAll: false,
+                    type: proj.type.toString(),
+                })
+            )
             .map((e, i, a) => {
                 i > 0 ? (e.startIndex = a[i - 1].count + a[i - 1].startIndex) : (e.startIndex = 0)
                 return e
@@ -96,6 +97,14 @@ export class ClientStoreData {
 
     @computed
     get clientProjectIds() {
-        return this.projects.map((proj: CloRequestElement, i): string => proj.Id.toString())
+        return this.clientProjects.map((proj): string => proj.projectId)
     }
+
+    projectById = (id: string) => this.clientProjects.find(project => project.projectId === id)
+
+    currentProjectType = (id: string) => this.projectById(id).type.split(" ")[0]
+
+    currentProjectWorks = (id: string) => this.clientProcesses.filter(process => process.projectId === id) || []
+
+    currentProjectWorkIds = (id: string) => this.currentProjectWorks(id).map(work => work.workId)
 }

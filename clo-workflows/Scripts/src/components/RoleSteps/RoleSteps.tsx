@@ -2,7 +2,7 @@ import * as React from "react"
 import { SessionStore, EmployeeStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { autobind } from "core-decorators"
-import { CompoundButton } from "office-ui-fabric-react"
+import { CompoundButton } from "office-ui-fabric-react/lib/"
 import { IStep } from "../../model"
 
 import "./styles.scss"
@@ -44,7 +44,7 @@ export default class RoleSteps extends React.Component<any, any> {
                                             onClick={() => this.onStepButtonClick(step)}
                                             key={innerIndex}
                                             className="roleSteps-stepButton-styles"
-                                            description={`${pendingItemCount} Pending Item${
+                                            secondaryText={`${pendingItemCount} Pending Item${
                                                 pendingItemCount !== 1 ? "s" : ""
                                             }`}
                                             primary={!!pendingItemCount}

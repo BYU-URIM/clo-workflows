@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
-import { DefaultButton, Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react"
+import { DefaultButton, Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
 export interface IHeaderBreadcrumbProps {

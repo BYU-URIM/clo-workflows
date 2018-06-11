@@ -2,7 +2,8 @@ import * as React from "react"
 import { EmployeeStore, SessionStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { FormControlGroup, NotesBox } from "../"
-import { PrimaryButton, IconButton } from "office-ui-fabric-react"
+// tslint:disable-next-line:no-submodule-imports
+import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
 @inject("rootStore")
@@ -25,7 +26,7 @@ export default class WorkDetail extends React.Component<any, any> {
                             <IconButton
                                 disabled={!requestDetailStore.isRequestActive}
                                 iconProps={{
-                                    getStyles: () => ({
+                                    styles: () => ({
                                         root: {
                                             fontSize: "1.4em",
                                         },

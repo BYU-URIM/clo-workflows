@@ -1,0 +1,32 @@
+.listItem-styles {
+  border-bottom: 1px inset #505050;
+  padding: 13px 0px;
+}
+
+.list-styles { max-width: 400px; padding: 0px }
+.listItemBody-styles { font: 18px Segoe UI, sans-serif }
+
+.listItemTitle-styles {
+  font: 20px Segoe UI, sans-serif;
+  color: #202020;
+  font-weight: 200;
+  margin-right: 15px;
+}
+
+.listItemSubheader-styles {
+  font: 12px Segoe UI, sans-serif;
+  color: #a9a9a9;
+  margin-bottom: 10px;
+}
+
+.listItemHeader-styles { display: flex }
+
+.pivot-tab {
+    margin: 8px 0px;
+}
+
+.listItemEmpty-styles {
+    font: 14px Segoe UI, sans-serif;
+    color: #a9a9a9;
+    margin: 10px 0px;
+}

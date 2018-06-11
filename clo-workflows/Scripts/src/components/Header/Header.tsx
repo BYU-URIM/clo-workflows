@@ -1,6 +1,6 @@
 import * as React from "react"
 import { IUser } from "../../model"
-import { Persona, Toggle } from "office-ui-fabric-react"
+import { Persona, Toggle } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
 export interface IHeaderProps {
@@ -9,7 +9,7 @@ export interface IHeaderProps {
     toggleClientMode?(): void
 }
 
-const Header = (props: IHeaderProps) => {
+export const Header = (props: IHeaderProps) => {
     const { currentUser } = props
     return (
         <div className={"header-wrapper-styles"}>
@@ -30,4 +30,3 @@ const Header = (props: IHeaderProps) => {
         </div>
     )
 }
-export default Header

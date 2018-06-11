@@ -1,6 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { PrimaryButton, IconButton, IconFontSizes, IconType } from "office-ui-fabric-react"
+import { PrimaryButton, IconButton, IconFontSizes, IconType } from "office-ui-fabric-react/lib/"
 import { EmployeeStore, SessionStore } from "../../store"
 import { NotesBox, FormControlGroup } from "../"
 import * as db from "../../../res/json/DB_CONFIG.json"
@@ -32,7 +32,7 @@ export default class ProjectDetail extends React.Component<any, any> {
                                         ? { iconName: "BoxMultiplySolid" }
                                         : {
                                               iconName: "edit",
-                                              getStyles: () => ({
+                                              styles: () => ({
                                                   root: {
                                                       fontSize: "1.4em",
                                                   },
@@ -49,7 +49,7 @@ export default class ProjectDetail extends React.Component<any, any> {
                                 disabled={!requestDetailStore.isRequestActive}
                                 iconProps={{
                                     iconName: "OpenFolderHorizontal",
-                                    getStyles: () => ({
+                                    styles: () => ({
                                         root: {
                                             fontSize: "1.4em",
                                         },
@@ -59,8 +59,10 @@ export default class ProjectDetail extends React.Component<any, any> {
                                 onClick={() => {
                                     const id = requestDetailStore.project.get("Id")
                                     const title = requestDetailStore.project.get("Title")
-                                    window.open(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
-                                    console.log(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
+                                    const type = requestDetailStore.project.get("type")
+                                    window.open(
+                                        `${DB_CONFIG.hostUrl}/SiteAssets/${type} - ${title} - ${id}`
+                                    )
                                 }}
                             />
                         </div>

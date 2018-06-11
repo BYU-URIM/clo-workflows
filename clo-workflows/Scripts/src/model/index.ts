@@ -1,7 +1,6 @@
 export * from "./CloRequestElement"
 export * from "./FormControl"
-import * as resourceLoaders from "./loader/resourceLoaders"
-export { resourceLoaders }
+export * from "./loader/resourceLoaders"
 export * from "./Note"
 export * from "./Role"
 export * from "./Step"

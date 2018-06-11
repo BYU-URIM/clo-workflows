@@ -13,17 +13,22 @@ import {
     INote,
     NoteSource,
     NoteScope,
-    resourceLoaders,
+    getView,
 } from "../../model"
-import { IDataService } from "../../service"
+import { IDataService, ListName } from "../../service"
 import Utils from "../../utils"
 import { StoreUtils, RootStore, ClientViewState, ClientStoreData, NotesStore } from ".."
 import { IViewProvider, IMessage } from "../ViewProvider"
+import { IListItem } from "../../components"
+import * as resourceLoaders from "../../model/loader/resourceLoaders"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
 @autobind
 export class ClientStore implements IViewProvider {
+    @observable searchedProjects: ObservableMap<CloRequestElement>
+    @observable searchedWorks: ObservableMap<CloRequestElement> = new ObservableMap()
+    @observable searchedProcesses: ObservableMap<CloRequestElement>
     @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* Observable maps to store the info entered that is not state */
     @observable newProject: ClientObsMap
@@ -78,7 +83,7 @@ export class ClientStore implements IViewProvider {
 
     @action
     setAsyncPendingLockout(val: boolean) {
-        this.view.asyncPendingLockout = val
+        this.asyncPendingLockout = val
     }
 
     /* ------------------------------------------------------------ *
@@ -87,7 +92,7 @@ export class ClientStore implements IViewProvider {
     @computed
     get currentForm(): Array<FormControl> {
         return this.view.work.type || this.view.project.type
-            ? resourceLoaders.getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formControls
+            ? getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formControls
             : undefined
     }
 
@@ -118,10 +123,7 @@ export class ClientStore implements IViewProvider {
         )
     }
 
-    @computed
-    get asyncPendingLockout(): boolean {
-        return this.view.asyncPendingLockout
-    }
+    @observable asyncPendingLockout: boolean
 
     @computed
     get typesAsOptions() {
@@ -171,6 +173,18 @@ export class ClientStore implements IViewProvider {
               })
     }
 
+    @computed
+    get searchedWorkBriefs(): Array<IListItem> {
+        return Object.values(this.searchedWorks.toJS()).map(
+            (work): IListItem => ({
+                body: work.Title.toString(),
+                header: work.Title.toString(),
+                id: work.Id,
+                selectable: true,
+            })
+        )
+    }
+
     /* ------------------------------------------------------------ *
      *                  Other Class Actions
      * ------------------------------------------------------------ */
@@ -205,9 +219,9 @@ export class ClientStore implements IViewProvider {
 
     @action
     private submitProject = async (): Promise<void> => {
-        this.setAsyncPendingLockout(true)
         this.newProject.set("type", this.view.project.type)
         try {
+            this.setAsyncPendingLockout(true)
             const res = await this.dataService.createProject(this.newProject.toJS())
             this.newProject.set("Id", res.data.Id)
             runInAction(() => this.data.projects.push(this.newProject.toJS()))
@@ -226,11 +240,12 @@ export class ClientStore implements IViewProvider {
 
     @action
     private submitWork = async (): Promise<void> => {
-        this.setAsyncPendingLockout(true)
         try {
+            this.setAsyncPendingLockout(true)
             this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
             this.view.work.id = res.data.Id
+            this.newWork.set("Id", res.data.Id)
             runInAction(() => this.data.works.push(this.newWork.toJS()))
         } catch (error) {
             console.error(error)
@@ -245,8 +260,8 @@ export class ClientStore implements IViewProvider {
 
     @action
     private submitProcess = async (): Promise<void> => {
-        this.setAsyncPendingLockout(true)
         try {
+            this.setAsyncPendingLockout(true)
             const previousStep: IStep = resourceLoaders.getStep("Intake")
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
@@ -274,15 +289,27 @@ export class ClientStore implements IViewProvider {
             this.setAsyncPendingLockout(false)
         }
     }
+    @action
+    async search(searchTerm: string) {
+        const works = await this.dataService.searchWorksByTitle(searchTerm, this.view.work.type)
+        works.filter(work => !this.data.currentProjectWorkIds(this.view.project.id).includes(work.Id))
+
+        runInAction(() => {
+            this.searchedWorks =
+                StoreUtils.mapRequestElementArrayById(
+                    works.filter(work => !this.data.currentProjectWorkIds(this.view.project.id).includes(work.Id.toString()))
+                ) || observable.map()
+        })
+    }
 
     /* ------------------------------------------------------------ *
      * NOTES - SHARED BY PROJECTS AND WORKS
      * ------------------------------------------------------------ */
     @action
     async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
-        this.setAsyncPendingLockout(true)
         let submissionStatus = true
         try {
+            this.setAsyncPendingLockout(true)
             // fill in any info the new note needs before submission
             noteToCreate.dateSubmitted = Utils.getFormattedDate()
             noteToCreate.submitter = this.root.sessionStore.currentUser.name
@@ -311,7 +338,7 @@ export class ClientStore implements IViewProvider {
                 messageType: "error",
             })
         } finally {
-            this.view.asyncPendingLockout = false
+            this.asyncPendingLockout = false
         }
 
         return submissionStatus
@@ -319,9 +346,9 @@ export class ClientStore implements IViewProvider {
 
     @action
     updateNote = async (noteToUpdate: INote, noteSource: NoteSource): Promise<boolean> => {
-        this.view.asyncPendingLockout = true
         let submissionStatus = true
         try {
+            this.asyncPendingLockout = true
             noteToUpdate.dateSubmitted = Utils.getFormattedDate()
             await this.dataService.updateNote(noteToUpdate)
 
@@ -335,17 +362,17 @@ export class ClientStore implements IViewProvider {
             submissionStatus = false
             this.postMessage({ messageText: "there was a problem updating your note, try again", messageType: "error" })
         } finally {
-            this.view.asyncPendingLockout = false
+            this.asyncPendingLockout = false
         }
 
         return submissionStatus
     }
     @action
     deleteNote = async (noteToDelete: INote, noteSource: NoteSource): Promise<boolean> => {
-        this.view.asyncPendingLockout = true
         let submissionStatus = true
 
         try {
+            this.asyncPendingLockout = true
             await this.dataService.deleteNote(noteToDelete.Id)
             // if deletion is successful, remove the new note from the corresponding list
             if (noteSource === NoteSource.PROJECT) this.removeELementInListById(noteToDelete, this.data.process_notes)
@@ -356,7 +383,7 @@ export class ClientStore implements IViewProvider {
             submissionStatus = false
             this.postMessage({ messageText: "there was a problem deleting your note, try again", messageType: "error" })
         } finally {
-            this.view.asyncPendingLockout = false
+            this.asyncPendingLockout = false
         }
         return submissionStatus
     }

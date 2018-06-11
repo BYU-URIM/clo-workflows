@@ -4,7 +4,7 @@ import { CloRequestElement } from "../../model/CloRequestElement"
 import { autobind } from "core-decorators"
 import { IStep, StepName } from "../../model/Step"
 import { IListItem } from "../../components/NonScrollableList/NonScrollableList"
-import { IBreadcrumbItem } from "office-ui-fabric-react"
+import { IBreadcrumbItem } from "office-ui-fabric-react/lib/"
 import { IDataService, ListName } from "../../service/dataService/IDataService"
 import { getStep, getStepById } from "../../model/loader/resourceLoaders"
 import { StoreUtils } from "./.."
@@ -221,7 +221,7 @@ export class EmployeeStore implements IViewProvider {
                 const previousStep = getStepById(currentStep.orderId - 1)
                 const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateFieldName]
                 return {
-                    header: `${processProject.department || ""} ${processWork.type || ""} Process`,
+                    header: `${processProject.Title || ""} - ${processWork.type || ""} Process`,
                     subheader: `submitted to ${process.step} on ${
                         submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"
                     }`,

@@ -5,7 +5,6 @@ import { NoteSource } from "../../model/"
 type Modal = "project" | "process" | null
 
 export class ClientViewState {
-    @observable private _asyncPendingLockout: boolean = false
     @observable private _modal: Modal = null
     @observable project: ClientRequest = new ClientRequest()
     @observable process: ClientRequest = new ClientRequest()
@@ -28,20 +27,11 @@ export class ClientViewState {
         this._modal = value
     }
     @computed
-    get asyncPendingLockout() {
-        return this._asyncPendingLockout
-    }
-    set asyncPendingLockout(p) {
-        this._asyncPendingLockout = p
-    }
-
-    @computed
     get notesTitle() {
         return this.notesType === NoteSource.WORK ? "Work Notes" : "Projects Notes"
     }
     @action
     resetClientState() {
-        this.asyncPendingLockout = false
         this.modal = null
         this.project = new ClientRequest()
         this.process = new ClientRequest()
