@@ -36,7 +36,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                     onChanged={e => {
                         props.clientStore.view.project.type = e.text
                     }}
-                    disabled={props.clientStore.view.asyncPendingLockout}
+                    disabled={props.clientStore.asyncPendingLockout}
                 />
                 {props.clientStore.view.project.type && (
                     <div>
@@ -56,7 +56,7 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                         onClick={() => {
                             props.clientStore.clearState()
                         }}
-                        disabled={props.clientStore.view.asyncPendingLockout}
+                        disabled={props.clientStore.asyncPendingLockout}
                     />
                     <PrimaryButton
                         description="Create the new project"
