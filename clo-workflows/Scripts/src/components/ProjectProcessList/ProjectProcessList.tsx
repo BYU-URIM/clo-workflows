@@ -1,5 +1,5 @@
 import { observer } from "mobx-react"
-import { CommandBar, DetailsList, IGroup, CheckboxVisibility, IGroupDividerProps, CommandButton } from "office-ui-fabric-react"
+import { CommandBar, DetailsList, IGroup, CheckboxVisibility, IGroupDividerProps, CommandButton } from "office-ui-fabric-react/lib/"
 import * as React from "react"
 import { NoteSource } from "../../model"
 import { ClientViewState, ClientStoreData } from "../../store"

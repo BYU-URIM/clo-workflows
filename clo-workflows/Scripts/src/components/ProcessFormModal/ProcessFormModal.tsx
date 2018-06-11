@@ -1,6 +1,16 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { Dropdown, Checkbox, DefaultButton, PrimaryButton, SearchBox, PivotItem, PivotLinkFormat, PivotLinkSize, Pivot } from "office-ui-fabric-react"
+import {
+    Dropdown,
+    Checkbox,
+    DefaultButton,
+    PrimaryButton,
+    SearchBox,
+    PivotItem,
+    PivotLinkFormat,
+    PivotLinkSize,
+    Pivot,
+} from "office-ui-fabric-react/lib/"
 // tslint:disable-next-line:no-submodule-imports
 import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
 import { ClientStore } from "../../store"

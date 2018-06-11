@@ -1,4 +1,4 @@
-export { rootStore, RootStore } from "./RootStore/RootStore"
+export * from "./RootStore/RootStore"
 export { SessionStore } from "./SessionStore/SessionStore"
 export { storeUtils as StoreUtils } from "./StoreUtils"
 import { EmployeeStore, EmployeeViewKey } from "./EmployeeStore/EmployeeStore"

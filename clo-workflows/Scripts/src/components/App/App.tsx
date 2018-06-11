@@ -2,7 +2,7 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { RootStore } from "../../store/"
 import { Header, Employee, LoadingPage, Client } from "../"
-import { Fabric } from "office-ui-fabric-react"
+import { Fabric } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 import { initializeIcons } from "@uifabric/icons"
 // Register icons and pull the fonts from the default SharePoint cdn.

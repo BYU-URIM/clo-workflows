@@ -1,6 +1,6 @@
 import * as React from "react"
 import { IUser } from "../../model"
-import { Persona, Toggle } from "office-ui-fabric-react"
+import { Persona, Toggle } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
 export interface IHeaderProps {

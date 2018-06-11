@@ -2,7 +2,7 @@ import * as React from "react"
 import { observer, inject } from "mobx-react"
 import { EmployeeStore } from "../../store/"
 import { RoleSteps, ProcessBriefList } from "../"
-import { SearchBox } from "office-ui-fabric-react"
+import { SearchBox } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
 @inject("rootStore")

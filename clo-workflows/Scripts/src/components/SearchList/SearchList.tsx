@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react"
 import { autobind } from "core-decorators"
-import { IconButton, Pivot, PivotItem, PivotLinkFormat, PivotLinkSize, SearchBox } from "office-ui-fabric-react"
+import { IconButton, Pivot, PivotItem, PivotLinkFormat, PivotLinkSize, SearchBox } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 import { Item } from "@pnp/sp"
 export interface IListItem {

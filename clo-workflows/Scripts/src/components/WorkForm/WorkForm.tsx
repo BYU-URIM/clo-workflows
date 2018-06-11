@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { Dropdown } from "office-ui-fabric-react"
+import { Dropdown } from "office-ui-fabric-react/lib/"
 import { ClientStore } from "../../store"
 import { FormControlGroup } from "../"
 import "./styles.scss"

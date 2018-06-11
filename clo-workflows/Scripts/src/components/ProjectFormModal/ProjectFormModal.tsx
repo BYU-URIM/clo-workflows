@@ -1,5 +1,5 @@
 import { observer } from "mobx-react"
-import { Dropdown, DefaultButton, PrimaryButton } from "office-ui-fabric-react"
+import { Dropdown, DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/"
 // tslint:disable-next-line:no-submodule-imports
 import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
 

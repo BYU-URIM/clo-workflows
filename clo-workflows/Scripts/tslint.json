@@ -28,7 +28,8 @@
         "trailing-comma": false,
         "one-line": false,
         "ban-comma-operator": false,
-        "no-implicit-dependencies": false
+        "no-implicit-dependencies": false,
+        "no-submodule-imports": false
     },
     "rulesDirectory": []
 }
