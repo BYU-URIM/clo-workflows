@@ -12,25 +12,13 @@ export interface IFormPanelProps {
 const WorkForm = (props: IFormPanelProps) => {
     return (
         <div className={"workForm-wrapper-styles"}>
-            <Dropdown
-                label="Select the Work Type:"
-                selectedKey={props.clientStore.view.work.type || undefined}
-                options={props.clientStore.typesAsOptions.WORKS}
-                className={"workForm-dropDown-styles"}
-                placeHolder={props.clientStore.view.work.type || "select a Work type"}
-                onChanged={e => {
-                    props.clientStore.view.work.type = e.text
-                }}
-            />
             {props.clientStore.view.work.type && (
                 <div>
                     <FormControlGroup
                         data={props.clientStore.newWork}
                         formControls={props.clientStore.currentForm}
                         validation={props.clientStore.currentFormValidation}
-                        updateFormField={(fieldName, value) =>
-                            props.clientStore.updateClientStoreMember(fieldName, value, "newWork")
-                        }
+                        updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newWork")}
                     />
                 </div>
             )}

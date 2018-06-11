@@ -59,8 +59,10 @@ export default class ProjectDetail extends React.Component<any, any> {
                                 onClick={() => {
                                     const id = requestDetailStore.project.get("Id")
                                     const title = requestDetailStore.project.get("Title")
-                                    window.open(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
-                                    console.log(`${DB_CONFIG.hostUrl}/SiteAssets/${title}---${id}`)
+                                    const type = requestDetailStore.project.get("type")
+                                    window.open(
+                                        `${DB_CONFIG.hostUrl}/SiteAssets/${type} - ${title} - ${id}`
+                                    )
                                 }}
                             />
                         </div>

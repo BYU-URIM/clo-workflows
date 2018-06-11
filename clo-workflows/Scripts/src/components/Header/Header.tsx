@@ -9,7 +9,7 @@ export interface IHeaderProps {
     toggleClientMode?(): void
 }
 
-const Header = (props: IHeaderProps) => {
+export const Header = (props: IHeaderProps) => {
     const { currentUser } = props
     return (
         <div className={"header-wrapper-styles"}>
@@ -30,4 +30,3 @@ const Header = (props: IHeaderProps) => {
         </div>
     )
 }
-export default Header

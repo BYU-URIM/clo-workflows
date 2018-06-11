@@ -1,10 +1,10 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { Dropdown, Checkbox, DefaultButton, PrimaryButton } from "office-ui-fabric-react"
+import { Dropdown, Checkbox, DefaultButton, PrimaryButton, SearchBox, PivotItem, PivotLinkFormat, PivotLinkSize, Pivot } from "office-ui-fabric-react"
 // tslint:disable-next-line:no-submodule-imports
 import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
 import { ClientStore } from "../../store"
-import { WorkForm } from "../"
+import { WorkForm, SearchList } from "../"
 import "./styles.scss"
 
 export interface IFormPanelProps {
@@ -21,39 +21,37 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
             isBlocking={true}
         >
             <div className="processFormModal-styles">
-                <h2>New Process Form</h2>
-                <Checkbox
-                    label={"add a new work"}
-                    checked={props.clientStore.view.work.isNew}
-                    onChange={(m, v) => {
-                        props.clientStore.newProcess.set("projectId", props.clientStore.view.project.id)
-                        props.clientStore.view.modal = "process"
-                        props.clientStore.view.work.isNew = v
-                        props.clientStore.view.work.type = ""
-                        props.clientStore.view.work.id = ""
-                    }}
+                <h2>Add a Work</h2>
+                <Dropdown
+                    selectedKey={props.clientStore.view.work.type || undefined}
+                    options={props.clientStore.typesAsOptions.WORKS}
+                    className={"workForm-dropDown-styles"}
+                    placeHolder={props.clientStore.view.work.type || "select a Work type"}
+                    onChanged={e => (props.clientStore.view.work.type = e.text)}
                 />
-                {props.clientStore.view.work.isNew ? (
-                    <WorkForm clientStore={props.clientStore} />
-                ) : (
-                    <Dropdown
-                        label="Select the Work:"
-                        selectedKey={props.clientStore.view.work.type ? props.clientStore.view.work.type : undefined}
-                        options={props.clientStore.data.works.map((field, index) => {
-                            return {
-                                text: field.Title,
-                                value: field.Title,
-                                key: field.Id,
-                            }
-                        })}
-                        className="processFormModal-dropdown-styles"
-                        placeHolder={props.clientStore.view.work.type ? props.clientStore.view.work.type : "select a Work"}
-                        onChanged={e => {
-                            props.clientStore.view.work.id = e.key.toString()
-                        }}
-                        disabled={props.clientStore.view.asyncPendingLockout}
-                    />
-                )}
+                <Pivot
+                    linkFormat={PivotLinkFormat.tabs}
+                    linkSize={PivotLinkSize.normal}
+                    onLinkClick={e => {
+                        props.clientStore.view.work.isNew = e.props.itemKey === "new"
+                    }}
+                >
+                    <PivotItem linkText="Existing Work" itemKey="existing">
+                        <SearchList
+                            items={props.clientStore.searchedWorkBriefs}
+                            onSelectItem={e => {
+                                props.clientStore.view.work.id = e.id.toString()
+                            }}
+                            typeSelected={props.clientStore.view.work.type ? true : false}
+                            search={props.clientStore.search}
+                            selectedItem={props.clientStore.view.work.id}
+                            emptyMessage={"No Results"}
+                        />
+                    </PivotItem>
+                    <PivotItem linkText="New Work" itemKey="new">
+                        <WorkForm clientStore={props.clientStore} />
+                    </PivotItem>
+                </Pivot>
 
                 <div className="process-buttonbar-styles">
                     <PrimaryButton
@@ -69,10 +67,8 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     <DefaultButton
                         text="Close"
                         description="close without submitting"
-                        onClick={() => {
-                            props.clientStore.clearState()
-                        }}
-                        disabled={props.clientStore.view.asyncPendingLockout}
+                        onClick={props.clientStore.clearState}
+                        disabled={props.clientStore.asyncPendingLockout}
                     />
                 </div>
             </div>{" "}
