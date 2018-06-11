@@ -11,7 +11,7 @@
     "build:sharepointProxy": "webpack-cli --env.NODE_ENV=sharepointProxy",
     "build:production": "webpack-cli --env.NODE_ENV=sharepoint --mode production",
     "lint": "ts-node ./scripts/lint.ts",
-    "test": "rimraf test_build/** && tsc --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
+    "test": "rimraf test_build/** && tsc -p ./tsconfig.test.json --outDir test_build && cpx  \"./res/**/*.json\" \"./test_build/res\" && ava test_build/test --verbose",
     "sp:deleteAll": "ts-node ./scripts/config.dev.ts && ts-node ./sp_config/migrations/tasks/DeleteAll",
     "sp:createAll": "ts-node ./scripts/config.dev.ts && ts-node ./sp_config/migrations/tasks/CreateAll &&  ts-node ./sp_config/migrations/tasks/CreateGroups",
     "sp:deleteAllAndCreateAll": "ts-node ./scripts/config.dev.ts && ts-node ./sp_config/migrations/tasks/DeleteAll && ts-node ./sp_config/migrations/tasks/CreateAll",

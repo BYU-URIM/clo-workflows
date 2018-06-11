@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "declaration": false,
+      "noImplicitAny": false,
+      "removeComments": true,
+      "experimentalDecorators": true,
+      "noLib": false,
+      "jsx": "react",
+      "outDir": "dist",
+      "lib": ["dom", "es2017"],
+      "types": ["node"],
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "strictNullChecks": false
+    },
+    "exclude": [
+      "node_modules",
+      "**/node_modules/*",
+      "static",
+      "dist"
+    ],
+    "include": [
+        "src/**/*",
+        "test/**/*",
+        "res/**/*",
+        "sp_config/**/*",
+        "scripts/**/*"
+      ]
+}
