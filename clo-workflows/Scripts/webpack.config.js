@@ -4,12 +4,23 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
 
 module.exports = function(env) {
+    console.log(`
+
+    ${env.NODE_ENV === "sharepointProxy"}
+
+    `)
+
     return {
         entry: "./src/main.tsx",
         output: {
             filename: "bundle.js",
             path: path.join(__dirname, "dist"),
         },
+        ...(env.NODE_ENV === "sharepointProxy"
+            ? {
+                  devtool: "source-map",
+              }
+            : {}),
         module: {
             rules: [
                 {
