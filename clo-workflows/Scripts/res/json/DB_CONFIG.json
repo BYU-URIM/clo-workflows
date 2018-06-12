@@ -83,7 +83,8 @@
                 "completeSubName",
                 "completeSubDate",
                 "canceledSubName",
-                "canceledSubDate"
+                "canceledSubDate",
+                "literaryPostingMethod"
             ]
         },
         "projects": {
@@ -164,7 +165,8 @@
                 "targetedDemographic",
                 "reasonForShowing",
                 "contactName",
-                "contactEmail"
+                "contactEmail",
+                "literaryPostingMethod"
             ]
         },
         "works": {

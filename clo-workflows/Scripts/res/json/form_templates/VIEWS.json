@@ -51,7 +51,9 @@
             "Publisher",
             "Year",
             "ISSN/ISBN",
-            "Volume/Edition"
+            "Volume/Edition",
+            "Page Range",
+            "Total Pages"
         ],
         "privilegedFormControls": [
             "Owner NetID"
