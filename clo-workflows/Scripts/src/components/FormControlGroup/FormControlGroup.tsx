@@ -2,7 +2,7 @@ import * as React from "react"
 import { observer } from "mobx-react"
 import { FormControl, FormEntryType } from "../../model"
 import { DescriptiveDropdown, DescriptiveCheckbox } from "../"
-import { TextField, IDropdownOption } from "office-ui-fabric-react/lib/"
+import { TextField, IDropdownOption, DatePicker, MaskedTextField } from "office-ui-fabric-react/lib/"
 import { ObservableMap } from "mobx"
 import "./styles.scss"
 interface IFormControlGroupProps {
@@ -43,7 +43,7 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
             <div className="formControlGroup-styles" style={props.width && { width: props.width }}>
                 {props.formControls &&
                     props.formControls.map((formControl, index) => {
-                        if (formControl.type === "text" || formControl.type === "datetime" || formControl.type === "number") {
+                        if (formControl.type === "text" || formControl.type === "number") {
                             return (
                                 <div className="formControlGroup-formControl-styles" key={index}>
                                     <TextField
@@ -58,6 +58,37 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                                         }
                                         onBlur={() => formControl.touch()}
                                         errorMessage={props.validation[formControl.dataRef]}
+                                    />
+                                </div>
+                            )
+                        } else if (formControl.type === "datetime") {
+                            return (
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <DatePicker
+                                        value={props.data.has(formControl.dataRef) && new Date(props.data.get(formControl.dataRef))}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        highlightSelectedMonth={true}
+                                        onSelectDate={newVal => props.updateFormField(formControl.dataRef, newVal.toLocaleDateString())}
+                                    />
+                                </div>
+                            )
+                        } else if (formControl.type === "maskedtext") {
+                            return (
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <MaskedTextField
+                                        value={(props.data.get(formControl.dataRef) as string) || ""}
+                                        onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        className={formControl.readonly ? "formControlGroup-disabledInputBackground" : ""}
+                                        description={
+                                            formControl.description ||
+                                            (props.getFormControlDescription && props.getFormControlDescription(formControl))
+                                        }
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
+                                        mask={formControl.mask}
                                     />
                                 </div>
                             )
@@ -104,6 +135,21 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
                                         disabled={formControl.readonly}
                                         description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
                                         onBlur={() => formControl.touch()}
+                                    />
+                                </div>
+                            )
+                        } else if (formControl.type === "semesterpicker") {
+                            return (
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <DescriptiveDropdown
+                                        options={formControl.choices.map(choice => ({ key: choice, text: choice }))}
+                                        selectedKey={props.data.get(formControl.dataRef) as string}
+                                        onChanged={(option: IDropdownOption) => props.updateFormField(formControl.dataRef, option.text)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        description={props.getFormControlDescription && props.getFormControlDescription(formControl)}
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
                                     />
                                 </div>
                             )

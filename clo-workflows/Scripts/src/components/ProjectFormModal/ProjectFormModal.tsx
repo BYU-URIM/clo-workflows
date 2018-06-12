@@ -52,14 +52,14 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
                 <div className="project-buttonbar-styles">
                     <DefaultButton
                         text="Close"
-                        description="close without submitting"
+                        secondaryText="close without submitting"
                         onClick={() => {
                             props.clientStore.clearState()
                         }}
                         disabled={props.clientStore.asyncPendingLockout}
                     />
                     <PrimaryButton
-                        description="Create the new project"
+                        secondaryText="Create the new project"
                         onClick={() => props.clientStore.processClientRequest()}
                         text="Create Project"
                         disabled={!props.clientStore.currentProjectFormIsValid}

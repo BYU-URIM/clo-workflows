@@ -65,7 +65,7 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
 
                 <div className="process-buttonbar-styles">
                     <PrimaryButton
-                        description="Submit Process Request"
+                        secondaryText="Submit Process Request"
                         onClick={props.clientStore.processClientRequest}
                         text="Submit Work Request"
                         disabled={
@@ -76,7 +76,7 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
                     />
                     <DefaultButton
                         text="Close"
-                        description="close without submitting"
+                        secondaryText="close without submitting"
                         onClick={props.clientStore.clearState}
                         disabled={props.clientStore.asyncPendingLockout}
                     />

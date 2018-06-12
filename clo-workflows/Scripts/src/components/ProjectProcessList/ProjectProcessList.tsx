@@ -5,46 +5,27 @@ import { NoteSource } from "../../model"
 import { ClientViewState, ClientStoreData } from "../../store"
 
 import "./styles.scss"
-
-export interface IColumns {
-    key: string
-    name: string
-    fieldName: string
-    minWidth: number
-    maxWidth: number
-    isResizable: boolean
-}
-export interface IProjectGroup extends IGroup {
-    submitterId: string
-    Title?: string
-    projectId: string
-    type: string
-}
-export interface ICustomGroup extends IGroup {
-    projectId: string
-}
-export interface IProjectProcessListProps {
-    asyncPendingLockout: boolean
-    handleSubmit(projectId: string): void
-    view: ClientViewState
-    data: ClientStoreData
-}
-export interface ICustomGroupDividerProps extends IGroupDividerProps {
-    group: ICustomGroup
-}
+import { ICustomGroupDividerProps, IProjectProcessListProps, IColumns } from "."
 
 export const ProjectProcessList = observer((props: IProjectProcessListProps) => {
-    const fields = ["title", "step"]
-    const _columns = fields.map(
-        (f, i): IColumns => ({
-            key: i.toString(),
-            name: f.split(/(?=[A-Z])/).join(" "),
-            fieldName: f,
-            minWidth: 40,
+    const _columns: Array<IColumns> = [{
+            key: "1",
+            name: "title",
+            fieldName: "title",
+            minWidth: 100,
+            maxWidth: 500,
+            isResizable: true
+        },
+        {
+            key: "2",
+            name: "step",
+            fieldName: "step",
+            minWidth: 225,
             maxWidth: 300,
-            isResizable: true,
-        })
-    )
+            isResizable: true
+        }
+    ]
+
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {
         return (
             <div>
@@ -86,7 +67,10 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                     {
                         key: "addNewProject",
                         name: "Add New Project",
-                        icon: "Add",
+                        // icon: "Add",
+                        iconProps: {
+                            iconName: "Add",
+                        },
                         onClick: () => {
                             props.view.modal = "project"
                         },
@@ -99,6 +83,7 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                 items={props.data.clientProcesses}
                 groups={props.data.clientProjects}
                 columns={_columns}
+                compact={true}
                 checkboxVisibility={CheckboxVisibility.hidden}
                 onRenderRow={(_props, defaultRender) => (
                     <div
