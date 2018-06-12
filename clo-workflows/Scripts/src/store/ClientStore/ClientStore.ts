@@ -43,7 +43,7 @@ export class ClientStore implements IViewProvider {
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
     constructor(public root: RootStore, private dataService: IDataService) {
-        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id)
+        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id, {status: "Active"})
         this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.data = new ClientStoreData(this.dataService, this.currentUser)
@@ -64,7 +64,7 @@ export class ClientStore implements IViewProvider {
     /* this replaces the entire current view with a new instance */
     @action
     clearState = () => {
-        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id)
+        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id, { status: "Active"})
         this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.view.resetClientState()

@@ -39,8 +39,8 @@ class StoreUtils {
         }, {})
     }
 
-    getClientObsMap = (userId: string): ObservableMap<string> => {
-        return observable.map([["submitterId", userId]])
+    getClientObsMap = (userId: string, defaultValues?: {}): ObservableMap<string> => {
+        return observable.map([["submitterId", userId]]).merge(defaultValues)
     }
 
     mapRequestElementArrayById = (requestElementArray: CloRequestElement[]): ObservableMap<CloRequestElement> =>

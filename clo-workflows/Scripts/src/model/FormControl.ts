@@ -7,6 +7,7 @@ export interface IFormControl {
     defaultValue?: any
     readonly?: boolean
     description?: string
+    mask?: string
 }
 
 export class FormControl implements IFormControl {
@@ -15,9 +16,13 @@ export class FormControl implements IFormControl {
         Object.assign(this, formControlDefinition)
         this.readonly = false
         this.touched = false
-        this.description = formControlDefinition.description || ""
+        // this.description = formControlDefinition.description || ""
         if (this.type === "checkbox") {
             this.defaultValue = "false"
+        }
+        if (this.type === "semesterpicker") {
+            const date = new Date()
+            this.choices = [...this.getSemesterChoices(date.getFullYear()), ...this.getSemesterChoices(date.getFullYear() + 1)]
         }
         this.required = formControlDefinition.displayName.includes("*")
     }
@@ -31,6 +36,7 @@ export class FormControl implements IFormControl {
     @observable required?: boolean
     @observable touched: boolean
     @observable description?: string
+    @observable mask?: string
 
     @action
     touch() {
@@ -41,6 +47,11 @@ export class FormControl implements IFormControl {
     makeReadOnly() {
         this.readonly = true
     }
+
+    @action
+    getSemesterChoices(year: number) {
+        return ["Winter", "Spring", "Summer", "Fall"].map(sem => `${sem} - ${year}`)
+    }
 }
 
-export type FormControlType = "text" | "choice" | "checkbox" | "textarea" | "datetime" | "number"
+export type FormControlType = "text" | "choice" | "checkbox" | "textarea" | "datetime" | "number" | "semesterpicker" | "maskedtext"
