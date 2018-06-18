@@ -1,9 +1,8 @@
 import { MockUsersDtos, MockProjects, MockProcesses, MockWorks, MockNotes } from "./MockData"
-import { IUser, User, CloRequestElement, INote, NoteSource, NoteScope } from "../../model"
+import { IUser, User, CloRequestElement, INote, NoteSource, NoteScope, getRole } from "../../model"
 import Utils from "../../utils"
-import { IDataService, ListName } from "./IDataService"
 import { ItemAddResult } from "@pnp/sp"
-import { getRole } from "../../model/loader/resourceLoaders"
+import { IDataService, ListName } from "../"
 
 export class MockDataService implements IDataService {
     searchWorksByTitle(searchTerm: string): Promise<CloRequestElement[]> {

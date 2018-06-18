@@ -1,9 +1,5 @@
 import * as ava from "ava"
-import * as ROLES from "../res/json/processing_config/USER_ROLES.json"
-import * as STEPS from "../res/json/processing_config/PROCESS_STEPS.json"
-import * as VIEWS from "../res/json/form_templates/VIEWS.json"
-import * as FORM_CONTROLS from "../res/json/form_templates/FORM_CONTROLS.json"
-import * as DB_CONFIG from "../res/json/DB_CONFIG.json"
+import { DB_CONFIG, FORM_CONTROLS, ROLES, STEPS, VIEWS } from "../res/"
 import { IFormControl, IStep, PROJECT_TYPES, WORK_TYPES } from "../src/model"
 
 /*

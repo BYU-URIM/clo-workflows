@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { autobind } from "core-decorators"
+// import { autobind } from "core-decorators"
 import { DefaultButton, Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
@@ -9,13 +9,13 @@ export interface IHeaderBreadcrumbProps {
     onClickItem: (breadcrumbKey: string) => void
 }
 
-interface IHeaderBreadcrumbState {
+export interface IHeaderBreadcrumbState {
     hoverBreadcrumbKey: string
 }
 
-@autobind
+// @autobind
 @observer
-export default class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IHeaderBreadcrumbState> {
+export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IHeaderBreadcrumbState> {
     constructor(props: IHeaderBreadcrumbProps) {
         super(props)
         this.state = { hoverBreadcrumbKey: NONE_SELECTED }
@@ -24,16 +24,12 @@ export default class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbP
     public render() {
         return (
             <div className="headerBreadcrumb-wrapper-styles">
-                <Breadcrumb
-                    items={this.props.items}
-                    onRenderItem={this.renderBreadcrumbItem}
-                    ariaLabel={"Website breadcrumb"}
-                />
+                <Breadcrumb items={this.props.items} onRenderItem={this.renderBreadcrumbItem} ariaLabel={"Website breadcrumb"} />
             </div>
         )
     }
 
-    private renderBreadcrumbItem(item: IBreadcrumbItem) {
+    private renderBreadcrumbItem = (item: IBreadcrumbItem) => {
         return (
             <div>
                 <DefaultButton
@@ -48,7 +44,7 @@ export default class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbP
         )
     }
 
-    private getBreadcrumbButtonStyle(itemKey: string) {
+    private getBreadcrumbButtonStyle = (itemKey: string) => {
         return itemKey === this.state.hoverBreadcrumbKey ? { backgroundColor: "#F0F0F0" } : {}
     }
 }

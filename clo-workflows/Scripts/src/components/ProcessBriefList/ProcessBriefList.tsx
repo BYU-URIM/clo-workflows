@@ -9,17 +9,17 @@ interface IProcessBriefListProps {
     onSelectProcessBrief: (listItem: IListItem, itemIndex: number) => void
 }
 
-function ProcessBriefList(props: IProcessBriefListProps): JSX.Element {
-    return (
-        <div className="processBriefList-wrapper-styles">
-            <div className="processBriefList-processListTitle-styles">{props.title}</div>
-            {props.processBriefs.length ? (
-                <NonScrollableList items={props.processBriefs} onSelectItem={props.onSelectProcessBrief} />
-            ) : (
-                <div className="processBriefList-text-styles">{props.emptyMessage}</div>
-            )}
-        </div>
-    )
-}
-
-export default observer(ProcessBriefList)
+export const ProcessBriefList = observer(
+    (props: IProcessBriefListProps): JSX.Element => {
+        return (
+            <div className="processBriefList-wrapper-styles">
+                <div className="processBriefList-processListTitle-styles">{props.title}</div>
+                {props.processBriefs ? (
+                    <NonScrollableList items={props.processBriefs} onSelectItem={props.onSelectProcessBrief} />
+                ) : (
+                    <div className="processBriefList-text-styles">{props.emptyMessage}</div>
+                )}
+            </div>
+        )
+    }
+)

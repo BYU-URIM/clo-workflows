@@ -1,7 +1,7 @@
 import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
 import { SessionStore, RootStore } from "../../src/store/"
-import { MockDataService } from "../../src/service"
+import { MockDataService } from "../../src/service/dataService/MockDataService"
 import { IUser } from "../../src/model"
 import { getRole } from "../../src/model/loader/resourceLoaders"
 

@@ -1,13 +1,10 @@
 import chalk from "chalk"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
-import * as db from "../../res/json/DB_CONFIG.json"
+import * as DB_CONFIG from "../../res/json/DB_CONFIG.json"
 import { IUtil, IData, IDBConfig, IGroup } from "./IUtil"
-import { Util } from "@pnp/common"
 import { CloRequestElement } from "../../src/model/"
 import { SPRest, sp } from "@pnp/sp"
-
-const DB_CONFIG = db as any
-
+const db = DB_CONFIG as any
 export class Utils implements IUtil {
     pnpNodeSettings: IPnpNodeSettings
     config: any
@@ -26,12 +23,11 @@ export class Utils implements IUtil {
             },
         }),
             (this.data = {
-                proposedLists: Object.keys(this.DB_CONFIG.tables),
+                proposedLists: Object.keys(db.tables),
                 currentListTitles: Array<string>(),
                 missingLists: Array<string>(),
             })
     }
-    DB_CONFIG: IDBConfig = DB_CONFIG
     data: IData
     sp: SPRest = sp
     /* -------------------------------------------------- *
@@ -44,7 +40,7 @@ export class Utils implements IUtil {
     async getCurrentListTitles() {
         const res = await sp.web.lists.select("Title").get()
         const titles = await res.map(listinfo => listinfo.Title)
-        return titles.filter(list => !this.DB_CONFIG.defaultTables.includes(list))
+        return titles.filter(list => !db.defaultTables.includes(list))
     }
     async getMissingListTitles() {
         const res = await this.getCurrentListTitles()
@@ -76,12 +72,12 @@ export class Utils implements IUtil {
         }
     }
     async ensureSiteAssetsLibrary() {
-        return await sp.web.lists.ensureSiteAssetsLibrary().catch(console.log)
+        return sp.web.lists.ensureSiteAssetsLibrary().catch(console.log)
     }
     async ensureList(title: string) {
         await sp.web.lists.ensure(title, `${title} description`, 100, true)
-        for (const field of this.DB_CONFIG.tables[title].fields) {
-            !this.DB_CONFIG.defaultFields.includes(field)
+        for (const field of db.tables[title].fields) {
+            !db.defaultFields.includes(field)
                 ? (await sp.web.lists.getByTitle(title).fields.addText(field), console.log(chalk`{green created field}: {blue ${field}} `))
                 : console.log(chalk`{green field already exists}: {blue ${field}} `)
         }
@@ -92,9 +88,9 @@ export class Utils implements IUtil {
     }
 
     validateDBConfig() {
-        const tables = this.DB_CONFIG.tables
+        const tables = db.tables
         Object.values(tables).forEach(element => {
-            console.log(utils.validateStringArray(element.fields))
+            // console.log(utils.validateStringArray(element.fields))
         })
     }
     fieldIsValid(field: string) {
@@ -147,7 +143,7 @@ ERROR: INVALID  FIELD
     }
     async getMissingGroups(): Promise<Array<IGroup>> {
         const allGroupTitles = await this.getAllGroupTitles()
-        return this.DB_CONFIG.groups.filter(group => !allGroupTitles.includes(group.name))
+        return db.groups.filter(group => !allGroupTitles.includes(group.name))
     }
     async createGroup(groupName: string) {
         await sp.web.siteGroups.add({

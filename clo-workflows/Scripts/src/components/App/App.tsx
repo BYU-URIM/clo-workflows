@@ -1,50 +1,34 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { RootStore } from "../../store/"
 import { Header, Employee, LoadingPage, Client } from "../"
 import { Fabric } from "office-ui-fabric-react/lib/"
-import "./styles.scss"
 import { initializeIcons } from "@uifabric/icons"
+import "./styles.scss"
+
 // Register icons and pull the fonts from the default SharePoint cdn.
 initializeIcons()
 @inject("rootStore")
 @observer
-export default class App extends React.Component<any, any> {
-    componentWillMount() {
-        this.rootStore = this.props.rootStore
-    }
-
-    private rootStore: RootStore
-
+export class App extends React.Component<any, any> {
     render() {
+        const { rootStore } = this.props
         return (
             <Fabric>
-                {this.rootStore.initialized ? (
-                    /* data is initialized - render out app content (client / employee dashboard) */
-                    <div>
+                {rootStore.initialized ? (
+                    <>
                         <Header
-                            currentUser={this.rootStore.sessionStore.currentUser}
-                            clientMode={
-                                this.rootStore.sessionStore.isEmployee
-                                    ? this.rootStore.employeeStore.clientMode
-                                    : undefined
-                            }
-                            toggleClientMode={
-                                this.rootStore.sessionStore.isEmployee
-                                    ? this.rootStore.employeeStore.toggleClientMode
-                                    : undefined
-                            }
+                            currentUser={rootStore.sessionStore.currentUser}
+                            clientMode={rootStore.sessionStore.isEmployee ? rootStore.employeeStore.clientMode : undefined}
+                            toggleClientMode={rootStore.sessionStore.isEmployee ? rootStore.employeeStore.toggleClientMode : undefined}
                         />
-                        <div>
-                            <div className="app-content-styles">
-                                {!this.rootStore.sessionStore.isEmployee || this.rootStore.employeeStore.clientMode ? (
-                                    <Client currentUser={this.rootStore.sessionStore.currentUser} />
-                                ) : (
-                                    <Employee currentUser={this.rootStore.sessionStore.currentUser} />
-                                )}
-                            </div>
+                        <div className="app-content-styles">
+                            {!rootStore.sessionStore.isEmployee || rootStore.employeeStore.clientMode ? (
+                                <Client currentUser={rootStore.sessionStore.currentUser} />
+                            ) : (
+                                <Employee currentUser={rootStore.sessionStore.currentUser} />
+                            )}
                         </div>
-                    </div>
+                    </>
                 ) : (
                     <LoadingPage />
                 )}

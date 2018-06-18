@@ -1,11 +1,13 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { FormControl, FormEntryType } from "../../model"
 import { DescriptiveDropdown, DescriptiveCheckbox } from "../"
 import { TextField, IDropdownOption, DatePicker, MaskedTextField } from "office-ui-fabric-react/lib/"
 import { ObservableMap } from "mobx"
+import { FormEntryType, FormControl } from "../../model"
+
 import "./styles.scss"
-interface IFormControlGroupProps {
+
+export interface IFormControlGroupProps {
     data: ObservableMap<FormEntryType> // map of fieldName to fieldValue
     formControls: Array<FormControl>
     validation: {}
@@ -16,7 +18,8 @@ interface IFormControlGroupProps {
 }
 
 // renders an array of form controls which pull their information from the model object in props
-class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
+@observer
+export class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
     public constructor(props: IFormControlGroupProps) {
         super(props)
         this.applyDefaultValues()
@@ -161,5 +164,3 @@ class FormControlGroup extends React.Component<IFormControlGroupProps, {}> {
         )
     }
 }
-
-export default observer(FormControlGroup)

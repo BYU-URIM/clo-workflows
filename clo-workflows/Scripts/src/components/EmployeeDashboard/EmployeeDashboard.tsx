@@ -7,7 +7,7 @@ import "./styles.scss"
 
 @inject("rootStore")
 @observer
-export default class EmployeeDashboard extends React.Component<any, any> {
+export class EmployeeDashboard extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }
@@ -23,10 +23,7 @@ export default class EmployeeDashboard extends React.Component<any, any> {
                     <div className="searchProcess-styles">
                         <div className="searchProcess-title-styles">Search Past Processes</div>
                         <div className="searchProcess-searchbox-styles">
-                            <SearchBox
-                                placeholder="search by work or project"
-                                onSearch={employeeStore.searchProcesses}
-                            />
+                            <SearchBox placeholder="search by work or project" onSearch={employeeStore.searchProcesses} />
                         </div>
                     </div>
                 </div>

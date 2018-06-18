@@ -9,3 +9,4 @@ export { ClientStore } from "./ClientStore/ClientStore"
 export { ClientStoreData } from "./ClientStore/ClientStoreData"
 export { ClientViewState } from "./ClientStore/ClientViewState"
 export { EmployeeStore, EmployeeViewKey }
+export * from "./ViewProvider"

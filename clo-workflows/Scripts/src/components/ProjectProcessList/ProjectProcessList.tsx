@@ -2,19 +2,46 @@ import { observer } from "mobx-react"
 import { CommandBar, DetailsList, IGroup, CheckboxVisibility, IGroupDividerProps, CommandButton } from "office-ui-fabric-react/lib/"
 import * as React from "react"
 import { NoteSource } from "../../model"
-import { ClientViewState, ClientStoreData } from "../../store"
 
 import "./styles.scss"
-import { ICustomGroupDividerProps, IProjectProcessListProps, IColumns } from "."
+import { ClientViewState, ClientStoreData } from "../../store"
+
+export interface IColumns {
+    key: string
+    name: string
+    fieldName: string
+    minWidth: number
+    maxWidth: number
+    isResizable: boolean
+}
+export interface IProjectGroup extends IGroup {
+    submitterId: string
+    Title?: string
+    projectId: string
+    type: string
+}
+export interface ICustomGroup extends IGroup {
+    projectId: string
+}
+export interface IProjectProcessListProps {
+    asyncPendingLockout: boolean
+    handleSubmit(projectId: string): void
+    view: ClientViewState
+    data: ClientStoreData
+}
+export interface ICustomGroupDividerProps extends IGroupDividerProps {
+    group: ICustomGroup
+}
 
 export const ProjectProcessList = observer((props: IProjectProcessListProps) => {
-    const _columns: Array<IColumns> = [{
+    const _columns: Array<IColumns> = [
+        {
             key: "1",
             name: "title",
             fieldName: "title",
             minWidth: 100,
             maxWidth: 500,
-            isResizable: true
+            isResizable: true,
         },
         {
             key: "2",
@@ -22,8 +49,8 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
             fieldName: "step",
             minWidth: 225,
             maxWidth: 300,
-            isResizable: true
-        }
+            isResizable: true,
+        },
     ]
 
     const _onRenderHeader = (renderHeaderProps: ICustomGroupDividerProps): JSX.Element => {

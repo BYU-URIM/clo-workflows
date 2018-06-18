@@ -1,6 +1,6 @@
 import * as ava from "ava"
 import { CloRequestElementParser } from "../../src/service/dataService/SpDataService"
-import * as DB_CONFIG from "../../res/json/DB_CONFIG.json"
+import * as DB_CONFIG from "../../../res/json/DB_CONFIG.json"
 import { mock, verify, instance, anything } from "ts-mockito"
 
 ava.test(

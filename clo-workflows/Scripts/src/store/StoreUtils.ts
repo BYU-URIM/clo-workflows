@@ -1,4 +1,4 @@
-import { FormControl, FormEntryType, CloRequestElement, IdentifiableObject } from "../model"
+import { FormControl, FormEntryType, CloRequestElement, IdentifiableObject } from "../model/"
 import { observable, action, ObservableMap } from "mobx"
 
 class StoreUtils {
@@ -49,16 +49,16 @@ class StoreUtils {
             return requestElementMap
         }, new ObservableMap<CloRequestElement>())
 
-    @action
-    replaceElementInListById(newItem: IdentifiableObject, list: IdentifiableObject[]): boolean {
-        const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
+    // @action
+    // replaceElementInListById(newItem: IdentifiableObject, list: IdentifiableObject[]): boolean {
+    //     const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
 
-        if (staleItemIndex !== -1) {
-            list[staleItemIndex] = newItem
-            return true
-        }
-        return false
-    }
+    //     if (staleItemIndex !== -1) {
+    //         list[staleItemIndex] = newItem
+    //         return true
+    //     }
+    //     return false
+    // }
 
     @action
     removeELementInListById = (list: Array<IdentifiableObject>) => {

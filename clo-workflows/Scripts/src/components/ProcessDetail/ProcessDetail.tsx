@@ -2,16 +2,15 @@ import * as React from "react"
 import { observer, inject } from "mobx-react"
 import { EmployeeStore, PivotState } from "../../store/"
 import { FormControlGroup, WorkDetail, ProjectDetail, DescriptiveDropdown } from "../"
-import { autobind } from "core-decorators"
-import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize, IDropdownOption } from "office-ui-fabric-react/lib/"
+// import { autobind } from "core-decorators"
+import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize, IDropdownOption, SearchBox } from "office-ui-fabric-react/lib/"
+import { StepName, getStepNames } from "../../model/"
 import "./styles.scss"
-import { getStepNames } from "../../model/loader/resourceLoaders"
-import { StepName } from "../../model"
 
 @inject("rootStore")
-@autobind
+// @autobind
 @observer
-export default class ProcessDetail extends React.Component<any, any> {
+export class ProcessDetail extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }
@@ -22,6 +21,7 @@ export default class ProcessDetail extends React.Component<any, any> {
         const requestDetailStore = this.employeeStore.requestDetailStore
         return (
             <div className="processDetail-wrapper-styles">
+
                 <div className="processDetail-processFor-styles">
                     {/* Process Form */}
                     <div className="processDetail-processTitle-styles">Edit Process</div>

@@ -1,6 +1,6 @@
 import { observable, action, computed } from "mobx"
-import { RootStore } from ".."
-import { IUser } from "../../model"
+import { RootStore } from "../"
+import { IUser } from "../../model/"
 import { IDataService } from "../../service/"
 
 export class SessionStore {

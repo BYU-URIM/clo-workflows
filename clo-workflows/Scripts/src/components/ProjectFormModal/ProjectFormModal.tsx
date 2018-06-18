@@ -1,19 +1,18 @@
+import * as React from "react"
 import { observer } from "mobx-react"
 import { Dropdown, DefaultButton, PrimaryButton } from "office-ui-fabric-react/lib/"
-// tslint:disable-next-line:no-submodule-imports
 import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
-
-import * as React from "react"
-
-import { ClientStore } from "../../store/ClientStore/ClientStore"
 import { FormControlGroup } from "../"
 
 import "./styles.scss"
-export interface IFormPanelProps {
+
+import { ClientStore } from "../../store"
+
+export interface IProjectFormModalProps {
     clientStore: ClientStore
 }
 
-const ProjectFormModal = observer((props: IFormPanelProps) => {
+export const ProjectFormModal = observer((props: IProjectFormModalProps) => {
     return (
         <Modal
             isOpen={true}
@@ -69,4 +68,3 @@ const ProjectFormModal = observer((props: IFormPanelProps) => {
         </Modal>
     )
 })
-export default observer(ProjectFormModal)

@@ -1,10 +1,7 @@
-import { IDataService } from "../../service/dataService/IDataService"
+import { IDataService } from "../../service/"
 import { action, observable, computed, runInAction, ObservableMap } from "mobx"
-import { IUser, StepName, CloRequestElement } from "../../model"
-import { NoteSource, NoteScope } from "../../model/"
+import { IUser, StepName, CloRequestElement, INote, getStep, getStepNames } from "../../model"
 import { IProjectGroup } from "../../components/"
-import { getStep, getStepNames } from "../../model/loader/resourceLoaders"
-import { INote } from "../../model/Note"
 
 export class ClientStoreData {
     dataService: IDataService

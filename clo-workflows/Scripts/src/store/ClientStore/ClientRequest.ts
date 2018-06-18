@@ -1,4 +1,4 @@
-import { observable, action, computed } from "mobx"
+import { observable, computed } from "mobx"
 export class ClientRequest {
     @observable private _id: string = undefined
     @observable private _type: string = undefined

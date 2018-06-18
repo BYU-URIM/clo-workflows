@@ -1,21 +1,18 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { PrimaryButton, IconButton, IconFontSizes, IconType } from "office-ui-fabric-react/lib/"
-import { EmployeeStore, SessionStore } from "../../store"
+import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/"
+import { EmployeeStore } from "../../store"
 import { NotesBox, FormControlGroup } from "../"
-import * as db from "../../../res/json/DB_CONFIG.json"
+import { DB_CONFIG } from "../../../res"
 import "./styles.scss"
-const DB_CONFIG = db as any
 @inject("rootStore")
 @observer
-export default class ProjectDetail extends React.Component<any, any> {
+export class ProjectDetail extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
-        this.sessionStore = this.props.rootStore.sessionStore
     }
 
     private employeeStore: EmployeeStore
-    private sessionStore: SessionStore
 
     public render() {
         const requestDetailStore = this.employeeStore.requestDetailStore
@@ -60,9 +57,7 @@ export default class ProjectDetail extends React.Component<any, any> {
                                     const id = requestDetailStore.project.get("Id")
                                     const title = requestDetailStore.project.get("Title")
                                     const type = requestDetailStore.project.get("type")
-                                    window.open(
-                                        `${DB_CONFIG.hostUrl}/SiteAssets/${type} - ${title} - ${id}`
-                                    )
+                                    window.open(`${DB_CONFIG.hostUrl}/SiteAssets/${type} - ${title} - ${id}`)
                                 }}
                             />
                         </div>

@@ -1,19 +1,8 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import {
-    Dropdown,
-    Checkbox,
-    DefaultButton,
-    PrimaryButton,
-    SearchBox,
-    PivotItem,
-    PivotLinkFormat,
-    PivotLinkSize,
-    Pivot,
-} from "office-ui-fabric-react/lib/"
-// tslint:disable-next-line:no-submodule-imports
+import { Dropdown, DefaultButton, PrimaryButton, PivotItem, PivotLinkFormat, PivotLinkSize, Pivot } from "office-ui-fabric-react/lib/"
 import { Modal } from "office-ui-fabric-react/lib/components/Modal/Modal"
-import { ClientStore } from "../../store"
+import { ClientStore } from "../../store/"
 import { WorkForm, SearchList } from "../"
 import "./styles.scss"
 
@@ -21,7 +10,7 @@ export interface IFormPanelProps {
     clientStore: ClientStore
 }
 
-const ProcessFormModal = observer((props: IFormPanelProps) => {
+export const ProcessFormModal = observer((props: IFormPanelProps) => {
     return (
         <Modal
             isOpen={true}
@@ -85,4 +74,3 @@ const ProcessFormModal = observer((props: IFormPanelProps) => {
         </Modal>
     )
 })
-export default observer(ProcessFormModal)

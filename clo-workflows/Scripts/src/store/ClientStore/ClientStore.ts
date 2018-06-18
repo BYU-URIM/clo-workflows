@@ -1,5 +1,5 @@
 import { action, ObservableMap, observable, runInAction, computed } from "mobx"
-import { autobind } from "core-decorators"
+// import { autobind } from "core-decorators"
 import {
     FormEntryType,
     CloRequestElement,
@@ -14,17 +14,17 @@ import {
     NoteSource,
     NoteScope,
     getView,
+    getStep,
 } from "../../model"
-import { IDataService, ListName } from "../../service"
+import { IDataService } from "../../service"
 import Utils from "../../utils"
 import { StoreUtils, RootStore, ClientViewState, ClientStoreData, NotesStore } from ".."
 import { IViewProvider, IMessage } from "../ViewProvider"
 import { IListItem } from "../../components"
-import * as resourceLoaders from "../../model/loader/resourceLoaders"
 
 type ClientObsMap = ObservableMap<FormEntryType>
 
-@autobind
+// @autobind
 export class ClientStore implements IViewProvider {
     @observable searchedProjects: ObservableMap<CloRequestElement>
     @observable searchedWorks: ObservableMap<CloRequestElement> = new ObservableMap()
@@ -43,7 +43,7 @@ export class ClientStore implements IViewProvider {
     data: ClientStoreData = new ClientStoreData(this.dataService, this.currentUser)
     view: ClientViewState = new ClientViewState()
     constructor(public root: RootStore, private dataService: IDataService) {
-        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id, {status: "Active"})
+        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id, { status: "Active" })
         this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.data = new ClientStoreData(this.dataService, this.currentUser)
@@ -51,10 +51,7 @@ export class ClientStore implements IViewProvider {
         this.currentUser = this.root.sessionStore.currentUser
     }
 
-    @action
-    async init(): Promise<void> {
-        await this.data.init()
-    }
+    @action init = async (): Promise<void> => this.data.init()
 
     /* ------------------------------------------------------------
      * Mutations to ClientViewState
@@ -64,14 +61,14 @@ export class ClientStore implements IViewProvider {
     /* this replaces the entire current view with a new instance */
     @action
     clearState = () => {
-        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id, { status: "Active"})
+        this.newProject = StoreUtils.getClientObsMap(this.currentUser.Id, { status: "Active" })
         this.newProcess = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.newWork = StoreUtils.getClientObsMap(this.currentUser.Id)
         this.view.resetClientState()
     }
 
     @action
-    postMessage(message: any, displayTime: number = 5000) {
+    postMessage = (message: any, displayTime: number = 5000) => {
         this.message = message
         setTimeout(
             action(() => {
@@ -82,7 +79,7 @@ export class ClientStore implements IViewProvider {
     }
 
     @action
-    setAsyncPendingLockout(val: boolean) {
+    setAsyncPendingLockout = (val: boolean) => {
         this.asyncPendingLockout = val
     }
 
@@ -222,11 +219,10 @@ export class ClientStore implements IViewProvider {
         this.newProject.set("type", this.view.project.type)
         try {
             this.setAsyncPendingLockout(true)
-            const res = await this.dataService.createProject(this.newProject.toJS())
-            this.newProject.set("Id", res.data.Id)
-            runInAction(() => this.data.projects.push(this.newProject.toJS()))
+            await this.dataService.createProject(this.newProject.toJS())
             this.clearState()
             this.postMessage({ messageText: "project successfully created", messageType: "success" })
+            await this.data.fetchClientProjects()
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -245,8 +241,8 @@ export class ClientStore implements IViewProvider {
             this.newWork.set("type", this.view.work.type)
             const res = await this.dataService.createWork(this.newWork.toJS())
             this.view.work.id = res.data.Id
-            this.newWork.set("Id", res.data.Id)
-            runInAction(() => this.data.works.push(this.newWork.toJS()))
+            await this.data.works.push(this.newWork)
+            // runInAction(() => this.data.works.push(this.newWork.toJS()))
         } catch (error) {
             console.error(error)
             this.postMessage({
@@ -262,18 +258,19 @@ export class ClientStore implements IViewProvider {
     private submitProcess = async (): Promise<void> => {
         try {
             this.setAsyncPendingLockout(true)
-            const previousStep: IStep = resourceLoaders.getStep("Intake")
+            const previousStep: IStep = getStep("Intake")
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
-            this.view.work.isNew
-                ? this.newProcess.set("Title", this.newWork.get("Title"))
-                : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
+            if (this.view.work.isNew) this.newProcess.set("Title", this.newWork.get("Title"))
+            // : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
             this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
-            const res = await this.dataService.createProcess(this.newProcess.toJS())
-            this.newProcess.set("Id", res.data.Id)
-            runInAction(() => this.data.processes.push(this.newProcess.toJS()))
+            // const res =
+            await this.dataService.createProcess(this.newProcess.toJS())
+            await this.data.fetchClientProcesses()
+            // this.newProcess.set("Id", res.data.Id)
+            // runInAction(() => this.data.processes.push(this.newProcess.toJS()))
             this.clearState()
             this.postMessage({
                 messageText: "the new Process request was submitted successfully",
@@ -290,7 +287,7 @@ export class ClientStore implements IViewProvider {
         }
     }
     @action
-    async search(searchTerm: string) {
+    search = async (searchTerm: string) => {
         const works = await this.dataService.searchWorksByTitle(searchTerm, this.view.work.type)
         works.filter(work => !this.data.currentProjectWorkIds(this.view.project.id).includes(work.Id))
 
@@ -306,7 +303,7 @@ export class ClientStore implements IViewProvider {
      * NOTES - SHARED BY PROJECTS AND WORKS
      * ------------------------------------------------------------ */
     @action
-    async submitNewNote(noteToCreate: INote, noteSource: NoteSource): Promise<boolean> {
+    submitNewNote = async (noteToCreate: INote, noteSource: NoteSource): Promise<boolean> => {
         let submissionStatus = true
         try {
             this.setAsyncPendingLockout(true)
@@ -326,9 +323,7 @@ export class ClientStore implements IViewProvider {
             const addResult = await this.dataService.createNote(noteToCreate)
             noteToCreate.Id = addResult.data.Id // assign the assigned SP ID to the newly created note
 
-            // if submission is successful, add the new note to the corresponding list
-            if (noteSource === NoteSource.WORK) runInAction(() => this.data.process_notes.unshift(noteToCreate))
-            if (noteSource === NoteSource.PROJECT) runInAction(() => this.data.process_notes.unshift(noteToCreate))
+            await this.data.fetchNotes()
             this.postMessage({ messageText: "note successfully submitted", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -353,9 +348,7 @@ export class ClientStore implements IViewProvider {
             await this.dataService.updateNote(noteToUpdate)
 
             // if submission is successful, add the new note to the corresponding list
-            if (noteSource === NoteSource.WORK) this.replaceElementInListById(noteToUpdate, this.data.process_notes)
-            if (noteSource === NoteSource.PROJECT) this.replaceElementInListById(noteToUpdate, this.data.process_notes)
-
+            await this.data.fetchNotes()
             this.postMessage({ messageText: "note successfully updated", messageType: "success" })
         } catch (error) {
             console.error(error)
@@ -386,16 +379,6 @@ export class ClientStore implements IViewProvider {
             this.asyncPendingLockout = false
         }
         return submissionStatus
-    }
-    @action
-    private replaceElementInListById = (newItem: CloRequestElement | INote, list: Array<CloRequestElement | INote>): boolean => {
-        const staleItemIndex = list.findIndex(listItem => listItem["Id"] === newItem["Id"])
-
-        if (staleItemIndex !== -1) {
-            list[staleItemIndex] = newItem
-            return true
-        }
-        return false
     }
 
     @action
