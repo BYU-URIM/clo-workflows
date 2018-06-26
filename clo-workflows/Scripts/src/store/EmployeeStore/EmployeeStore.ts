@@ -1,39 +1,23 @@
-import { RootStore } from "../"
 import { action, ObservableMap, observable, runInAction, computed, reaction } from "mobx"
-import { CloRequestElement } from "../../model/CloRequestElement"
-import { autobind } from "core-decorators"
-import { IStep, StepName } from "../../model/Step"
-import { IListItem } from "../../components/NonScrollableList/NonScrollableList"
+import { CloRequestElement, IStep, StepName, getStep, getStepById } from "../../model/"
+// import { autobind } from "core-decorators"
+import { IListItem } from "../../components/"
 import { IBreadcrumbItem } from "office-ui-fabric-react/lib/"
-import { IDataService, ListName } from "../../service/dataService/IDataService"
-import { getStep, getStepById } from "../../model/loader/resourceLoaders"
-import { StoreUtils } from "./.."
-import { RequestDetailStore } from "./RequestDetailStore"
-import { IMessage, IViewProvider } from "../ViewProvider"
+import { IDataService, ListName } from "../../service/"
+import { StoreUtils, IMessage, IViewProvider, RootStore, RequestDetailStore } from "../"
+import chalk from "chalk"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
-@autobind
+// @autobind
 export class EmployeeStore implements IViewProvider {
     constructor(public readonly root: RootStore, private readonly dataService: IDataService) {}
 
     @action
-    async init(): Promise<void> {
+    init = async (): Promise<void> => {
         // fetch request elements
-        const currentUser = this.root.sessionStore.currentUser
-        const activeProcessList = await this.dataService.fetchEmployeeActiveProcesses(currentUser)
-        runInAction(() => (this.activeProcesses = StoreUtils.mapRequestElementArrayById(activeProcessList)))
-
-        const activeProjectList = await this.dataService.fetchRequestElementsById(
-            activeProcessList.map(process => Number(process.projectId)),
-            ListName.PROJECTS
-        )
-        runInAction(() => (this.activeProjects = StoreUtils.mapRequestElementArrayById(activeProjectList)))
-
-        const activeWorkList = await this.dataService.fetchRequestElementsById(
-            activeProcessList.map(process => Number(process.workId)),
-            ListName.WORKS
-        )
-        runInAction(() => (this.activeWorks = StoreUtils.mapRequestElementArrayById(activeWorkList)))
+        await this.fetchLatestProcesses()
+        await this.fetchLatestWorks()
+        await this.fetchLatestProjects()
 
         this.setAsyncPendingLockout(false)
 
@@ -44,34 +28,44 @@ export class EmployeeStore implements IViewProvider {
          * by reactively disposing of the request detail store,
          * the store creation / disposal logic is decoupled from view logic
          */
-        reaction(
-            () => this.canDisposeRequestDetailStore,
-            () => this.canDisposeRequestDetailStore && this.disposeRequestDetailStore()
-        )
+        reaction(() => this.canDisposeRequestDetailStore, () => this.canDisposeRequestDetailStore && this.disposeRequestDetailStore())
 
         /**
          * if the user has focused on a step, automatically clear out searched requests
          * so that step-specific requests can be displayed
          */
-        reaction(
-            () => this.isFocusStep,
-            () => this.isFocusStep && this.unfocusSearch()
-        )
+        reaction(() => this.isFocusStep, () => this.isFocusStep && this.unfocusSearch())
 
         /* if the user has executed a search for past processes,
         automatically clear out step requests so that searched requests can be displayed */
-        reaction(
-            () => this.isFocusSearch,
-            () => this.isFocusSearch && this.unfocusStep()
+        reaction(() => this.isFocusSearch, () => this.isFocusSearch && this.unfocusStep())
+    }
+    @action
+    fetchLatestProcesses = async () => {
+        const activeProcessList = await this.dataService.fetchEmployeeActiveProcesses(this.root.sessionStore.currentUser)
+        runInAction(() => (this.activeProcesses = StoreUtils.mapRequestElementArrayById(activeProcessList)))
+    }
+    @action
+    fetchLatestWorks = async () => {
+        const activeWorkList = await this.dataService.fetchRequestElementsById(
+            this.activeProcesses.values().map(process => Number(process.workId)),
+            ListName.WORKS
         )
+        runInAction(() => (this.activeWorks = StoreUtils.mapRequestElementArrayById(activeWorkList)))
+    }
+
+    @action
+    fetchLatestProjects = async () => {
+        const activeProjectList = await this.dataService.fetchRequestElementsById(
+            this.activeProcesses.values().map(process => Number(process.projectId)),
+            ListName.PROJECTS
+        )
+        runInAction(() => (this.activeProjects = StoreUtils.mapRequestElementArrayById(activeProjectList)))
     }
 
     @observable requestDetailStore: RequestDetailStore
     // runs automatically when current view is set to dashboard - see reactions in init()
-    @action
-    private disposeRequestDetailStore() {
-        this.requestDetailStore = null
-    }
+    @action disposeRequestDetailStore = () => (this.requestDetailStore = null)
     @computed
     get canDisposeRequestDetailStore(): boolean {
         return !this.viewHierarchy.includes(EmployeeViewKey.ProcessDetail)
@@ -91,7 +85,7 @@ export class EmployeeStore implements IViewProvider {
     // STEPS
     @observable focusStep: IStep
     @action
-    selectFocusStep(step: IStep): void {
+    selectFocusStep = (step: IStep): void => {
         this.focusStep = step
     }
     @computed
@@ -99,7 +93,7 @@ export class EmployeeStore implements IViewProvider {
         return !!this.focusStep
     }
     @action
-    private unfocusStep(): void {
+    private unfocusStep = (): void => {
         this.focusStep = null
     }
 
@@ -110,9 +104,8 @@ export class EmployeeStore implements IViewProvider {
 
     // TODO project lookup should be more efficient, store as map ?
     @action
-    async selectActiveDetailProcess(itemBrief: IListItem): Promise<void> {
-        return this.selectDetailProcess(itemBrief, this.activeProcesses, this.activeWorks, this.activeProjects)
-    }
+    selectActiveDetailProcess = (itemBrief: IListItem): Promise<void> =>
+        this.selectDetailProcess(itemBrief, this.activeProcesses, this.activeWorks, this.activeProjects)
 
     // computes a plain JavaScript object mapping step names process counts
     @computed
@@ -127,34 +120,24 @@ export class EmployeeStore implements IViewProvider {
     @computed
     private get selectedStepProcesses(): ObservableMap<CloRequestElement> {
         if (this.focusStep) {
-            const filteredProcesses = this.activeProcesses
-                .values()
-                .filter(process => process.step === this.focusStep.name)
+            const filteredProcesses = this.activeProcesses.values().filter(process => process.step === this.focusStep.name)
             return StoreUtils.mapRequestElementArrayById(filteredProcesses)
         }
     }
 
     @computed
     get selectedStepProcessBriefs(): Array<IListItem> {
-        return EmployeeStore.getProcessBriefsFromRequestElements(
-            this.selectedStepProcesses,
-            this.activeWorks,
-            this.activeProjects
-        )
+        console.log(EmployeeStore.getProcessBriefsFromRequestElements(this.selectedStepProcesses, this.activeWorks, this.activeProjects))
+
+        return EmployeeStore.getProcessBriefsFromRequestElements(this.selectedStepProcesses, this.activeWorks, this.activeProjects)
     }
 
     // searches past processes by title - populates searchedWorks, searchedProcesses, and searchedProject arrays
     @action
-    async searchProcesses(searchTerm: string) {
+    searchProcesses = async (searchTerm: string) => {
         const processes = await this.dataService.searchProcessesByTitle(searchTerm)
-        const works = await this.dataService.fetchRequestElementsById(
-            processes.map(proc => Number(proc.workId)),
-            ListName.WORKS
-        )
-        const projects = await this.dataService.fetchRequestElementsById(
-            processes.map(proc => Number(proc.projectId)),
-            ListName.PROJECTS
-        )
+        const works = await this.dataService.fetchRequestElementsById(processes.map(proc => Number(proc.workId)), ListName.WORKS)
+        const projects = await this.dataService.fetchRequestElementsById(processes.map(proc => Number(proc.projectId)), ListName.PROJECTS)
         runInAction(() => {
             this.searchedProcesses = StoreUtils.mapRequestElementArrayById(processes)
             this.searchedWorks = StoreUtils.mapRequestElementArrayById(works)
@@ -162,7 +145,7 @@ export class EmployeeStore implements IViewProvider {
         })
     }
     @action
-    private unfocusSearch(): void {
+    private unfocusSearch = (): void => {
         this.searchedProcesses = null
         this.searchedProjects = null
         this.searchedWorks = null
@@ -174,43 +157,32 @@ export class EmployeeStore implements IViewProvider {
     @computed
     get searchedProcessBriefs(): Array<IListItem> {
         // request briefs are small summaries of a request that contain information about the work, process, and project
-        return EmployeeStore.getProcessBriefsFromRequestElements(
-            this.searchedProcesses,
-            this.searchedWorks,
-            this.searchedProjects
-        )
+        return EmployeeStore.getProcessBriefsFromRequestElements(this.searchedProcesses, this.searchedWorks, this.searchedProjects)
     }
     @action
-    async selectSearchedDetailProcess(itemBrief: IListItem): Promise<void> {
-        return this.selectDetailProcess(itemBrief, this.searchedProcesses, this.searchedWorks, this.searchedProjects)
-    }
+    selectSearchedDetailProcess = async (itemBrief: IListItem): Promise<void> =>
+        this.selectDetailProcess(itemBrief, this.searchedProcesses, this.searchedWorks, this.searchedProjects)
 
     @action
-    private async selectDetailProcess(
+    private selectDetailProcess = async (
         selectedProcessBrief: IListItem,
         processesMap: ObservableMap<CloRequestElement>,
         worksMap: ObservableMap<CloRequestElement>,
         projectsMap: ObservableMap<CloRequestElement>
-    ): Promise<void> {
+    ): Promise<void> => {
         const selectedProcess: CloRequestElement = processesMap.get(String(selectedProcessBrief.id))
         const selectedWork = worksMap.get(selectedProcess.workId as string)
         const selectedProject = projectsMap.get(selectedProcess.projectId as string)
-        this.requestDetailStore = new RequestDetailStore(
-            this,
-            this.dataService,
-            selectedProcess,
-            selectedProject,
-            selectedWork
-        )
+        this.requestDetailStore = new RequestDetailStore(this, this.dataService, selectedProcess, selectedProject, selectedWork)
         this.extendViewHierarchy(EmployeeViewKey.ProcessDetail)
         await this.requestDetailStore.init()
     }
 
-    private static getProcessBriefsFromRequestElements(
+    private static getProcessBriefsFromRequestElements = (
         processesMap: ObservableMap<CloRequestElement>,
         worksMap: ObservableMap<CloRequestElement>,
         projectsMap: ObservableMap<CloRequestElement>
-    ): Array<IListItem> {
+    ): Array<IListItem> => {
         if (processesMap && worksMap && projectsMap) {
             return processesMap.values().map(process => {
                 const processWork = worksMap.get(process.workId as string)
@@ -222,13 +194,8 @@ export class EmployeeStore implements IViewProvider {
                 const submissionDateAtCurrentStep = currentStep && process[previousStep.submissionDateFieldName]
                 return {
                     header: `${processProject.Title || ""} - ${processWork.type || ""} Process`,
-                    subheader: `submitted to ${process.step} on ${
-                        submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"
-                    }`,
-                    body: `${processWork.Title} - ${processWork.authorName ||
-                        processWork.artist ||
-                        processWork.composer ||
-                        "unknown artist"}`,
+                    subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
+                    body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer || "unknown artist"}`,
                     id: process.Id as number,
                     selectable: true,
                 }
@@ -251,17 +218,11 @@ export class EmployeeStore implements IViewProvider {
     }
 
     @action
-    reduceViewHierarchy(viewKeyString: string) {
-        this.viewHierarchy = this.viewHierarchy.slice(
-            0,
-            this.viewHierarchy.indexOf(viewKeyString as EmployeeViewKey) + 1
-        )
+    reduceViewHierarchy = (viewKeyString: string) => {
+        this.viewHierarchy = this.viewHierarchy.slice(0, this.viewHierarchy.indexOf(viewKeyString as EmployeeViewKey) + 1)
     }
 
-    @action
-    extendViewHierarchy(viewKey: EmployeeViewKey) {
-        this.viewHierarchy.push(viewKey)
-    }
+    @action extendViewHierarchy = (viewKey: EmployeeViewKey) => this.viewHierarchy.push(viewKey)
 
     @computed
     get breadcrumbItems(): Array<IBreadcrumbItem> {
@@ -269,8 +230,7 @@ export class EmployeeStore implements IViewProvider {
             let text: string
             if (viewKey === EmployeeViewKey.Dashboard) text = "Processor Dashboard"
             else if (viewKey === EmployeeViewKey.ProcessDetail)
-                text = `${this.requestDetailStore.process.get("type") ||
-                    ""} Process ${this.requestDetailStore.process.get("Id") || ""} Detail`
+                text = `${this.requestDetailStore.process.get("type") || ""} Process ${this.requestDetailStore.process.get("Id") || ""} Detail`
 
             return {
                 text,
@@ -283,13 +243,13 @@ export class EmployeeStore implements IViewProvider {
 
     @observable asyncPendingLockout: boolean
     @action
-    setAsyncPendingLockout(val: boolean) {
+    setAsyncPendingLockout = (val: boolean) => {
         this.asyncPendingLockout = val
     }
 
     @observable message: IMessage
     @action
-    postMessage(message: IMessage, displayTime: number = 5000) {
+    postMessage = (message: IMessage, displayTime: number = 5000) => {
         this.message = message
         setTimeout(
             action(() => {
@@ -301,7 +261,7 @@ export class EmployeeStore implements IViewProvider {
 
     @observable clientMode: boolean = false
     @action
-    toggleClientMode() {
+    toggleClientMode = () => {
         this.clientMode = !this.clientMode
         if (this.clientMode) {
             this.root.clientStore.data.init()

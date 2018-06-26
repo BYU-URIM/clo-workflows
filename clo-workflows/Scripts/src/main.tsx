@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as ReactDom from "react-dom"
 import { useStrict } from "mobx"
-import { App } from "./components"
+import { App } from "./components/"
 import { Provider } from "mobx-react"
 import { RootStore } from "./store"
 import { DataServiceFactory } from "./service"
@@ -10,16 +10,17 @@ import "./styles.scss"
 useStrict(true)
 
 const root = document.getElementById("root")
-
 const rootStore = new RootStore(DataServiceFactory.getDataService())
-
-// TODO remove window rootStore reference
 window["rootStore"] = rootStore
 
-ReactDom.render(
-    <Provider rootStore={rootStore}>
-        <App />
-    </Provider>,
-    root
-)
-rootStore.init()
+const init = async () => {
+    ReactDom.render(
+        <Provider rootStore={rootStore}>
+            <App />
+        </Provider>,
+        root
+    )
+    rootStore.init()
+}
+
+init()

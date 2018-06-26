@@ -7,35 +7,34 @@ import "./styles.scss"
 
 @inject("rootStore")
 @observer
-export default class Client extends React.Component<any, any> {
+export class Client extends React.Component<any, any> {
     public componentWillMount() {
         this.clientStore = this.props.rootStore.clientStore
     }
     clientStore: ClientStore
 
     render() {
-        const clientStore = this.clientStore
         return (
-            <div>
+            <>
                 <div className="client-wrapper-styles">
                     <div className="client-left-section-styles">
                         <ProjectProcessList
-                            asyncPendingLockout={clientStore.asyncPendingLockout}
+                            asyncPendingLockout={this.clientStore.asyncPendingLockout}
                             data={this.clientStore.data}
-                            handleSubmit={(projectId: any) => clientStore.handleAddNewProcess(projectId)}
-                            view={clientStore.view}
+                            handleSubmit={(projectId: any) => this.clientStore.handleAddNewProcess(projectId)}
+                            view={this.clientStore.view}
                         />
                     </div>
                     <div className="client-right-section-styles">
                         {this.clientStore.view.notesType && (
-                            <NotesBox title={clientStore.view.notesTitle} notesStore={clientStore.selectedNotesStore} />
+                            <NotesBox title={this.clientStore.view.notesTitle} notesStore={this.clientStore.selectedNotesStore} />
                         )}
                     </div>
                 </div>
-                {clientStore.view.modal === "project" && <ProjectFormModal clientStore={clientStore} />}
-                {clientStore.view.modal === "process" && <ProcessFormModal clientStore={clientStore} />}
-                {clientStore.message && <Message {...clientStore.message} />}
-            </div>
+                {this.clientStore.view.modal === "project" && <ProjectFormModal clientStore={this.clientStore} />}
+                {this.clientStore.view.modal === "process" && <ProcessFormModal clientStore={this.clientStore} />}
+                {this.clientStore.message && <Message {...this.clientStore.message} />}
+            </>
         )
     }
 }

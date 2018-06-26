@@ -1,8 +1,9 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { autobind } from "core-decorators"
+// import { autobind } from "core-decorators"
 import { IconButton } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
+
 export interface IListItem {
     header: string
     subheader?: string
@@ -13,7 +14,7 @@ export interface IListItem {
     deletable?: boolean
 }
 
-interface INonScrollableListProps {
+export interface INonScrollableListProps {
     items: Array<IListItem>
     style?: {}
     // onSelectItem will only work if listItem.selectable = true (see IListItem interface)
@@ -24,11 +25,11 @@ interface INonScrollableListProps {
     onDeleteItem?: (listItem: IListItem, itemIndex: number) => void
 }
 
-interface IProcessListState {
+export interface IProcessListState {
     hoverItemIndex: number
 }
 
-@autobind
+// @autobind
 @observer
 export class NonScrollableList extends React.Component<INonScrollableListProps, IProcessListState> {
     constructor(props) {
@@ -48,26 +49,12 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
                             style={this.getListItemStyle(index)}
                             onMouseLeave={item.selectable ? this.onMouseLeaveListItem : null}
                             onMouseEnter={item.selectable ? () => this.onMouseEnterListItem(index) : null}
-                            onClick={
-                                item.selectable && props.onSelectItem
-                                    ? () => this.props.onSelectItem(item, index)
-                                    : null
-                            }
+                            onClick={item.selectable && props.onSelectItem ? () => this.props.onSelectItem(item, index) : null}
                         >
                             <div className="listItemHeader-styles">
                                 <div className="listItemTitle-styles">{item.header}</div>
-                                {item.editable && (
-                                    <IconButton
-                                        iconProps={{ iconName: "edit" }}
-                                        onClick={() => props.onEditItem(item, index)}
-                                    />
-                                )}
-                                {item.deletable && (
-                                    <IconButton
-                                        iconProps={{ iconName: "delete" }}
-                                        onClick={() => props.onDeleteItem(item, index)}
-                                    />
-                                )}
+                                {item.editable && <IconButton iconProps={{ iconName: "edit" }} onClick={() => props.onEditItem(item, index)} />}
+                                {item.deletable && <IconButton iconProps={{ iconName: "delete" }} onClick={() => props.onDeleteItem(item, index)} />}
                             </div>
                             <div className="listItemSubheader-styles">{item.subheader}</div>
                             <div>{item.body}</div>
@@ -78,15 +65,11 @@ export class NonScrollableList extends React.Component<INonScrollableListProps, 
         )
     }
 
-    private getListItemStyle(index: number) {
+    private getListItemStyle = (index: number) => {
         return this.state.hoverItemIndex === index ? { backgroundColor: "#F0F0F0", cursor: "pointer" } : {}
     }
 
-    private onMouseLeaveListItem() {
-        this.setState({ hoverItemIndex: -1 })
-    }
+    private onMouseLeaveListItem = () => this.setState({ hoverItemIndex: -1 })
 
-    private onMouseEnterListItem(index: number) {
-        this.setState({ hoverItemIndex: index })
-    }
+    private onMouseEnterListItem = (index: number) => this.setState({ hoverItemIndex: index })
 }

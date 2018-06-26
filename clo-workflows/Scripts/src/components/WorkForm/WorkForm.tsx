@@ -1,15 +1,15 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-import { Dropdown } from "office-ui-fabric-react/lib/"
-import { ClientStore } from "../../store"
 import { FormControlGroup } from "../"
 import "./styles.scss"
 
-export interface IFormPanelProps {
+import { ClientStore } from "../../store"
+
+export interface IWorkFormProps {
     clientStore: ClientStore
 }
 
-const WorkForm = (props: IFormPanelProps) => {
+export const WorkForm = observer((props: IWorkFormProps) => {
     return (
         <div className={"workForm-wrapper-styles"}>
             {props.clientStore.view.work.type && (
@@ -24,5 +24,4 @@ const WorkForm = (props: IFormPanelProps) => {
             )}
         </div>
     )
-}
-export default observer(WorkForm)
+})

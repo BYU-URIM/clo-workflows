@@ -1,20 +1,19 @@
 import * as React from "react"
 import { observer } from "mobx-react"
-// tslint:disable-next-line:no-submodule-imports
-import { ICheckboxProps, Checkbox } from "office-ui-fabric-react/lib/"
-import "./styles.scss"
-
+import { Checkbox } from "office-ui-fabric-react/lib/"
+import { ICheckboxProps } from "office-ui-fabric-react"
 export interface IDescriptiveCheckboxProps extends ICheckboxProps {
     description: string
 }
+import "./styles.scss"
 
-function DescriptiveCheckbox(props: IDescriptiveCheckboxProps): JSX.Element {
-    return (
-        <div>
-            <Checkbox {...props} />
-            <span className="descriptiveCheckbox-description-styles">{props.description}</span>
-        </div>
-    )
-}
-
-export default observer(DescriptiveCheckbox)
+export const DescriptiveCheckbox = observer(
+    (props: IDescriptiveCheckboxProps): JSX.Element => {
+        return (
+            <div>
+                <Checkbox {...props} />
+                <span className="descriptiveCheckbox-description-styles">{props.description}</span>
+            </div>
+        )
+    }
+)

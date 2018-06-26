@@ -1,5 +1,5 @@
 import { IRole } from "."
-import { observable, computed } from "mobx"
+import { observable } from "mobx"
 
 export interface IUser {
     name: string
@@ -39,9 +39,7 @@ export class User implements IUser {
      */
     private _primaryRole = null
     get primaryRole(): IRole {
-        if (!this._primaryRole)
-            this._primaryRole =
-                this.roles.length && this.roles.sort((roleA, roleB) => (roleA.rank > roleB.rank ? -1 : 1))[0]
+        if (!this._primaryRole) this._primaryRole = this.roles.length && this.roles.sort((roleA, roleB) => (roleA.rank > roleB.rank ? -1 : 1))[0]
         return this._primaryRole
     }
 }

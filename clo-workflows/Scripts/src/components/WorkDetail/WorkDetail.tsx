@@ -1,14 +1,13 @@
 import * as React from "react"
-import { EmployeeStore, SessionStore } from "../../store/"
+import { EmployeeStore } from "../../store/"
 import { inject, observer } from "mobx-react"
 import { FormControlGroup, NotesBox } from "../"
-// tslint:disable-next-line:no-submodule-imports
 import { PrimaryButton, IconButton } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
 
 @inject("rootStore")
 @observer
-export default class WorkDetail extends React.Component<any, any> {
+export class WorkDetail extends React.Component<any, any> {
     public componentWillMount() {
         this.employeeStore = this.props.rootStore.employeeStore
     }

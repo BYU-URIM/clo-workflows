@@ -1,15 +1,11 @@
 import { Role, View, FormControl, StepName, Step, IStep, IRole } from ".."
-import * as VIEWS from "../../../res/json/form_templates/VIEWS.json"
-import * as FORM_CONTROLS from "../../../res/json/form_templates/FORM_CONTROLS.json"
-import * as STEPS from "../../../res/json/processing_config/PROCESS_STEPS.json"
-import * as ROLES from "../../../res/json/processing_config/USER_ROLES.json"
+import { FORM_CONTROLS, VIEWS, STEPS, ROLES } from "../../../res/"
 import Utils from "../../utils"
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
 export const getView = (viewName: string, userRole: IRole): View => {
     const isUserEmployee = userRole.name !== "LTT Client"
-    const isUserAdmin = userRole.name === "Administrator"
     const normalizedView = VIEWS[viewName]
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
@@ -75,9 +71,7 @@ export const getRole = (roleName: string): Role => {
     })
 }
 
-export const getStep = (stepName: StepName): Step => {
-    return new Step(STEPS[stepName])
-}
+export const getStep = (stepName: StepName): Step => new Step(STEPS[stepName])
 
 export const getStepById = (id: number): Step => {
     for (const stepName in STEPS) {
@@ -93,10 +87,6 @@ export const getStepForProcessFieldName = (processFieldName: string): Step => {
     return null
 }
 
-export const getStepNames = (): string[] => {
-    return Object.keys(STEPS)
-}
+export const getStepNames = (): string[] => Object.keys(STEPS)
 
-export const getRoleNames = (): string[] => {
-    return Object.keys(ROLES.default)
-}
+export const getRoleNames = (): string[] => Object.keys(ROLES)

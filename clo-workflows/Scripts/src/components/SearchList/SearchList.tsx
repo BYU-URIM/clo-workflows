@@ -1,29 +1,25 @@
 import * as React from "react"
-import { observer } from "mobx-react"
-import { autobind } from "core-decorators"
-import { IconButton, Pivot, PivotItem, PivotLinkFormat, PivotLinkSize, SearchBox } from "office-ui-fabric-react/lib/"
+import { SearchBox } from "office-ui-fabric-react/lib/"
 import "./styles.scss"
-import { Item } from "@pnp/sp"
-export interface IListItem {
+
+export interface ISearchListItem {
     header: string
     subheader?: string
     body: string
     id: string | number
     selectable?: boolean
-    editable?: boolean
-    deletable?: boolean
 }
 
-interface ISearchListProps {
-    items: Array<IListItem>
+export interface ISearchListProps {
+    items: Array<ISearchListItem>
     selectedItem: string
     search(searchTerm: string)
-    onSelectItem?: (listItem: IListItem, itemIndex: number) => void
+    onSelectItem?: (listItem: ISearchListItem, itemIndex: number) => void
     typeSelected: boolean
     emptyMessage: string
 }
 
-const SearchList = (props: ISearchListProps) => {
+export const SearchList = (props: ISearchListProps) => {
     const getListItemStyle = (id: string) => {
         return id === props.selectedItem ? { backgroundColor: "#dadada", cursor: "pointer" } : {}
     }
@@ -62,5 +58,3 @@ const SearchList = (props: ISearchListProps) => {
         </div>
     )
 }
-
-export default SearchList

@@ -7,13 +7,13 @@ export interface IDescriptiveDropdownProps extends IDropdownProps {
     description: string
 }
 
-function DescriptiveDropdown(props: IDescriptiveDropdownProps): JSX.Element {
-    return (
-        <div>
-            <Dropdown {...props} />
-            <span className="descriptiveDropdown-description-styles">{props.description}</span>
-        </div>
-    )
-}
-
-export default observer(DescriptiveDropdown)
+export const DescriptiveDropdown = observer(
+    (props: IDescriptiveDropdownProps): JSX.Element => {
+        return (
+            <div>
+                <Dropdown {...props} />
+                <span className="descriptiveDropdown-description-styles">{props.description}</span>
+            </div>
+        )
+    }
+)

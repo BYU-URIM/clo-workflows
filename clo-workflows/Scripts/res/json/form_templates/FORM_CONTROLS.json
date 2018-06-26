@@ -495,7 +495,7 @@
         "type": "text"
     },
     "Page Range": {
-        "displayName": "Page Range",
+        "displayName": "Page Number Ranges *",
         "dataRef": "pageRange",
         "type": "text"
     },
@@ -562,8 +562,7 @@
         "choices": [
             "Active",
             "Canceled"
-        ],
-        "defaultValue": "Active"
+        ]
     },
     "Project Name": {
         "displayName": "Project Name *",
@@ -579,7 +578,8 @@
     "Preferred Contact Phone Number": {
         "displayName": "Preferred Contact Phone Number *",
         "dataRef": "preferredContactPhoneNumber",
-        "type": "text"
+        "type": "maskedtext",
+        "mask": "( 999 ) 999 - 9999"
     },
     "Professor Name": {
         "displayName": "Professor Name (if different than Contact Name)",
@@ -589,7 +589,7 @@
     "Semester Content Required": {
         "displayName": "Semester Content Required *",
         "dataRef": "semesterContentRequired",
-        "type": "text"
+        "type": "semesterpicker"
     },
     "Requesting Group Name": {
         "displayName": "Name of Club/Group/Department Showing the Film *",
@@ -654,6 +654,11 @@
         "description": "Please be as specific as possible as this is the primary indicator for the fee. If unknown, give your best estimated range (e.g. 100-400 people). It’s better to guess on the lower end in general (realistic vs. hopeful), but please be honest and as accurate as possible. Use prior, similarly marketed events as a guide when possible. Anticipated audience size is the primary indicator of fee so it’s important for this to be accurate. Studios will ask for audience reports after the event.",
         "type": "text"
     },
+    "Anticipated Number of recipients": {
+        "displayName": "Anticipated Number of recipients to receive content *",
+        "dataRef": "anticipatedAudienceSize",
+        "type": "text"
+    },
     "Admission": {
         "displayName": "Admission *",
         "dataRef": "admission",
@@ -677,6 +682,11 @@
         "dataRef": "copyNeeded",
         "type": "checkbox",
         "description": "The studios can provide a copy of the movie (DVD or Blu-Ray) if requested, but it costs an additional shipping/rental fee of approx. $28 so it may be wiser to purchase and keep the DVD yourself if that is possible. Just be sure to obtain a lawfully made copy (i.e. No downloading from pirate sites or burning a DVD from a friend). Purchasing a DVD at reputable retailers such as Walmart or Amazon is sufficient."
+    },
+    "Literary Posting Method": {
+        "displayName": "How do you plan on posting the content? *",
+        "dataRef": "literaryPostingMethod",
+        "type": "text"
     },
     "Other Notes": {
         "displayName": "Other Notes",

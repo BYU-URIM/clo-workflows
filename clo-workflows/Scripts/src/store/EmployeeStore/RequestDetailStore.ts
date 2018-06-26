@@ -1,23 +1,24 @@
-import { observable, computed, action, runInAction, ObservableMap, reaction, toJS } from "mobx"
-import { FormEntryType, CloRequestElement } from "../../model/CloRequestElement"
-import { EmployeeStore, EmployeeViewKey } from "./EmployeeStore"
-import { IDataService, ListName } from "../../service/dataService/IDataService"
-import { autobind } from "core-decorators"
+import { observable, computed, action, runInAction, ObservableMap, reaction } from "mobx"
+import { IDataService, ListName } from "../../service/"
+// import { autobind } from "core-decorators"
+import Utils from "../../utils"
+import { StoreUtils, NotesStore, EmployeeStore, EmployeeViewKey } from "../"
 import {
+    FormEntryType,
+    CloRequestElement,
+    NoteSource,
+    NoteScope,
+    StepName,
+    getNextStepName,
     getView,
     getViewAndMakeReadonly,
     getStepForProcessFieldName,
     getStep,
-} from "../../model/loader/resourceLoaders"
-import { View } from "../../model/View"
-import Utils from "../../utils"
-import { StoreUtils } from ".."
-import { StepName, getNextStepName } from "../../model/Step"
-import { IFormControl } from "../../model/FormControl"
-import { NotesStore } from "../"
-import { NoteSource, NoteScope } from "../../model/Note"
+    View,
+    IFormControl,
+} from "../../model"
 
-@autobind
+// @autobind
 export class RequestDetailStore {
     constructor(
         public readonly employeeStore: EmployeeStore,
@@ -31,17 +32,14 @@ export class RequestDetailStore {
         this.work = observable.map(originalWork)
 
         // if process is changed, recalculate next step
-        reaction(
-            () => this.process.values(),
-            () => this.nextStepName = getNextStepName(this.process.toJS())
-        )
+        reaction(() => this.process.values(), () => (this.nextStepName = getNextStepName(this.process.toJS())))
     }
 
     @observable workNotesStore: NotesStore
     @observable projectNotesStore: NotesStore
 
     @action
-    async init(): Promise<void> {
+    init = async (): Promise<void> => {
         const workNotes = await this.dataService.fetchNotes(
             NoteSource.WORK,
             NoteScope.EMPLOYEE,
@@ -78,8 +76,7 @@ export class RequestDetailStore {
 
     @computed
     get isRequestActive(): boolean {
-        return (this.process.get("step") as StepName) !== "Complete"
-            && (this.process.get("step") as StepName) !== "Canceled"
+        return (this.process.get("step") as StepName) !== "Complete" && (this.process.get("step") as StepName) !== "Canceled"
     }
 
     /*******************************************************************************************************/
@@ -87,20 +84,19 @@ export class RequestDetailStore {
     /*******************************************************************************************************/
     @observable process: ObservableMap<FormEntryType>
     @observable nextStepName: StepName
-    @action updateNextStepName(stepName: StepName) {
+    @action
+    updateNextStepName = (stepName: StepName) => {
         this.nextStepName = stepName
     }
 
     @computed
     get processView(): View {
         const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
-        if (this.isRequestActive && this.employeeStore.focusStep)
-            return getView(this.employeeStore.focusStep.view, curUserRole)
-        else
-            return getView("Complete", curUserRole)
+        if (this.isRequestActive && this.employeeStore.focusStep) return getView(this.employeeStore.focusStep.view, curUserRole)
+        else return getView("Complete", curUserRole)
     }
 
-    getProcessSubmissionMetadata(formControl: IFormControl): string {
+    getProcessSubmissionMetadata = (formControl: IFormControl): string => {
         // if the form control is readonly - look up the submission metadata to display under the form control
         // if the form control is not readonly, it is active and the present submission will overwrite the metadata
         if (formControl.readonly) {
@@ -117,12 +113,7 @@ export class RequestDetailStore {
 
     @computed
     get canSubmitProcess(): boolean {
-        return (
-            !this.employeeStore.asyncPendingLockout &&
-            Utils.isObjectEmpty(this.processValidation) &&
-            this.isRequestActive
-            && !!this.nextStepName
-        )
+        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.processValidation) && this.isRequestActive && !!this.nextStepName
     }
 
     @computed
@@ -131,12 +122,12 @@ export class RequestDetailStore {
     }
 
     @action
-    updateProcess(fieldName: string, newVal: FormEntryType): void {
+    updateProcess = (fieldName: string, newVal: FormEntryType): void => {
         this.process.set(fieldName, String(newVal))
     }
 
     @action
-    async submitProcess(): Promise<void> {
+    submitProcess = async (): Promise<void> => {
         this.processView.touchAllRequiredFormControls()
         if (!this.canSubmitProcess) {
             this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
@@ -187,12 +178,12 @@ export class RequestDetailStore {
     }
 
     @action
-    updateProject(fieldName: string, newVal: FormEntryType): void {
+    updateProject = (fieldName: string, newVal: FormEntryType): void => {
         this.project.set(fieldName, String(newVal))
     }
 
     @action
-    async submitProject(): Promise<void> {
+    submitProject = async (): Promise<void> => {
         this.projectView.touchAllRequiredFormControls()
         if (!this.canSubmitProject) {
             this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
@@ -219,11 +210,7 @@ export class RequestDetailStore {
 
     @computed
     get canSubmitProject(): boolean {
-        return (
-            !this.employeeStore.asyncPendingLockout &&
-            Utils.isObjectEmpty(this.projectValidation) &&
-            this.isRequestActive
-        )
+        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.projectValidation) && this.isRequestActive
     }
 
     @computed
@@ -232,16 +219,16 @@ export class RequestDetailStore {
     }
 
     @action
-    private resetProjectToOriginal() {
+    private resetProjectToOriginal = () => {
         this.project = observable.map(this.originalProject)
     }
 
     @action
-    startEditingProject() {
+    startEditingProject = () => {
         this.canEditProject = true
     }
     @action
-    stopEditingProject() {
+    stopEditingProject = () => {
         this.canEditProject = false
         this.resetProjectToOriginal()
     }
@@ -261,12 +248,12 @@ export class RequestDetailStore {
     }
 
     @action
-    updateWork(fieldName: string, newVal: FormEntryType): void {
+    updateWork = (fieldName: string, newVal: FormEntryType): void => {
         this.work.set(fieldName, String(newVal))
     }
 
     @action
-    async submitWork(): Promise<void> {
+    submitWork = async (): Promise<void> => {
         this.workView.touchAllRequiredFormControls()
         if (!this.canSubmitWork) {
             this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
@@ -277,6 +264,7 @@ export class RequestDetailStore {
             this.employeeStore.setAsyncPendingLockout(true)
             const updatedWork = this.work.toJS() as CloRequestElement
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
+            await 
             this.employeeStore.activeWorks.set(String(updatedWork.Id), updatedWork)
             this.employeeStore.postMessage({ messageText: "work successfully submitted", messageType: "success" })
             runInAction(() => (this.canEditWork = false))
@@ -293,17 +281,15 @@ export class RequestDetailStore {
 
     @computed
     get canSubmitWork(): boolean {
-        return (
-            !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.workValidation) && this.isRequestActive
-        )
+        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.workValidation) && this.isRequestActive
     }
 
     @action
-    startEditingWork() {
+    startEditingWork = () => {
         this.canEditWork = true
     }
     @action
-    stopEditingWork() {
+    stopEditingWork = () => {
         this.canEditWork = false
         this.resetWorkToOriginal()
     }
@@ -314,7 +300,7 @@ export class RequestDetailStore {
     }
 
     @action
-    private resetWorkToOriginal() {
+    private resetWorkToOriginal = () => {
         this.work = observable.map(this.originalWork)
     }
 
@@ -325,7 +311,7 @@ export class RequestDetailStore {
     // current state of the projectWork pivot => is either "project" (show project detail) or "work" (show work detail)
     @observable pivotState: PivotState = "work"
     @action
-    setPivotState(state: PivotState) {
+    setPivotState = (state: PivotState) => {
         this.pivotState = state
         // if switching away from a pivot selection, reinitialize it from the original copy
         if (state === "project") {

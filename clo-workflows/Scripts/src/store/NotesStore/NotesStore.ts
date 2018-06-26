@@ -1,4 +1,3 @@
-import { autobind } from "core-decorators"
 import { observable, action, runInAction, computed, toJS, reaction } from "mobx"
 import { INote, NoteSource, NoteScope, getEmptyNote } from "./../../model/"
 import { IDataService } from "./../../service/"
@@ -17,7 +16,6 @@ export interface INotesStoreConfig {
     attachedProjectId?: number
 }
 
-@autobind
 export class NotesStore {
     constructor(config: INotesStoreConfig) {
         this.provider = config.viewProvider
@@ -68,13 +66,10 @@ export class NotesStore {
         return Math.min(this.MAX_DISPLAY_COUNT_CHANGE_INTERVAL, this.zeroFloor(this.notes.length - this.displayCount))
     }
 
-    @action
-    increaseDisplayCount() {
-        this.displayCount += this.displayCountChangeInterval
-    }
+    @action increaseDisplayCount = () => (this.displayCount += this.displayCountChangeInterval)
 
     @action
-    updateSelectedNoteText(newVal: string) {
+    updateSelectedNoteText = (newVal: string) => {
         this.selectedNote.text = newVal
     }
 
@@ -82,7 +77,7 @@ export class NotesStore {
     private readonly MAX_DISPLAY_COUNT_CHANGE_INTERVAL = 3
 
     // handler for the note dialog submit button, contains logic to determine whether note should be created or updated
-    async submitSelectedNote(): Promise<void> {
+    submitSelectedNote = async (): Promise<void> => {
         if (this.selectedNoteOperation === NoteOperation.CREATE_NOTE) {
             await this.createSelectedNote()
         } else if (this.selectedNoteOperation === NoteOperation.UPDATE_NOTE) {
@@ -91,7 +86,7 @@ export class NotesStore {
     }
 
     @action
-    private async createSelectedNote(): Promise<void> {
+    private createSelectedNote = async (): Promise<void> => {
         this.provider.setAsyncPendingLockout(true)
 
         try {
@@ -126,7 +121,7 @@ export class NotesStore {
             await this.dataService.updateNote(toJS(this.selectedNote))
 
             // if submission is successful, add the new note to the corresponding list
-            StoreUtils.replaceElementInListById(this.selectedNote, this.notes)
+            // StoreUtils.replaceElementInListById(this.selectedNote, this.notes)
             this.provider.postMessage({ messageText: "note successfully updated", messageType: "success" })
             this.unselectNote()
         } catch (error) {
@@ -141,9 +136,8 @@ export class NotesStore {
     }
 
     @action
-    async deleteNote(noteToDelete: INote): Promise<void> {
+    deleteNote = async (noteToDelete: INote): Promise<void> => {
         this.provider.setAsyncPendingLockout(true)
-
         try {
             await this.dataService.deleteNote(noteToDelete.Id)
 
@@ -162,7 +156,7 @@ export class NotesStore {
     }
 
     @action
-    selectNewNote(noteScope: NoteScope): void {
+    selectNewNote = (noteScope: NoteScope): void => {
         this.selectedNote = getEmptyNote(noteScope)
 
         // initialize an empty note with starting information
@@ -178,20 +172,16 @@ export class NotesStore {
     }
 
     @action
-    selectExistingNote(noteToSelect: INote) {
+    selectExistingNote = (noteToSelect: INote) => {
         this.selectedNote = Utils.deepCopy(noteToSelect)
     }
 
     @action
-    unselectNote() {
+    unselectNote = () => {
         this.selectedNote = null
     }
 
-    // HELPERS
-
-    private zeroFloor(val: number): number {
-        return val >= 0 ? val : 0
-    }
+    private zeroFloor = (val: number): number => (val >= 0 ? val : 0)
 }
 
 enum NoteOperation {

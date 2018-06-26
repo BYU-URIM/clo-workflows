@@ -1,5 +1,5 @@
 import { IKeyValueMap } from "mobx"
-import * as VIEWS from "../../res/json/form_templates/VIEWS.json"
+import { VIEWS } from "../../res/"
 // Request Element is a process, project, or work
 // it is a plain javascript object sent from the server containing form data
 // an alternate and identical definition would be interface CloRequestElement {[field: string]: FormEntryType}
