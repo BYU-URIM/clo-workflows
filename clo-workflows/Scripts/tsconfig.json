@@ -13,7 +13,8 @@
       "types": ["node"],
       "moduleResolution": "node",
       "sourceMap": true,
-      "strictNullChecks": false
+      "strictNullChecks": false,
+      "allowSyntheticDefaultImports": true
     },
     "exclude": [
       "node_modules",
