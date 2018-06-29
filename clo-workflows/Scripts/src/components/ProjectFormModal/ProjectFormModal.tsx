@@ -41,7 +41,7 @@ export const ProjectFormModal = observer((props: IProjectFormModalProps) => {
                     <div>
                         <FormControlGroup
                             data={props.clientStore.newProject}
-                            formControls={props.clientStore.currentForm}
+                            formFields={props.clientStore.currentForm}
                             validation={props.clientStore.currentFormValidation}
                             updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProject")}
                         />

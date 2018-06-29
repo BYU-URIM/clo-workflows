@@ -5,7 +5,7 @@ import { observable, action } from "mobx"
 export interface IView {
     dataSource: string
 
-    formControls: Array<IFormControl>
+    formFields: Array<IFormControl>
 }
 
 export class View implements IView {
@@ -15,11 +15,11 @@ export class View implements IView {
     }
 
     @observable dataSource: string
-    @observable formControls: Array<FormControl>
+    @observable formFields: Array<FormControl>
 
     @action
-    touchAllRequiredFormControls() {
-        this.formControls.forEach(formControl => {
+    touchAllRequiredformFields() {
+        this.formFields.forEach(formControl => {
             if (formControl.required) formControl.touch()
         })
     }

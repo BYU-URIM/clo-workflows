@@ -38,7 +38,7 @@ export class WorkDetail extends React.Component<any, any> {
                     </div>
                     <FormControlGroup
                         data={requestDetailStore.work}
-                        formControls={requestDetailStore.workView.formControls}
+                        formFields={requestDetailStore.workView.formFields}
                         updateFormField={requestDetailStore.updateWork}
                         validation={requestDetailStore.workValidation}
                         width={350}

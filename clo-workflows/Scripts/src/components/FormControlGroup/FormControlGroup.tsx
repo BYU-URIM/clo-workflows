@@ -9,7 +9,7 @@ import "./styles.scss"
 
 export interface IFormControlGroupProps {
     data: ObservableMap<FormEntryType> // map of fieldName to fieldValue
-    formControls: Array<FormControl>
+    formFields: Array<FormControl>
     validation: {}
     updateFormField: (fieldName: string, newVal: FormEntryType) => void
     // custom logic to compute a description given a form control
@@ -26,12 +26,12 @@ export class FormControlGroup extends React.Component<IFormControlGroupProps, {}
     }
 
     /**
-     * this componenet represents the union of formControls and form data,
+     * this componenet represents the union of formFields and form data,
      * when this connection occurs (on construction)
      * the default values (form form controls) need to be applied to the form data
      */
     private applyDefaultValues() {
-        this.props.formControls.forEach(formControl => {
+        this.props.formFields.forEach(formControl => {
             const formValue = this.props.data[formControl.dataRef]
             const defaultValue = formControl.defaultValue
             if ((formValue === null || formValue === undefined) && (defaultValue !== null && defaultValue !== undefined)) {
@@ -44,8 +44,8 @@ export class FormControlGroup extends React.Component<IFormControlGroupProps, {}
         const props = this.props
         return (
             <div className="formControlGroup-styles" style={props.width && { width: props.width }}>
-                {props.formControls &&
-                    props.formControls.map((formControl, index) => {
+                {props.formFields &&
+                    props.formFields.map((formControl, index) => {
                         if (formControl.type === "text" || formControl.type === "number") {
                             return (
                                 <div className="formControlGroup-formControl-styles" key={index}>

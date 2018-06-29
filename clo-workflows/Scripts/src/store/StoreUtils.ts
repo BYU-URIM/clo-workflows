@@ -27,8 +27,8 @@ class StoreUtils {
     }
 
     // returns plain javascript object mapping field names to error strings
-    validateFormControlGroup(formControls: FormControl[], formValues: ObservableMap<FormEntryType>): {} {
-        return formControls.reduce((accumulator: {}, formControl: FormControl) => {
+    validateFormControlGroup(formFields: FormControl[], formValues: ObservableMap<FormEntryType>): {} {
+        return formFields.reduce((accumulator: {}, formControl: FormControl) => {
             const fieldName: string = formControl.dataRef
             const inputVal = formValues.get(fieldName)
             const error = this.validateFormControl(formControl, inputVal)

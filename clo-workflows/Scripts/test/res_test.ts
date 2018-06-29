@@ -52,22 +52,22 @@ ava.test("test json steps for correct shape", t => {
             t.truthy(jsonView) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
 
             // ensure that the view accurately displays the given step according to the rules above
-            // first check the viewFormControls against the step processFormControls (they should contain the same field names)
-            t.deepEqual(step.processFieldNames.length, jsonView.formControls.length)
-            for (const formControlName of jsonView.formControls) {
+            // first check the viewformFields against the step processformFields (they should contain the same field names)
+            t.deepEqual(step.processFieldNames.length, jsonView.formFields.length)
+            for (const formControlName of jsonView.formFields) {
                 const formControl: IFormControl = FORM_CONTROLS[formControlName]
                 t.true(step.processFieldNames.includes(formControl.dataRef))
             }
 
-            // then check readonlyFormControls against all previous step processFormControls
+            // then check readonlyformFields against all previous step processformFields
             const previousStepsProcessFieldNames: string[] = Object.keys(STEPS)
                 .map(curStepName => STEPS[curStepName])
                 .filter(stepJson => stepJson.orderId < step.orderId) // only keep steps with a lower orderID
                 .reduce((accumulator, prevStepJson) => {
                     return accumulator.concat(prevStepJson.processFieldNames)
                 }, [])
-            t.deepEqual(previousStepsProcessFieldNames.length, jsonView.readonlyFormControls.length)
-            for (const formControlName of jsonView.readonlyFormControls) {
+            t.deepEqual(previousStepsProcessFieldNames.length, jsonView.readonlyformFields.length)
+            for (const formControlName of jsonView.readonlyformFields) {
                 const formControl: IFormControl = FORM_CONTROLS[formControlName]
                 t.true(previousStepsProcessFieldNames.includes(formControl.dataRef))
             }
@@ -79,7 +79,7 @@ ava.test("test json steps for correct shape", t => {
 })
 
 /*
-    ensure all JSON formControls have the correct shape:
+    ensure all JSON formFields have the correct shape:
     {
         displayName: string
         dataRef: string
@@ -105,8 +105,8 @@ ava.test("test form controls for correct shape", t => {
     ensure that all views contain references to exisiting form controls and have correct shape
     {
         dataSource: string
-        readonlyFormControls: Array<IFormControl>
-        formControls: Array<IFormControl>
+        readonlyformFields: Array<IFormControl>
+        formFields: Array<IFormControl>
     }
 */
 ava.test("test that all views contain only valid formControl names and have correct shape", t => {
@@ -114,17 +114,17 @@ ava.test("test that all views contain only valid formControl names and have corr
         const view = VIEWS[viewName]
         t.true(typeof view.dataSource === "string")
 
-        if (view.formControls) {
-            t.true(Array.isArray(view.formControls))
-            const formControlNames: string[] = view.formControls
+        if (view.formFields) {
+            t.true(Array.isArray(view.formFields))
+            const formControlNames: string[] = view.formFields
             formControlNames.forEach(formControlName => {
                 t.truthy(FORM_CONTROLS[formControlName])
             })
         }
 
-        if (view.readonlyFormControls) {
-            t.true(Array.isArray(view.readonlyFormControls))
-            const formControlNames: string[] = view.readonlyFormControls
+        if (view.readonlyformFields) {
+            t.true(Array.isArray(view.readonlyformFields))
+            const formControlNames: string[] = view.readonlyformFields
             formControlNames.forEach(formControlName => {
                 t.truthy(FORM_CONTROLS[formControlName])
             })
@@ -138,9 +138,9 @@ ava.test("test that all views contain only valid formControl names and have corr
             })
         }
 
-        // if the view is a process view, it must have form controls and readonlyFormControls
+        // if the view is a process view, it must have form controls and readonlyformFields
         if (view.dataSource === "processes") {
-            t.truthy(view.formControls && view.readonlyFormControls)
+            t.truthy(view.formFields && view.readonlyformFields)
         }
     }
 })
@@ -186,7 +186,7 @@ ava.test("ensure that each form control dataRef references a valid field from th
         const view = VIEWS[viewName]
         const table = DB_CONFIG["tables"][view.dataSource]
 
-        for (const formControlName of view.formControls) {
+        for (const formControlName of view.formFields) {
             const formControl = FORM_CONTROLS[formControlName]
             t.true(table.fields.includes(formControl.dataRef))
         }
