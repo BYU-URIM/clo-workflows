@@ -4,19 +4,23 @@ import { observable, action } from "mobx"
 // View is a list of form controls rendered as a group
 export interface IView {
     dataSource: string
-
     formFields: Array<IFormControl>
+    privilegedFormFields?: Array<IFormControl>
+    readOnlyFormFields?: Array<FormControl>
 }
 
 export class View implements IView {
     /* copy constructor for copying JSON definition objects into observable model objects */
-    constructor(viewDefinition: IView) {
-        Object.assign(this, viewDefinition)
+    constructor(viewDef: IView) {
+        Object.assign(this, viewDef)
+        if (!viewDef.privilegedFormFields) this.privilegedFormFields = []
+        if (!viewDef.readOnlyFormFields) this.readOnlyFormFields = []
     }
 
     @observable dataSource: string
     @observable formFields: Array<FormControl>
-
+    @observable privilegedFormFields?: Array<FormControl>
+    @observable readOnlyFormFields?: Array<FormControl>
     @action
     touchAllRequiredformFields() {
         this.formFields.forEach(formControl => {
