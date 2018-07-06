@@ -10,7 +10,7 @@
       "jsx": "react",
       "outDir": "dist",
       "lib": ["dom", "es2017"],
-      "types": ["node"],
+      "types": ["node", "jest"],
       "moduleResolution": "node",
       "sourceMap": true,
       "strictNullChecks": false,
