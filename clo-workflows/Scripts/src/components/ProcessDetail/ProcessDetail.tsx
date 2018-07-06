@@ -27,7 +27,7 @@ export class ProcessDetail extends React.Component<any, any> {
                     <div className="processDetail-processTitle-styles">Edit Process</div>
                     <FormControlGroup
                         data={requestDetailStore.process}
-                        formControls={requestDetailStore.processView.formControls}
+                        formFields={requestDetailStore.processView.formFields}
                         validation={requestDetailStore.processValidation}
                         updateFormField={requestDetailStore.updateProcess}
                         width={350}

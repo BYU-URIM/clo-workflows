@@ -1,3 +1,6 @@
-import * as ava from "ava"
+function adder(a: number, b: number) {
+    return a + b
+}
 
-ava.test("test", t => t.pass())
+test("main test that tests the main function", () => expect(adder(2, 3)).not.toBe(6))
+

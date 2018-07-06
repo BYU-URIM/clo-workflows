@@ -1,21 +1,21 @@
 {
     "Literary Project": {
         "dataSource": "projects",
-        "formControls": [
+        "formFields": [
             "Project Name",
             "Preferred Email Address",
             "Preferred Contact Phone Number",
             "Professor Name",
             "Semester Content Required"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID",
             "Status"
         ]
     },
     "Movie Project": {
         "dataSource": "projects",
-        "formControls": [
+        "formFields": [
             "Project Name",
             "Preferred Email Address",
             "Preferred Contact Phone Number",
@@ -36,14 +36,14 @@
             "Other Notes",
             "How You Found CLO"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID",
             "Status"
         ]
     },
     "Literary": {
         "dataSource": "works",
-        "formControls": [
+        "formFields": [
             "Literary Work Title",
             "Literary URL",
             "Chapter/Article Title",
@@ -55,104 +55,104 @@
             "Page Range",
             "Total Pages"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Movie": {
         "dataSource": "works",
-        "formControls": [
+        "formFields": [
             "Title of Film",
             "Release Date",
             "Film Studio"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Public Domain Research": {
         "dataSource": "processes",
-        "readonlyFormControls": [],
-        "formControls": [
+        "readonlyFormFields": [],
+        "formFields": [
             "Public Domain Research"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Public Domain Approval": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research"
         ],
-        "formControls": [
+        "formFields": [
             "Public Domain Approval"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Existing License": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval"
         ],
-        "formControls": [
+        "formFields": [
             "Existing License"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Existing License Approval": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License"
         ],
-        "formControls": [
+        "formFields": [
             "Existing License Approval"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Exemption Analysis": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
             "Existing License Approval"
         ],
-        "formControls": [
+        "formFields": [
             "Exemption Analysis"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Exemption Approval": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
             "Existing License Approval",
             "Exemption Analysis"
         ],
-        "formControls": [
+        "formFields": [
             "Exemption Approval"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Ownership Research Licensing Exchange": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -160,16 +160,16 @@
             "Exemption Analysis",
             "Exemption Approval"
         ],
-        "formControls": [
+        "formFields": [
             "Licensing Exchange"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Ownership Research Direct to Rights Holder": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -178,16 +178,16 @@
             "Exemption Approval",
             "Licensing Exchange"
         ],
-        "formControls": [
+        "formFields": [
             "Direct to Rights Holders"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Request Submitted": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -197,16 +197,16 @@
             "Licensing Exchange",
             "Direct to Rights Holders"
         ],
-        "formControls": [
+        "formFields": [
             "Request Submitted"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Response from Rights Holder Received": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -217,16 +217,16 @@
             "Direct to Rights Holders",
             "Request Submitted"
         ],
-        "formControls": [
+        "formFields": [
             "Rights Holder Response"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "CLO Response to Rights Holder": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -238,16 +238,16 @@
             "Request Submitted",
             "Rights Holder Response"
         ],
-        "formControls": [
+        "formFields": [
             "CLO Response to Rights Holder"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Receipt of License": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -260,16 +260,16 @@
             "Rights Holder Response",
             "CLO Response to Rights Holder"
         ],
-        "formControls": [
+        "formFields": [
             "Receipt of License"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Supervisor Signature": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -283,16 +283,16 @@
             "CLO Response to Rights Holder",
             "Receipt of License"
         ],
-        "formControls": [
+        "formFields": [
             "Supervisor Signature"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Payment": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -307,16 +307,16 @@
             "Receipt of License",
             "Supervisor Signature"
         ],
-        "formControls": [
+        "formFields": [
             "Payment"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Process Payment": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -332,17 +332,17 @@
             "Supervisor Signature",
             "Payment"
         ],
-        "formControls": [
+        "formFields": [
             "Process Payment",
             "Fast Track Number"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Initial Request Completion": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -360,16 +360,16 @@
             "Process Payment",
             "Fast Track Number"
         ],
-        "formControls": [
+        "formFields": [
             "Initial Request Completion"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Final Request Completion": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -388,16 +388,16 @@
             "Fast Track Number",
             "Initial Request Completion"
         ],
-        "formControls": [
+        "formFields": [
             "Final Request Completion"
         ],
-        "privilegedFormControls": [
+        "privilegedFormFields": [
             "Owner NetID"
         ]
     },
     "Complete": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -417,11 +417,11 @@
             "Initial Request Completion",
             "Final Request Completion"
         ],
-        "formControls": []
+        "formFields": []
     },
     "Canceled": {
         "dataSource": "processes",
-        "readonlyFormControls": [
+        "readonlyFormFields": [
             "Public Domain Research",
             "Public Domain Approval",
             "Existing License",
@@ -441,6 +441,6 @@
             "Initial Request Completion",
             "Final Request Completion"
         ],
-        "formControls": []
+        "formFields": []
     }
 }

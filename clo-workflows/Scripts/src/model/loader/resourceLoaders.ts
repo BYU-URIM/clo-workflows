@@ -9,12 +9,12 @@ export const getView = (viewName: string, userRole: IRole): View => {
     const normalizedView = VIEWS[viewName]
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
-    // form controls in a single view are composed of the formControls array and the readonlyFormControls array
-    // the readonlyFormControls appear first followed by the standard formControls
-    let formControls: FormControl[] = []
-    if (isUserEmployee && normalizedView.privilegedFormControls) {
-        formControls = formControls.concat(
-            normalizedView.privilegedFormControls.map(formControlName => {
+    // form controls in a single view are composed of the formFields array and the readonlyformFields array
+    // the readonlyformFields appear first followed by the standard formFields
+    let formFields: FormControl[] = []
+    if (isUserEmployee && normalizedView.privilegedFormFields) {
+        formFields = formFields.concat(
+            normalizedView.privilegedFormFields.map(formControlName => {
                 const formControl = new FormControl(FORM_CONTROLS[formControlName])
                 return formControl
             })
@@ -26,9 +26,9 @@ export const getView = (viewName: string, userRole: IRole): View => {
     const readonlyAdminOverride: boolean = isUserEmployee && normalizedView.dataSource === "processes"
 
     // first add in the readonly form controls (if present)
-    if (normalizedView.readonlyFormControls) {
-        formControls = formControls.concat(
-            normalizedView.readonlyFormControls.map(formControlName => {
+    if (normalizedView.readonlyformFields) {
+        formFields = formFields.concat(
+            normalizedView.readonlyformFields.map(formControlName => {
                 const formControl = new FormControl(FORM_CONTROLS[formControlName])
                 // make the form control readonly, except for the special case of admin override
                 if (!readonlyAdminOverride) formControl.makeReadOnly()
@@ -38,16 +38,16 @@ export const getView = (viewName: string, userRole: IRole): View => {
     }
 
     // next add in the standard form controls (if present)
-    if (normalizedView.formControls) {
-        formControls = formControls.concat(
-            normalizedView.formControls.map(formControlName => {
+    if (normalizedView.formFields) {
+        formFields = formFields.concat(
+            normalizedView.formFields.map(formControlName => {
                 return new FormControl(FORM_CONTROLS[formControlName])
             })
         )
     }
 
     return new View({
-        formControls,
+        formFields,
         dataSource: normalizedView.dataSource,
     })
 }
@@ -58,7 +58,7 @@ export const getView = (viewName: string, userRole: IRole): View => {
 // to make multiple JSON view definitions differing only by readonly form controls
 export const getViewAndMakeReadonly = (viewName: string, userRole: IRole): View => {
     const view = getView(viewName, userRole)
-    view.formControls.forEach(formControl => formControl.makeReadOnly())
+    view.formFields.forEach(formControl => formControl.makeReadOnly())
     return view
 }
 

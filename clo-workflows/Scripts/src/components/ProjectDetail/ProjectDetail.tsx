@@ -64,7 +64,7 @@ export class ProjectDetail extends React.Component<any, any> {
                     </div>
                     <FormControlGroup
                         data={requestDetailStore.project}
-                        formControls={requestDetailStore.projectView.formControls}
+                        formFields={requestDetailStore.projectView.formFields}
                         updateFormField={requestDetailStore.updateProject}
                         validation={requestDetailStore.projectValidation}
                         width={350}

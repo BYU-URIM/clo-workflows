@@ -118,7 +118,7 @@ export class RequestDetailStore {
 
     @computed
     get processValidation(): {} {
-        return StoreUtils.validateFormControlGroup(this.processView.formControls, this.process)
+        return StoreUtils.validateFormControlGroup(this.processView.formFields, this.process)
     }
 
     @action
@@ -128,7 +128,7 @@ export class RequestDetailStore {
 
     @action
     submitProcess = async (): Promise<void> => {
-        this.processView.touchAllRequiredFormControls()
+        this.processView.touchAllRequiredformFields()
         if (!this.canSubmitProcess) {
             this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
             return
@@ -184,7 +184,7 @@ export class RequestDetailStore {
 
     @action
     submitProject = async (): Promise<void> => {
-        this.projectView.touchAllRequiredFormControls()
+        this.projectView.touchAllRequiredformFields()
         if (!this.canSubmitProject) {
             this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
             return
@@ -215,7 +215,7 @@ export class RequestDetailStore {
 
     @computed
     get projectValidation(): {} {
-        return StoreUtils.validateFormControlGroup(this.projectView.formControls, this.project)
+        return StoreUtils.validateFormControlGroup(this.projectView.formFields, this.project)
     }
 
     @action
@@ -254,7 +254,7 @@ export class RequestDetailStore {
 
     @action
     submitWork = async (): Promise<void> => {
-        this.workView.touchAllRequiredFormControls()
+        this.workView.touchAllRequiredformFields()
         if (!this.canSubmitWork) {
             this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
             return
@@ -296,7 +296,7 @@ export class RequestDetailStore {
 
     @computed
     get workValidation(): {} {
-        return StoreUtils.validateFormControlGroup(this.workView.formControls, this.work)
+        return StoreUtils.validateFormControlGroup(this.workView.formFields, this.work)
     }
 
     @action

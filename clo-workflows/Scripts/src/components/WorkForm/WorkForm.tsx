@@ -16,7 +16,7 @@ export const WorkForm = observer((props: IWorkFormProps) => {
                 <div>
                     <FormControlGroup
                         data={props.clientStore.newWork}
-                        formControls={props.clientStore.currentForm}
+                        formFields={props.clientStore.currentForm}
                         validation={props.clientStore.currentFormValidation}
                         updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newWork")}
                     />

@@ -127,7 +127,7 @@ export class EmployeeStore implements IViewProvider {
 
     @computed
     get selectedStepProcessBriefs(): Array<IListItem> {
-        console.log(EmployeeStore.getProcessBriefsFromRequestElements(this.selectedStepProcesses, this.activeWorks, this.activeProjects))
+        // console.log(EmployeeStore.getProcessBriefsFromRequestElements(this.selectedStepProcesses, this.activeWorks, this.activeProjects))
 
         return EmployeeStore.getProcessBriefsFromRequestElements(this.selectedStepProcesses, this.activeWorks, this.activeProjects)
     }

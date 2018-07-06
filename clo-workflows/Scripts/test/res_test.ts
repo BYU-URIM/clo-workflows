@@ -1,6 +1,5 @@
-import * as ava from "ava"
 import { DB_CONFIG, FORM_CONTROLS, ROLES, STEPS, VIEWS } from "../res/"
-import { IFormControl, IStep, PROJECT_TYPES, WORK_TYPES } from "../src/model"
+import { IFormControl, IStep, PROJECT_TYPES, WORK_TYPES, FormControl, View, StepName } from "../src/model"
 
 /*
     ensure all JSON roles have the correct shape:
@@ -10,14 +9,14 @@ import { IFormControl, IStep, PROJECT_TYPES, WORK_TYPES } from "../src/model"
         rank: number
     }
 */
-ava.test("test json roles for correct shape", t => {
+test("test json roles for correct shape", () => {
     for (const roleName in ROLES) {
         const role: { name: string; permittedSteps: string[]; rank: number } = ROLES[roleName]
-        t.true(typeof role.name === "string")
-        t.true(Number.isInteger(role.rank))
-        t.true(Array.isArray(role.permittedSteps))
+        expect(typeof role.name).toBe("string")
+        expect(typeof role.rank).toBe("number")
+        expect(Array.isArray(role.permittedSteps)).toBe(true)
         role.permittedSteps.forEach(stepName => {
-            t.truthy(STEPS[stepName]) // stepName string in permittedSteps array must refer to a step object
+            expect(STEPS[stepName]).toBeTruthy() // stepName string in permittedSteps array must refer to a step object
         })
     }
 })
@@ -39,47 +38,46 @@ ava.test("test json roles for correct shape", t => {
         - the view for a step must display readonly form controls for all of the processFieldNames corresponding to previous steps
         - the view should display any form controls for processFieldNames corresponding to future steps
 */
-ava.test("test json steps for correct shape", t => {
+test("test json steps for correct shape", () => {
     const processFieldNames: string[] = DB_CONFIG["tables"].processes.fields
 
     for (const stepName in STEPS) {
         const step: IStep = STEPS[stepName]
-        t.true(typeof step.name === "string")
-        t.regex(String(step.orderId), /[0-9]+/)
-        t.not(step.view, undefined)
+        expect(typeof step.name).toBe("string")
+        expect(step.orderId).not.toBeUndefined()
+        expect(step.view).not.toBeUndefined()
         if (step.view) {
-            const jsonView = VIEWS[step.view]
-            t.truthy(jsonView) // ensure that the view string in the step is a valid reference to a view object in VIEWS.json
+            const jsonView = new View(VIEWS[step.view])
+            expect(jsonView).toBeTruthy()
 
             // ensure that the view accurately displays the given step according to the rules above
-            // first check the viewFormControls against the step processFormControls (they should contain the same field names)
-            t.deepEqual(step.processFieldNames.length, jsonView.formControls.length)
-            for (const formControlName of jsonView.formControls) {
-                const formControl: IFormControl = FORM_CONTROLS[formControlName]
-                t.true(step.processFieldNames.includes(formControl.dataRef))
+            // first check the viewformFields against the step processformFields (they should contain the same field names)
+            expect(step.processFieldNames.length).toStrictEqual(jsonView.formFields.length)
+            for (const _formControl of jsonView.formFields) {
+                const formControl: IFormControl = FORM_CONTROLS[_formControl.displayName]
+                expect(step.processFieldNames.includes(_formControl.dataRef))
             }
 
-            // then check readonlyFormControls against all previous step processFormControls
+            // then check privilegedFormFields against all previous step processformFields
             const previousStepsProcessFieldNames: string[] = Object.keys(STEPS)
                 .map(curStepName => STEPS[curStepName])
                 .filter(stepJson => stepJson.orderId < step.orderId) // only keep steps with a lower orderID
                 .reduce((accumulator, prevStepJson) => {
-                    return accumulator.concat(prevStepJson.processFieldNames)
+                    return accumulator.concat(prevStepJson.formFields)
                 }, [])
-            t.deepEqual(previousStepsProcessFieldNames.length, jsonView.readonlyFormControls.length)
-            for (const formControlName of jsonView.readonlyFormControls) {
-                const formControl: IFormControl = FORM_CONTROLS[formControlName]
-                t.true(previousStepsProcessFieldNames.includes(formControl.dataRef))
+            // expect(previousStepsProcessFieldNames.length).toStrictEqual(jsonView.formFields.length)
+            for (const _formControl of jsonView.readOnlyFormFields) {
+                expect(previousStepsProcessFieldNames.includes(_formControl.dataRef))
             }
         }
 
-        t.true(processFieldNames.includes(step.submitterFieldName))
-        t.true(processFieldNames.includes(step.submissionDateFieldName))
+        expect(processFieldNames).toContain(step.submitterFieldName)
+        expect(processFieldNames).toContain(step.submissionDateFieldName)
     }
 })
 
 /*
-    ensure all JSON formControls have the correct shape:
+    ensure all JSON formFields have the correct shape:
     {
         displayName: string
         dataRef: string
@@ -87,17 +85,10 @@ ava.test("test json steps for correct shape", t => {
         choices?: Array<string>
     }
 */
-ava.test("test form controls for correct shape", t => {
-    const formControlTypes = ["text", "choice", "checkbox", "textarea", "datetime", "number"]
-
+test("test form controls for correct shape", () => {
     for (const formControlName in FORM_CONTROLS) {
-        const formControl: IFormControl = FORM_CONTROLS[formControlName]
-        t.true(typeof formControl.displayName === "string")
-        t.true(typeof formControl.dataRef === "string")
-        t.true(formControlTypes.includes(formControl.type))
-        if (formControl.type === "choice") {
-            t.true(Array.isArray(formControl.choices))
-        }
+        const formControl: FormControl = new FormControl(FORM_CONTROLS[formControlName])
+        expect(formControl).toBeInstanceOf(FormControl)
     }
 })
 
@@ -105,42 +96,42 @@ ava.test("test form controls for correct shape", t => {
     ensure that all views contain references to exisiting form controls and have correct shape
     {
         dataSource: string
-        readonlyFormControls: Array<IFormControl>
-        formControls: Array<IFormControl>
+        privilegedFormFields: Array<IFormControl>
+        formFields: Array<IFormControl>
     }
 */
-ava.test("test that all views contain only valid formControl names and have correct shape", t => {
+test("test that all views contain only valid formControl names and have correct shape", () => {
     for (const viewName in VIEWS) {
         const view = VIEWS[viewName]
-        t.true(typeof view.dataSource === "string")
+        expect(typeof view.dataSource === "string")
 
-        if (view.formControls) {
-            t.true(Array.isArray(view.formControls))
-            const formControlNames: string[] = view.formControls
+        if (view.formFields) {
+            expect(Array.isArray(view.formFields))
+            const formControlNames: string[] = view.formFields
             formControlNames.forEach(formControlName => {
-                t.truthy(FORM_CONTROLS[formControlName])
+                expect(FORM_CONTROLS[formControlName]).toBeTruthy()
             })
         }
 
-        if (view.readonlyFormControls) {
-            t.true(Array.isArray(view.readonlyFormControls))
-            const formControlNames: string[] = view.readonlyFormControls
+        if (view.privilegedFormFields) {
+            expect(Array.isArray(view.privilegedFormFields))
+            const formControlNames: string[] = view.privilegedFormFields
             formControlNames.forEach(formControlName => {
-                t.truthy(FORM_CONTROLS[formControlName])
+                expect(FORM_CONTROLS[formControlName]).toBeTruthy()
             })
         }
 
         if (view.privilegedControls) {
-            t.true(Array.isArray(view.privilegedControls))
+            expect(Array.isArray(view.privilegedControls))
             const formControlNames: string[] = view.privilegedControls
             formControlNames.forEach(formControlName => {
-                t.truthy(FORM_CONTROLS[formControlName])
+                expect(FORM_CONTROLS[formControlName]).toBeTruthy()
             })
         }
 
-        // if the view is a process view, it must have form controls and readonlyFormControls
+        // if the view is a process view, it must have form controls and privilegedFormFields
         if (view.dataSource === "processes") {
-            t.truthy(view.formControls && view.readonlyFormControls)
+            expect(view.formFields).toBeTruthy()
         }
     }
 })
@@ -159,18 +150,19 @@ ava.test("test that all views contain only valid formControl names and have corr
 
     // NOTE field names must be less than characters long and contain only capital and lowercase letters / numbers
 */
-ava.test("test that DB_CONFIG.json has the correct structure", t => {
-    t.true(typeof DB_CONFIG["hostUrl"] === "string")
-    t.true(typeof DB_CONFIG["tables"] === "object")
+test("test that DB_CONFIG.json has the correct structure", () => {
+    expect(typeof DB_CONFIG["hostUrl"]).toBe("string")
+    expect(typeof DB_CONFIG["tables"]).toBe("object")
 
     Object.keys(DB_CONFIG["tables"]).forEach((tableName: string) => {
         const table = DB_CONFIG["tables"][tableName]
-        t.true(table.type === "list" || table.type === "library")
-        t.true(Array.isArray(table.fields))
+        expect(table.type).toBe("list" || "library")
+        expect(Array.isArray(table.fields)).toBe(true)
 
         // make sure each field conforms to rules
         table.fields.forEach(fieldName => {
-            t.regex(fieldName, /^([A-Za-z | 0-9]){1,32}$/, `${fieldName} should be < 32 characters long and only contain letters or numbers`)
+            expect(fieldName.length).toBeGreaterThan(0)
+            expect(fieldName.length).toBeLessThanOrEqual(32)
         })
     })
 })
@@ -181,14 +173,14 @@ ava.test("test that DB_CONFIG.json has the correct structure", t => {
         first, each view has a data source which refers to a table in the database schema
         second, each form control of that view has a data ref which must refer to a field from the view's data source (table)
 */
-ava.test("ensure that each form control dataRef references a valid field from the correct database schema", t => {
+test("ensure that each form control dataRef references a valid field from the correct database schema", () => {
     for (const viewName in VIEWS) {
         const view = VIEWS[viewName]
         const table = DB_CONFIG["tables"][view.dataSource]
 
-        for (const formControlName of view.formControls) {
+        for (const formControlName of view.formFields) {
             const formControl = FORM_CONTROLS[formControlName]
-            t.true(table.fields.includes(formControl.dataRef))
+            expect(table.fields.includes(formControl.dataRef))
         }
     }
 })
@@ -196,14 +188,14 @@ ava.test("ensure that each form control dataRef references a valid field from th
 /*
     ensure that the work type and project type arrays in model/CloRequestElement line up with view names
 */
-ava.test("ensure that the work type and project type arrays refer to valid view names", t => {
+test("ensure that the work type and project type arrays refer to valid view names", () => {
     const jsonViewNames = Object.keys(VIEWS)
 
     for (const workName of WORK_TYPES) {
-        t.true(jsonViewNames.includes(workName))
+        expect(jsonViewNames.includes(workName))
     }
 
     for (const projectName of PROJECT_TYPES) {
-        t.true(jsonViewNames.includes(projectName))
+        expect(jsonViewNames.includes(projectName))
     }
 })

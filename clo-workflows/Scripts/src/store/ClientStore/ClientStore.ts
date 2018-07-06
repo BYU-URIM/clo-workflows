@@ -89,7 +89,7 @@ export class ClientStore implements IViewProvider {
     @computed
     get currentForm(): Array<FormControl> {
         return this.view.work.type || this.view.project.type
-            ? getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formControls
+            ? getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formFields
             : undefined
     }
 

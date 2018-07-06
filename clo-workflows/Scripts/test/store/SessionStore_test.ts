@@ -1,11 +1,10 @@
-import * as ava from "ava"
 import { mock, when, instance } from "ts-mockito"
 import { SessionStore, RootStore } from "../../src/store/"
 import { MockDataService } from "../../src/service/dataService/MockDataService"
 import { IUser } from "../../src/model"
 import { getRole } from "../../src/model/loader/resourceLoaders"
 
-ava.test("sessionStore recognizes employee", async t => {
+test("sessionStore recognizes employee", async () => {
     const mockDataService = mock(MockDataService)
     const user: IUser = {
         name: "Connor Moody",
@@ -24,10 +23,10 @@ ava.test("sessionStore recognizes employee", async t => {
 
     const sessionStore: SessionStore = new SessionStore(rootStore, dataService)
     await sessionStore.init()
-    t.true(sessionStore.isEmployee)
+    expect(sessionStore.isEmployee).toBe(true)
 })
 
-ava.test("sessionStore recognizes LTT Client user", async t => {
+test("sessionStore recognizes LTT Client user", async () => {
     const mockDataService = mock(MockDataService)
     const user: IUser = {
         name: "Connor Moody",
@@ -46,5 +45,5 @@ ava.test("sessionStore recognizes LTT Client user", async t => {
 
     const sessionStore: SessionStore = new SessionStore(rootStore, dataService)
     await sessionStore.init()
-    t.false(sessionStore.isEmployee)
+    expect(sessionStore.isEmployee).toBe(false)
 })

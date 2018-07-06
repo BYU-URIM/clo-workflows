@@ -13,7 +13,6 @@ export interface IdentifiableObject {
 // ensures that values of a CloRequestElement are serializable primitive values (no functions or nested objects)
 export type FormEntryType = string | number
 
-// TODO should these be in JSON??
 export const WORK_TYPES = Object.keys(VIEWS).filter(view => VIEWS[view].dataSource === "works")
 
 // export const PROJECT_TYPES = ["Synch", "Arranging", "Masters", "Grand", "Theatrical", "Movies", "Images"]
