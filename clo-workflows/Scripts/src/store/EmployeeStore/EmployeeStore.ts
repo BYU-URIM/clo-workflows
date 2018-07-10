@@ -195,7 +195,11 @@ export class EmployeeStore implements IViewProvider {
                 return {
                     header: `${processProject.Title || ""} - ${processWork.type || ""} Process`,
                     subheader: `submitted to ${process.step} on ${submissionDateAtCurrentStep ? submissionDateAtCurrentStep : "an unknown date"}`,
-                    body: `${processWork.Title} - ${processWork.authorName || processWork.artist || processWork.composer || "unknown artist"}`,
+                    body: `${processWork.Title} - ${processWork.authorName ||
+                        processWork.artist ||
+                        processWork.composer ||
+                        processWork.filmStudio ||
+                        "unknown artist"}`,
                     id: process.Id as number,
                     selectable: true,
                 }

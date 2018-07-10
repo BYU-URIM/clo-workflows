@@ -89,7 +89,14 @@ export class ClientStore implements IViewProvider {
     @computed
     get currentForm(): Array<FormControl> {
         return this.view.work.type || this.view.project.type
-            ? getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formFields
+            ? [...getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole, true).formFields]
+            : undefined
+    }
+
+    @computed
+    get currentWorkForm(): Array<FormControl> {
+        return this.view.work.type || this.view.project.type
+            ? [...getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formFields]
             : undefined
     }
 
@@ -239,10 +246,11 @@ export class ClientStore implements IViewProvider {
         try {
             this.setAsyncPendingLockout(true)
             this.newWork.set("type", this.view.work.type)
+            console.log("res")
+            // this.newWork.values().filter(this.currentForm.)
             const res = await this.dataService.createWork(this.newWork.toJS())
+
             this.view.work.id = res.data.Id
-            await this.data.works.push(this.newWork)
-            // runInAction(() => this.data.works.push(this.newWork.toJS()))
         } catch (error) {
             console.error(error)
             this.postMessage({
