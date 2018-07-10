@@ -4,9 +4,11 @@ import Utils from "../../utils"
 
 // create model instances by loading raw JSON from res/json and denormalizing it
 // all loaders should always use deepCopy(JSON) to create a separate instance so that the global JSON definition is not mutated
-export const getView = (viewName: string, userRole: IRole): View => {
+export const getView = (viewName: string, userRole: IRole, use: boolean = false): View => {
     const isUserEmployee = userRole.name !== "LTT Client"
     const normalizedView = VIEWS[viewName]
+    console.log(normalizedView)
+
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formFields array and the readonlyformFields array
@@ -41,6 +43,15 @@ export const getView = (viewName: string, userRole: IRole): View => {
     if (normalizedView.formFields) {
         formFields = formFields.concat(
             normalizedView.formFields.map(formControlName => {
+                return new FormControl(FORM_CONTROLS[formControlName])
+            })
+        )
+    }
+
+    // next add in the use form controls (if present)
+    if (normalizedView.useFields && use) {
+        formFields = formFields.concat(
+            normalizedView.useFields.map(formControlName => {
                 return new FormControl(FORM_CONTROLS[formControlName])
             })
         )

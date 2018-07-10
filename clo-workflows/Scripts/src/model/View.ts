@@ -4,8 +4,8 @@ import { observable, action } from "mobx"
 // View is a list of form controls rendered as a group
 export interface IView {
     dataSource: string
-    formFields: Array<IFormControl>
-    privilegedFormFields?: Array<IFormControl>
+    formFields: Array<FormControl>
+    privilegedFormFields?: Array<FormControl>
     readOnlyFormFields?: Array<FormControl>
 }
 
