@@ -720,5 +720,23 @@
         "displayName": "Film Studio",
         "dataRef": "filmStudio",
         "type": "text"
+    },
+    "Content Delivery Description": {
+        "displayName": "Content Delivery Description",
+        "dataRef": "deliveryDescription",
+        "type": "text",
+        "description": "(Please provide additional information (if desired) regarding your planned distribution of this content)"
+    },
+    "Work Modifications": {
+        "displayName": "Modifications (if any) to be made to the work",
+        "dataRef": "workModifications",
+        "type": "text",
+        "description": "(If so, please briefly describe how)"
+    },
+    "Date Content Required": {
+        "displayName": "Specific Date Content Required*",
+        "dataRef": "dateContentRequired",
+        "type": "datetime",
+        "description": "(If so, please briefly describe how)"
     }
 }

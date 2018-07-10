@@ -1,19 +1,46 @@
 {
-    "Literary Project": {
+    "Literary project": {
         "dataSource": "projects",
         "formFields": [
             "Project Name",
             "Preferred Email Address",
             "Preferred Contact Phone Number",
             "Professor Name",
-            "Semester Content Required"
+            "Semester Content Required",
+            "How You Found CLO"
         ],
         "privilegedFormFields": [
             "Owner NetID",
             "Status"
         ]
     },
-    "Movie Project": {
+    "Literary work": {
+        "dataSource": "works",
+        "formFields": [
+            "Literary Work Title",
+            "Literary URL",
+            "Chapter/Article Title",
+            "Author/Editor",
+            "Publisher",
+            "Year",
+            "Volume/Edition",
+            "ISSN/ISBN"
+        ],
+        "privilegedFormFields": [
+            "Owner NetID"
+        ],
+        "useFields": [
+            "Page Range",
+            "Total Pages",
+            "Anticipated Number of recipients",
+            "Literary Posting Method",
+            "Content Delivery Description",
+            "Work Modifications",
+            "Date Content Required"
+        ]
+
+    },
+    "Movie project": {
         "dataSource": "projects",
         "formFields": [
             "Project Name",
@@ -41,25 +68,7 @@
             "Status"
         ]
     },
-    "Literary": {
-        "dataSource": "works",
-        "formFields": [
-            "Literary Work Title",
-            "Literary URL",
-            "Chapter/Article Title",
-            "Author/Editor",
-            "Publisher",
-            "Year",
-            "ISSN/ISBN",
-            "Volume/Edition",
-            "Page Range",
-            "Total Pages"
-        ],
-        "privilegedFormFields": [
-            "Owner NetID"
-        ]
-    },
-    "Movie": {
+    "Movie work": {
         "dataSource": "works",
         "formFields": [
             "Title of Film",
@@ -68,7 +77,8 @@
         ],
         "privilegedFormFields": [
             "Owner NetID"
-        ]
+        ],
+        "useFields": []
     },
     "Public Domain Research": {
         "dataSource": "processes",

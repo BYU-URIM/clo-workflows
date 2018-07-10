@@ -84,7 +84,10 @@
                 "completeSubDate",
                 "canceledSubName",
                 "canceledSubDate",
-                "literaryPostingMethod"
+                "literaryPostingMethod",
+                "dateContentRequired",
+                "workModifications",
+                "deliveryDescription"
             ]
         },
         "projects": {
