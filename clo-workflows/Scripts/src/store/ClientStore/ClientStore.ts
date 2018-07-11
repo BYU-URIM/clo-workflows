@@ -26,9 +26,9 @@ type ClientObsMap = ObservableMap<FormEntryType>
 
 // @autobind
 export class ClientStore implements IViewProvider {
-    @observable searchedProjects: ObservableMap<CloRequestElement>
     @observable searchedWorks: ObservableMap<CloRequestElement> = new ObservableMap()
-    @observable searchedProcesses: ObservableMap<CloRequestElement>
+    // @observable searchedProjects: ObservableMap<CloRequestElement>
+    // @observable searchedProcesses: ObservableMap<CloRequestElement>
     @observable currentUser: IUser = this.root.sessionStore.currentUser
     /* Observable maps to store the info entered that is not state */
     @observable newProject: ClientObsMap
@@ -187,12 +187,15 @@ export class ClientStore implements IViewProvider {
     @computed
     get searchedWorkBriefs(): Array<IListItem> {
         return Object.values(this.searchedWorks.toJS()).map(
-            (work): IListItem => ({
-                body: work.Title.toString(),
-                header: work.Title.toString(),
-                id: work.Id,
-                selectable: true,
-            })
+            (work): IListItem => {
+                console.log(work)
+                return {
+                    header: String(work.Title || ""),
+                    body: String(work.body || ""),
+                    id: work.Id,
+                    selectable: work.Id === 0 ? false : true,
+                }
+            }
         )
     }
 
@@ -204,6 +207,11 @@ export class ClientStore implements IViewProvider {
     @action
     updateClientStoreMember = async (fieldName: string, newVal: FormEntryType | boolean, objToUpdate?: string) => {
         objToUpdate ? this[objToUpdate].set(fieldName, newVal) : (this[fieldName] = newVal)
+    }
+
+    @action
+    clearSearchResults = () => {
+        this.searchedWorks = new ObservableMap<CloRequestElement>()
     }
     /* determines which request the user is making from the ViewState */
     @action
@@ -274,7 +282,6 @@ export class ClientStore implements IViewProvider {
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
             if (this.view.work.isNew) this.newProcess.set("Title", this.newWork.get("Title"))
-            // : this.newProcess.set("Title", this.data.works.find(work => work.Id.toString() === this.view.work.id).Title)
             this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
