@@ -1,9 +1,9 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
-import { EmployeeStore, PivotState } from "../../store/"
-import { FormControlGroup, WorkDetail, ProjectDetail, DescriptiveDropdown } from "../"
+import { EmployeeStore, PivotState, RequestDetailStore } from "../../store/"
+import { FormControlGroup, WorkDetail, ProjectDetail, DescriptiveDropdown, UseDetail } from "../"
 // import { autobind } from "core-decorators"
-import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize, IDropdownOption, SearchBox } from "office-ui-fabric-react/lib/"
+import { PrimaryButton, Pivot, PivotLinkFormat, PivotItem, PivotLinkSize, IDropdownOption } from "office-ui-fabric-react/lib/"
 import { StepName, getStepNames } from "../../model/"
 import "./styles.scss"
 
@@ -18,10 +18,10 @@ export class ProcessDetail extends React.Component<any, any> {
     private employeeStore: EmployeeStore
 
     public render() {
-        const requestDetailStore = this.employeeStore.requestDetailStore
+        const requestDetailStore: RequestDetailStore = this.employeeStore.requestDetailStore
+
         return (
             <div className="processDetail-wrapper-styles">
-
                 <div className="processDetail-processFor-styles">
                     {/* Process Form */}
                     <div className="processDetail-processTitle-styles">Edit Process</div>
@@ -53,19 +53,39 @@ export class ProcessDetail extends React.Component<any, any> {
                 </div>
                 <div className="processDetail-projectWorkSwitches-styles">
                     {/* Project / Work switcher */}
-                    <Pivot
-                        linkFormat={PivotLinkFormat.tabs}
-                        linkSize={PivotLinkSize.large}
-                        selectedKey={requestDetailStore.pivotState}
-                        onLinkClick={item => requestDetailStore.setPivotState(item.props.itemKey as PivotState)}
-                    >
-                        <PivotItem linkText="Work" itemKey="work">
-                            <WorkDetail />
-                        </PivotItem>
-                        <PivotItem linkText="Project" itemKey="project">
-                            <ProjectDetail />
-                        </PivotItem>
-                    </Pivot>
+                    {requestDetailStore.useView.useFields.length > 0 ? (
+                        <Pivot
+                            linkFormat={PivotLinkFormat.tabs}
+                            linkSize={PivotLinkSize.large}
+                            selectedKey={requestDetailStore.pivotState}
+                            onLinkClick={item => requestDetailStore.setPivotState(item.props.itemKey as PivotState)}
+                        >
+                            <PivotItem linkText="Work" itemKey="work">
+                                <WorkDetail />
+                            </PivotItem>
+                            <PivotItem linkText="Project" itemKey="project">
+                                <ProjectDetail />
+                            </PivotItem>
+
+                            <PivotItem linkText="Use" itemKey="use">
+                                <UseDetail />
+                            </PivotItem>
+                        </Pivot>
+                    ) : (
+                        <Pivot
+                            linkFormat={PivotLinkFormat.tabs}
+                            linkSize={PivotLinkSize.large}
+                            selectedKey={requestDetailStore.pivotState}
+                            onLinkClick={item => requestDetailStore.setPivotState(item.props.itemKey as PivotState)}
+                        >
+                            <PivotItem linkText="Work" itemKey="work">
+                                <WorkDetail />
+                            </PivotItem>
+                            <PivotItem linkText="Project" itemKey="project">
+                                <ProjectDetail />
+                            </PivotItem>
+                        </Pivot>
+                    )}
                 </div>
             </div>
         )
