@@ -26,18 +26,22 @@ export class ClientStoreData {
         this.fetchWorks()
         this.fetchNotes()
     }
+    @action
     fetchClientProcesses = async () => {
         const processes = await this.dataService.fetchClientProcesses(this.currentUser.Id)
         runInAction(() => (this.processes = processes))
     }
+    @action
     fetchClientProjects = async () => {
         const projects = await this.dataService.fetchClientProjects(this.currentUser.Id)
         runInAction(() => (this.projects = projects))
     }
+    @action
     fetchWorks = async () => {
         const works = await this.dataService.fetchWorks()
         runInAction(() => (this.works = works))
     }
+    @action
     fetchNotes = async () => {
         this.projectNotesByProjectId = observable.map()
         this.workNotesByWorkId = observable.map()

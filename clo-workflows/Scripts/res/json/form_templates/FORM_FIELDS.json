@@ -350,11 +350,6 @@
         "dataRef": "link",
         "type": "text"
     },
-    "Projected Audience Size": {
-        "displayName": "Projected Audience Size",
-        "dataRef": "projectedAudienceSize",
-        "type": "number"
-    },
     "Actual Audience Size": {
         "displayName": "Actual Audience Size",
         "dataRef": "actualAudienceSize",
@@ -504,11 +499,6 @@
         "dataRef": "totalPages",
         "type": "number"
     },
-    "Total Chapters": {
-        "displayName": "Total Chapters",
-        "dataRef": "totalChapters",
-        "type": "number"
-    },
     "URL": {
         "displayName": "URL",
         "dataRef": "URL",
@@ -535,19 +525,9 @@
         "dataRef": "holdUntil",
         "type": "text"
     },
-    "Year": {
+     "Year": {
         "displayName": "Year",
         "dataRef": "year",
-        "type": "text"
-    },
-    "Director": {
-        "displayName": "Director",
-        "dataRef": "director",
-        "type": "text"
-    },
-    "Hard Copy Owner": {
-        "displayName": "Hard Copy Owner",
-        "dataRef": "hardCopyOwner",
         "type": "text"
     },
     "Owner NetID": {
@@ -720,5 +700,23 @@
         "displayName": "Film Studio",
         "dataRef": "filmStudio",
         "type": "text"
+    },
+    "Content Delivery Description": {
+        "displayName": "Content Delivery Description",
+        "dataRef": "deliveryDescription",
+        "type": "text",
+        "description": "(Please provide additional information (if desired) regarding your planned distribution of this content)"
+    },
+    "Work Modifications": {
+        "displayName": "Modifications (if any) to be made to the work",
+        "dataRef": "workModifications",
+        "type": "text",
+        "description": "(If so, please briefly describe how)"
+    },
+    "Date Content Required": {
+        "displayName": "Specific Date Content Required*",
+        "dataRef": "dateContentRequired",
+        "type": "datetime",
+        "description": "(If so, please briefly describe how)"
     }
 }

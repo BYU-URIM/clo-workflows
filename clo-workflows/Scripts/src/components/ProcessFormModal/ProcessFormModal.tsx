@@ -26,13 +26,17 @@ export const ProcessFormModal = observer((props: IFormPanelProps) => {
                     options={props.clientStore.typesAsOptions.WORKS}
                     className={"workForm-dropDown-styles"}
                     placeHolder={props.clientStore.view.work.type || "select a Work type"}
-                    onChanged={e => (props.clientStore.view.work.type = e.text)}
+                    onChanged={e => {
+                        props.clientStore.view.work.type = e.text
+                        props.clientStore.clearSearchResults()
+                    }}
                 />
                 <Pivot
                     linkFormat={PivotLinkFormat.tabs}
                     linkSize={PivotLinkSize.normal}
                     onLinkClick={e => {
                         props.clientStore.view.work.isNew = e.props.itemKey === "new"
+                        props.clientStore.clearSearchResults()
                     }}
                 >
                     <PivotItem linkText="Existing Work" itemKey="existing">
@@ -44,7 +48,7 @@ export const ProcessFormModal = observer((props: IFormPanelProps) => {
                             typeSelected={props.clientStore.view.work.type ? true : false}
                             search={props.clientStore.search}
                             selectedItem={props.clientStore.view.work.id}
-                            emptyMessage={"No Results"}
+                            emptyMessage={""}
                         />
                     </PivotItem>
                     <PivotItem linkText="New Work" itemKey="new">

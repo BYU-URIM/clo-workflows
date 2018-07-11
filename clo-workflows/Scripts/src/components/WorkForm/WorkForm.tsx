@@ -22,6 +22,16 @@ export const WorkForm = observer((props: IWorkFormProps) => {
                     />
                 </div>
             )}
+            {props.clientStore.view.work.type && (
+                <div>
+                    <FormControlGroup
+                        data={props.clientStore.newProcess}
+                        formFields={props.clientStore.useForm}
+                        validation={props.clientStore.useFormValidation}
+                        updateFormField={(fieldName, value) => props.clientStore.updateClientStoreMember(fieldName, value, "newProcess")}
+                    />
+                </div>
+            )}
         </div>
     )
 })

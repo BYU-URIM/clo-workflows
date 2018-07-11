@@ -8,11 +8,7 @@ import "./styles.scss"
 @inject("rootStore")
 @observer
 export class Employee extends React.Component<any, any> {
-    public componentWillMount() {
-        this.employeeStore = this.props.rootStore.employeeStore
-    }
-
-    private employeeStore: EmployeeStore
+    private employeeStore: EmployeeStore = this.props.rootStore.employeeStore
 
     public render() {
         const employeeStore = this.employeeStore

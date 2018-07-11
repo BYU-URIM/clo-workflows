@@ -29,7 +29,7 @@ export interface IProcessListState {
     hoverItemIndex: number
 }
 
-// @autobind
+
 @observer
 export class NonScrollableList extends React.Component<INonScrollableListProps, IProcessListState> {
     constructor(props) {

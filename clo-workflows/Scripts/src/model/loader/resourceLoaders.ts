@@ -7,11 +7,14 @@ import Utils from "../../utils"
 export const getView = (viewName: string, userRole: IRole): View => {
     const isUserEmployee = userRole.name !== "LTT Client"
     const normalizedView = VIEWS[viewName]
+    console.log(normalizedView)
+
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formFields array and the readonlyformFields array
     // the readonlyformFields appear first followed by the standard formFields
-    let formFields: FormControl[] = []
+    let formFields: Array<FormControl> = []
+    let useFields: Array<FormControl> = []
     if (isUserEmployee && normalizedView.privilegedFormFields) {
         formFields = formFields.concat(
             normalizedView.privilegedFormFields.map(formControlName => {
@@ -46,8 +49,16 @@ export const getView = (viewName: string, userRole: IRole): View => {
         )
     }
 
+    // next add in the use form controls (if present)
+    if (normalizedView.useFields) {
+        useFields = normalizedView.useFields.map(formControlName => {
+            return new FormControl(FORM_CONTROLS[formControlName])
+        })
+    }
+
     return new View({
         formFields,
+        useFields,
         dataSource: normalizedView.dataSource,
     })
 }
@@ -59,6 +70,7 @@ export const getView = (viewName: string, userRole: IRole): View => {
 export const getViewAndMakeReadonly = (viewName: string, userRole: IRole): View => {
     const view = getView(viewName, userRole)
     view.formFields.forEach(formControl => formControl.makeReadOnly())
+    view.useFields.forEach(useField => useField.makeReadOnly())
     return view
 }
 

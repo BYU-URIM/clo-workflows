@@ -8,7 +8,7 @@ import { IStep } from "../../model"
 import "./styles.scss"
 
 @inject("rootStore")
-// @autobind
+
 @observer
 export class RoleSteps extends React.Component<any, any> {
     public componentWillMount() {

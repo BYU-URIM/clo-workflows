@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { IPnpNodeSettings, PnpNode } from "sp-pnp-node"
 import * as DB_CONFIG from "../../res/json/DB_CONFIG.json"
-import { IUtil, IData, IDBConfig, IGroup } from "./IUtil"
+import { IUtil, IData, IGroup } from "./IUtil"
 import { CloRequestElement } from "../../src/model/"
 import { SPRest, sp } from "@pnp/sp"
 const db = DB_CONFIG as any

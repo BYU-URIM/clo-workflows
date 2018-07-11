@@ -41,26 +41,6 @@ export class ProjectDetail extends React.Component<any, any> {
                                 }
                             />
                         </div>
-                        <div className="projectDetail-editButton-styles">
-                            <IconButton
-                                disabled={!requestDetailStore.isRequestActive}
-                                iconProps={{
-                                    iconName: "OpenFolderHorizontal",
-                                    styles: () => ({
-                                        root: {
-                                            fontSize: "1.4em",
-                                        },
-                                    }),
-                                }}
-                                title="open project documents folder"
-                                onClick={() => {
-                                    const id = requestDetailStore.project.get("Id")
-                                    const title = requestDetailStore.project.get("Title")
-                                    const type = requestDetailStore.project.get("type")
-                                    window.open(`${DB_CONFIG.hostUrl}/SiteAssets/${type} - ${title} - ${id}`)
-                                }}
-                            />
-                        </div>
                     </div>
                     <FormControlGroup
                         data={requestDetailStore.project}

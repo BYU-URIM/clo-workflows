@@ -96,7 +96,7 @@ module.exports = function(env) {
             filename: "[name].js",
             path: path.join(__dirname, "dist"),
         },
-        devtool: "cheap-module-eval-source-map",
+        devtool: "source-map",
         module: {
             rules: [
                 {

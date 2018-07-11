@@ -8,10 +8,7 @@ import "./styles.scss"
 @inject("rootStore")
 @observer
 export class Client extends React.Component<any, any> {
-    public componentWillMount() {
-        this.clientStore = this.props.rootStore.clientStore
-    }
-    clientStore: ClientStore
+    clientStore: ClientStore = this.props.rootStore.clientStore
 
     render() {
         return (
