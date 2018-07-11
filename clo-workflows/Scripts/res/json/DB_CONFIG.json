@@ -87,7 +87,10 @@
                 "literaryPostingMethod",
                 "dateContentRequired",
                 "workModifications",
-                "deliveryDescription"
+                "deliveryDescription",
+                "pageRange",
+                "totalPages",
+                "anticipatedAudienceSize"
             ]
         },
         "projects": {
@@ -98,12 +101,7 @@
                 "submitterId",
                 "Title",
                 "department",
-                "danceTitle",
-                "descriptionOfWork",
                 "group",
-                "timing",
-                "artist",
-                "arranger",
                 "copyrightOwner",
                 "licensingOrganization",
                 "instrumentation",
@@ -133,7 +131,6 @@
                 "source",
                 "copyOfScore",
                 "link",
-                "projectedAudienceSize",
                 "actualAudienceSize",
                 "dateOfShowing",
                 "requestorContactInfo",
@@ -182,7 +179,6 @@
                 "Title",
                 "course",
                 "format",
-                "authorName",
                 "artist",
                 "publisher",
                 "yearPublished",
@@ -192,7 +188,6 @@
                 "ISSNISBN",
                 "issue",
                 "pageRange",
-                "totalPages",
                 "totalChapters",
                 "chapterArticleTitle",
                 "URL",
