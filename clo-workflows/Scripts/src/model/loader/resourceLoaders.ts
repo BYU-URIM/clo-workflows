@@ -70,6 +70,7 @@ export const getView = (viewName: string, userRole: IRole): View => {
 export const getViewAndMakeReadonly = (viewName: string, userRole: IRole): View => {
     const view = getView(viewName, userRole)
     view.formFields.forEach(formControl => formControl.makeReadOnly())
+    view.useFields.forEach(useField => useField.makeReadOnly())
     return view
 }
 
