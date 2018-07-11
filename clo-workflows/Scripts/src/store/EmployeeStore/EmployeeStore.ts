@@ -199,6 +199,7 @@ export class EmployeeStore implements IViewProvider {
                         processWork.artist ||
                         processWork.composer ||
                         processWork.filmStudio ||
+                        processWork.authorOrEditor ||
                         "unknown artist"}`,
                     id: process.Id as number,
                     selectable: true,

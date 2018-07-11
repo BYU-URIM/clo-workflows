@@ -89,14 +89,14 @@ export class ClientStore implements IViewProvider {
     @computed
     get currentForm(): Array<FormControl> {
         return this.view.work.type || this.view.project.type
-            ? [...getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole, true).formFields]
+            ? [...getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formFields]
             : undefined
     }
 
     @computed
-    get currentWorkForm(): Array<FormControl> {
+    get useForm(): Array<FormControl> {
         return this.view.work.type || this.view.project.type
-            ? [...getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).formFields]
+            ? [...getView(this.view.work.type || this.view.project.type, this.root.sessionStore.currentUser.primaryRole).useFields]
             : undefined
     }
 
@@ -104,6 +104,13 @@ export class ClientStore implements IViewProvider {
     get currentFormValidation(): {} {
         const typeToValidate = this.currentForm
         const newInstanceOfType = this.view.modal === "project" ? this.newProject : this.newWork
+        return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
+    }
+
+    @computed
+    get useFormValidation(): {} {
+        const typeToValidate = this.useForm
+        const newInstanceOfType = this.newProcess
         return StoreUtils.validateFormControlGroup(typeToValidate, newInstanceOfType)
     }
 
@@ -246,10 +253,7 @@ export class ClientStore implements IViewProvider {
         try {
             this.setAsyncPendingLockout(true)
             this.newWork.set("type", this.view.work.type)
-            console.log("res")
-            // this.newWork.values().filter(this.currentForm.)
             const res = await this.dataService.createWork(this.newWork.toJS())
-
             this.view.work.id = res.data.Id
         } catch (error) {
             console.error(error)
