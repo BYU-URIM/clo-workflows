@@ -8,7 +8,7 @@ import { StepName, getStepNames } from "../../model/"
 import "./styles.scss"
 
 @inject("rootStore")
-// @autobind
+
 @observer
 export class ProcessDetail extends React.Component<any, any> {
     public componentWillMount() {

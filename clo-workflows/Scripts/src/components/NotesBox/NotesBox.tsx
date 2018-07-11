@@ -17,7 +17,7 @@ enum NoteOperation {
     CREATE_NOTE = "create_note",
 }
 
-// @autobind
+
 @observer
 export class NotesBox extends React.Component<INotesBoxProps, any> {
     public render() {

@@ -13,7 +13,7 @@ export interface IHeaderBreadcrumbState {
     hoverBreadcrumbKey: string
 }
 
-// @autobind
+
 @observer
 export class HeaderBreadcrumb extends React.Component<IHeaderBreadcrumbProps, IHeaderBreadcrumbState> {
     constructor(props: IHeaderBreadcrumbProps) {
