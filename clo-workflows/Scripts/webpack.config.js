@@ -13,7 +13,7 @@ module.exports = function(env) {
 
     const prodConfig = {
         entry: {
-            app: "./src/main.tsx",
+            bundle: "./src/main.tsx",
         },
         output: {
             filename: "[name].js",
@@ -25,28 +25,7 @@ module.exports = function(env) {
                 new UglifyJsPlugin({
                     cache: true,
                     parallel: true,
-                }),
-                new OptimizeCSSAssetsPlugin({}),
-            ],
-            runtimeChunk: {
-                name: "manifest",
-            },
-            splitChunks: {
-                cacheGroups: {
-                    react: {
-                        test: /[\\/]node_modules[\\/]react[\\/]/,
-                        name: "react",
-                        priority: -20,
-                        chunks: "all",
-                    },
-                    office: {
-                        test: /[\\/]node_modules[\\/]office-ui-fabric-react[\\/]/,
-                        name: "office",
-                        priority: -20,
-                        chunks: "all",
-                    },
-                },
-            },
+                })            ]
         },
         module: {
             rules: [
@@ -61,11 +40,11 @@ module.exports = function(env) {
                 },
                 {
                     test: /\.scss$/,
-                    use: [MiniCssExtractPlugin.loader, "css-loader"],
+                    use: ["style-loader", "css-loader"],
                 },
                 {
                     test: /\.css$/,
-                    use: [MiniCssExtractPlugin.loader, "css-loader"],
+                    use: ["style-loader", "css-loader"],
                 },
             ],
         },
@@ -75,10 +54,6 @@ module.exports = function(env) {
         },
         plugins: [
             new CleanWebpackPlugin(["dist/"]),
-            new MiniCssExtractPlugin({
-                filename: "[name].css",
-                chunkFilename: "[id].css",
-            }),
             new webpack.DefinePlugin({
                 NODE_ENV: JSON.stringify(env.NODE_ENV),
             }),
