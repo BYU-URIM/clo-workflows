@@ -324,8 +324,6 @@ OpenCover/
 clo-workflows/Scripts/notes.md
 clo-workflows/Scripts/src/component/Testing.tsx
 clo-workflows/Scripts/config/private.json
-clo-workflows/Scripts/dist/sp_config/migrations/IUtil.js
 clo-workflows/Scripts/src/browserFile.ts
 clo-workflows/work.code-workspace
-clo-workflows/Scripts/dist/
 clo-workflows/Scripts/dist/index.html
