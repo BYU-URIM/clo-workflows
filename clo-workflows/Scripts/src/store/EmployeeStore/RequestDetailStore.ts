@@ -18,7 +18,7 @@ import {
     IFormControl,
 } from "../../model"
 
-// @autobind
+
 export class RequestDetailStore {
     constructor(
         public readonly employeeStore: EmployeeStore,
@@ -30,6 +30,7 @@ export class RequestDetailStore {
         this.process = observable.map(originalProcess)
         this.project = observable.map(originalProject)
         this.work = observable.map(originalWork)
+        this.use = observable.map(originalProcess)
 
         // if process is changed, recalculate next step
         reaction(() => this.process.values(), () => (this.nextStepName = getNextStepName(this.process.toJS())))
@@ -78,12 +79,84 @@ export class RequestDetailStore {
     get isRequestActive(): boolean {
         return (this.process.get("step") as StepName) !== "Complete" && (this.process.get("step") as StepName) !== "Canceled"
     }
+    /*******************************************************************************************************/
+    // USE
+    /*******************************************************************************************************/
+    @observable use: ObservableMap<FormEntryType>
+    @observable canEditUse: boolean = false
+    @computed
+    get useView(): View {
+        console.log("here")
+        console.log(this.work)
+        
+        
+        const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
+        return this.canEditUse
+            ? getView(this.work.get("type") as string, curUserRole)
+            : getViewAndMakeReadonly(this.work.get("type") as string, curUserRole)
+    }
+    @computed
+    get canSubmitUse(): boolean {
+        return !this.employeeStore.asyncPendingLockout && Utils.isObjectEmpty(this.useValidation) && this.isRequestActive
+    }
+
+    @computed
+    get useValidation(): {} {
+        return StoreUtils.validateFormControlGroup(this.useView.useFields, this.use)
+    }
+
+    @action
+    updateUse = (fieldName: string, newVal: FormEntryType): void => {
+        this.use.set(fieldName, String(newVal))
+    }
+
+    @action
+    submitUse = async (): Promise<void> => {
+        this.useView.touchAllRequiredformFields()
+        if (!this.canSubmitUse) {
+            this.employeeStore.postMessage({ messageText: "please fix all form errors", messageType: "error" })
+            return
+        }
+
+        try {
+            this.employeeStore.setAsyncPendingLockout(true)
+            const updatedUse = this.use.toJS() as CloRequestElement
+
+            await this.dataService.updateRequestElement(updatedUse, ListName.PROCESSES)
+            // replace cached process with successfully submitted process
+            this.employeeStore.activeProcesses.set(String(updatedUse.Id), updatedUse)
+            this.employeeStore.postMessage({ messageText: "process successfully submitted", messageType: "success" })
+        } catch (error) {
+            console.log(error)
+            this.employeeStore.postMessage({
+                messageText: "there was a problem submitting your process, try again",
+                messageType: "error",
+            })
+        } finally {
+            this.employeeStore.setAsyncPendingLockout(false)
+        }
+    }
+    @action
+    startEditingUse = () => {
+        this.canEditUse = true
+    }
+    @action
+    stopEditingUse = () => {
+        this.canEditUse = false
+        this.resetUseToOriginal()
+    }
+    @action
+    private resetUseToOriginal = () => {
+        this.use = observable.map(this.originalProcess)
+    }
 
     /*******************************************************************************************************/
     // PROCESSES
     /*******************************************************************************************************/
     @observable process: ObservableMap<FormEntryType>
     @observable nextStepName: StepName
+    @observable canEditProcess: boolean = false
+
     @action
     updateNextStepName = (stepName: StepName) => {
         this.nextStepName = stepName
@@ -161,6 +234,19 @@ export class RequestDetailStore {
         } finally {
             this.employeeStore.setAsyncPendingLockout(false)
         }
+    }
+    @action
+    startEditingProcess = () => {
+        this.canEditProcess = true
+    }
+    @action
+    stopEditingProcess = () => {
+        this.canEditProcess = false
+        this.resetProcessToOriginal()
+    }
+    @action
+    private resetProcessToOriginal = () => {
+        this.process = observable.map(this.originalProcess)
     }
 
     /*******************************************************************************************************/
@@ -264,8 +350,7 @@ export class RequestDetailStore {
             this.employeeStore.setAsyncPendingLockout(true)
             const updatedWork = this.work.toJS() as CloRequestElement
             await this.dataService.updateRequestElement(updatedWork, ListName.WORKS)
-            await 
-            this.employeeStore.activeWorks.set(String(updatedWork.Id), updatedWork)
+            await this.employeeStore.activeWorks.set(String(updatedWork.Id), updatedWork)
             this.employeeStore.postMessage({ messageText: "work successfully submitted", messageType: "success" })
             runInAction(() => (this.canEditWork = false))
         } catch (error) {

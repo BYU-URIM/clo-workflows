@@ -8,7 +8,7 @@ import { StoreUtils, IMessage, IViewProvider, RootStore, RequestDetailStore } fr
 import chalk from "chalk"
 
 // stores all in-progress projects, processes, and works that belong the current employee's steps
-// @autobind
+
 export class EmployeeStore implements IViewProvider {
     constructor(public readonly root: RootStore, private readonly dataService: IDataService) {}
 
@@ -266,13 +266,13 @@ export class EmployeeStore implements IViewProvider {
 
     @observable clientMode: boolean = false
     @action
-    toggleClientMode = () => {
+    toggleClientMode = async () => {
         this.clientMode = !this.clientMode
         if (this.clientMode) {
             this.root.clientStore.data.init()
             this.root.clientStore.view.resetClientState()
         } else {
-            this.init()
+            await this.init()
         }
     }
 }
