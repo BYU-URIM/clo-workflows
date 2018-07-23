@@ -17,8 +17,7 @@ module.exports = function(env) {
         },
         output: {
             filename: "[name].js",
-            path: path.join(__dirname, "dist"),
-            chunkFilename: "[name].js",
+            path: path.join(__dirname, "dist")
         },
         optimization: {
             minimizer: [
@@ -34,19 +33,12 @@ module.exports = function(env) {
                     test: /\.tsx?$/,
                     loader: "ts-loader",
                     include: path.resolve(__dirname, "./src"),
-                    exclude: /node_modules/,
-                    options: {
-                        transpileOnly: true,
-                    },
+                    exclude: /node_modules/
                 },
                 {
                     test: /\.scss$/,
                     use: ["style-loader", "css-loader"],
-                },
-                {
-                    test: /\.css$/,
-                    use: ["style-loader", "css-loader"],
-                },
+                }
             ],
         },
         resolve: {
@@ -66,7 +58,7 @@ module.exports = function(env) {
     }
     const devConfig = {
         entry: {
-            app: "./src/main.tsx",
+            bundle: "./src/main.tsx",
         },
         output: {
             filename: "[name].js",
