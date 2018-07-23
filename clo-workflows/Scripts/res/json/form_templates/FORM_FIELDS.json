@@ -533,12 +533,12 @@
     "Owner NetID": {
         "displayName": "Owner NetID *",
         "dataRef": "submitterId",
-        "type": "text"
+        "type": "admin-text"
     },
     "Status": {
         "displayName": "Status *",
         "dataRef": "status",
-        "type": "choice",
+        "type": "admin-choice",
         "choices": [
             "Active",
             "Canceled"

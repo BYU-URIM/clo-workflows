@@ -25,7 +25,8 @@ module.exports = function(env) {
                 new UglifyJsPlugin({
                     cache: true,
                     parallel: true,
-                })            ]
+                }),
+            ],
         },
         module: {
             rules: [
@@ -71,7 +72,7 @@ module.exports = function(env) {
             filename: "[name].js",
             path: path.join(__dirname, "dist"),
         },
-        devtool: "source-map",
+        devtool: "inline-source-map",
         module: {
             rules: [
                 {

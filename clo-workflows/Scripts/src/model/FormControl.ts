@@ -1,4 +1,6 @@
 import { observable, action } from "mobx"
+import { FORM_CONTROLS } from "../../res/"
+
 export interface IFormControl {
     displayName: string
     dataRef: string // reference to the field name from the model that this from control is displaying
@@ -54,4 +56,15 @@ export class FormControl implements IFormControl {
     }
 }
 
-export type FormControlType = "text" | "choice" | "checkbox" | "textarea" | "datetime" | "number" | "semesterpicker" | "maskedtext"
+export type FormControlType =
+    | "text"
+    | "choice"
+    | "checkbox"
+    | "textarea"
+    | "datetime"
+    | "number"
+    | "semesterpicker"
+    | "maskedtext"
+    | "admin-choice"
+    | "admin-text"
+

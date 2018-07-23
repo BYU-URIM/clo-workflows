@@ -1,0 +1,17 @@
+---
+name: DescriptiveDropdown
+---
+
+import { DescriptiveDropdown } from "./DescriptiveDropdown"
+import {Playground} from "docz"
+
+# DescriptiveDropdown
+
+The descriptive checkbox is just a checkbox with a description...
+<Playground>
+<DescriptiveDropdown
+                                        options={[{key: "option 1", text: "option 1"}, {key: "option 2", text: "option 2"}]}
+                                        selectedKey={"option 1"}
+                                        description={"wow this is a fantastic description!"}
+                                    />
+</Playground>
