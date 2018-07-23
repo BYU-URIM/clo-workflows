@@ -1,0 +1,16 @@
+---
+name: HeaderBreadcrumb
+---
+import { HeaderBreadcrumb } from "./HeaderBreadcrumb"
+import { MockUsers } from "../../service"
+import { Playground } from "docz"
+
+# HeaderBreadcrumb
+
+The descriptive checkbox is just a checkbox with a description...
+<Playground>
+<HeaderBreadcrumb
+items={[{text: "breadcrumb 1", key: "bc1"}, {text: "breadcrumb 2", key: "bc2"}]}
+onClickItem={() => console.log("clicked")}
+/>
+</Playground>

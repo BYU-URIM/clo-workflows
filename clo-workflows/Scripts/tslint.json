@@ -31,5 +31,11 @@
         "no-implicit-dependencies": false,
         "no-submodule-imports": false
     },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*",
+        "static",
+        "dist"
+      ],
     "rulesDirectory": []
 }

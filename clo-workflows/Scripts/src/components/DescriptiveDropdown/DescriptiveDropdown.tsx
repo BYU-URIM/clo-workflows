@@ -5,6 +5,7 @@ import "./styles.scss"
 
 export interface IDescriptiveDropdownProps extends IDropdownProps {
     description: string
+    descriptionClassName?: string
 }
 
 export const DescriptiveDropdown = observer(
@@ -12,7 +13,15 @@ export const DescriptiveDropdown = observer(
         return (
             <div>
                 <Dropdown {...props} />
-                <span className="descriptiveDropdown-description-styles">{props.description}</span>
+                <span
+                    className={
+                        props.descriptionClassName
+                            ? `${props.descriptionClassName} descriptiveDropdown-description-styles`
+                            : "descriptiveDropdown-description-styles"
+                    }
+                >
+                    {props.description}
+                </span>
             </div>
         )
     }

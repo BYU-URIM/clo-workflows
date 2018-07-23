@@ -1,26 +1,33 @@
-
 .formControlGroup-styles {
-  width: 450px;
-  margin: 0px;
+    width: 450px;
+    margin: 0;
 }
 
 .formControlGroup-formControl-styles {
-  margin: 20px 0px;
+    margin: 20px 0;
 }
 
 .formControlGroup-checkbox-styles {
-  margin: 20px 0px;
+    margin: 20px 0;
 }
 
 .formControlGroup-formControl-styles label {
-  font-weight: 600
+    font-weight: 600;
 }
 
 .ms-Checkbox-text.css-100 {
-  font-weight: 600;
-  color: rgb(51, 51, 51);
+    font-weight: 600;
+    color: rgb(51, 51, 51);
 }
 
 .formControlGroup-disabledInput-styles {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
+}
+
+.formControlGroup-formControl-admin-styles {
+    color: #0078d4 !important;
+}
+
+.formControlGroup-formControl-admin-styles .ms-TextField-description {
+    color: #0078d4 !important;
 }

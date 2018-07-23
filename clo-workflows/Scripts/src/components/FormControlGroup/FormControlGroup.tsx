@@ -110,6 +110,45 @@ export class FormControlGroup extends React.Component<IFormControlGroupProps, {}
                                     />
                                 </div>
                             )
+                        } else if (formControl.type === "admin-choice") {
+                            return (
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <DescriptiveDropdown
+                                        options={formControl.choices.map(choice => ({ key: choice, text: choice }))}
+                                        selectedKey={props.data.get(formControl.dataRef) as string}
+                                        onChanged={(option: IDropdownOption) => props.updateFormField(formControl.dataRef, option.text)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        description={
+                                            formControl.description
+                                                ? `${formControl.description} \nthis field is only visible to Administrators`
+                                                : `this field is only visible to Administrators`
+                                        }
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
+                                        descriptionClassName={formControl.readonly ? "" : "formControlGroup-formControl-admin-styles"}
+                                    />
+                                </div>
+                            )
+                        } else if (formControl.type === "admin-text") {
+                            return (
+                                <div className="formControlGroup-formControl-styles" key={index}>
+                                    <TextField
+                                        value={(props.data.get(formControl.dataRef) as string) || ""}
+                                        onChanged={(newVal: string) => props.updateFormField(formControl.dataRef, newVal)}
+                                        label={formControl.displayName}
+                                        disabled={formControl.readonly}
+                                        className={
+                                            formControl.readonly
+                                                ? "formControlGroup-disabledInputBackground"
+                                                : "formControlGroup-formControl-admin-styles"
+                                        }
+                                        description={`this field is only visible to Administrators`}
+                                        onBlur={() => formControl.touch()}
+                                        errorMessage={props.validation[formControl.dataRef]}
+                                    />
+                                </div>
+                            )
                         } else if (formControl.type === "textarea") {
                             return (
                                 <div className="formControlGroup-formControl-styles" key={index}>
