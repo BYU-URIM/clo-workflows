@@ -1,40 +1,40 @@
 .workDetail-wrapper-styles {
-  padding: 16px 0px;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: flex-start;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23);
-  background: #f8f8f8;
+    padding: 16px 0;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    background: #f8f8f8;
 }
 
 .title-styles {
-  text-align: center;
-  margin-bottom: 8px;
-  font: 30px Segoe UI, sans-serif;
-  width: 350px;
+    text-align: center;
+    margin-bottom: 8px;
+    font: 30px Segoe UI, sans-serif;
+    width: 350px;
 }
 
 .submitButton-styles {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  margin-right: 25px;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-right: 25px;
 }
 
 .editButton-styles {
-  transform: translateX(-25px);
+    transform: translateX(-25px);
 }
 
 .workHeader-styles {
-  display: flex;
+    display: flex;
 }
 
 .formColumn-styles {
-  padding: 0px 8px 0px 32px;
+    padding: 0 8px 0 32px;
 }
 
 .notesColumn-styles {
-  padding: 0px 32px 0px 8px;
+    padding: 0 32px 0 8px;
 }
