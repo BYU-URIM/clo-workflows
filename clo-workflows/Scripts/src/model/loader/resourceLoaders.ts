@@ -7,8 +7,6 @@ import Utils from "../../utils"
 export const getView = (viewName: string, userRole: IRole): View => {
     const isUserEmployee = userRole.name !== "LTT Client"
     const normalizedView = VIEWS[viewName]
-    console.log(normalizedView)
-
     if (!normalizedView) throw new Error(`no view for ${viewName} exists`)
 
     // form controls in a single view are composed of the formFields array and the readonlyformFields array

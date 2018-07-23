@@ -86,10 +86,6 @@ export class RequestDetailStore {
     @observable canEditUse: boolean = false
     @computed
     get useView(): View {
-        console.log("here")
-        console.log(this.work)
-        
-        
         const curUserRole = this.employeeStore.root.sessionStore.currentUser.primaryRole
         return this.canEditUse
             ? getView(this.work.get("type") as string, curUserRole)

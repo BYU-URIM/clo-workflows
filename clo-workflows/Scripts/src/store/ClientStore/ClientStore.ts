@@ -188,7 +188,6 @@ export class ClientStore implements IViewProvider {
     get searchedWorkBriefs(): Array<IListItem> {
         return Object.values(this.searchedWorks.toJS()).map(
             (work): IListItem => {
-                console.log(work)
                 return {
                     header: String(work.Title || ""),
                     body: String(work.body || ""),
