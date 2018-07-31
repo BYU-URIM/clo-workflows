@@ -60,7 +60,7 @@ export class ProjectDetail extends React.Component<any, any> {
                     )}
                 </div>
                 <div className="projectDetail-notesColumn-styles">
-                    {requestDetailStore.projectNotesStore && <NotesBox notesStore={requestDetailStore.projectNotesStore} title="Project Notes" />}
+                    {requestDetailStore && <NotesBox notesStore={requestDetailStore.projectNotesStore} title="Project Notes" />}
                 </div>
             </div>
         )
