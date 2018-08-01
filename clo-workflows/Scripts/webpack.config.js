@@ -65,6 +65,7 @@ module.exports = function(env) {
             path: path.join(__dirname, "dist"),
         },
         devtool: "inline-source-map",
+        watch: true,
         module: {
             rules: [
                 {
@@ -94,10 +95,6 @@ module.exports = function(env) {
             new HtmlWebpackPlugin({
                 template: "./res/index.html",
             }),
-            // new WorkboxPlugin.InjectManifest({
-            //     swSrc: "./src/sw.js",
-            //     swDest: "sw.js",
-            // }),
         ],
     }
     return devMode ? devConfig : prodConfig

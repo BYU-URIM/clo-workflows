@@ -280,11 +280,12 @@ export class ClientStore implements IViewProvider {
             const previousStep: IStep = getStep("Intake")
             const nextStepName: StepName = getNextStepName(this.newProcess.toJS(), "Intake")
             this.newProcess.set("step", nextStepName)
-            if (this.view.work.isNew) this.newProcess.set("Title", this.newWork.get("Title"))
+            this.view.work.isNew
+                ? this.newProcess.set("Title", this.newWork.get("Title"))
+                : this.newProcess.set("Title", this.searchedWorks.get(this.view.work.id).Title)
             this.newProcess.set("workId", this.view.work.id.toString())
             this.newProcess.set(previousStep.submissionDateFieldName, Utils.getFormattedDate())
             this.newProcess.set(previousStep.submitterFieldName, this.root.sessionStore.currentUser.name)
-            // const res =
             await this.dataService.createProcess(this.newProcess.toJS())
             await this.data.fetchClientProcesses()
             // this.newProcess.set("Id", res.data.Id)

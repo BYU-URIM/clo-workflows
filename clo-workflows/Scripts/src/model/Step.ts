@@ -62,10 +62,7 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
         case "Public Domain Research":
             if (process.publicDomainResearch === "Public Domain") {
                 return "Public Domain Approval"
-            } else if (
-                process.publicDomainResearch === "Non Public Domain" ||
-                process.publicDomainResearch === "Unclear"
-            ) {
+            } else if (process.publicDomainResearch === "Non Public Domain" || process.publicDomainResearch === "Unclear") {
                 return "Existing License"
             }
             return curStepName
@@ -80,7 +77,9 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
 
         case "Existing License":
             if (
-                process.existingLicense === "CC" ||
+                process.existingLicense === "Creative Commons" ||
+                process.existingLicense === "ASCAP/BMI" ||
+                process.existingLicense === "CCC Blanket License" ||
                 process.existingLicense === "Library Database" ||
                 process.existingLicense === "Terms of Use" ||
                 process.existingLicense === "Permission from Rights Holder"
@@ -116,7 +115,13 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
             return curStepName
 
         case "Ownership Research Licensing Exchange":
-            if (process.licensingExchange === "Tresona" || process.licensingExchange === "Wearethehits.com") {
+            if (
+                process.licensingExchange === "Tresona" ||
+                process.licensingExchange === "Wearethehits.com" ||
+                process.licensingExchange === "CCC" ||
+                process.licensingExchange === "Swank/Criterion" ||
+                process.licensingExchange === "Harry Fox"
+            ) {
                 return "Request Submitted"
             } else if (process.licensingExchange === "Not found in licensing exchange") {
                 return "Ownership Research Direct to Rights Holder"
@@ -136,10 +141,7 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
             return curStepName
 
         case "Response from Rights Holder Received":
-            if (
-                process.rightsHolderResponse === "License request approved" ||
-                process.rightsHolderResponse === "License request denied"
-            ) {
+            if (process.rightsHolderResponse === "License request approved" || process.rightsHolderResponse === "License request denied") {
                 return "CLO Response to Rights Holder"
             }
             return curStepName
