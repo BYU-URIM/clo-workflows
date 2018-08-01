@@ -34,7 +34,9 @@
         "dataRef": "existingLicense",
         "type": "choice",
         "choices": [
-            "CC",
+            "Creative Commons",
+            "ASCAP/BMI",
+            "CCC Blanket License",
             "Library Database",
             "Terms of Use",
             "Permission from Rights Holder",
@@ -52,7 +54,12 @@
         "type": "choice",
         "choices": [
             "Fair Use",
-            "No Exemption"
+            "No Exemption",
+            "108",
+            "110(1)",
+            "110(2)",
+            "110(3)",
+            "110(4)"
         ]
     },
     "Exemption Approval": {
@@ -67,6 +74,9 @@
         "choices": [
             "Tresona",
             "Wearethehits.com",
+            "CCC",
+            "Swank/Criterion",
+            "Harry Fox",
             "Not found in licensing exchange"
         ]
     },
@@ -98,7 +108,7 @@
         "choices": [
             "Rights holder offer accepted",
             "Renegotiating",
-            "Public domian override",
+            "Public domain override",
             "Exemption override",
             "Low risk override",
             "Cancel request"
