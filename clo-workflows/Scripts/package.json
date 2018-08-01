@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "dev:local": "webpack-cli --env.NODE_ENV=local --mode=development --watch",
-    "dev:sharepoint": "webpack-cli --watch  --env.NODE_ENV=sharepoint",
-    "dev:sharepointProxy": "concurrently --kill-others \"webpack-cli --watch --env.NODE_ENV=sharepointProxy --mode=development\" \"npm run sp:proxyServer \"",
+    "dev:sharepoint": "webpack-cli --watch --env.NODE_ENV=sharepoint",
+    "dev:sharepointProxy": "concurrently --kill-others \"webpack-cli --env.NODE_ENV=sharepointProxy --mode=development\" \"npm run sp:proxyServer \"",
     "build:local": "webpack-cli --env.NODE_ENV=local",
     "build:sharepoint": "webpack-cli --env.NODE_ENV=sharepoint",
     "build:sharepointProxy": "webpack-cli --env.NODE_ENV=sharepointProxy",
