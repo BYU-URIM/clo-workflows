@@ -10,9 +10,9 @@
         "name": "Junior License Processor",
         "permittedSteps": [
             "Existing License",
-            "Ownership Research Licensing Exchange",
+            "Licensing Agent",
             "Request Submitted",
-            "Response from Rights Holder Received",
+            "Response from Rights Holder",
             "Receipt of License",
             "Payment"
         ],
@@ -25,9 +25,8 @@
             "Exemption Analysis",
             "Ownership Research Direct to Rights Holder",
             "Request Submitted",
-            "Response from Rights Holder Received",
-            "Receipt of License",
-            "Payment"
+            "Response from Rights Holder",
+            "Receipt of License"
         ],
         "rank": 2
     },

@@ -10,10 +10,10 @@ export type StepName =
     | "Existing License Approval"
     | "Exemption Analysis"
     | "Exemption Approval"
-    | "Ownership Research Licensing Exchange"
+    | "Licensing Agent"
     | "Ownership Research Direct to Rights Holder"
     | "Request Submitted"
-    | "Response from Rights Holder Received"
+    | "Response from Rights Holder"
     | "CLO Response to Rights Holder"
     | "Receipt of License"
     | "Supervisor Signature"
@@ -102,7 +102,7 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
             if (process.exemptionAnalysis === "Fair Use") {
                 return "Exemption Approval"
             } else if (process.exemptionAnalysis === "No Exemption") {
-                return "Ownership Research Licensing Exchange"
+                return "Licensing Agent"
             }
             return curStepName
 
@@ -110,11 +110,11 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
             if (process.exemptionApproval === "true") {
                 return "Complete"
             } else if (process.exemptionApproval === "false") {
-                return "Ownership Research Licensing Exchange"
+                return "Licensing Agent"
             }
             return curStepName
 
-        case "Ownership Research Licensing Exchange":
+        case "Licensing Agent":
             if (
                 process.licensingExchange === "Tresona" ||
                 process.licensingExchange === "Wearethehits.com" ||
@@ -136,11 +136,11 @@ export function getNextStepName(process: CloRequestElement, currentStep?: StepNa
 
         case "Request Submitted":
             if (process.requestSubmitted === "true") {
-                return "Response from Rights Holder Received"
+                return "Response from Rights Holder"
             }
             return curStepName
 
-        case "Response from Rights Holder Received":
+        case "Response from Rights Holder":
             if (process.rightsHolderResponse === "License request approved" || process.rightsHolderResponse === "License request denied") {
                 return "CLO Response to Rights Holder"
             }
