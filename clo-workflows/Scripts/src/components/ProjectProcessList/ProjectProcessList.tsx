@@ -1,19 +1,11 @@
 import { observer } from "mobx-react"
-import { CommandBar, DetailsList, IGroup, CheckboxVisibility, IGroupDividerProps, CommandButton } from "office-ui-fabric-react/lib/"
+import { CommandBar, DetailsList, IGroup, CheckboxVisibility, IGroupDividerProps, CommandButton, IColumn } from "office-ui-fabric-react/lib/"
 import * as React from "react"
 import { NoteSource } from "../../model"
 
 import "./styles.scss"
 import { ClientViewState, ClientStoreData } from "../../store"
 
-export interface IColumns {
-    key: string
-    name: string
-    fieldName: string
-    minWidth: number
-    maxWidth: number
-    isResizable: boolean
-}
 export interface IProjectGroup extends IGroup {
     submitterId: string
     Title?: string
@@ -34,7 +26,7 @@ export interface ICustomGroupDividerProps extends IGroupDividerProps {
 }
 
 export const ProjectProcessList = observer((props: IProjectProcessListProps) => {
-    const _columns: Array<IColumns> = [
+    const _columns: Array<IColumn> = [
         {
             key: "1",
             name: "title",
@@ -45,11 +37,12 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
         },
         {
             key: "2",
-            name: "step",
+            name: "status",
             fieldName: "step",
             minWidth: 225,
             maxWidth: 300,
             isResizable: true,
+            onRender: item => <p>{item.step === "Complete" ? "Complete" : "In Progress"}</p>,
         },
     ]
 
@@ -94,7 +87,6 @@ export const ProjectProcessList = observer((props: IProjectProcessListProps) => 
                     {
                         key: "addNewProject",
                         name: "Add New Project",
-                        // icon: "Add",
                         iconProps: {
                             iconName: "Add",
                         },
