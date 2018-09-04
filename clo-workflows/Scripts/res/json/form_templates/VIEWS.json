@@ -160,7 +160,7 @@
             "Owner NetID"
         ]
     },
-    "Ownership Research Licensing Exchange": {
+    "Licensing Agent": {
         "dataSource": "processes",
         "readonlyFormFields": [
             "Public Domain Research",
@@ -189,7 +189,7 @@
             "Licensing Exchange"
         ],
         "formFields": [
-            "Direct to Rights Holders"
+            "Rights Holder"
         ],
         "privilegedFormFields": [
             "Owner NetID"
@@ -205,7 +205,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders"
+            "Rights Holder"
         ],
         "formFields": [
             "Request Submitted"
@@ -214,7 +214,7 @@
             "Owner NetID"
         ]
     },
-    "Response from Rights Holder Received": {
+    "Response from Rights Holder": {
         "dataSource": "processes",
         "readonlyFormFields": [
             "Public Domain Research",
@@ -224,7 +224,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted"
         ],
         "formFields": [
@@ -244,7 +244,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response"
         ],
@@ -265,7 +265,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder"
@@ -287,7 +287,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",
@@ -310,7 +310,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",
@@ -334,7 +334,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",
@@ -360,7 +360,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",
@@ -387,7 +387,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",
@@ -415,7 +415,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",
@@ -439,7 +439,7 @@
             "Exemption Analysis",
             "Exemption Approval",
             "Licensing Exchange",
-            "Direct to Rights Holders",
+            "Rights Holder",
             "Request Submitted",
             "Rights Holder Response",
             "CLO Response to Rights Holder",

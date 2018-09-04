@@ -80,8 +80,8 @@
             "Not found in licensing exchange"
         ]
     },
-    "Direct to Rights Holders": {
-        "displayName": "Direct to Rights Holders *",
+    "Rights Holder": {
+        "displayName": "Rights Holder *",
         "dataRef": "directToRightsHolders",
         "type": "textarea"
     },

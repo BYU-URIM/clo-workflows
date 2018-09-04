@@ -67,10 +67,10 @@
             "exemptionApproval"
         ]
     },
-    "Ownership Research Licensing Exchange": {
-        "name": "Ownership Research Licensing Exchange",
+    "Licensing Agent": {
+        "name": "Licensing Agent",
         "orderId": 7,
-        "view": "Ownership Research Licensing Exchange",
+        "view": "Licensing Agent",
         "submitterFieldName": "ownershipLicenseExchangeSubName",
         "submissionDateFieldName": "ownershipLicenseExchangeSubDate",
         "processFieldNames": [
@@ -97,10 +97,10 @@
             "requestSubmitted"
         ]
     },
-    "Response from Rights Holder Received": {
-        "name": "Response from Rights Holder Received",
+    "Response from Rights Holder": {
+        "name": "Response from Rights Holder",
         "orderId": 10,
-        "view": "Response from Rights Holder Received",
+        "view": "Response from Rights Holder",
         "submitterFieldName": "responseFromRightsHolderSubName",
         "submissionDateFieldName": "responseFromRightsHolderSubDate",
         "processFieldNames": [

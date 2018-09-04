@@ -327,3 +327,4 @@ clo-workflows/Scripts/config/private.json
 clo-workflows/Scripts/src/browserFile.ts
 clo-workflows/work.code-workspace
 clo-workflows/Scripts/dist/index.html
+clo-workflows/Scripts/feedback.md
